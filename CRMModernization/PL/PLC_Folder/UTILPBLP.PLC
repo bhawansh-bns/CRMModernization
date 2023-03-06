@@ -1,0 +1,15 @@
+BEGIN_PLC(UTILPBLP)
+ DCL 1 UTILPBL_PARM,        
+       3 POLICY                  PIC '(11)9',        
+       3 PAYMENT_TYPE            CHAR (3),        
+       3 AMOUNT                  FIXED (9,2),        
+       3 COMPANY                 PIC '99',        
+       3 AREA_CODE               PIC '99',        
+       3 DEPARTMENT              PIC '99',        
+       3 WORKING_GROUP           PIC '99',        
+       3 SECTION                 PIC '99',        
+       3 EMPLOYEE                PIC '(5)9',        
+       3 DEF_PERIOD              FIXED (3),        
+       3 LETTER_ID               CHAR (8),        
+       3 CLAIM_NO                CHAR (11);        
+END_PLC(UTILPBLP)

@@ -1,0 +1,35 @@
+BEGIN_PLC(N040CLOG)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040CLOG                                       */        
+    /*   GENERATION  : 001                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : DIARY                                          */        
+    /*   PROGRAMMER  : S K BOWES                                      */        
+    /*   DATE        : OCTOBER 2004                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+    /*                 ACTIONS CONNECTED WITH CONTACT LOG UPDATE.     */        
+    /*                 THIS INCLUDE DEFINES THE NEW CONTACT LOG       */        
+    /*                 INTERFACE DATA STRUCTURE. THE ARRAY OCCURS 10  */        
+    /*                 ALLOWING MULTIPLE LOG ENTRIES PER POLICY.      */        
+    /*     **** NOTE THAT ACTIVITY-ID AND ACTIVITY-GROUP-ID ****      */        
+    /*     **** REQUIRE CHRYSALIS DEVELOPMENT               ****      */        
+    /*                                                                */        
+ /******************************************************************/        
+          DCL 1 DATA_CLOG BASED (COM_DATA.DATA_CLOG_PTR),        
+                3 CONTLOG_COUNT          PIC '99',        
+                3 CONTLOG_REP(10),        
+                  5 CL_CLIENT_NO         CHAR(09),        
+                  5 CL_COMMA01           CHAR(01),        
+                  5 CL_POLICY_NO         CHAR(11),        
+                  5 CL_COMMA02           CHAR(01),        
+                  5 CL_ACTIVITY_ID       CHAR(04),        
+                  5 CL_COMMA03           CHAR(01),        
+                  5 CL_ACTIVITY_GROUP_ID CHAR(04),        
+                  5 CL_COMMA04           CHAR(01),        
+                  5 CL_LAST_CLUS_POL     CHAR(11),        
+                  5 CL_COMMA05           CHAR(01),        
+                  5 CL_FILLER            CHAR(20);        
+END_PLC(N040CLOG)

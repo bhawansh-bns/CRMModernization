@@ -1,0 +1,8 @@
+BEGIN_PLC(D1PMTRG)
+     DCL MAT_DATA                       CHAR(41) BASED(ADDR(MAT));        
+     DCL 1 MAT,        
+           5 MATURITY_VAL               PIC '(7)Z9V.99' INIT (0),        
+           5 NEW_MAT_VAL                PIC '(7)Z9V.99' INIT (0),        
+           5 NEW_MAT_DATE               PIC '(8)9' INIT (0),        
+           5 GROWTH_RATE                PIC '(7)Z9V.99' INIT (0);        
+END_PLC(D1PMTRG)

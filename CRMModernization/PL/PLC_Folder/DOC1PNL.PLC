@@ -1,0 +1,31 @@
+BEGIN_PLC(DOC1PNL)
+ /*******************************************************************/        
+ /* PLIINC - DOC1PNL.                                               */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY THE CWA / DOC1 INTERFACE PROGRAM        */        
+ /* DOC1P00 AND ANY OF ITS SUBROUTINES THAT REFER TO POLICY NUMBER  */        
+ /* LIST (PNL) DATA.                                                */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF PNL DATA TO BE WRITTEN TO THE FILE  */        
+ /* CREATED FOR DOC1.                                               */        
+ /*                                                                 */        
+ /* THE VARIABLES IN THIS STRUCTURE HAVE TO BE DECLARED AS EXTERNAL */        
+ /* AS THE DATA NEEDS TO BE ACCESSIBLE TO BOTH THE TOP-LEVEL        */        
+ /* INTERFACE DOC1P00 AND ANY SUBROUTINES.                          */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL   PNL_DTA                  CHAR(1009) EXTERNAL;        
+         
+     DCL 1 PNL_STRUC                BASED(ADDR(PNL_DTA)),        
+           3 PNL_SORT_1             CHAR(15),        
+           3 PNL_SORT_2             CHAR(15),        
+           3 PNL_SORT_3             CHAR(15),        
+           3 PNL_SEQ_NUM            PIC '(3)9',        
+           3 PNL_TRIGGER_ID         CHAR(9),        
+           3 PNL_RECORD_ID          CHAR(3),        
+           3 PNL_RECORD_DATA_FLAG   CHAR(1),        
+           3 PNL_POLICY_COUNT       PIC '99',        
+           3 PNL_POLICIES (86),        
+             5 PNL_POLICY_NUMBER    CHAR(11);        
+END_PLC(DOC1PNL)

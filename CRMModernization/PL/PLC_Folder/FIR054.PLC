@@ -1,0 +1,59 @@
+BEGIN_PLC(FIR054)
+ /*****************************/        
+ /* OB PRICES FILE            */        
+ /*                           */        
+ /* FIR054 -                  */        
+ /* EXPANSION OF FOB246 FOR   */        
+ /* Y2K CONVERSION            */        
+ /*                           */        
+ /* 'DATE' EXPANDED           */        
+ /*                           */        
+ /* JAN 1998                  */        
+ /*****************************/        
+ /*****************************************************************/        
+ /* IMPORTANT NOTE                                                */        
+ /* AT PRESENT ONLY THE ONLINE APPLICATIONS OBPU AND ORAC MAKE    */        
+ /* UPDATES TO THE FIR054 FILE PLGL.FIR054.PRICFIL.               */        
+ /* IF YOU ARE INCLUDING THIS FILE IN A NEW APPLICATION PLEASE    */        
+ /* REMEMBER THAT ANY UPDATES TO IT MUST BE LOGGED TO THE FIR081  */        
+ /* FILE ALSO. THIS IS IMPORTANT AS WITHOUT THE LOG RECORD UI,    */        
+ /* EUC, POLICY VALUES AND REVIEWS APPLICATIONS WILL NOT GET THE  */        
+ /* PRICE UPDATE.                                                 */        
+ /* DAMIEN KEOGH 8/3/1999                                         */        
+ /*****************************************************************/        
+         
+         
+         
+ DCL 1 WIR054  UNALIGNED                                   ,        
+ /* THE KEY IS THE FIRST 13 BYTES - FUND,DATE,CURR */        
+       2   FUND     CHAR           (  3)                   ,        
+ /* FUND MNEMONIC                            */        
+ /* AS ON THE FUND FILE                          */        
+       2   DATE     PIC            '(8)9'                  ,        
+ /* DATE IN CCYYMMDD FORMAT                  */        
+       2   CURR     CHAR           (  1)                   ,        
+ /* CURRENCY                                 */        
+ /* P - IRISH POUNDS                                 */        
+ /* S - STERLING                                     */        
+       2   TYPE     CHAR           (  1)                   ,        
+ /* FUND TYPE                                */        
+ /* P - PREMIUM UNITS                                */        
+ /* I - INITIAL UNITS                                */        
+ /* BLANK - ONLY ONE TYPE                            */        
+       2   BID      PIC            '(3)9V(6)9'             ,        
+ /* BID PRICE                                */        
+       2   DIVID    PIC            '(1)9V(6)9'             ,        
+ /* DIVIDEND PER UNIT                        */        
+       2   OFFER    PIC            '(3)9V(6)9'             ,        
+ /* OFFER PRICE                              */        
+       2   INDEX    PIC            '(6)9V(6)9'             ,        
+ /* INDEX (BONDS)                            */        
+ /* BID & OFFER PRICES ARE IN  PER UNIT             */        
+ /* DIVIDENDS ARE IN  PER UNIT                      */        
+ /* INDICES ARE JUST NUMBERS                         */        
+ /* DIVIDENDS AND INDICES MAY OR MAY NOT             */        
+ /* EXIST DEPENDING ON THE FUND FILE                 */        
+       2   SPARE    CHAR           (  6)                   ;        
+ /* SPARE                                    */        
+         
+END_PLC(FIR054)

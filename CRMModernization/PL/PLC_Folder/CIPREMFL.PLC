@@ -1,0 +1,63 @@
+BEGIN_PLC(CIPREMFL)
+         
+         
+         
+         
+ /********************************************************************/        
+ /* MODULE GENERATION  - @##                                         */        
+ /* COMPILED ON        - @###DATE                                    */        
+ /* AT                 - @###TIME                                    */        
+ /* FROM TERMINAL      - @##T                                        */        
+ /* BY                 - @#USERID                                    */        
+ /*                    - @#ID                                        */        
+ /*                    - @#NAME                                      */        
+ /* PURPOSE :-   COMMON STRUCTURE USED IN 'PREM' TRANSACTION FOR     */        
+ /*              INDICATING WHICH FIELDS HAVE BEEN UPDATED / REQUIRE */        
+ /*              AUTHORISATION                                       */        
+ /********************************************************************/        
+         
+     DCL 1 FLAGS,        
+           3  FLAG_C68001    PIC'9',        
+           3  FLAG_O96009    PIC'9',        
+           3  FLAG_O97009    PIC'9',        
+           3  FLAG_M47003    PIC'9',        
+           3  FLAG_O07007    PIC'9',        
+           3  FLAG_P16005    PIC'9',        
+           3  FLAG_P30109    PIC'9',        
+           3  FLAG_P09009    PIC'9',        
+           3  FLAG_P31505    PIC'9',        
+           3  FLAG_P38007    PIC'9',        
+           3  FLAG_P24007    PIC'9',        
+           3  FLAG_P30707    PIC'9',        
+           3  FLAG_P30207    PIC'9',        
+           3  FLAG_P06007    PIC'9',        
+           3  FLAG_P39007    PIC'9',        
+           3  FLAG_P30307    PIC'9',        
+           3  FLAG_P07007    PIC'9',        
+           3  FLAG_P40007    PIC'9',        
+           3  FLAG_P30807    PIC'9',        
+           3  FLAG_P14007    PIC'9',        
+           3  FLAG_P41007    PIC'9',        
+           3  FLAG_P30407    PIC'9',        
+           3  FLAG_P15007    PIC'9',        
+           3  FLAG_P30507    PIC'9',        
+           3  FLAG_P13007    PIC'9',        
+           3  FLAG_P28009    PIC'9',        
+           3  FLAG_P29009    PIC'9',        
+           3  FLAG_P27009    PIC'9',        
+           3  FLAG_P21007    PIC'9',        
+           3  FLAG_P10007    PIC'9',        
+           3  FLAG_P17007    PIC'9',        
+           3  FLAG_P26007    PIC'9',        
+           3  FLAG_P18007    PIC'9',        
+           3  FLAG_P22007    PIC'9',         /*NO C26101*/        
+           3  FLAG_P19007    PIC'9',        
+           3  FLAG_P17507    PIC'9',        
+           3  FLAG_P20009    PIC'9',        
+           3  FLAG_R03005    PIC'9',        
+           3  FLAG_S09007    PIC'9',        
+           3  FLAG_S18007    PIC'9',        
+           3  FLAG_S05109    PIC'9',        
+           3  FLAG_D39008    PIC'9',        
+           3  FLAG_M31003    PIC'9';        
+END_PLC(CIPREMFL)

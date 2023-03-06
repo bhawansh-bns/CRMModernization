@@ -1,0 +1,73 @@
+BEGIN_PLC(N040OTHR)
+         
+    /******************************************************************/        
+    /* COPIED FROM CPDF FOR CHESNARA MIGRATION                LP00601 */        
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040OTHR                                       */        
+    /*   GENERATION  : 033                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : JANUARY 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : 'OTHERS' DATA AREA FOR USE BY THE N040 DIARY   */        
+    /*                 PROCEDURES.                                    */        
+    /*                 STORES DATA NEEDED BY VARIOUS ACTIONS DURING   */        
+    /*                 DIARY PROCESSING. MOST DATA IS LOADED IN THE   */        
+    /*                 INITIAL PROCEDURE, N040P01.                    */        
+    /*                 USED IN CONJUNCTION WITH N040TWA.              */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 OTHERS BASED(TWA.OTHERS_PTR),        
+                3 HIDATE          PIC'(8)9',  /* HIGH DATE            */        
+                3 LODATE          PIC'(8)9',  /* LOW DATE             */        
+                3 SYSDATE         PIC'(8)9',  /* SYSTEM DATE          */        
+                3 SYSTIME         PIC'(6)9',  /* SYSTEM TIME          */        
+                3 HIDATE_PLUS_1D  PIC'(8)9',  /* HIDATE PLUS 1 DAY    */        
+                3 HIDATE_PLUS_1Y  PIC'(8)9',  /* HIDATE PLUS 1 YEAR   */        
+                3 RUN_DATE        PIC'(8)9',  /* RUN DATE (LOW - 1 D) */        
+                3 TRANSACT_MTH    PIC'99',    /* TRANSACTION MONTH    */        
+                3 LOTRACE         CHAR(1),    /* LOGIC TRACE SWITCH   */        
+                3 DATRACE         CHAR(1),    /* DATA TRACE SWITCH    */        
+                3 TESTRUN         CHAR(1),    /* TEST RUN SWITCH      */        
+                3 POTRACE         PIC'(11)9', /* POLICY TRACE SWITCH  */        
+                3 POLYSTART       PIC'(11)9', /* POLICY START NUMBER  */        
+                3 POLYSTOP        PIC'(11)9', /* POLICY STOP NUMBER   */        
+                3 POLYSKIP        PIC'(11)9', /* POLICY SKIP NUMBER   */        
+                3 RUN_TIME_KEY    PIC'(9)9',  /* FOR HISTORY FILE     */        
+                3 OPERATOR_ID     CHAR(4),    /* FOR HISTORY FILE     */        
+                3 SECTION_NAME    CHAR(5),    /* FOR HISTORY FILE     */        
+                3 ONLINE_BATCH    PIC'9',     /* FOR HISTORY FILE     */        
+                3 EMPLOYEE_NUM    PIC'99999', /* FOR HISTORY FILE     */        
+                3 COMPANY_CODE    PIC'99',    /* FOR HISTORY FILE     */        
+                3 AREA_CODE       PIC'99',    /* FOR HISTORY FILE     */        
+                3 DEPT_NUM        PIC'99',    /* FOR HISTORY FILE     */        
+                3 WORKING_GRP     PIC'99',    /* FOR HISTORY FILE     */        
+                3 SECTION_NUM     PIC'99',    /* FOR HISTORY FILE     */        
+                3 CURR_C77011     PIC'(11)9', /* CURRENT POLICY NO.   */        
+                3 PLAN_CODE       PIC'999',   /* DEFINITIVE PLAN CODE */        
+                3 POLY_TYPE       PIC'999',   /* DEFINITIVE POLY TYPE */        
+                3 P_LIFE_PEN      CHAR(1),    /* LIFE / PENSION IND.  */        
+                3 POLY_DEPN,                  /* POLICY DEPENDENT VALS*/        
+                  5 HISTCNT        PIC'999',  /* COUNT OF HISTORY RECS*/        
+                  5 REP_CNT(100)   PIC'999',  /* COUNT OF REPORT RECS */        
+                  5 TRN_CNT(25)    PIC'999',  /* COUNT OF TRANS RECS  */        
+                  5 BAC_CNT(25)    PIC'999',  /* COUNT OF BACS RECS   */        
+                  5 MODAL_UNITS    FIXED(3),  /* MODAL UNITS          */        
+                  5 PREM_UNITS_DUE FIXED(3),  /* PREMIUM UNITS DUE    */        
+                  5 PREM_DUE_DATE  PIC'(8)9', /* PREMIUM DUE DATE     */        
+                  5 EFF_DATE_ANNIV PIC'(8)9', /* EFFECTIVE DATE ANNIV */        
+                  5 LOAN_UNITS_DUE FIXED(3),  /* LOAN UNITS DUE       */        
+                  5 LOAN_DUE_DATE  PIC'(8)9', /* LOAN DUE DATE        */        
+                  5 MAT_DATE_ANNIV PIC'(8)9', /* MATURITY DATE ANNIV  */        
+                3 ACTION_DEPN,                /* ACTION DEPENDENT VALS*/        
+                  5 ACTION_RES     CHAR(1),   /* RESULT OF ACTION     */        
+                  5 ERROR_CODE     CHAR(4),   /* ERROR CODE OF ACTION */        
+                  5 ERROR_MESS     CHAR(79),  /* ERROR DESCRIPTION    */        
+                  5 NEW_DATE       PIC'(8)9', /* DATE CALC BY ACTION  */        
+                  5 P_ACT_TYPE     CHAR(1),   /* ACTION TYPE          */        
+                  5 P_ACT_CODE     CHAR(4),   /* ACTION CODE          */        
+                  5 P_ACT_DESC     CHAR(5);   /* ACTION SHORT DESC    */        
+END_PLC(N040OTHR)

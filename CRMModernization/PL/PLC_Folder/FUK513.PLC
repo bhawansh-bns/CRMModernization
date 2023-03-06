@@ -1,0 +1,24 @@
+BEGIN_PLC(FUK513)
+ /*------------------------------------------------------------------*/        
+ /* Layout of Policy Fee File                                        */        
+ /*------------------------------------------------------------------*/        
+ /* For TQR and TQL Products, the policy fee is a fixed amount which */        
+ /* changes each year. To avoid having to amend code each year,      */        
+ /* the Policy Fee file is used.                                     */        
+ /*                                                                  */        
+ /*                                                                  */        
+ /*------------------------------------------------------------------*/        
+ /* Audit Trail                                                      */        
+ /*                                                                  */        
+ /* Initials  Date      Description                                  */        
+ /* --------  --------  -------------------------------------------  */        
+ /* JOG       30/07/97  Allow for Globals Policy Fee  (GBL)          */        
+ /*------------------------------------------------------------------*/        
+ Dcl 1 WUK513 ,        
+     3 Pr_Type        Char      ( 3 )   , /* 'TQR' or 'TQL' or 'GBL'  */        
+     3 Eff_Yr         Pic       '9999'  , /* Year in which this amount*/        
+                                          /* applies                  */        
+     3 Pol_Fee        Pic     '999V99'  , /* Amount of Policy Fee     */        
+     3 XFiller        Char       (68)   ;        
+         
+END_PLC(FUK513)

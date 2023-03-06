@@ -1,0 +1,14 @@
+BEGIN_PLC(UTILFEEI)
+         
+ DECLARE 1 REQUEST,        
+           3 C77011            PIC '(11)9',        
+           3 C59401            CHAR (01),        
+           3 C90502            PIC  '99',        
+           3 C59501            CHAR (01),        
+           3 D34508            PIC '(8)9',        
+           3 FUND_DETAILS (30),        
+             5 C46003          PIC '999',        
+             5 T18009          FIXED DEC (9,2),        
+             5 R03505          FIXED DEC (5,2),        
+           3 LIQ_FEE           FIXED DEC (9,2);        
+END_PLC(UTILFEEI)

@@ -1,0 +1,28 @@
+BEGIN_PLC(N040DPRM)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DPRM                                       */        
+    /*   GENERATION  : 033                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : OCTOBER 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+    /*                 ACTIONS WHEN PREMIUM DATA IS REQUIRED.         */        
+    /*                 STORES COMMON PREMIUM DATA.                    */        
+    /*                 ALL DATA IS LOADED IN THE PROCEDURE, UTILP01.  */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DPRM,        
+                3 POLICY_NUMBER   PIC'(11)9', /* POLICY NUMBER        */        
+                3 P_HIDATE        PIC'(8)9',  /* HIGH DATE            */        
+                3 P_LODATE        PIC'(8)9',  /* LOW DATE             */        
+                3 MODAL_UNITS     FIXED(3),   /* MODAL UNITS          */        
+                3 PREM_UNITS_DUE  FIXED(3),   /* PREMIUM UNITS DUE    */        
+                3 PREM_DUE_DATE   PIC'(8)9',  /* PREMIUM DUE DATE     */        
+                3 EFF_DATE_ANNIV  PIC'(8)9',  /* EFFECTIVE DATE ANNIV */        
+                3 NEXT_EFF_DAY    PIC'(8)9';  /* NEXT DATE OF EFF DAY */        
+END_PLC(N040DPRM)

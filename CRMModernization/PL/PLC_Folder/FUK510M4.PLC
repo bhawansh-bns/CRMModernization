@@ -1,0 +1,363 @@
+BEGIN_PLC(FUK510M4)
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* Test reporting record layout MIGRATION ONLY SHEET1                */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+         
+         
+ DCL 1 WUK510E  UNALIGNED  ,        
+       2 POLNO   PIC '(7)9',        
+ /* Policy Number                            */        
+       2 Fill1   char (01) ,        
+       2 VERS     PIC '(1)9',        
+ /* Version                                  */        
+       2 Fill2   char (01) ,        
+       2 Effdt    PIC '(8)9',        
+ /* Date of record. Investment date. */        
+       2 Fill2a   char (01) ,        
+       2 Sheet   char (01) ,        
+ /* Sheet Number for actuaries */        
+     2 F_TypePr    (5)              ,   /* Premiums By Fund Type     */        
+       3 Fill01  char (01) ,        
+       3 F_TYPE_PR       PIC'(9)9V(2)9' ,        
+       2 Fill100 char (01) ,        
+       2   SRA         PIC            '(3)9'            ,        
+ /* Selected Retirement Age */        
+       2 Fill101 char (01) ,        
+       2   TOT_V5_PTD_PRE97  PIC'(9)9V(2)9'          ,        
+ /* Total V5 SP Paid To Date Pre 1997             */        
+       2 Fill102 char (01) ,        
+       2   AGE_AT_1   PIC            '(3)9'               ,        
+ /* Age Attained Life 1 */        
+       2 Fill103 char (01) ,        
+       2   AGE_AT_2   PIC            '(3)9'               ,        
+ /* Age Attained Life 2 */        
+       2 Fill104 char (01) ,        
+       2   ADJ_AGE_1  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 1 */        
+       2 Fill105 char (01) ,        
+       2   ADJ_AGE_2  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 2 */        
+       2 Fill106 char (01) ,        
+       2   ILL_AGE_1  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 1 - Serious Illness */        
+       2 Fill107 char (01) ,        
+       2   ILL_AGE_2  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 2 - Serious Illness */        
+       2 Fill108 char (01) ,        
+       2   AGE_NX_1   PIC            '(3)9'               ,        
+ /* Age Next Birthday Life 1 */        
+       2 Fill109 char (01) ,        
+       2   AGE_NX_2   PIC            '(3)9'               ,        
+ /* Age Next Birthday Life 2 */        
+       2 Fill110 char (01) ,        
+       2   ANB_ATE_1  PIC            '(3)9'               ,        
+ /* Age Next Birthday at Entry - Life 1 */        
+       2 Fill111 char (01) ,        
+       2   ANB_ATE_2  PIC            '(3)9'               ,        
+ /* Age Next Birthday at Entry - Life 2 */        
+       2 Fill112 char (01) ,        
+       2   DT_1ST_RP  PIC            '(8)9'               ,        
+ /* Date of First RP Payment */        
+       2 Fill113 char (01) ,        
+       2   CURR_DUR   PIC'(3)9'                  ,        
+ /* Duration in Months     */        
+       2 Fill114 char (01) ,        
+       2   CURT_DUR   PIC'(3)9'                  ,        
+ /* Duration in Years      */        
+       2 Fill115 char (01) ,        
+       2   IX_BASE    CHAR           (  1)               ,        
+ /* Indexation Basis */        
+       2 Fill116 char (01) ,        
+       2   SU_CHARGE  PIC'(8)9V(3)9'                      ,        
+ /* Setup Charge calculated in UK08981, allocated in Uk08990 */        
+       2 Fill117 char (01) ,        
+       2   CAMP_CD    PIC            '(4)9'               ,        
+ /* Campaign Code */        
+       2 Fill118 char (01) ,        
+       2   DO1DSS     PIC            '(8)9'               ,        
+ /* Date of First DSS payment */        
+       2 Fill119 char (01) ,        
+       2   CONV_DATE  PIC            '(8)9'               ,        
+ /* Date of Initial Unit Conversion  */        
+       2 Fill120 char (01) ,        
+       2   AUTO_SW    CHAR           (  1)                ,        
+ /* PIS Indicator  - Derived by Normaliasation    */        
+       2 Fill121 char (01) ,        
+       2   SUS_DATE   PIC            '(8)9'               ,        
+ /* Date of Suspension */        
+       2 Fill122 char (01) ,        
+       2   DO1SP      PIC            '(8)9'               ,        
+ /* Date of First SP */        
+       2 Fill123 char (01) ,        
+       2   Wop_End_Dt PIC            '(8)9'               ,        
+ /* Date of WOP End */        
+       2 Fill124 char (01) ,        
+       2   Bonus_Date PIC            '(8)9'               ,        
+ /* Date of Last Bonus */        
+       2 Fill125 char (01) ,        
+       2   Loan_Amt   PIC'(9)9V(2)9'                      ,        
+ /* Outstanding Global Loan                       */        
+       2 Fill126 char (01) ,        
+       2   ALT_CHARGE PIC'(9)9V(2)9'                      ,        
+ /* Setup Charge calculated in UK08981, allocated in Uk08990 */        
+       2 Fill127 char (01) ,        
+       2   Stamp_duty PIC'(9)9V(2)9'                      ,        
+ /* Stamp Duty calculated in UK08981, allocated in Uk08990 */        
+       2 Fill128 char (01) ,        
+       2   STRA        PIC            '(3)9'              ,        
+ /* State Retirement Age */        
+       2 Fill129 char (01) ,        
+       2   PRDOM       PIC            '(8)9'              ,        
+ /* Protected Rights DOM */        
+       2 Fill130 char (01) ,        
+       2   Pol_Fee     PIC'(9)9V(2)9'                     ,        
+ /* Policy Fee                                    */        
+       2 Fill131 char (01) ,        
+       2   Cash_Factor PIC'(1)9V(6)9'               ,        
+ /* Cashing Factor                                */        
+       2 Fill132 char (01) ,        
+       2   SAD_Fee     PIC'(6)9V(5)9'               ,        
+ /* Sum Assured Death Fee                         */        
+       2 Fill133 char (01) ,        
+       2   TOT_Ptd     PIC'(9)9V(2)9'               ,        
+ /* Total Regular Premiums Paid To Date           */        
+       2 Fill134 char (01) ,        
+       2   Mths_Paid   PIC '(4)9'                        ,        
+ /* Number of Months Paid                         */        
+       2 Fill135 char (01) ,        
+       2   TOT_V5_PTD  PIC'(9)9V(2)9'               ,        
+ /* Total V5 SP Paid To Date                      */        
+       2 Fill136 char (01) ,        
+       2   TOT_SP_PTD  PIC'(9)9V(2)9'               ,        
+ /* Total SP Paid To Date                         */        
+       2 Fill137 char (01) ,        
+       2   CURTATE_PROB_1 PIC'(1)9V(6)9'                ,        
+ /* Cumulative Probability Life 1                 */        
+       2 Fill138 char (01) ,        
+       2   CURTATE_PROB_2 PIC'(1)9V(6)9'                ,        
+ /* Cumulative Probability Life 2                 */        
+       2 Fill139 char (01) ,        
+       2   PTD_CODE       PIC'(1)9V(2)9'                ,        
+ /* Permanent Total Disability  Code (0,1,2,3)    */        
+       2 Fill140 char (01) ,        
+       2 Occ_Load_1    Pic '999'   ,        
+ /* Occupational Loading 1     */        
+       2 Fill141 char (01) ,        
+       2 Occ_Load_2    Pic '999'   ,        
+ /* Occupational Loading 2     */        
+       2 Fill142 char (01) ,        
+       2   DIS_Fee     PIC'(9)9V(2)9'               ,        
+ /* Sum Assured Death Fee                         */        
+ /*---------------------------------------------------------------*/        
+ /* Fields specific to TQL and Older products                     */        
+ /*---------------------------------------------------------------*/        
+       2 Fill143 char (01) ,        
+       2   Pol_Fee_Vers  PIC '9'                         ,        
+ /* Policy Fee Version Applies (TQL)              */        
+       2 Fill144 char (01) ,        
+       2   Fund_Fact_V1  PIC'(9)9V(2)9'                 ,        
+ /* Fund Factor Version 1 (TQL)                   */        
+       2 Fill145 char (01) ,        
+       2   Fund_Fact_V2  PIC'(9)9V(2)9'                 ,        
+ /* Fund Factor Version 2 (TQL)                   */        
+       2 Fill146 char (01) ,        
+       2   Fund_Fact_V3  PIC'(9)9V(2)9'                 ,        
+ /* Fund Factor Version 3 (TQL)                   */        
+       2 Fill147 char (01) ,        
+       2   Tot_Ptd_V1  PIC'(9)9V(2)9'               ,        
+ /* Total Regular Premiums Paid To Date (TQL)     */        
+       2 Fill148 char (01) ,        
+       2   Tot_Ptd_V2  PIC'(9)9V(2)9'               ,        
+ /* Total Regular Premiums Paid To Date (TQL)     */        
+       2 Fill149 char (01) ,        
+       2   Tot_Ptd_V3  PIC'(9)9V(2)9'               ,        
+ /* Total Regular Premiums Paid To Date (TQL)     */        
+       2 Fill150 char (01) ,        
+       2   Life_1_or_2_V1          Char (1)                  ,        
+ /* Life 1 or 2 (TQL)                             */        
+       2 Fill151 char (01) ,        
+       2   Life_1_or_2_V2          Char (1)                  ,        
+ /* Life 1 or 2 (TQL)                             */        
+       2 Fill152 char (01) ,        
+       2   Life_1_or_2_V3          Char (1)                  ,        
+ /* Life 1 or 2 (TQL)                             */        
+       2 Fill153 char (01) ,        
+       2   MED_FAC_1_V1  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 (TQL) */        
+       2 Fill154 char (01) ,        
+       2   MED_FAC_1_V2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 (TQL) */        
+       2 Fill155 char (01) ,        
+       2   MED_FAC_1_V3  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 (TQL) */        
+       2 Fill156 char (01) ,        
+       2   MED_FAC_2_V1  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 (TQL) */        
+       2 Fill157 char (01) ,        
+       2   MED_FAC_2_V2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 (TQL) */        
+       2 Fill158 char (01) ,        
+       2   MED_FAC_2_V3  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 (TQL) */        
+       2 Fill159 char (01) ,        
+       2   PRM_FAC_1_V1  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 (TQL) */        
+       2 Fill160 char (01) ,        
+       2   PRM_FAC_1_V2  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 (TQL) */        
+       2 Fill161 char (01) ,        
+       2   PRM_FAC_1_V3  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 (TQL) */        
+       2 Fill162 char (01) ,        
+       2   PRM_FAC_2_V1  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 (TQL) */        
+       2 Fill163 char (01) ,        
+       2   PRM_FAC_2_V2  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 (TQL) */        
+       2 Fill164 char (01) ,        
+       2   PRM_FAC_2_V3  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 (TQL) */        
+       2 Fill165 char (01) ,        
+       2   PTD_V1                     Pic  '9'               ,        
+ /* Permanent Total Disability Indicator (TQL)      */        
+       2 Fill166 char (01) ,        
+       2   PTD_V3                     Pic  '9'               ,        
+ /* Permanent Total Disability Indicator (TQL)      */        
+       2 Fill167 char (01) ,        
+       2   WOP_APP_V1     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code (TQL) */        
+       2 Fill168 char (01) ,        
+       2   WOP_APP_V3     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code (TQL) */        
+       2 Fill169 char (01) ,        
+       2   Auto_Inc_Amt   PIC'(9)9V(2)9'           ,        
+ /* Automatic Income Amount */        
+       2 Fill170 char (01) ,        
+       2   Auto_Inc_Per   PIC'(3)9V(2)9'          ,        
+ /* Automatic Income Percentage */        
+       2 Fill171 char (01) ,        
+       2   Cash_Freq      Pic '99' ,        
+ /* Automatic Income Cashing Frequency */        
+       2 Fill172 char (01) ,        
+       2   Orig_Table     Pic '999' ,        
+ /* Original Table */        
+       2 Fill173 char (01) ,        
+       2   Life_1_or_2    Char (1)  ,        
+ /* Life 1 or 2 */        
+       2 Fill174 char (01) ,        
+       2   Claim_Pend     CHAR           (  1)              ,        
+ /* Claim Pending                        */        
+       2 Fill175 char (01) ,        
+       2   Highest_AP PIC'(11)9V(2)9'                    ,        
+ /* Highest Annual Premium */        
+       2 Fill176 char (01) ,        
+       2   STATUS_V1  CHAR           (  3)                ,        
+ /* Status TQL Version 1   */        
+       2 Fill177 char (01) ,        
+       2   STATUS_V2  CHAR           (  3)                ,        
+ /* Status TQL Version 2   */        
+       2 Fill178 char (01) ,        
+       2   STATUS_V3  CHAR           (  3)                ,        
+ /* Status TQL Version 3   */        
+       2 Fill179 char (01) ,        
+       2   Orig_SP_Amt PIC'(9)9V(2)9'               ,        
+ /* Total SP Paid To Date                         */        
+       2 Fill180 char (01) ,        
+       2   Extra_Prm   PIC'(9)9V(2)9'               ,        
+ /* Extra Premium                                 */        
+       2 Fill181 char (01) ,        
+       2   Prem_paid_V1   PIC'(9)9V(2)9'               ,        
+ /* Current Premium on Version 1                  */        
+       2 Fill182 char (01) ,        
+       2   Prem_paid_V2   PIC'(9)9V(2)9'               ,        
+ /* Current Premium on Version 2                  */        
+       2 Fill183 char (01) ,        
+       2   Prem_paid_V3   PIC'(9)9V(2)9'               ,        
+ /* Current Premium on Version 3                  */        
+       2 Fill184 char (01) ,        
+       2   SV_V1   PIC'(9)9V(2)9'               ,        
+ /* Surrender Value on Version 1                  */        
+       2 Fill185 char (01) ,        
+       2   SV_V2   PIC'(9)9V(2)9'               ,        
+ /* Surrender Value on Version 2                  */        
+       2 Fill186 char (01) ,        
+       2   SV_V3   PIC'(9)9V(2)9'               ,        
+ /* Surrender Value on Version 3                  */        
+       2 Fill187 char (01) ,        
+       2   CC_V1   PIC'(9)9V(2)9'               ,        
+ /* Life Charge on Version 1                      */        
+       2 Fill188 char (01) ,        
+       2   CC_V2   PIC'(9)9V(2)9'               ,        
+ /* PTD_Charge on Version 2                       */        
+       2 Fill189 char (01) ,        
+       2   CC_V3   PIC'(9)9V(2)9'               ,        
+ /* SI_Charge on Version 3                        */        
+       2 Fill190 char (01) ,        
+       2   SUS_FLAG    Char (1)                      ,        
+ /* Suspended Flag - Y if ever suspended          */        
+       2 Fill191 char (01) ,        
+       2   IX_OPT_0_TO_6       Char (1)              ,        
+ /* Y if Index Option changed from 0 to 6         */        
+       2 Fill192 char (01) ,        
+       2   TOT_P_ENC  PIC'(9)9V(2)9'               ,        
+ /* Total Amount of Partial Encashments           */        
+       2 Fill193 char (01) ,        
+       2   PREV_STATUS     CHAR  (3)                 ,        
+ /* Status of policy in previous month      K05563*/        
+       2 Fill194 char (01) ,        
+       2   PENSIM_EYE      CHAR  (6)                 ,        
+ /* 'PENSIM' store for UK08978 processing   K06504*/        
+       2 Fill195 char (01) ,        
+ /* fields in Uk08990 added by RMJ 30/07/2007...  */        
+       2 MORT_AGE_ADJ_RULE1  CHAR  (5)              ,        
+       2 Fill196 char (01) ,        
+       2 MORT_AGE_ADJ_RULE2  CHAR  (5)              ,        
+       2 Fill197 char (01) ,        
+       2 MORT_AGE_ADJ_VAL1   PIC'-999'              ,        
+       2 Fill198 char (01) ,        
+       2 MORT_AGE_ADJ_VAL2   PIC'-999'              ,        
+       2 Fill199 char (01) ,        
+       2 MORT_RATE_RULE1     CHAR  (5)              ,        
+       2 Fill200 char (01) ,        
+       2 MORT_RATE_RULE2     CHAR  (5)              ,        
+       2 Fill201 char (01) ,        
+       2 MORT_RATE_RULE_VAL1 CHAR (2)               ,        
+       2 Fill202 char (01) ,        
+       2 MORT_RATE_RULE_VAL2 CHAR (2)               ,        
+       2 Fill203 char (01) ,        
+       2 MORT_RATE_VAL1      PIC'9V(6)9'            ,        
+       2 Fill204 char (01) ,        
+       2 MORT_RATE_VAL2      PIC'9V(6)9'            ,        
+       2 Fill205 char (01) ,        
+       2 MORT_AGE_NEXT_BDAY1 PIC'999'               ,        
+       2 Fill206 char (01) ,        
+       2 MORT_AGE_NEXT_BDAY2 PIC'999'               ,        
+       2 Fill207 char (01) ,        
+       2 LC_SAR              PIC'(9)9V(4)9'         ,        
+       2 Fill208 char (01) ,        
+       2 MORTAB1             CHAR (8)               ,        
+       2 Fill209 char (01) ,        
+       2 MORTAB2             CHAR (8)               ,        
+       2 Fill210 char (01) ,        
+       2 UNINV_AMT           PIC '(09)-9V99' ,        
+    /* 2 UNINV_AMT           PIC'(9)9V(2)9-'        , */        
+       2 Fill211 char (01) ,        
+       2 POLVAL_TO_ZERO      CHAR  (1)              ,        
+       2 Fill212 char (01) ,        
+       2 REGVAL_TO_ZERO      CHAR  (1)              ,        
+       2 Fill213 char (01) ,        
+       2 EXPENSE_DEDUC       PIC '(08)-9V(5)9',        
+    /* 2 EXPENSE_DEDUC       PIC'(8)9V(5)9-'        , */        
+       2 Fill214 char (01) ,        
+       2 ABAR_VAL            PIC '(06)-9V(7)9',        
+    /* 2 ABAR_VAL            PIC'(6)9V(7)9-'        , */        
+         
+     2 Filler  char (105) ;        
+   /*2 Filler  char (151) ; */        
+   /*2 Filler  char (3578) ; */        
+         
+END_PLC(FUK510M4)

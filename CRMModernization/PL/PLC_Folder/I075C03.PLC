@@ -1,0 +1,87 @@
+BEGIN_PLC(I075C03)
+     DCL I075RAC                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(525) BLKSIZE(5250));        
+         
+     DCL TYPE_1                      CHAR(525) BASED(ADDR(T_1));        
+     DCL 01 T_1                      STATIC,        
+            03 REC_IDENT             PIC'9'   INIT(1),        
+            03 PERMIT_NO             CHAR(12) INIT(' '),        
+            03 SPARE_1               CHAR(16) INIT(' '),        
+            03 TAX_DISTRICT_NUM      PIC'999' INIT(0),        
+            03 PAYE_REF              CHAR(07) INIT(' '),        
+            03 TAX_DISTRICT_NAME     CHAR(40) INIT(' '),        
+            03 SPARE_2               CHAR(06) INIT(' '),        
+            03 TAX_YEAR_START        PIC'(4)9',/* 2001/2002 SET 2001 */        
+            03 EMPER_NAME            CHAR(36) INIT(' '),        
+            03 EMPER_ADDR            CHAR(60) INIT(' '),        
+            03 ECON                  CHAR(09) INIT(' '),        
+            03 SPARE_4               CHAR(329) INIT(' '),        
+            03 CONTROL_CHARS         CHAR(02) INIT(' ');        
+         
+     DCL TYPE_2                      CHAR(525) BASED(ADDR(T_2));        
+     DCL 01 T_2                      STATIC,        
+            03 REC_IDENT             PIC'9' INIT(2),        
+            03 OUR_REFERENCE         CHAR(14),        
+            03 SURNAME               CHAR(20),        
+            03 FORNAME_1             CHAR(07),        
+            03 FORNAME_2             CHAR(07),        
+            03 DOB                   CHAR(08),        
+            03 GENDER                CHAR(01),        
+            03 ADDR_1                CHAR(27),        
+            03 ADDR_2                CHAR(27),        
+            03 ADDR_3                CHAR(27),        
+            03 ADDR_4                CHAR(27),        
+            03 POST_CODE             CHAR(08),        
+            03 SPARE_1               CHAR(01) INIT(' '),        
+            03 TAX_CODE              CHAR(07),        
+            03 WM_INDICATOR          CHAR(01) INIT(' '),        
+            03 NI_NUMBER             CHAR(09),        
+            03 SPARE_2               CHAR(25) INIT(' '),        
+            03 NI_CONTRIB_TABLE      CHAR(01) INIT('X'),        
+            03 LEL_1                 PIC'(4)9' INIT(0000),        
+            03 ET_1                  PIC'(4)9' INIT(0000),        
+            03 UEL_1                 PIC'(5)9' INIT(00000),        
+            03 EE_ER_CONTRIB_PAYBLE  PIC'(9)9' INIT(000000000),        
+            03 EE_ER_CONTRIB_NEG     CHAR(01) INIT(' '),        
+            03 EE_CONTRIB_PAYBLE     PIC'(8)9' INIT(00000000),        
+            03 SCON                  CHAR(09) INIT(' '),        
+            03 SPARE_3               CHAR(03) INIT(' '),        
+            03 SSP                   PIC'(6)9' INIT(000000),        
+            03 SMP                   PIC'(8)9' INIT(00000000),        
+            03 SPP                   PIC'(6)9' INIT(000000),        
+            03 SAP                   PIC'(6)9' INIT(000000),        
+            03 TOTAL_GROSS_PAY       PIC'(9)9',        
+            03 TOTAL_TAX             PIC'(9)9',        
+            03 TAX_REFUND_SYMBOL     CHAR(01) INIT(' '),        
+            03 PREV_GROSS_PAY        PIC'(9)9',        
+            03 PREV_TAX_PAY          PIC'(9)9',        
+            03 EMPLY_START           PIC'(8)9' INIT(00000000),        
+            03 EMPLY_END             CHAR(08),        
+            03 SUPERANNU_CONTRIB     CHAR(05) INIT(' '),        
+            03 SUPERANNU_REFUND      CHAR(01) INIT(' '),        
+            03 EE_CONTRIB_WIDOWS     PIC'(4)9' INIT(0000),        
+            03 STUDENT_LOAN_DED      PIC'(5)9' INIT(00000),        
+            03 TAX_CREDIT            PIC'(7)9' INIT(0000000),        
+            03 WEEK_IND              CHAR(01) INIT(' '),        
+            03 TAX_PAY_EMPLY         CHAR(09) INIT(' '),        
+            03 PENSION_IND           CHAR(01) INIT(' '),        
+            03 DIRECTOR_IND          CHAR(01) INIT(' '),        
+            03 THE_REST              CHAR(151) INIT(' '); /* 525-374 */        
+         
+     DCL TYPE_3                      CHAR(525) BASED(ADDR(T_3));        
+     DCL 01 T_3                      STATIC,        
+            03 REC_IDENT             PIC'9'  INIT(3),        
+            03 TOTAL_ER_EE_NI        PIC'(11)9' INIT(00000000000),        
+            03 TOTAL_ER_EE_NEG       CHAR(01) INIT(' '),        
+            03 TOTAL_TAX             PIC'(12)9',        
+            03 TAX_REFUND_SYMBOL     CHAR(01) INIT(' '),        
+            03 COUNT_TYPE2_RECS      PIC'(7)9',        
+            03 ZEROES                CHAR(98) INIT((98)'0'),        
+            03 THE_REST              CHAR(394) INIT(' '); /* 525-131 */        
+         
+     DCL TYPE_4                      CHAR(525) BASED(ADDR(T_4));        
+     DCL 01 T_4                      STATIC,        
+            03 REC_IDENT             PIC'9' INIT(4),        
+            03 END_OF_DATA           CHAR(11) INIT('END OF DATA'),        
+            03 THE_REST              CHAR(513) INIT(' '); /* 525-12 */        
+END_PLC(I075C03)

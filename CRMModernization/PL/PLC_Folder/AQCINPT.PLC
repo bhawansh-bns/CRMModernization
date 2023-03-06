@@ -1,0 +1,48 @@
+BEGIN_PLC(AQCINPT)
+  DCL 1 QUOTE,        
+        2 INPUTS,        
+          3 SEX(2)               CHAR (1),        
+          3 AGE(2)               PIC'99V.99',        
+          3 QMODE                CHAR (1),        
+          3 ADVR                 CHAR (3),        
+          3 GUAR                 FIXED DEC (3),        
+          3 ESC                  FLOAT DEC (16),        
+          3 WIDOWS               FLOAT DEC (16),        
+          3 YGCHAR               CHAR (1),        
+          3 PURPRICE             FLOAT DEC (16), /*?*/        
+          3 CASHSUMCH            CHAR (5),       /*?*/        
+          3 CASHSUMAMNT          FLOAT DEC (16), /*?*/        
+          3 IRINPUT              FLOAT DEC (16),        
+          3 IRINPUT2             FLOAT DEC (16), /*?*/        
+          3 SFSOLD               CHAR (1),       /*?*/        
+          3 IFASELLER            CHAR (3),       /*?*/        
+          3 ICVUPLIFT            FLOAT DEC (16), /*?*/        
+          3 COMM_RATE            FLOAT DEC (16), /*?*/        
+          3 EPP                  CHAR (1),       /*?*/        
+          3 PRE_LPI_PREMS        FLOAT DEC (16), /*?*/        
+          3 LPI_UNIT_VAL         FLOAT DEC (16), /*?*/        
+          3 PREMS_TODATE         FLOAT DEC (16), /*?*/        
+          3 WFEE                 CHAR (1), /*WAIVE FEE - Y/N */        
+          3 ADAY_TFC             FLOAT DEC (16), /*TAX FREE CASH*/        
+          3 ADAY_MAX_PEN         FLOAT DEC (16), /*MAXIMUM PENSION*/        
+          3 ADAY_VALUATION       FLOAT DEC (16), /*VALUE*/        
+          3 RETIREMENT_DATE      PIC '(8)9',     /*RETIREMENT DATE*/        
+        2 OUTPUTS,        
+          3 FP1                  FLOAT DEC (16), /*FULL PENSION1*/        
+          3 CS                   FLOAT DEC (16), /*TAX FREE CASH*/        
+          3 RP1                  FLOAT DEC (16), /*REDUCED PENSION1*/        
+          3 FP2                  FLOAT DEC (16), /*FULL PENSION2*/        
+          3 RP2                  FLOAT DEC (16), /*REDUCED PENSION2*/        
+          3 LTCRATIO             FLOAT DEC (16), /* LTC RATIO */        
+          3 FP3                  FLOAT DEC (16), /*FULL PENSION3*/        
+          3 RP3                  FLOAT DEC (16),/*REDUCED PENSION3*/        
+          3 INITCOMMDISCLOSED(2) FLOAT DEC (16),        
+          3 RNWLCOMMDISCLOSED(2) FLOAT DEC (16),        
+          3 LPIFP1               FLOAT DEC (16),/*LPI FULL PENSION1*/        
+          3 LPIRP1               FLOAT DEC (16),/*LPI RED PENSION1*/        
+          3 LTA_PERCENTAGE       FIXED DEC (5,2), /*LTA PERCENTAGE*/        
+        2 QRET_CODE              CHAR(3),        
+        2 VERSION                PIC'99V.99',        
+        2 LPIUV                  FLOAT DEC (16);        
+         
+END_PLC(AQCINPT)

@@ -1,0 +1,27 @@
+BEGIN_PLC(N040TWAS)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040TWAS                                       */        
+    /*   GENERATION  : 018                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : JANUARY 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : TWA AREA FOR USE BY THE N040 DIARY PROCEDURES. */        
+    /*                 IT ALLOWS DATA TO BE PASED FROM ONE PROCEDURE  */        
+    /*                 TO ANOTHER WITHOUT THE NEED FOR EXTERNAL       */        
+    /*                 STORAGE OR PARAMETERS.                         */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 TWA BASED(APS_TWA_PTR),        
+                3 RESERVED_PTR       PTR, /* USED BY APS FOR LINK     */        
+                3 POL_BEFORE_PTR     PTR, /* POLICY CTL BEFORE UPDATE */        
+                3 POL_AFTER_PTR      PTR, /* POLICY CTL AFTER  UPDATE */        
+                3 INV_BEFORE_PTR     PTR, /* INV. CTL BEFORE UPDATE   */        
+                3 INV_UPD_PTR        PTR, /* INV. RECS FOR UPDATING   */        
+                3 HIS_DATA_PTR       PTR, /* HIST. DATA STORAGE AREA  */        
+                3 OTHERS_PTR         PTR; /* OTHER COMMON DATA NEEDED */        
+END_PLC(N040TWAS)

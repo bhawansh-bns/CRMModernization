@@ -1,0 +1,24 @@
+BEGIN_PLC(D1PCTTRG)
+     DCL PCT_DATA              CHAR(1256) BASED (ADDR(PCT));        
+     DCL 1 PCT,        
+       3 POLICY_NUMBER      CHAR(11),        
+       3 OWNER_CLI_REF      CHAR(9),        
+       3 START_DATE         CHAR(8),        
+       3 END_DATE           CHAR(8),        
+       3 CONTRIBUTION_SOURCE CHAR(2),        
+       3 NI_NUMBER          CHAR(9),        
+       3 CLI_ADDRESS_NAME   CHAR(50),        
+       3 CLI_LETTER_NAME    CHAR(50),        
+       3 MAILER_ADDR1       CHAR(30),        
+       3 MAILER_ADDR2       CHAR(30),        
+       3 MAILER_ADDR3       CHAR(30),        
+       3 MAILER_ADDR4       CHAR(30),        
+       3 MAILER_POSTCODE    CHAR(8),        
+       3 YOURS_SINC_FAITH   CHAR(10),        
+       3 YOUR_REF           CHAR(10),        
+       3 THIRD_PARTY        CHAR(1),        
+       3 PAYMENTS(30),        
+         5 PAYMENT_DATE     CHAR(8),        
+         5 PAYMENT_AMOUNT   PIC '(8)-9V.99',        
+         5 PAYMENT_NET_AMOUNT   PIC '(8)-9V.99';        
+END_PLC(D1PCTTRG)

@@ -1,0 +1,37 @@
+BEGIN_PLC(POLCTLB)
+         
+    /*****************************************************************/        
+    /* POLICY RECORD BEFORE THE UPDATE                               */        
+    /* USED IN N201.                                                 */        
+    /*****************************************************************/        
+         
+          DCL 1 POLB BASED(TWA.POL_BEFORE_PTR),        
+                3 C77011          PIC'(11)9',      /* POLICY NO.A0109 */        
+                3 UPD_SW          CHAR (1),        /* 0 POLICY NOT UPD*/        
+                                                   /* 1 POLICY UPDATED*/        
+                                                   /* 2 NEW POLICY    */        
+                3 A24003          FIXED DEC (3),   /* UNITS PD  L1103 */        
+                3 A27009          FIXED DEC (9,2), /* SUSPENSE  L0511 */        
+                3 A11009          FIXED DEC (9,2), /* LIQ PRO   L0611 */        
+                3 O05009          FIXED DEC (9,2), /* FIXED ACCOUNT   */        
+                3 A08009          FIXED DEC (9,2), /* REPL      L0711 */        
+                3 A14005          FIXED DEC (5,2), /* ODD LOT   L0905 */        
+                3 A85011          FIXED DEC (11,2), /*CHRG.AMT  U0111 */        
+                3 A26009          FIXED DEC (9,2), /* PAID B.CL L0111 */        
+                3 A16009          FIXED DEC (9,2), /* PAID B.OT L0211 */        
+                3 A13009          FIXED DEC (9,2), /* LOAN INT  L0211 */        
+                3 A31009          FIXED DEC (9,2), /* SPECIALS  L0211 */        
+                3 A15009          FIXED DEC (9,2), /* APL AMT.  L0311 */        
+                3 A28009          FIXED DEC (9,2), /* IFL AMT.  L0311 */        
+                3 A12009          FIXED DEC (9,2), /* LOAN CPTL L0311 */        
+                3 A05009          FIXED DEC (9,2), /* BEN. AMT. L0311 */        
+                3 A19009          FIXED DEC (9,2), /* PAYMT. DT L0301 */        
+                3 A25009          FIXED DEC (9,2), /* PRE. PAID L0409 */        
+                3 TOTAL_TRAN      FIXED DEC (11,2), /*TOTAL AMT IN|OUT*/        
+                3 R41005          FIXED DEC (5,4),  /*FUNDING FACT-CAP*/        
+                3 R41105          FIXED DEC (5,4),  /*FUNDING FACT-ACC*/        
+                3 C75003          PIC '999',        /* PLAN           */        
+                3 C77503          PIC '999',        /* POLICY TYPE    */        
+                3 C68001          PIC '9',          /* MODE           */        
+                3 C90502          CHAR (2);         /* STATUS         */        
+END_PLC(POLCTLB)

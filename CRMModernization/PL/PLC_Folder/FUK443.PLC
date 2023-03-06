@@ -1,0 +1,41 @@
+BEGIN_PLC(FUK443)
+ /*-----------------------------------------------------------------\        
+  UNIT AUDIT PLIDESC CORRESPONDING TO FIELDS ON AUDIT MASTER               
+  CREATED EL SEP '93 - UK VERSION                                          
+ __________________________________________________________________        
+                                                                           
+  AUDIT TRAIL                                                              
+  -----------                                                              
+                                                                           
+  DATE : 23/07/1999                                                        
+                                                                           
+  PROGRAMMER : JAMES FARRELL (M255)                                        
+                                                                           
+  ADDED ARCHV FIELD TO INDICATE IF A RECORD HAS BEEN ARCHIVED              
+  SO THAT THE RECORD CAN BE MANIPULATED WITHOUT LOASS OF INTEGRITY         
+                                                                           
+ \_________________________________________________________________*/        
+ DCL 1 WUK443  ,        
+       2   TABLE    CHAR  ( 3) , /* TABLE NUMBER                      */        
+       2   POLNO    CHAR  ( 7) , /* POLICY NUMBER                     */        
+       2   ISSUE    PIC  '(8)9', /* DATE OF ISSUE                     */        
+       2   CODE     CHAR  ( 2) , /* AUDIT STATUS                      */        
+       2   SELDT    PIC  '(8)9', /* DATE SELECTED                     */        
+       2   AUDDT    PIC  '(8)9', /* DATE AUDITED                      */        
+       2   USER     CHAR  ( 4) , /* USER FOR AUDIT                    */        
+       2   REIND    PIC  '(8)9', /* DATE REINVESTED                   */        
+       2   DOWND    PIC  '(8)9', /* DATE OF DOWNLOAD                  */        
+       2   TYPE     CHAR  ( 1) , /* TYPE OF POLICY                    */        
+       2   COMPL    CHAR  ( 1) , /* AUDIT COMPLETE                    */        
+       2   MULTI(9) CHAR  ( 1) , /* VERSION LEVEL FLAGGING            */        
+       2   PASS_UI  CHAR  ( 1) , /* PASSED UI RUN                     */        
+       2   TXN_TM   CHAR  ( 1) , /* TRANSACTION THIS MONTH            */        
+                                 /* Y IF ANY ACTIVITY ON POLICY SINCE */        
+                                 /* LAST REIND ... OTHERWISE N        */        
+       2   TXN_NM   CHAR  ( 1) , /* TRANSACTION NEXT MONTH            */        
+                                 /* 4 IF ANY ACTIVITY ON POLICY SINCE */        
+                                 /* REINVEST DATE ... OTHERWISE BLANK */        
+       2   ARCHV    CHAR  ( 1) , /* DENOTES IF THIS RECORD HAS BEEN   */        
+                                 /* ARCHIVED YET 'Y'-YES OR ' '-NO    */        
+       2   SPARE    CHAR  ( 9) ;        
+END_PLC(FUK443)

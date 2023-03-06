@@ -1,0 +1,7 @@
+BEGIN_PLC(A940INCL)
+ DCL AREA_AR           CHAR(12000) EXTERNAL;        
+         
+ DCL 1 AREA_ARRAY(2000) BASED(ADDR(AREA_AR)),        
+       3 REGION_CODE     CHAR(3),        
+       3 SALES_ARM       CHAR(3);        
+END_PLC(A940INCL)

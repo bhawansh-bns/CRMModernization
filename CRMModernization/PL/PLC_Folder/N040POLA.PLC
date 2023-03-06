@@ -1,0 +1,42 @@
+BEGIN_PLC(N040POLA)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040POLA                                       */        
+    /*   GENERATION  : 019                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : JANUARY 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : 'POLA' DATA AREA FOR USE BY THE N040 DIARY     */        
+    /*                 PROCEDURES.                                    */        
+    /*                 POLICY FILE DATA IS LOADED TO THIS STRUCTURE   */        
+    /*                 IN THE ROOT PROCEDURE, N040P00, AFTER ALL      */        
+    /*                 DIARY PROCESSING IS COMPLETE FOR THE POLICY.   */        
+    /*                 IT IS THEN USED IN THE CROSS CHECKING          */        
+    /*                 PROCEDURE, N040P04.                            */        
+    /*                 USED IN CONJUNCTION WITH N040TWA.              */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 POLA BASED(TWA.POL_AFTER_PTR),        
+                3 C77011          PIC'(11)9',      /* POLICY NO.A0109 */        
+                3 A24003          FIXED DEC (3),   /* UNITS PD  L1103 */        
+                3 A27009          FIXED DEC (9,2), /* SUSPENSE  L0511 */        
+                3 A11009          FIXED DEC (9,2), /* LIQ PRO   L0611 */        
+                3 O05009          FIXED DEC (9,2), /* FIXED ACCOUNT   */        
+                3 A08009          FIXED DEC (9,2), /* REPL      L0711 */        
+                3 A14005          FIXED DEC (5,2), /* ODD LOT   L0905 */        
+                3 A85011          FIXED DEC (11,2), /*CHRG.AMT  U0111 */        
+                3 A26009          FIXED DEC (9,2), /* PAID B.CL L0111 */        
+                3 A16009          FIXED DEC (9,2), /* PAID B.OT L0211 */        
+                3 A13009          FIXED DEC (9,2), /* LOAN INT  L0211 */        
+                3 A31009          FIXED DEC (9,2), /* SPECIALS  L0211 */        
+                3 A15009          FIXED DEC (9,2), /* APL AMT.  L0311 */        
+                3 A28009          FIXED DEC (9,2), /* IFL AMT.  L0311 */        
+                3 A12009          FIXED DEC (9,2), /* LOAN CPTL L0311 */        
+                3 A05009          FIXED DEC (9,2), /* BEN. AMT. L0311 */        
+                3 A19009          FIXED DEC (9,2), /* PAYMT. DT L0301 */        
+                3 A25009          FIXED DEC (9,2); /* PRE. PAID L0409 */        
+END_PLC(N040POLA)

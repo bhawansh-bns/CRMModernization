@@ -1,0 +1,31 @@
+BEGIN_PLC(DUK09007)
+         
+ /*-------------------------------------------------------------------*/        
+ /* DUK09007 : Declarations needed to call module UK09007.            */        
+ /*                                                                   */        
+ /* This include is used by programs which call program UK09007.      */        
+ /*                                                                   */        
+ /* The following preprocessor code should be included in the         */        
+ /* calling program.                                                  */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /* %DCL CUK09007_NAME_TYPE CHAR                                      */        
+ /* %CUK09007_NAME_TYPE = 'CUK09007'                                  */        
+ /* %include CUK09007                                                 */        
+ /* %DEACT CUK09007_NAME_TYPE                                         */        
+ /* %include DUK9007                                                  */        
+ /*                                                                   */        
+ /* Communications variables should be referred to by                 */        
+ /* CUK09007.xxxxxxx (ie CUK09007.F_Name = Fund name in comms area)   */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ %DCL CALL_UK09007_ALLOC_MONEY CHAR ;        
+ %CALL_UK09007_ALLOC_MONEY =        
+             'CALL UK09007 (UI_PTR,P_CUK09007,P_CUK09009)';        
+         
+ Dcl UK09007 Entry (Ptr,Ptr,Ptr) External ;        
+ P_CUK09007 = ADDR (CUK09007) ;        
+         
+         
+END_PLC(DUK09007)

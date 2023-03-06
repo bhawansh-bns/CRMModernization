@@ -1,0 +1,91 @@
+BEGIN_PLC(CINV9PRM)
+ /*********************************************************************/        
+ /*     <AL> ON: 01/08/2007  BY: Louise Chandler   PRJ/INC/UQ:LP601   */        
+ /*  Brought over for Chesnara migration - no changes made    R01596  */        
+ /*********************************************************************/        
+ /*     <AL> ON: 03/11/2004  BY: Colm Cormican          ALTR: 57795   */        
+ /*        Amended to total additional elements for new reinsurance   */        
+ /*        calculations and add extra PD elements.                    */        
+ /*********************************************************************/        
+ /*     <AL> ON: 22/10/1999  BY: Derek Power            ALTR: 15828   */        
+ /*        Amended to handle new medical limits.                      */        
+ /*********************************************************************/        
+ /*     <AL> ON: 21/08/1998  BY: Robert Brown      PRJ/INC/UQ: P09008 */        
+ /*      Financial Foundation Enhancements.                           */        
+ /*      Changed to include new parameters for Critical Health        */        
+ /*      Aggregation                                                  */        
+ /*********************************************************************/        
+ /*     <AL> ON: 03/07/1998  BY: John Farr         PRJ/INC/UQ: P09008 */        
+ /*      Financial Foundation Enhancements.                           */        
+ /*      Amend for new Policy Type of 002 for Plan Code 050.          */        
+ /*********************************************************************/        
+ /*    IF ANY CHANGES ARE MADE TO THIS COPYBOOK THEN CINV009, CINVAGR */        
+ /*    CINVUNW AND CINVINS SHOULD BE RE-COMPILED AND CRC'ED.          */        
+ /*                    Data from pending policy                       */        
+ /*********************************************************************/        
+        3  PENDING_DATA,        
+           5  PD_SA              FIXED DEC(9),    /* Sum Assured      */        
+           5  PD_CAP_FACTOR      FIXED DEC(3,1),  /* Capitalisation   */        
+           5  PD_ANNUAL_PREM     FIXED DEC(9,2),  /* Annualised Prem  */        
+           5  PD_POLICY_TYPE     PIC '(3)9',      /* Policy Type      */        
+           5  PD_WHICH_DEATH     PIC '9',         /* Joint life ind.  */        
+           /*                                                         */        
+           /* LA1 & LA2                                               */        
+           /*----------                                               */        
+           5  PD_LA (2),        
+              7  PD_INVEST_SA    FIXED DEC(9),    /* Sum Assured      */        
+              7  PD_PURE_SA      FIXED DEC(9),    /* Sum Assured      */        
+              7  PD_ACTUAL_SA    FIXED DEC(9),    /* Sum Assured      */        
+              7  PD_CIP          FIXED DEC(9),    /* Crit Ill Prepay  */        
+              7  PD_ADB          FIXED DEC(9),    /* Acc Death Ben    */        
+              7  PD_PDP          FIXED DEC(9),    /* Perm Dis Prepay  */        
+  /* 09008 */ 7  PD_ECP          FIXED DEC(9),    /* Eld Care Prepay  */        
+              7  PD_CIB          FIXED DEC(9),    /* Crit Ill Benefit */        
+              7  PD_PDB          FIXED DEC(9),    /* Perm Dis Benefit */        
+  /* 09008 */ 7  PD_ECB          FIXED DEC(9),    /* Eld Care Benefit */        
+              7  PD_SCB          FIXED DEC(9),    /* Surg Cash Ben    */        
+              7  PD_IPB          FIXED DEC(9),    /* Income Prot Ben  */        
+              7  PD_IPB2         FIXED DEC(9),    /* Income Prot Ben  */        
+ /* A15828 */ 7  PD_MORT_DIB     FIXED DEC(9),    /* Mortgage Dis Inc */        
+              7  PD_IHRA         FIXED DEC(9),    /* Pension PDB      */        
+              7  PD_FIB          FIXED DEC(9),    /* Family Inc Ben   */        
+              7  PD_WDIS         FIXED DEC(9,2),  /* Widows Death Ben */        
+              7  PD_WOP          FIXED DEC(7,2),  /* Waiver of Prem   */        
+        /**************************************************************/        
+        /*                Aggregated benefits for LA1 & LA2           */        
+        /**************************************************************/        
+        3  CLIENT_TOTALS (2),        
+           5  CT_SA              FIXED DEC(9),    /* Sum Assured      */        
+           5  CT_SA_FOR_REINS    FIXED DEC(9),    /* SA for Reins     */        
+ /*15828*/ 5  CT_SA_FOR_UW       FIXED DEC(9),    /* SA for Underwrtg */        
+           5  CT_SA_REINS        FIXED DEC(9),    /* SA Reins Amount  */        
+           5  CT_ADB             FIXED DEC(9),    /* Acc Death Ben    */        
+           5  CT_ADB_REINS       FIXED DEC(9),    /* ADB Reins        */        
+           5  CT_IPB             FIXED DEC(9),    /* Inc Protect Ben  */        
+           5  CT_IPB_REINS       FIXED DEC(9),    /* IPB Reins        */        
+ /*15828*/ 5  CT_MORT_DIB        FIXED DEC(9),    /* Mortgage Dis Inc */        
+           5  CT_WOPBEN          FIXED DEC(9),    /* Waiver of Prem   */        
+ /*09008*/ 5  CT_CI              FIXED DEC(9),    /* Crit Ill Pre/Ben */        
+ /*09008*/ 5  CT_PD              FIXED DEC(9),    /* Perm Dis Pre/Ben */        
+ /*09008*/ 5  CT_EC              FIXED DEC(9),    /* Eld Care Pre/Ben */        
+ /*09008*/ 5  CT_CH              FIXED DEC(9),    /* Crit Hea Pre/Ben */        
+           5  CT_CIB_REINS       FIXED DEC(9),    /* CIB Reins        */        
+ /*09008*/ 5  CT_CHB             FIXED DEC(9),    /* Crit Health Ben  */        
+ /*09008*/ 5  CT_CHP             FIXED DEC(9),    /* Crit Health Pre  */        
+ /*09008*/ 5  CT_CHB_REINS       FIXED DEC(9),    /* CHB Reins        */        
+           5  CT_SCB             FIXED DEC(9),    /* Surg Cash Ben    */        
+           5  CT_IHRA            FIXED DEC(9),    /* Pension PDB      */        
+           5  CT_IHRA_REINS      FIXED DEC(9),    /* Pension PDB reins*/        
+           5  CT_CH_REINS        FIXED DEC(9),    /* CH reins         */        
+           5  CT_SCB_REINS       FIXED DEC(9),    /* Surg Cash Ben re */        
+           5  CT_PTD             FIXED DEC(9),    /* Perm Tot Disable */        
+           5  CT_CIP             FIXED DEC(9),    /* Crit Ill Cover   */        
+           5  CT_ECP             FIXED DEC(9),    /* ECP prepay amount*/        
+           5  CT_PREPAY_AMOUNT   FIXED DEC(9),    /* Max prepay amount*/        
+           5  CT_PREPAY_REINS    FIXED DEC(9),    /* Max prepay reins */        
+           5  CT_PDB             FIXED DEC(9),    /* PTB benefit      */        
+           5  CT_CIB             FIXED DEC(9),    /* Crit Ill Benefit */        
+           5  CT_ECB             FIXED DEC(9),    /* ECB benefit      */        
+           5  CT_BENEFIT_AMOUNT  FIXED DEC(9),    /* Max benfit amount*/        
+           5  CT_BENEFIT_REINS   FIXED DEC(9);    /* Max benfit reins */        
+END_PLC(CINV9PRM)

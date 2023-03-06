@@ -1,0 +1,77 @@
+BEGIN_PLC(DOC1TRG)
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*     <AL> ON: 04/03/2002  BY: BEN CHAPMAN        CCID: 176388      */        
+ /*                                                                   */        
+ /*     Changes for CHARGEABLE EVENTS CERTIFICATES                    */        
+ /*                         */        
+ /*     Added: TRG_ADR_ASSOC_CODE:  to describe the addressee's       */        
+ /*                                 relationship to the policy,       */        
+ /*            TRG_OWNER_CLIENT_NO: to hold the client number, if     */        
+ /*                                 any, of the 1st owner,            */        
+ /*            TRG_FILLER:          to allow extra fields to be added */        
+ /*                                 later without changing the        */        
+ /*                                 position and length of the custom */        
+ /*                                 data                              */        
+ /*                                                                   */        
+ /*     Reduced length of TRG_LETTER_SPECIFIC from 959 to 900 bytes.  */        
+ /*     Changed TRG_POLICY_NO from PIC to CHAR.                       */        
+ /*                                                                   */        
+ /*     Created TRG_TMP and TRG_TMP_STRUC.                            */        
+ /*     This additional trigger structure will be used in the "read   */        
+ /*     ahead" process for multi-policy client letters.               */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ /*******************************************************************/        
+ /* PLIINC - DOC1TRG.                                               */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY THE CPDF / DOC1 INTERFACE PROGRAM       */        
+ /* DOC1P00 AND ANY PROGRAMS THAT TRIGGER DOC1 LETTERS.             */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF COMMON TRIGGER FILE DATA ELEMENTS.  */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL   TRG_DTA                  CHAR(1067) EXTERNAL;        
+         
+     DCL 1 TRG_STRUC                BASED(ADDR(TRG_DTA)),        
+           3 TRG_ID                 CHAR(9),        
+           3 TRG_LETTER_REF         CHAR(20),        
+           3 TRG_SUBTYPES           CHAR(5),        
+           3 TRG_DATE               CHAR(8),        
+           3 TRG_SOURCE_PROG        CHAR(8),        
+           3 TRG_LOGON_ID           CHAR(8),        
+           3 TRG_EMPLOYEE_NUM       CHAR(8),        
+           3 TRG_LOCATION           CHAR(2),        
+           3 TRG_NUM_COPIES         CHAR(2),        
+           3 TRG_POLICY_NO          CHAR(11),        
+           3 TRG_CLIENT_NO          CHAR(9), /* ADDRESSEE (not owner) */        
+           3 TRG_PAYREF_NO          CHAR(18),        
+           3 TRG_ADR_ASSOC_CODE     CHAR(2),        
+           3 TRG_OWNER_CLIENT_NO    CHAR(9),        
+           3 TRG_FILLER             CHAR(48),        
+           3 TRG_LETTER_SPECIFIC    CHAR(900);        
+         
+     DCL   TRG_TMP                  CHAR(1067);        
+         
+     /* Internal temp structure for multiple policy read-ahead */        
+         
+     DCL 1 TRG_TMP_STRUC            BASED(ADDR(TRG_TMP)),        
+           3 TRG_TMP_ID             CHAR(9),        
+           3 TRG_TMP_LETTER_REF     CHAR(20),        
+           3 TRG_TMP_SUBTYPES       CHAR(5),        
+           3 TRG_TMP_DATE           CHAR(8),        
+           3 TRG_TMP_SOURCE_PROG    CHAR(8),        
+           3 TRG_TMP_LOGON_ID       CHAR(8),        
+           3 TRG_TMP_EMPLOYEE_NUM   CHAR(8),        
+           3 TRG_TMP_LOCATION       CHAR(2),        
+           3 TRG_TMP_NUM_COPIES     CHAR(2),        
+           3 TRG_TMP_POLICY_NO      CHAR(11),        
+           3 TRG_TMP_CLIENT_NO      CHAR(9), /* ADDRESSEE (not owner) */        
+           3 TRG_TMP_PAYREF_NO      CHAR(18),        
+           3 TRG_TMP_ADR_ASSOC_CODE CHAR(2),        
+           3 TRG_TMP_OWNER_CLIENT_NO CHAR(9),        
+           3 TRG_TMP_FILLER         CHAR(48),        
+           3 TRG_TMP_LETTER_SPECIFIC CHAR(900);        
+END_PLC(DOC1TRG)

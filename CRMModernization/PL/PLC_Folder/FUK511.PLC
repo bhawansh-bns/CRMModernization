@@ -1,0 +1,473 @@
+BEGIN_PLC(FUK511)
+ /*------------------------------------------------------------------*/        
+ /* WUK511 : UKPH/UKUI table cross reference                         */        
+ /* PR0003 RMJ 01/11/2002 Remove semicolon from within comments      */        
+ /*------------------------------------------------------------------*/        
+         
+  Dcl 1 WUK511 (1000)   Pic  '999';        
+  /* PPP - Employed */        
+  WUK511(630) = 630;        
+  WUK511(631) = 630;        
+  WUK511(632) = 630;        
+  WUK511(633) = 630;        
+  WUK511(634) = 630;        
+  WUK511(635) = 630;        
+  WUK511(636) = 630;        
+  WUK511(637) = 630;        
+  /* PPP - FSAVC */        
+  WUK511(640) = 640;        
+  WUK511(641) = 640;        
+  WUK511(643) = 640;        
+  WUK511(644) = 640;        
+  WUK511(645) = 640;        
+  WUK511(646) = 640;        
+  /* PPP - Self Employed */        
+  WUK511(670) = 670;        
+  WUK511(671) = 670;        
+  WUK511(673) = 670;        
+  WUK511(674) = 670;        
+  WUK511(675) = 670;        
+  WUK511(676) = 670;        
+  /* TQR 1 - Personal Pension */        
+  WUK511(320) = 320;        
+  WUK511(321) = 320;        
+  WUK511(322) = 320;        
+  WUK511(323) = 320;        
+  WUK511(325) = 320;        
+  /* TQR 1 - Additional Pension */        
+  WUK511(330) = 330;        
+  WUK511(331) = 330;        
+  WUK511(332) = 330;        
+  WUK511(333) = 330;        
+  WUK511(375) = 330;        
+  /* TQR 1 - Self Employed */        
+  WUK511(570) = 570;        
+  WUK511(571) = 570;        
+  WUK511(572) = 570;        
+  WUK511(573) = 570;        
+  WUK511(575) = 570;        
+  /* TQR 1 - Principal Pension */        
+  WUK511(210) = 210;        
+  WUK511(211) = 210;        
+  WUK511(212) = 210;        
+  WUK511(253) = 210;        
+  WUK511(255) = 210;        
+  /* TQR 2 - Personal Pension */        
+  WUK511(512) = 512;        
+  WUK511(513) = 512;        
+  WUK511(514) = 512;        
+  WUK511(256) = 512;        
+  WUK511(261) = 512;        
+  /* TQR 2 - Additional Pension */        
+  WUK511(612) = 612;        
+  WUK511(613) = 612;        
+  WUK511(614) = 612;        
+  WUK511(257) = 612;        
+  WUK511(262) = 612;        
+  /* TQR 2 - Self Employed */        
+  WUK511(712) = 712;        
+  WUK511(713) = 712;        
+  WUK511(714) = 712;        
+  WUK511(258) = 712;        
+  WUK511(263) = 712;        
+  /* TQR 2 - Principal Pension */        
+  WUK511(746) = 746;        
+  WUK511(747) = 746;        
+  WUK511(748) = 746;        
+  WUK511(259) = 746;        
+  WUK511(264) = 746;        
+  /* EPP - Regular Premium */        
+  WUK511(740) = 740;        
+  WUK511(741) = 741;        
+  WUK511(742) = 742;        
+  /* EPP - Single Premium */        
+  WUK511(743) = 743;        
+  WUK511(744) = 744;        
+  WUK511(745) = 745;        
+  /* TQL 1 - Single Life */        
+  WUK511(760) = 760;        
+  WUK511(761) = 760;        
+  WUK511(762) = 760;        
+  WUK511(763) = 760;        
+         
+  WUK511(751) = 751;        
+  WUK511(753) = 753;        
+  WUK511(800) = 800;        
+  WUK511(798) = 798;        
+  WUK511(802) = 802;        
+         
+  /* TQL 1 - Joint Life */        
+  WUK511(785) = 785;        
+  WUK511(786) = 785;        
+  WUK511(787) = 785;        
+  WUK511(788) = 785;        
+         
+  WUK511(789) = 789;        
+         
+  WUK511(752) = 752;        
+  WUK511(754) = 754;        
+  WUK511(801) = 801;        
+  WUK511(799) = 799;        
+  WUK511(803) = 803;        
+         
+  /* TQL 2 - Single Life */        
+  WUK511(071) = 071;        
+  WUK511(142) = 071;        
+  WUK511(143) = 071;        
+  WUK511(144) = 071;        
+         
+  /* TQL 2 - Joint Life */        
+  WUK511(072) = 072;        
+  WUK511(191) = 072;        
+  WUK511(192) = 072;        
+  WUK511(193) = 072;        
+         
+  WUK511(199) = 199;        
+         
+  WUK511(082) = 082;        
+  WUK511(083) = 083;        
+  WUK511(084) = 084;        
+  WUK511(085) = 085;        
+  WUK511(548) = 548;        
+  WUK511(549) = 549;        
+  WUK511(563) = 563;        
+  WUK511(564) = 564;        
+  WUK511(565) = 565;        
+  WUK511(566) = 566;        
+         
+  /* Globals Series 1 */        
+  WUK511(950) = 950;        
+  WUK511(951) = 951;        
+         
+  /* Globals Series 2 */        
+  WUK511(955) = 955;        
+  WUK511(956) = 956;        
+  WUK511(958) = 958;        
+  WUK511(959) = 959;        
+         
+  /* Globals Series 3 */        
+  WUK511(755) = 755;        
+  WUK511(756) = 756;        
+  WUK511(758) = 758;        
+  WUK511(759) = 759;        
+         
+  /* Older Products   */        
+  /* Blue Chip        */        
+  WUK511(201) = 201;        
+  WUK511(202) = 201;        
+  WUK511(205) = 201;        
+  WUK511(209) = 201;        
+         
+  /* Older Products   */        
+  /* Blue Chip Inv. Plan  */        
+  WUK511(037) = 037;        
+  WUK511(038) = 037;        
+  WUK511(328) = 037;        
+  WUK511(337) = 037;        
+  WUK511(338) = 037;        
+         
+  /* Older Products   */        
+  /* Blue Chip Growth Plan  */        
+  WUK511(200) = 200;        
+  WUK511(205) = 200;        
+  WUK511(300) = 200;        
+  WUK511(305) = 200;        
+         
+  /* Older Products   */        
+  /* Managed Fund Type 1  */        
+  WUK511(181) = 201;        
+  WUK511(182) = 201;        
+         
+  /* Older Products   */        
+  /* Managed Fund Type 2  */        
+  WUK511(381) = 201;        
+  WUK511(382) = 201;        
+  WUK511(481) = 201;        
+  WUK511(482) = 201;        
+         
+  /* Older Products   */        
+  /* Managed Fund Series 2  */        
+  WUK511(581) = 201;        
+  WUK511(582) = 201;        
+         
+  /* Older Products   */        
+  /* Managed Fund Inv. Plan Type 1  */        
+  WUK511(180) = 180;        
+  WUK511(185) = 180;        
+         
+  /* Older Products   */        
+  /* Managed Fund Inv. Plan Type 2  */        
+  WUK511(371) = 180;        
+  WUK511(380) = 180;        
+  WUK511(385) = 180;        
+  WUK511(471) = 180;        
+  WUK511(480) = 180;        
+  WUK511(485) = 180;        
+         
+  /* Older Products   */        
+  /* Managed Fund Accumulator Type 1  */        
+  WUK511(183) = 180;        
+  WUK511(187) = 180;        
+         
+  /* Older Products   */        
+  /* Managed Fund Accumulator Type 2  */        
+  WUK511(383) = 180;        
+  WUK511(387) = 180;        
+  WUK511(483) = 180;        
+  WUK511(487) = 180;        
+         
+  /* Older Products   */        
+  /* Managed Fund Series 2 Growth  */        
+  WUK511(484) = 584;        
+  WUK511(584) = 584;        
+  WUK511(586) = 584;        
+  WUK511(588) = 584;        
+         
+  /* Older Products   */        
+  /* Managed Fund Series 2 Accumulator  */        
+  WUK511(583) = 584;        
+  WUK511(587) = 180;        
+         
+  /* Older Products   */        
+  /* Premier Growth Account  */        
+  WUK511(136) = 136;        
+  WUK511(137) = 136;        
+  WUK511(138) = 136;        
+  WUK511(139) = 136;        
+         
+  /* Older Products   */        
+  /* Global Bond  */        
+  WUK511(561) = 561;        
+  WUK511(562) = 561;        
+  WUK511(661) = 561;        
+  WUK511(662) = 561;        
+         
+  /* Older Products   */        
+  /* Unit 10 Inv. Bond  */        
+  WUK511(915) = 561;        
+  WUK511(916) = 561;        
+  WUK511(917) = 561;        
+  WUK511(918) = 561;        
+         
+  /* Older Products   */        
+  /* Universal Inv. Account  */        
+  WUK511(935) = 561;        
+  WUK511(936) = 561;        
+  /* WUK511(937) = 561        
+  WUK511(938) = 561   PR0003 */        
+         
+  /* Older Products   */        
+  /* Universal Bond SP Topup  */        
+  WUK511(835) = 561;        
+  WUK511(836) = 561;        
+         
+  /* Older Products   */        
+  /* GGA Bond SP Topup  */        
+  WUK511(158) = 561;        
+  WUK511(159) = 561;        
+         
+  /* Older Products   */        
+  /* Pension Program SP  */        
+  WUK511(743) = 743;        
+  WUK511(744) = 743;        
+         
+  /* Older Products   */        
+  /* Property Modules  */        
+  WUK511(121) = 151;        
+  WUK511(122) = 151;        
+  WUK511(151) = 151;        
+  WUK511(152) = 151;        
+  WUK511(251) = 151;        
+  WUK511(252) = 151;        
+         
+  /* Older Products   */        
+  /* Property Modules Growth  */        
+  WUK511(351) = 151;        
+  WUK511(352) = 151;        
+  WUK511(451) = 151;        
+  WUK511(452) = 151;        
+         
+  /* Older Products   */        
+  /* Property Modules Growth Series 2  */        
+  WUK511(551) = 151;        
+  WUK511(552) = 151;        
+         
+  /* Older Products   */        
+  /* Property Modules Growth Inv. Plan  */        
+  WUK511(111) = 120;        
+  WUK511(120) = 120;        
+  WUK511(125) = 120;        
+  WUK511(150) = 120;        
+  WUK511(155) = 120;        
+         
+  /* Older Products   */        
+  /* Property Modules Miscellany  */        
+  WUK511(129) = 120;        
+  WUK511(141) = 120;        
+  WUK511(153) = 353;        
+  WUK511(157) = 353;        
+         
+  /* Older Products   */        
+  /* Property Modules Growth Inv. Plan  */        
+  WUK511(341) = 120;        
+  WUK511(350) = 120;        
+  WUK511(355) = 120;        
+  WUK511(441) = 120;        
+  WUK511(450) = 120;        
+  WUK511(455) = 120;        
+         
+  /* Older Products   */        
+  /* Property Modules Growth Series 2  */        
+  WUK511(108) = 353;        
+  WUK511(353) = 353;        
+  WUK511(357) = 353;        
+  WUK511(453) = 353;        
+  WUK511(454) = 353;        
+  WUK511(457) = 353;        
+  WUK511(553) = 353;        
+  WUK511(554) = 353;        
+  WUK511(556) = 353;        
+  WUK511(557) = 353;        
+  WUK511(558) = 353;        
+         
+  /* Older Products   */        
+  /* Unit 5 Directors - Annual Premium  */        
+  WUK511(365) = 365;        
+  WUK511(366) = 365;        
+  WUK511(367) = 365;        
+  WUK511(368) = 365;        
+  WUK511(369) = 365;        
+  WUK511(865) = 365;        
+  WUK511(866) = 365;        
+  WUK511(868) = 365;        
+  WUK511(869) = 365;        
+         
+  /* Older Products   */        
+  /* Unit 5 Directors - Single Premium  */        
+  WUK511(870) = 870;        
+  WUK511(871) = 870;        
+  WUK511(872) = 870;        
+  WUK511(873) = 870;        
+  WUK511(874) = 870;        
+  WUK511(875) = 875;        
+  WUK511(876) = 875;        
+         
+  /* Older Products   */        
+  /* Unit 5 Single Premium  */        
+  WUK511(770) = 870;        
+  WUK511(771) = 870;        
+  WUK511(772) = 870;        
+  WUK511(773) = 870;        
+  WUK511(774) = 875;        
+  WUK511(775) = 875;        
+  WUK511(776) = 875;        
+         
+  /* Older Products   */        
+  /* Unit 5 Annual Premium  */        
+  WUK511(265) = 365;        
+  WUK511(266) = 365;        
+  WUK511(267) = 365;        
+  WUK511(268) = 365;        
+  WUK511(269) = 365;        
+  WUK511(765) = 365;        
+  WUK511(766) = 365;        
+  WUK511(767) = 365;        
+  WUK511(768) = 365;        
+  WUK511(769) = 365;        
+         
+  /* Older Products   */        
+  /* Unit 5 Plan  */        
+  WUK511(491) = 491;        
+  WUK511(492) = 491;        
+  WUK511(493) = 491;        
+  WUK511(494) = 491;        
+  WUK511(495) = 491;        
+  WUK511(496) = 491;        
+  WUK511(497) = 491;        
+  WUK511(498) = 491;        
+  WUK511(499) = 491;        
+  WUK511(500) = 491;        
+  WUK511(501) = 501;        
+  WUK511(502) = 501;        
+  WUK511(503) = 501;        
+  WUK511(504) = 501;        
+  WUK511(505) = 501;        
+  WUK511(506) = 501;        
+  WUK511(507) = 501;        
+  WUK511(508) = 501;        
+  WUK511(509) = 501;        
+  WUK511(510) = 501;        
+  WUK511(591) = 491;        
+  WUK511(592) = 491;        
+  WUK511(593) = 491;        
+  WUK511(594) = 491;        
+  WUK511(595) = 491;        
+  WUK511(596) = 491;        
+  WUK511(597) = 491;        
+  WUK511(598) = 491;        
+  WUK511(599) = 491;        
+  WUK511(600) = 491;        
+  WUK511(601) = 501;        
+  WUK511(602) = 501;        
+  WUK511(603) = 501;        
+  WUK511(604) = 501;        
+  WUK511(605) = 501;        
+  WUK511(606) = 501;        
+  WUK511(607) = 501;        
+  WUK511(608) = 501;        
+  WUK511(609) = 501;        
+  WUK511(610) = 501;        
+  WUK511(691) = 491;        
+  WUK511(692) = 491;        
+  WUK511(693) = 491;        
+  WUK511(694) = 491;        
+  WUK511(695) = 491;        
+  WUK511(696) = 491;        
+  WUK511(697) = 491;        
+  WUK511(698) = 491;        
+  WUK511(699) = 491;        
+  WUK511(700) = 491;        
+  WUK511(701) = 501;        
+  WUK511(702) = 501;        
+  WUK511(703) = 501;        
+  WUK511(704) = 501;        
+  WUK511(705) = 501;        
+  WUK511(706) = 501;        
+  WUK511(707) = 501;        
+  WUK511(708) = 501;        
+  WUK511(709) = 501;        
+  WUK511(710) = 501;        
+         
+  /* Lifestyles */        
+  WUK511(653) = 653;        
+  WUK511(654) = 654;        
+  WUK511(655) = 655;        
+  WUK511(656) = 656;        
+  WUK511(657) = 657;        
+  WUK511(658) = 658;        
+  WUK511(659) = 659;        
+  WUK511(663) = 663;        
+  WUK511(664) = 664;        
+  WUK511(665) = 665;        
+  WUK511(666) = 666;        
+  WUK511(667) = 667;        
+  WUK511(668) = 668;        
+  WUK511(677) = 677;        
+  WUK511(678) = 678;        
+  WUK511(683) = 683;        
+  WUK511(684) = 684;        
+         
+  /* RA's */        
+  WUK511(213) = 215;        
+  WUK511(214) = 215;        
+  WUK511(215) = 215;        
+  WUK511(216) = 215;        
+  WUK511(217) = 215;        
+  WUK511(218) = 215;        
+         
+  /* MIP's */        
+  WUK511(749) = 749;        
+  WUK511(750) = 749;        
+         
+ /*------------------------------------------------------------------*/        
+END_PLC(FUK511)

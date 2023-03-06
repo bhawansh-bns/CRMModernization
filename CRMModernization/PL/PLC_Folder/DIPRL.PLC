@@ -1,0 +1,24 @@
+BEGIN_PLC(DIPRL)
+     /**************************************************************/        
+     /**    DIPRL  : IRISH LIFE PAYMENT HISTORY FILE              **/        
+     /*                                                            */        
+     /**************************************************************/        
+         
+  DCL  01  IP_DATA_REC UNAL,        
+           03  IP_CODE,        
+               05  IP_POLICY_NO            PIC '(7)9',        
+               05  IP_LAST_PAYMENT_DATE    CHAR (7),        
+               05  IP_VERSION_NO           PIC '9',        
+               05  IP_SEQ_NO               PIC '(4)9',        
+           03  IP_DATA,        
+               05  IP_TRANS_CODE           CHAR (1),        
+               05  IP_CHECK_DIGIT          CHAR (1),        
+               05  IP_RENEWAL_PREMIUM      FIXED BIN(31),        
+               05  IP_LAST_PAYMENT_AMOUNT  FIXED BIN(31),        
+               05  IP_SOURCE_CODE          CHAR (1),        
+               05  IP_PAID_TO_DATE         CHAR (7),        
+               05  IP_ARREARS_CREDIT       FIXED BIN(31),        
+               05  IP_LODGEMENT_DATE       CHAR (7),        
+               05  IP_CURRENCY             CHAR (1),        
+               05  IP_GROSS_OF_TAX         CHAR (1);        
+END_PLC(DIPRL)

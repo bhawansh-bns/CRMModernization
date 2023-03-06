@@ -1,0 +1,18 @@
+BEGIN_PLC(DUK09006)
+         
+ /*-------------------------------------------------------------------*/        
+ /* DUK09006 : Declarations needed to call module UK09006.            */        
+ /*                                                                   */        
+ /* This include is used by programs which call program UK09006.      */        
+ /*                                                                   */        
+ /* UK09006 refreshes fund values on CUK09009.                        */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ %DCL CALL_UK09006_REFRESH_FUND_VAL CHAR ;        
+ %CALL_UK09006_REFRESH_FUND_VAL = 'CALL UK09006 (UI_PTR,P_CUK09009)' ;        
+         
+ DCL UK09006 ENTRY (PTR,PTR) EXTERNAL ;        
+         
+         
+END_PLC(DUK09006)

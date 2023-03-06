@@ -1,0 +1,12 @@
+BEGIN_PLC(SPLIDATA)
+  /********************************************************* 00108 **/        
+  /* Parameters for                                          00108  */        
+  /* SPLI / POLY / ADBA transactions :                       00108  */        
+  /********************************************************* 00108 **/        
+      DCL P_POLREF           CHAR (16);        
+      DCL P_SYSREF           CHAR (04);        
+      DCL P_U12TYP           CHAR (01);        
+      DCL P_U12STR           FIXED DEC(3);        
+      DCL P_U12END           FIXED DEC(3);        
+  /********************************************************* 00108 **/        
+END_PLC(SPLIDATA)

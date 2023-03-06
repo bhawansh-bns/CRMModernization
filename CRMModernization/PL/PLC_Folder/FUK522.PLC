@@ -1,0 +1,37 @@
+BEGIN_PLC(FUK522)
+    /* --------------------------------------------- */        
+    /* AMENDMENTS: (PLEASE COMPLETE FOR ALL CHANGES) */        
+    /* ~~~~~~~~~~                                    */        
+    /* DATE:       27/01/2000                        */        
+    /* CHANGED BY: PAULA BRANNIGAN                   */        
+    /* DESC:       REMOVE REDUNDANT FIELDS.          */        
+    /* CR0022 04/01/02 RMJ ADD REQUEST TERMINAL BONUS*/        
+ /* ILD243  OLW  24/06/04  ADD IMAGE-FLAG OPERATOR-ID                */        
+    /* --------------------------------------------- */        
+  DCL 1 WUK522 UNALIGNED,        
+     /* UI QUOTES SYSTEM: FROM ADDERS (UIPQ)         */        
+        2 POLNO         PIC '(7)9',        
+     /* POLICY NUMBER                                */        
+        2 TIME_STAMP    PIC '(8)9',        
+     /* DD-HH-MM-SS                                  */        
+        2 VERS          PIC '9',        
+     /* VERSION                                      */        
+        2 PDTD1         PIC'(8)9',        
+     /* PAID TO DATE VERSION 0/1                     */        
+        2 PDTD2         PIC'(8)9',        
+     /* PAID TO DATE VERSION 2                       */        
+        2 PDTD3         PIC'(8)9',        
+     /* PAID TO DATE VERSION 3                       */        
+        2 RINVD         PIC'(8)9',        
+     /* REINVEST TO DATE                             */        
+        2 REQ_BDOWN     CHAR (1),        
+    /* REQUEST BREAKDOWN                             */        
+        2 REQ_TBONUS    CHAR (1),        
+    /* REQUEST ADDITION OF TERMINAL BONUS            */        
+        2 IMAGE_FLAG    CHAR (1),           /*ILD243 */        
+    /* IMAGE FLAG                             ILD243 */        
+        2 OPERATOR_ID   CHAR (4),           /*ILD243 */        
+    /* OPERATOR ID                            ILD243 */        
+        2 FILL          CHAR (25);          /*ILD243 */        
+    /*  2 FILL          CHAR (30);            ILD243 */        
+END_PLC(FUK522)

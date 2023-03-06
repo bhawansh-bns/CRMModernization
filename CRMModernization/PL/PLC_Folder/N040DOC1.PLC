@@ -1,0 +1,53 @@
+BEGIN_PLC(N040DOC1)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DOC1                                       */        
+    /*   GENERATION  : 001                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : DIARY                                          */        
+    /*   PROGRAMMER  : BEN CHAPMAN                                    */        
+    /*   DATE        : AUGUST 2002                                    */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+    /*                 ACTIONS CONNECTED WITH DOC1 LETTER GENERATION. */        
+    /*                 STORES COMMON DATA NEEDED DURING THE CREATION  */        
+    /*                 OF TRIGGER FILE(S) FOR THE DOC1 BLACK BOX.     */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DOC1 BASED (COM_DATA.DATA_DOC1_PTR),        
+                3 LETTER_SORTED_BY(4),      /* 1 - CLIENT, 2 - POLICY */        
+                                            /* ETC.                   */        
+                  5 DOC1_CNT        PIC'99',/* COUNT OF ARRAY MEMBERS */        
+                  5 PASSED_BY(10),        
+                    7 DOC1_MODULE     CHAR(4),/* MODULE WHICH         */        
+                                              /* CREATED THE TRIGGER  */        
+                    7 DOC1_SUB_ACTION CHAR(1),        
+                  5 TRIGGER (10),        
+                  /****************************************************/        
+                  /* BELOW IS THE TRIGGER FILE STRUCTURE - THIS MUST  */        
+                  /* ALWAYS TIE UP WITH PLIINC(DOC1TRG), SO IF THIS   */        
+                  /* INCLUDE IS CHANGED, CHANGE DOC1TRG AS WELL, AND  */        
+                  /* VICE VERSA.                                      */        
+                  /* THERE ARE 10 INSTANCES OF THIS TRIGGER, SO EACH  */        
+                  /* POLICY CAN CURRENTLY HAVE UP TO 10 DIFFERENT     */        
+                  /* LETTER REQUESTS.                                 */        
+                  /****************************************************/        
+                    7 TRG_ID                 CHAR(9),        
+                    7 TRG_LETTER_REF         CHAR(20),        
+                    7 TRG_SUBTYPES           CHAR(5),        
+                    7 TRG_DATE               CHAR(8),        
+                    7 TRG_SOURCE_PROG        CHAR(8),        
+                    7 TRG_LOGON_ID           CHAR(8),        
+                    7 TRG_EMPLOYEE_NUM       CHAR(8),        
+                    7 TRG_LOCATION           CHAR(2),        
+                    7 TRG_NUM_COPIES         CHAR(2),        
+                    7 TRG_POLICY_NO          CHAR(11),        
+                    7 TRG_CLIENT_NO          CHAR(9),        
+                    7 TRG_PAYREF_NO          CHAR(18),        
+                    7 TRG_ADR_ASSOC_CODE     CHAR(2),        
+                    7 TRG_OWNER_CLIENT_NO    CHAR(9),        
+                    7 TRG_FILLER             CHAR(48),        
+                    7 TRG_LETTER_SPECIFIC    CHAR(900);        
+END_PLC(N040DOC1)

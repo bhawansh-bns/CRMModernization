@@ -1,0 +1,219 @@
+BEGIN_PLC(N137P01)
+ /********************************************************************/        
+ /** DATE: 10/09/2007  BY: S THARINI           PRJ:  CA CONVERSION   */        
+ /**          OUTPUT   RECORD AREAS                                  */        
+ /** NOTE, THIS INCLUDE MEMBER IS USED BY BOTH N137P00 AND N138P00   */        
+ /**                                                                 */        
+ /********************************************************************/        
+ /* OUTPUT RECORD */        
+     DCL 1 DD_OUTREC                CHAR(508) VARYING;        
+ /* LET */        
+     DCL 1 LET                      BASED(ADDR(LET_OUT)),        
+           3 REC_ID                 CHAR(6),        
+           3 LETTER_ID              CHAR(12),        
+           3 NOTICE_DATE            PIC '(8)9',        
+           3 METHOD_CODE            PIC '99',        
+           3 PROGRAM_REF            CHAR(4),        
+           3 INCREASE_IND           CHAR(1),        
+           3 ASSIGNEE_IND           CHAR(1),        
+           3 NOS_OWNERS             PIC '9',        
+           3 YEARS_TO_RUN           PIC '99',        
+           3 OLD_COMPANY            PIC '99',        
+           3 NON_STD_GROWTH_RATE    CHAR(1),        
+           3 PIS_APPLIES            CHAR(1),        
+           3 FILLER                 CHAR (359),        
+           3 COMPANY_CODE           PIC '99';        
+     DCL LET_OUT                    CHAR(402);        
+ /* POL*/        
+     DCL 1 POL                    BASED(ADDR(POL_OUT)),        
+           3 REC_ID               CHAR(6),        
+           3 POL_NO               CHAR(11),        
+           3 PREM_FREQ            CHAR(20),        
+           3 PLAN_CODE            CHAR(3),        
+           3 POLICY_TYPE          CHAR(3),        
+           3 PLAN_NAME            CHAR(25),        
+           3 NOTICE_DATE          PIC '(8)9',        
+           3 FUND_GROW_RATE       PIC 'Z9V.999',        
+           3 CURRENT_PREMIUM      PIC '(7)Z9V.99',        
+           3 REVIEW_PREMIUM       PIC '(7)Z9V.99',        
+           3 PREMIUM_WOL          PIC '(7)Z9V.99',        
+           3 SUM_ASSD             PIC '(7)Z9',        
+           3 RED_SUM_ASSD         PIC '(7)Z9',        
+           3 BENEF_RED_PC         PIC 'ZZ9',        
+           3 REVIEW_WAV_PREM      PIC '(7)Z9V.99',        
+           3 BENEFIT_YRS_LEFT     PIC 'ZZ9',        
+           3 AUTO_INCREASE        PIC '9',        
+           3 REPLY_DATE           PIC '(8)9',        
+           3 MATURITY_DATE        PIC '(8)9',        
+           3 INVEST_EXP_DATE      PIC '(8)9',        
+           3 ACT_WORK_01          CHAR(15),        
+           3 ACT_WORK_02          CHAR(15),        
+           3 ACT_WORK_03          CHAR(15),        
+           3 ACT_WORK_04          CHAR(15),        
+           3 ACT_WORK_05          CHAR(15),        
+           3 ACT_WORK_06          CHAR(15),        
+           3 ASSESS_TYPE          PIC '9',        
+           3 REVIEW_TYPE          PIC '9',        
+           3 LETTER_TYPE          CHAR (1),        
+           3 MONTHS_TO_MAT        PIC '9',        
+           3 TOPUP_POLICY         CHAR(11),        
+           3 INCR_TRAN_TYPE       CHAR (1),        
+           3 LOAN_INDICATOR       CHAR (1),        
+           3 USED4_MORTGAGE       CHAR (1),        
+           3 TARGET_MATVAL        PIC '(6)Z9V.99',        
+           3 PROJECTED_GROWTH (3) PIC 'ZZ9V.99',        
+           3 PROJECTED_VALUE  (3) PIC '(6)Z9V.99',        
+           3 PROJECTED_DIFF   (3) PIC '(6)-9V.99',        
+           3 PROJECTED_SIGN   (3) CHAR(1),        
+           3 EFFECTIVE_DATE       PIC '(8)9',        
+           3 MORT_GUAR_PROD       CHAR(1),        
+           3 MORT_GUAR_POL        CHAR(1),        
+           3 ACT_WORK        (10) CHAR(15),        
+           3 CURRENT_NET_PREM     PIC '(7)Z9V.99',        
+           3 REVIEW_NET_PREM      PIC '(7)Z9V.99',        
+           3 NET_OR_GROSS_PREM    CHAR(1),        
+           3 COMPLAINT_PARA_RQD   CHAR(1),        
+           3 COMPLAIN_BY_DATE     PIC '(8)9',        
+           3 CHANGE_EFF_DATE      PIC '(8)9',        
+           3 MTHLY_PBR_WITH_INDXN CHAR(1);        
+     DCL POL_OUT                  CHAR(573);        
+ /* ASE */        
+     DCL 1 ASE                    BASED(ADDR(ASE_OUT)),        
+           3 REC_ID               CHAR(6),        
+           3 ASS_REF              CHAR(30),        
+           3 ASS_RECIPIENT        CHAR(30),        
+           3 ASS_ADD1             CHAR(30),        
+           3 ASS_ADD2             CHAR(30),        
+           3 ASS_ADD3             CHAR(30),        
+           3 ASS_ADD4             CHAR(30),        
+           3 ASS_ADD5             CHAR(8);        
+      DCL ASE_OUT                 CHAR(194);        
+ /* OWN */        
+     DCL 1 OWN                    BASED(ADDR(OWN_OUT)),        
+           3 REC_ID               CHAR(6),        
+           3 OWN_NAME1            CHAR(50),        
+           3 OWN_NAME2            CHAR(50);        
+     DCL OWN_OUT                  CHAR(106);        
+ /* LAS*/        
+     DCL 1 LAS                    BASED(ADDR(LAS_OUT)),        
+           3 REC_ID               CHAR(6),        
+           3 POL_NO               CHAR(11),        
+           3 LA1_NAME             CHAR (50),        
+           3 LA2_NAME             CHAR (50),        
+           3 LA1_CLIENT_NO        CHAR(9),        
+           3 LA1_SALUTATION       CHAR(50),        
+           3 LA1_ADD_LIN1         CHAR(30),        
+           3 LA1_ADD_LIN2         CHAR(30),        
+           3 LA1_ADD_LIN3         CHAR(30),        
+           3 LA1_ADD_LIN4         CHAR(30),        
+           3 LA1_ADD_LIN5         CHAR(30),        
+           3 LA1_POSTCODE         CHAR(8),        
+           3 LA1_MAILCODE         CHAR(2),        
+           3 LA2_CLIENT_NO        CHAR(9),        
+           3 LA2_SALUTATION       CHAR(50),        
+           3 LA2_ADD_LIN1         CHAR(30),        
+           3 LA2_ADD_LIN2         CHAR(30),        
+           3 LA2_ADD_LIN3         CHAR(30),        
+           3 LA2_ADD_LIN4         CHAR(30),        
+           3 LA2_ADD_LIN5         CHAR(30),        
+           3 LA2_POSTCODE         CHAR(8),        
+           3 LA2_MAILCODE         CHAR(2);        
+     DCL LAS_OUT                  CHAR(555);        
+ /* PCE */        
+     DCL 1 PCE                    BASED(ADDR(PCE_OUT)),        
+           3 REC_ID               CHAR(6),        
+           3 CLI_REF              CHAR(9),        
+           3 CLI_REF2             CHAR(9),        
+           3 POL_NO               CHAR(11),        
+           3 LETTER_DATE          PIC '(8)9',        
+           3 LETTER_ID            CHAR(12),        
+           3 LOGON_ID             CHAR(7),        
+           3 ADD_NAME             CHAR(30),        
+           3 NOT_SENT             CHAR(1),        
+           3 EMPLOYEE_NO          PIC '(5)9',        
+           3 LOCATION             CHAR(2),        
+           3 MAILCODE             PIC '99',        
+           3 RUN_DATE             PIC '(8)9',        
+           3 RUN_TIME             PIC '(9)9',        
+           3 ASSOC_NO             PIC '(7)9',        
+           3 ASSOC_NAME           CHAR(30),        
+           3 ASSOC_OFF            CHAR(30),        
+           3 ASSOC_ADD1           CHAR(30),        
+           3 ASSOC_ADD2           CHAR(30),        
+           3 ASSOC_ADD3           CHAR(30),        
+           3 ASSOC_ADD4           CHAR(30),        
+           3 ASSOC_ADD5           CHAR(8),        
+           3 OSEAS_IND            PIC '9',        
+           3 GENUINE_LAPSE        CHAR(1),        
+           3 FILLER               CHAR(11),        
+           3 LETTER_SUBTYPE       CHAR(5),        
+           3 EMPLOYER_FLAG        CHAR(1);        
+     DCL PCE_OUT                  CHAR(333);        
+ /* ASS */        
+     DCL 1 ASS                      BASED(ADDR(ASS_OUT)),        
+           3 REC_ID                 CHAR(6),        
+           3 ASSOC_NO               PIC '(7)9',        
+           3 ASSOC_NAME             CHAR(30),        
+           3 ASSOC_OFF              CHAR(30),        
+           3 ASSOC_ADD1             CHAR(30),        
+           3 ASSOC_ADD2             CHAR(30),        
+           3 ASSOC_ADD3             CHAR(30),        
+           3 ASSOC_ADD4             CHAR(30),        
+           3 ASSOC_ADD5             CHAR(8),        
+           3 ASSOC_TEL_NO           CHAR(14),        
+           3 ASSOC_SALES_ARM        CHAR(3);        
+      DCL ASS_OUT                   CHAR(218);        
+ /* CLI*/        
+     DCL 1 CLI                    BASED(ADDR(CLI_OUT)),        
+           3 REC_ID               CHAR(6),        
+           3 SALUTATION           CHAR(50),        
+           3 ADD_NAME             CHAR(50),        
+           3 ADD_LIN1             CHAR(30),        
+           3 ADD_LIN2             CHAR(30),        
+           3 ADD_LIN3             CHAR(30),        
+           3 ADD_LIN4             CHAR(30),        
+           3 ADD_LIN5             CHAR(8),        
+           3 POL_NO               CHAR(11),        
+           3 MAILCODE             CHAR(2);        
+     DCL CLI_OUT                  CHAR(247);        
+         
+ /* COMMON VARIABLES FOR COMMON MODULES */        
+         
+     DCL COMMON_CLI_REF           CHAR(9);        
+     DCL COMMON_CLI_REF2          CHAR(9);        
+     DCL COMMON_LA1_CLI_REF       CHAR(9);        
+     DCL COMMON_LA2_CLI_REF       CHAR(9);        
+         
+     DCL WS_POL_NO                PIC '(11)9';        
+     DCL REASON                   CHAR(50);        
+     DCL ERROR                    PIC '(3)9' INIT(0);        
+     DCL ASSOC_ERROR              PIC '(3)9' INIT(0);        
+     DCL NRD_ERROR                PIC '(3)9' INIT(0);        
+         
+     DCL WS_ASSOC_ADD(5)          CHAR (30);        
+     DCL WS_ADD_LIN(5)            CHAR (30);        
+     DCL LINE                     FIXED DEC(5,0) INIT(0);        
+         
+ /********************************************/        
+ /*  ERROR TABLE                             */        
+ /*  0 = NO ERROR                            */        
+ /*  1 = NO POLICY RECORD ERROR              */        
+ /*  2 = NO CLIENT OWNER RECORD              */        
+ /*  3 = NO CLIENT LIFE ASS RECORD           */        
+ /*  4 = NO CLIENT OWNER OR LIFE ASS RECORD  */        
+ /********************************************/        
+         
+ /********************************************/        
+ /*  ASSOC ERROR TABLE                       */        
+ /*  0 = NO ERROR                            */        
+ /*  1 = NO FILE444 ERROR                    */        
+ /*  2 = NO SALES ARM, OFFICE ERROR          */        
+ /********************************************/        
+         
+ /************************************************/        
+ /*  NRD ERROR TABLE                             */        
+ /*  0 = NO ERROR                                */        
+ /*  1 = INVALID DATE OF BIRTH FOR SELECTED LIFE */        
+ /*  2 = NO RECORD FOUND ON TAB0440              */        
+ /************************************************/        
+END_PLC(N137P01)

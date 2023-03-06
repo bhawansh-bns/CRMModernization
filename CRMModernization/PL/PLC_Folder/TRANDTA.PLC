@@ -1,0 +1,9 @@
+BEGIN_PLC(TRANDTA)
+  /********************************************************************/        
+  /* THIS STRUCTURE IS BASED ON A POINTER WHICH IS BASED ON TUA_END.  */        
+  /* IT CONTAINS DATA THAT IS PASSED BETWEEN THE HIST/REVR/PORT TRANS */        
+  /********************************************************************/        
+           3 REVR_TRANSACTION_STATE     CHAR (1),        
+           3 HIST_APPL_DATES(12),        
+             5 PORT_APPL_DATES               PIC '(8)9';        
+END_PLC(TRANDTA)

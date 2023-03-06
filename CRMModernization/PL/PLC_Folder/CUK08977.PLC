@@ -1,0 +1,13 @@
+BEGIN_PLC(CUK08977)
+ /*-------------------------------------------------------------------*/        
+ /* CUK08977 : Declarations needed to call module UK08977.            */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK08977 Ptr ;        
+ Dcl 1 CUK08977_NAME_TYPE ,        
+       2 Mort_Key   Char(8),        /* Key of Mortality Table. */        
+       2 Age_Index  Fixed Dec(3),   /* Age index to Table      */        
+       2 Qx         Fixed Dec(7,6); /* Mortality rate returned */        
+         
+         
+END_PLC(CUK08977)

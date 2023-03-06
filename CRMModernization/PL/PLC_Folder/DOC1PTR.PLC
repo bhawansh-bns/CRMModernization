@@ -1,0 +1,26 @@
+BEGIN_PLC(DOC1PTR)
+ /*******************************************************************/        
+ /* PLIINC - DOC1PTR.                                               */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY THE CWA / DOC1 INTERFACE PROGRAM        */        
+ /* DOC1PTR AND ANY OTHER SUBS THAT NEED TO ACCESS CLIENT NUMBERS   */        
+ /* OF CLIENTS 'ASSOCIATED' WITH A POLICY.                          */        
+ /*                                                                 */        
+ /* THE SUBROUTINE DOC1PTR WILL READ THROUGH ALL CLIENT POINTERS    */        
+ /* FOR A POLICY AND LOAD THE CLIENT NUMBERS AND ASSOCIATION TYPES  */        
+ /* INTO THE FIELDS IN THIS INCLUDE.                                */        
+ /*                                                                 */        
+ /* THE VARIABLES IN THIS STRUCTURE HAVE TO BE DECLARED AS EXTERNAL */        
+ /* AS THE DATA NEEDS TO BE ACCESSIBLE TO VARIOUS SUBROUTINES OF    */        
+ /* DOC1P00.                                                        */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL   PTR_DTA                  CHAR(222) EXTERNAL;        
+         
+     DCL 1 PTR_STRUC                BASED(ADDR(PTR_DTA)),        
+           3 PTR_NUM_ENTRIES        PIC '99',        
+           3 PTR_ARRAY (20),        
+             5 PTR_ASSOC_TYPE       CHAR(2),        
+             5 PTR_CLIENT_NO        PIC '(9)9';        
+END_PLC(DOC1PTR)

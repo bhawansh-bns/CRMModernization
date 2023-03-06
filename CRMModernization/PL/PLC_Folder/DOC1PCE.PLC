@@ -1,0 +1,57 @@
+BEGIN_PLC(DOC1PCE)
+ /*******************************************************************/        
+ /* PLIINC - DOC1PCE.                                               */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY THE CWA / DOC1 INTERFACE PROGRAM        */        
+ /* DOC1P00 AND ANY OF ITS SUBROUTINES THAT REFER TO THE POST-      */        
+ /* COMPOSITION DATA.                                               */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF POST-COMPOSITION DATA TO BE WRITTEN */        
+ /* TO THE FILE CREATED FOR DOC1.                                   */        
+ /*                                                                 */        
+ /* THE VARIABLES IN THIS STRUCTURE HAVE TO BE DECLARED AS EXTERNAL */        
+ /* AS THE DATA NEEDS TO BE ACCESSIBLE TO BOTH THE TOP-LEVEL        */        
+ /* INTERFACE DOC1P00 AND ANY SUBROUTINES.                          */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL   PCE_DTA                  CHAR(407) EXTERNAL;        
+         
+     DCL 1 PCE_STRUC                BASED(ADDR(PCE_DTA)),        
+           3 PCE_SORT_1             CHAR(15),        
+           3 PCE_SORT_2             CHAR(15),        
+           3 PCE_SORT_3             CHAR(15),        
+           3 PCE_SEQ_NUM            PIC '(3)9',        
+           3 PCE_TRIGGER_ID         CHAR(9),        
+           3 PCE_RECORD_ID          CHAR(3),        
+           3 PCE_RECORD_DATA_FLAG   CHAR(1),        
+           3 PCE_RUN_DATE           PIC '(8)9',        
+           3 PCE_RUN_TIME           CHAR(9),        
+           3 PCE_ADR_CLIENT_NO      CHAR(9),        
+           3 PCE_CLIENT_2_NO        CHAR(9),        
+           3 PCE_POLICY_NO          CHAR(11),        
+           3 PCE_LETTER_REF         CHAR(20),        
+           3 PCE_LETTER_SUBTYPE     CHAR(5),        
+           3 PCE_LETTER_DATE        CHAR(8),        
+           3 PCE_SOURCE_PROG        CHAR(8),        
+           3 PCE_LOGON_ID           CHAR(8),        
+           3 PCE_EMPLOYEE_NUM       CHAR(8),        
+           3 PCE_LOCATION           CHAR(2),        
+           3 PCE_NUM_COPIES         CHAR(2),        
+           3 PCE_ADDRESSEE_NAME     CHAR(30),        
+           3 PCE_MAILCODE           CHAR(2),        
+           3 PCE_OVERSEAS_INDIC     CHAR(1),        
+           3 PCE_PLANCODE           CHAR(3),        
+           3 PCE_POLICY_TYPE        CHAR(3),        
+           3 PCE_PLAN_TYPE_CODE     CHAR(1),        
+           3 PCE_NON_PROFIT_INDIC   CHAR(1),        
+           3 PCE_ADV_NO             PIC '(7)9',        
+           3 PCE_ADV_NAME           CHAR(30),        
+           3 PCE_ADV_OFF            CHAR(30),        
+           3 PCE_ADV_ADD1           CHAR(30),        
+           3 PCE_ADV_ADD2           CHAR(30),        
+           3 PCE_ADV_ADD3           CHAR(30),        
+           3 PCE_ADV_ADD4           CHAR(30),        
+           3 PCE_ADV_ADD5           CHAR(8),        
+           3 PCE_ADV_SALES_ARM      CHAR(3);        
+END_PLC(DOC1PCE)

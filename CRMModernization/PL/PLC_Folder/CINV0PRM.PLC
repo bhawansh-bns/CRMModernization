@@ -1,0 +1,26 @@
+BEGIN_PLC(CINV0PRM)
+ /*********************************************************************/        
+ /*     <AL> ON: 01/08/2007  BY: Louise Chandler   PRJ/INC/UQ:LP601   */        
+ /*  Brought over for Chesnara migration - no changes made    R01596  */        
+ /*********************************************************************/        
+ /*     <AL> ON: 09/06/2000  BY: Dave Rantell           ALTR: 16866   */        
+ /*        variables used for checking benefits have increased for    */        
+ /*        pend code R104                                             */        
+ /*********************************************************************/        
+ /*    IF ANY CHANGES ARE MADE TO THIS COPYBOOK THEN CINCAGR, CINCUNW */        
+ /*                CICNINS SHOULD BE RE-COMPILED.                     */        
+ /*                                                                   */        
+ /*********************************************************************/        
+      3 CHECK_IPB(2)             FIXED DEC(9),    /* IF Pens SA       */        
+      3 CHECK_DTH(2)             FIXED DEC(9),    /* IF death SA      */        
+      3 CHECK_CI(2)              FIXED DEC(9),    /* IF CI SA         */        
+      3 CHECK_PD(2)              FIXED DEC(9),    /* IF PD SA         */        
+      3 CHECK_EC(2)              FIXED DEC(9),    /* IF EC SA         */        
+      3 CT_R104(2)               FIXED DEC(9),    /* CI Ben           */        
+      3 CI_CHANGE(2)             FIXED DEC(9),    /* CI ben if incrse*/        
+      3 PD_CHANGE(2)             FIXED DEC(9),    /* PD ben if incrse*/        
+      3 EC_CHANGE(2)             FIXED DEC(9),    /* EC ben if incrse*/        
+      3 CREM_SA_FOR_UW(2)        FIXED DEC(9),    /* CREM dth SA     */        
+      3 CREM_IPB(2)              FIXED DEC(9);    /* CREM IPB SA     */        
+         
+END_PLC(CINV0PRM)

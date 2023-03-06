@@ -1,0 +1,25 @@
+BEGIN_PLC(DUK09767)
+ /*-------------------------------------------------------------------*/        
+ /* DUK09767 : Declarations needed to call module UK09767.            */        
+ /*                                                                   */        
+ /* This include is used by programs which call program UK09767.      */        
+ /*                                                                   */        
+ /* The following preprocessor code should be included in the         */        
+ /* calling program.                                                  */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /* %DCL CUK09767_NAME_TYPE CHAR                                      */        
+ /* %CUK09767_NAME_TYPE = 'CUK09767'                                  */        
+ /* %include CUK09767                                                 */        
+ /* %DEACT CUK09767_NAME_TYPE                                         */        
+ /* %include DUK9767                                                  */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ %DCL CALL_UK09767_CALCULATE_SI CHAR ;        
+ %CALL_UK09767_CALCULATE_SI = 'CALL UK09767 (UI_PTR,P_CUK09767)' ;        
+         
+ DCL UK09767 ENTRY (PTR,PTR) EXTERNAL ;        
+ P_CUK09767 = ADDR(CUK09767) ;        
+         
+END_PLC(DUK09767)

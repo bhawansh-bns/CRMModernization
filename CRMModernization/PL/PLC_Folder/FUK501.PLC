@@ -1,0 +1,640 @@
+BEGIN_PLC(FUK501)
+ /*--------------------------------------------------------------+        
+               UK UI Formatted Transactions File.                       
+               ==================================                       
+                                                                        
+     Key      : POLNO, VERS, CKDGT, EFFDT, SEQ_NO, TXN_TYPE,            
+                ALT_NO, TABLE                                           
+     Length   : 1500                                                    
+                                                                        
+     *******************************************************            
+     *  WARNING : These layouts must be kept consistent    *            
+     *  with the Data Dictionary entries on X:/MF_UK/MFUI  *            
+     *******************************************************            
+                                                                        
+  AC  8/7/96  Add WOP Proportion to WUK501_2                            
+  AC  12/7/96 'NEWBU' is txn code for newbusiness slice                 
+  RM  06/8/96 'NEWPC' is txn code for new policy contract master        
+                      alteration.                                       
+  MH  2/10/96 Add DCLM_START and PTD_CODE to WUK501_1                   
+  RM  13/11/96 Remove WOP_PROP from WUK501_1 - now on WUK501_2          
+  MH  09/01/97 Add CAMP_CD to WUK501_1                                  
+  JOG 16/01/97 Move AUTO_SW from WUK501_5 to WUK501_1                   
+  RM  18/03/97 Add new transaction type for encashments - FENC          
+  JOG 25/08/97 Add in changes for Globals                               
+  JOG 14/04/99 Added STATUS_V1,STATUS_V2 and STATUS_V3 for TQLs         
+  BS  23/04/99 Add HCash_1 to WUK501_2. This contains the normal        
+               indexation amount where the increase > RPI rate.         
+  PM  03/05/99 Added Prem_Paid_V1,Prem_Paid_V2 and Prem_Paid_V3         
+               for TQLs                                                 
+  BS  22/09/99 Added PTD_V1, PTD_V3 to WUK501_1.                        
+               For TQL's, the PTD code from version 1, 2, and 3         
+               now stored in PTD_V1, PTD_V3                             
+  BS  30/09/99 Added MED_FAC_1_V2, MED_FAC_1_V3,                        
+                     MED_FAC_2_V2, MED_FAC_2_V3,                        
+                     PRM_FAC_1_V2, PRM_FAC_1_V3,                        
+                     PRM_FAC_2_V2, PRM_FAC_2_V3 to WUK501_1             
+               For TQL's, medical and premium factor loadings           
+               from versions 2 and 3 now stored in these fields.        
+  DH  05/09/01 Add UI_IGNORE                                            
+  RMJ 15/10/01 Add end of comment for above change.                     
+ +--------------------------------------------------------------*/        
+ /* Blank Layout                                       */        
+ /******************************************************/        
+         
+         
+ DCL 1 WUK501_BLANK  CHAR (1500) BASED(P_501)    ;        
+ /******************************************************/        
+ /* Key Layout - Contains no transaction specific data */        
+ /******************************************************/        
+         
+         
+ DCL 1 WUK501  UNALIGNED BASED(P_501)                    ,        
+ /***********************************************/        
+ /* KEY SECTION                                 */        
+ /***********************************************/        
+       2   POLNO      PIC            '(7)9'          ,        
+ /* Policy Number                            */        
+       2   VERS        PIC            '(1)9'          ,        
+ /* Version                                  */        
+       2   CKDGT       CHAR           (  1)           ,        
+ /* Check Digit                              */        
+       2   EFFDT       PIC            '(8)9'          ,        
+ /* Effective Date of Alteration             */        
+       2   SEQ_NO      PIC            '(3)9'          ,        
+ /* Sequence of Alteration                   */        
+       2   TXN_TYPE    CHAR           (  5)           ,        
+ /* TYPE OF ALTERATION                             */        
+       2   ALT_NO      PIC            '999'             ,        
+ /* Alteration Number (to help be unique)    */        
+       2   TABLE       PIC            '(3)9'  ,        
+ /* Table - from UKPH.TABLE. If TABLE has    */        
+ /* changed on UKPH, then use the new value  */        
+       2   DSS_TAX_YEAR PIC        '(4)9' ,        
+ /* Tax Year from OBCH (CBKYR field) - to distinguish SP's */        
+       2   UI_IGNORE    CHAR        ( 1)     ;        
+ /***********************************************/        
+ /* master alteration layout                    */        
+ /***********************************************/        
+         
+         
+ DCL 1 WUK501_1  UNALIGNED BASED(P_501)                    ,        
+ /***********************************************/        
+ /* KEY SECTION                                 */        
+ /***********************************************/        
+       2   POLNO       PIC            '(7)9'          ,        
+ /* Policy Number                            */        
+       2   VERS        PIC            '(1)9'          ,        
+ /* Version                                  */        
+       2   CKDGT       CHAR           (  1)           ,        
+ /* Check Digit                              */        
+       2   EFFDT       PIC            '(8)9'          ,        
+ /* Effective Date of Alteration             */        
+       2   SEQ_NO      PIC            '(3)9'          ,        
+ /* Sequence of Alteration                   */        
+       2   TXN_TYPE    CHAR           (  5)           ,        
+ /* TYPE OF ALTERATION                             */        
+ /* 'ALTER' = Alteration                           */        
+ /* 'NEWPC' = New Policy Contract                  */        
+       2   ALT_NO      PIC            '999'             ,        
+ /* Alteration Number (to help be unique)    */        
+       2   TABLE       PIC            '(3)9'            ,        
+ /* Table - from UKPH.TABLE. If TABLE has    */        
+ /* changed on UKPH, then use the new value  */        
+       2   DSS_TAX_YEAR PIC        '(4)9',        
+ /* Tax Year from OBCH (CBKYR field) - to distinguish SP's */        
+ /***********************************************/        
+ /* CONTRACTUAL SECTION                         */        
+ /***********************************************/        
+       2   UI_IGNORE    CHAR           ( 1)               ,        
+ /* UI Ignore indicator                                    */        
+       2   FILLER      CHAR           (57)             ,        
+ /* Free Space                                         */        
+       2   WOP_APP_V1     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code (TQL) */        
+       2   WOP_APP_V3     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code (TQL) */        
+       2   MED_FAC_1_V2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 Version 2 - from UKPH.XPMF1     */        
+       2   MED_FAC_2_V2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 Version 2 - from UKPH.XPMF2     */        
+       2   PRM_FAC_1_V2  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 Version 2 - from UKPH.XPFC1     */        
+       2   PRM_FAC_2_V2  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 Version 2 - from UKPH.XPFC2     */        
+       2   MED_FAC_1_V3  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 Version 3 - from UKPH.XPMF1     */        
+       2   MED_FAC_2_V3  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 Version 3 - from UKPH.XPMF2     */        
+       2   PRM_FAC_1_V3  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 Version 3 - from UKPH.XPFC1     */        
+       2   PRM_FAC_2_V3  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 Version 3 - from UKPH.XPFC2     */        
+       2   PTD_V1      FIXED DEC      (3,2)             ,        
+ /* Code to identify applicability of Permanent Total  */        
+ /* Disability - version 2 TQL                         */        
+       2   PTD_V3      FIXED DEC      (3,2)             ,        
+ /* Code to identify applicability of Permanent Total  */        
+ /* Disability - version 3 TQL                         */        
+       2   Orig_Table     PIC         '(3)9'          ,        
+ /* Original Table Number for Older Products           */        
+       2   Life_1_or_2_V1 CHAR        (  1)             ,        
+ /* Cover on TQL Version 1 - 1,2 or 3 if on life1 only, life2 or both */        
+       2   Life_1_or_2_V2 CHAR        (  1)             ,        
+ /* Cover on TQL Version 2 - 1,2 or 3 if on life1 only, life2 or both */        
+       2   Life_1_or_2_V3 CHAR        (  1)             ,        
+ /* Cover on TQL Version 3 - 1,2 or 3 if on life1 only, life2 or both */        
+       2   STATUS_V1   CHAR           (  3)             ,        
+ /* Status on TQL Version 1                            */        
+       2   STATUS_V2   CHAR           (  3)             ,        
+ /* Status on TQL Version 2                            */        
+       2   STATUS_V3   CHAR           (  3)             ,        
+ /* Status on TQL Version 3                            */        
+       2   AUTO_SW     CHAR           (  1)             ,        
+ /* PIS Indicator - derived by Normalisation from      */        
+ /* UKPH.ENDRn                                         */        
+       2   CAMP_CD     PIC           '(4)9'             ,        
+ /* Campaign Code                                      */        
+       2   PTD_CODE    FIXED DEC      (3,2)             ,        
+ /* Code to identify applicability of Permanent Total  */        
+ /* Disability                                         */        
+       2   DCLM_START  PIC            '(8)9'            ,        
+ /* Date on which payment of Disability Claim began    */        
+       2   STATUS     CHAR           (  3)                ,        
+ /* Status - derived from UKPH.STATn by normalisation */        
+ /* Status - IFR  Inforce Remitting        
+             IFS  Inforce Single premium        
+             LAP  Lapsed        
+             PUP  Paidup        
+             OOF  Out Of Force */        
+       2   INH_CD     CHAR           (  1)                ,        
+ /* Inhibit Code - from UKPH.INHIB           */        
+       2   BEN_PAY    CHAR           (  1)                ,        
+ /* Benefit in Payment - initialised by normalisation */        
+ /* if WOP_ACT = Y or UKPH.NDDCC ^= 0                 */        
+       2   STAFF      CHAR           (  1)                ,        
+ /* Staff Rate - from UKPH.STAFF             */        
+       2   TERM_CON    PIC            '(2)9'            ,        
+ /* Term to Conversion - from UKPH.TRMCN     */        
+       2   TERM        PIC            '(2)9'            ,        
+ /* Term - from UKPH.TERM                    */        
+       2   DOP        PIC            '(8)9'               ,        
+ /* Date of Proposal - from UKPH.DOP         */        
+       2   DOE         PIC            '(8)9'            ,        
+ /* Date of Entry - from UKPH.DOE            */        
+       2   DOM         PIC            '(8)9'            ,        
+ /* Date of Maturity - from UKPH.DOE         */        
+       2   SRA         PIC            '(3)9'            ,        
+ /* Selected Retirement Age */        
+       2   CNACC       CHAR           (  1)             ,        
+ /* Country of Accounting - from UKPH.CNACC  */        
+       2   CURR        CHAR           (  1)             ,        
+ /* Currency - from UKPH.CURR                */        
+       2   IMPAIR      CHAR           (  2)             ,        
+ /* Impairment Code - from UKPH.IMPR         */        
+       2   BILL_TYPE   CHAR           (  1)             ,        
+ /* Bill Type - from UKPH.BLTYP              */        
+       2   GROUPED     CHAR           (  1)             ,        
+ /* Grouped Extra Investment Applies - Derived */        
+ /* by Normalisation based on changes to TABLE */        
+       2   IX_OPT      CHAR           (  1)             ,        
+ /* Increase Option Code - from UKPH.OPINA       */        
+       2   SPOL_CD     CHAR           (  1)             ,        
+ /* Special Policy Code - from UKPH.SPOLC        */        
+       2   POLFEE_APP  CHAR           (  1)             ,        
+ /* Policy Fee Applies Code - from Normalisation */        
+ /***********************************************/        
+ /* CLIENT SECTION                              */        
+ /***********************************************/        
+       2   AGE_ENT_1   PIC            '(3)9'            ,        
+ /* Age at Entry Life 1 - from UKPH.AGE      */        
+       2   DOB_1       PIC            '(8)9'            ,        
+ /* Date of Birth 1 - from UKPH.DOB1         */        
+       2   DOB_2       PIC            '(8)9'            ,        
+ /* Date of Birth 2 - from UKPH.DOB2         */        
+       2   SEX_1       CHAR           (  1)             ,        
+ /* Sex Code Life 1 - from UKPH.SEX1         */        
+       2   SEX_2       CHAR           (  1)             ,        
+ /* Sex Code Life 2 - from UKPH.SEX2         */        
+       2   SMOKER_1    CHAR           (  1)             ,        
+ /* Smoker Code 1 - from UKPH.NSMOK (inverted)      */        
+       2   SMOKER_2    CHAR           (  1)             ,        
+ /* Smoker Code 2 - from UKPH.NSMK2 (inverted)      */        
+ /*******************************************************/        
+ /* BENEFITS SECTION                                    */        
+ /*******************************************************/        
+       2   MAT_SUM     FIXED DEC      ( 11,2)            ,        
+ /* MATURITY SUM ASSURED - from UKPH.SAM            */        
+       2   LCOVER_1    FIXED DEC      ( 11,2)            ,        
+ /* DEATH SUM ASSURED LIFE 1 - from UKPH.SAD1       */        
+       2   LCOVER_2    FIXED DEC      ( 11,2)            ,        
+ /* DEATH SUM ASSURED LIFE 2 - from UKPH.SAD2       */        
+       2   LCOVER_Fund CHAR           (  1)              ,        
+ /* LIFE COVER FUND RELATIONSHIP - from UKPH.LCFR   */        
+       2   DCOVER_1    FIXED DEC      ( 11,2)            ,        
+ /* DISABILITY SUM ASSURED LIFE 1 - from UKPH.DISSA */        
+       2   DCOVER_2    FIXED DEC      ( 11,2)            ,        
+ /* DISABILITY SUM ASSURED LIFE 2 - from UKPH.DISS2 */        
+       2   DEFER_1     PIC            '(3)9'             ,        
+ /* DEFERMENT PERIOD LIFE 1 - from UKPH.DEFER       */        
+       2   DEFER_2     PIC            '(3)9'             ,        
+ /* DEFERMENT PERIOD LIFE 2 - from UKPH.DEFR2       */        
+       2   DEND_AGE_1  PIC            '(2)9'             ,        
+ /* DISABILITY COVER ENDING AGE LIFE 1 - from UKPH.DEAGE */        
+       2   DEND_AGE_2  PIC            '(2)9'             ,        
+ /* DISABILITY COVER ENDING AGE LIFE 2 - from UKPH.DEAG2 */        
+       2   ESCAL       FIXED DEC      (  3,1)            ,        
+ /* ESCALATION RATE - from UKPH.ESCAL            */        
+       2   DAB_CD      CHAR           (  1)              ,        
+ /* DAB Code - from UKPH.DABCD                   */        
+       2   DAB_END     PIC            '(8)9'             ,        
+ /* Date DAB Cover Ceasing - from UKPH.DABND     */        
+       2   PUP_END     FIXED DEC      ( 11,2)            ,        
+ /* Paid-up Endowment Amount - from UKPH.PUNDW   */        
+       2   PUP_DTH     FIXED DEC      ( 11,2)            ,        
+ /* Paid-up Death Amount - from UKPH.PUDTH       */        
+       2   CON_CHG     FIXED DEC      ( 11,2)            ,        
+ /* Contract Charge - from UKPH.CONCG            */        
+       2   WOP_APP     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code - from UKPH.WAIVR */        
+       2   WOP_ACT     CHAR           (  1)              ,        
+ /* Waiver of Premium Active Code - from UKPH.WVACT  */        
+       2   ILSP1       CHAR           (  1)              ,        
+ /* Illness Paid Life 1 - from UKPH.ILSP1            */        
+       2   ILSP2       CHAR           (  1)              ,        
+ /* Illness Paid Life 2 - from UKPH.ILSP2            */        
+       2   ICOVER_1    FIXED DEC      (  9,2)            ,        
+ /* Serious Illness Cover Life 1 - from UKPH.SILL1   */        
+       2   ICOVER_2    FIXED DEC      (  9,2)            ,        
+ /* Serious Illness Cover Life 2 - from UKPH.SILL2   */        
+       2   CONT_PROT   FIXED DEC      ( 11,2)            ,        
+ /* Contribution Protection Amount - from UKPH.CNTPR */        
+       2   CCOVER_1    FIXED DEC      ( 11,2)            ,        
+ /* Crisis Cover Life 1 - from UKPH.CRIS1            */        
+       2   CCOVER_2    FIXED DEC      ( 11,2)            ,        
+ /* Crisis Cover Life 2 - from UKPH.CRIS2            */        
+       2   CC_MULT1    PIC'99'                           ,        
+ /* Crisis Cover Multiple 1 - from UKPH.CCMT1        */        
+       2   CC_MULT2    PIC'99'                           ,        
+ /* Crisis Cover Multiple 2 - from UKPH.CCMT2        */        
+       2   PCOVER_1    FIXED DEC     (11,2)              ,        
+ /* Total Permanent Disability Cover Life 1 -        */        
+ /* derived from LCOVER_1 and UKPH.TPDCD             */        
+       2   PCOVER_2    FIXED DEC     (11,2)              ,        
+ /* Total Permanent Disability Cover Life 2 -        */        
+ /* derived from LCOVER_2 and UKPH.TPDCD             */        
+ /*******************************************************/        
+ /* LOADINGS SECTION                                    */        
+ /*******************************************************/        
+       2   MED_FAC_1  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 - from UKPH.XPMF1     */        
+       2   MED_FAC_2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 - from UKPH.XPMF2     */        
+       2   PRM_FAC_1  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 - from UKPH.XPFC1     */        
+       2   PRM_FAC_2  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 - from UKPH.XPFC2     */        
+       2   PRM_FAC_DT PIC            '(8)9'               ,        
+ /* Extra Premium Factor Termination Date - from */        
+ /* UKPH.XDOT                                    */        
+       2   ADD_FAC_1  FIXED DEC      (  9,4)              ,        
+ /* Extra Additive Loading 1 - from UKPH.XPAL1   */        
+       2   ADD_FAC_2  FIXED DEC      (  9,4)              ,        
+ /* Extra Additive Loading 2 - from UKPH.XPAL2   */        
+       2   OCC_C_1    CHAR           (  1)                ,        
+ /* Occupation Class Life 1 - from UKPH.OCCL1    */        
+       2   OCC_C_2    CHAR           (  1)                ,        
+ /* Occupation Class Life 2 - from UKPH.OCCL2    */        
+       2   ILL_FAC_1  PIC            '(3)9'               ,        
+ /* Extra Serious Illness Factor 1 - from UKPH.XSIF1 */        
+       2   ILL_FAC_2  PIC            '(3)9'               ,        
+ /* Extra Serious Illness Factor 2 - from UKPH.XSIF2 */        
+       2   T_OCC_FC_1 PIC'999'                            ,        
+ /* Temporary Extra %age occupational loading 1 -    */        
+ /* from UKPH.TXFC1                                  */        
+       2   T_OCC_FC_2 PIC'999'                            ,        
+ /* Temporary Extra %age occupational loading 2 -    */        
+ /* from UKPH.TXFC2                                  */        
+       2   T_OCC_DT_1 PIC'99999999'                       ,        
+ /* Temporary Extra %age occupational loading end    */        
+ /* date 1 - from UKPH.TXF1D                         */        
+       2   T_OCC_DT_2 PIC'99999999'                       ,        
+ /* Temporary Extra %age occupational loading end    */        
+ /* date 1 - from UKPH.TXF2D                         */        
+       2   T_MED_FC_1 PIC'999'                            ,        
+ /* Temporary Extra %age medical loading 1 -         */        
+ /* from UKPH.TXMF1                                  */        
+       2   T_MED_FC_2 PIC'999'                            ,        
+ /* Temporary Extra %age medical loading 1 -         */        
+ /* from UKPH.TXMF1                                  */        
+       2   T_MED_DT_1 PIC'99999999'                       ,        
+ /* Temporary Extra %age medical loading end date 1  */        
+ /* from UKPH.TXM1D                                  */        
+       2   T_MED_DT_2 PIC'99999999'                       ,        
+ /* Temporary Extra %age medical loading end date 2  */        
+ /* from UKPH.TXM2D                                  */        
+       2   T_MIL_FC_1 PIC'999'                            ,        
+ /* Temporary per mille loading 1 - from UKPH.TPMD1  */        
+       2   T_MIL_FC_2 PIC'999'                            ,        
+ /* Temporary per mille loading 2 - from UKPH.TPMD2  */        
+       2   P_MIL_FC_1 PIC'999'                            ,        
+ /* Per mile loading 1 - from UKPH.PMMD1            */        
+       2   P_MIL_FC_2 PIC'999'                            ,        
+ /* Per mille loading 2 - from UKPH.PMMD2            */        
+       2   Dt_1st_Rp  PIC'99999999'                       ;        
+ /* Date of 1st Payment                              */        
+         
+ /*---------------------------------------------------------*/        
+         
+         
+ /*******************************************************/        
+ /* SLICE ALTERATION                                    */        
+ /*******************************************************/        
+         
+         
+ DCL 1 WUK501_2  UNALIGNED BASED(P_501)                    ,        
+ /***********************************************/        
+ /* KEY SECTION                                 */        
+ /***********************************************/        
+       2   POLNO      PIC            '(7)9'          ,        
+ /* Policy Number                            */        
+       2   VERS        PIC            '(1)9'          ,        
+ /* Version                                  */        
+       2   CKDGT       CHAR           (  1)           ,        
+ /* Check Digit                              */        
+       2   EFFDT       PIC            '(8)9'          ,        
+ /* Effective Date of Alteration             */        
+       2   SEQ_NO      PIC            '(3)9'          ,        
+ /* Sequence of Alteration                   */        
+       2   TXN_TYPE    CHAR           (  5)           ,        
+ /* TYPE OF ALTERATION                             */        
+ /* 'NEWBU' = New Business.                        */        
+ /* 'INDEX' = Indexation                           */        
+ /* 'OPINC' = Regular Premium Top-up               */        
+ /* 'OPRED' = Regular Premium Reduction            */        
+ /* 'SUSON' = Suspension On (Premium set to 0      */        
+ /* 'SUSOF' = Suspension Off (Premium set from 0)  */        
+ /* 'WOPON' = WOP set on (if paid by Prem Ded'n)   */        
+ /* 'WOPOF' = WOP set off (if paid by Prem Ded'n)  */        
+ /* 'DABON' = DAB set on         */        
+ /* 'DABOF' = DAB set off        */        
+       2   ALT_NO      PIC            '999'             ,        
+ /* Alteration Number (to help be unique)    */        
+       2   TABLE       PIC            '(3)9'            ,        
+ /* Table - from UKPH.TABLE.                 */        
+       2   DSS_TAX_YEAR PIC        '(4)9',        
+ /* Tax Year from OBCH (CBKYR field) - to distinguish SP's */        
+ /*******************************************************/        
+ /* SLICE SECTION                                       */        
+ /*******************************************************/        
+       2   UI_IGNORE CHAR           ( 1)              ,        
+ /* UI Ignore indicator                                */        
+       2   FILLER      CHAR           (310)             ,        
+ /* Free Space                                         */        
+       2   IXAMT       FIXED DEC      (  5,2)            ,        
+ /* Low Start H/B Indexation amount - 20% of 1st month's RSPRM */        
+       2   EXTRA_PRM     Fixed Dec (11,2)              ,        
+ /* Extra Premium Amount                               */        
+       2   Prem_Paid_V1 FIXED DEC      (  11,2)      ,        
+ /* Current Premium on Version 1                */        
+       2   Prem_Paid_V2 FIXED DEC      (  11,2)      ,        
+ /* Current Premium on Version 2                */        
+       2   Prem_Paid_V3 FIXED DEC      (  11,2)      ,        
+ /* Current Premium on Version 3                */        
+       2   HCASH_1     FIXED DEC      (  5,2)            ,        
+ /* HOSPITAL CASH from UKPH.HCAM1 - contains indexation amount */        
+       2   DAB_CD      CHAR           (  1)              ,        
+ /* DAB CODE for the slice                             */        
+       2   LCOVER_1    FIXED DEC      ( 11,2)            ,        
+ /* DEATH SUM ASSURED LIFE 1 - from UKPH.SAD1       */        
+       2   LCOVER_2    FIXED DEC      ( 11,2)            ,        
+ /* DEATH SUM ASSURED LIFE 2 - from UKPH.SAD2       */        
+       2   BILL_FRQ PIC            '(2)9'                  ,        
+ /* Bill Frequency - from UKPH.BLFRQ             */        
+       2   MTH_REN  PIC            '(2)9'                  ,        
+ /* Month of Renewal - from UKPH.MTREN           */        
+       2   NEW_PR   FIXED DEC      ( 11,2)                 ,        
+ /* New Renewal Premium - from UKPH.RSPRM*/        
+       2   OLD_PR   FIXED DEC      ( 11,2)                 ,        
+ /* Old Renewal Premium - from UKPH.RSPRM*/        
+       2   WOP_PROP FIXED DEC      ( 7,6)                  ,        
+ /* Annual Premium of Slice -            */        
+ /* BILL_FRQ x (NEW_PR - OLD_PR)         */        
+       2   COMM_RT     CHAR        (  1)           ,        
+ /* Commission Rate Code - from UKPH.COMRT      */        
+       2   SPOFF      CHAR        (  4)           ,        
+ /* Special Offer Code - from UKPH.SPOFF             */        
+       2   SPOFF_PC   FIXED DEC      (  5,2)      ,        
+ /* Special Offer Percentage - from UKPH.SOXPG       */        
+       2   SPOFF_BASE FIXED DEC      (  9,2)      ,        
+ /* Special Offer Base Amount - from UKPH.AXPAT      */        
+       2   SPOFF_DT   PIC            '(8)9'       ,        
+ /* Special Offer Applied Date - from UKPH.SOXDT     */        
+       2   SPOFF_XAMT FIXED DEC      (  9,2)      ,        
+ /* Special Offer Extra Amount - from UKPH.SOXMT     */        
+       2   SPOFF_DEF  PIC            '999'        ,        
+ /* Special Offer Deferment Period - from UKPH.SODFR */        
+       2   SPOFF_DOP  PIC            '(8)9'       ,        
+ /* Special Offer 'To' DOP - from UKPH.TUDOP         */        
+       2   CAMP_CD    PIC            '9999'          ;        
+ /* Campaign Code - from UKPH.CMPN              */        
+         
+         
+ /*---------------------------------------------------------*/        
+         
+ /*******************************************************/        
+ /* PURCHASE                                            */        
+ /*******************************************************/        
+         
+         
+ DCL 1 WUK501_3  UNALIGNED BASED(P_501)                    ,        
+ /***********************************************/        
+ /* KEY SECTION                                 */        
+ /***********************************************/        
+       2   POLNO      PIC            '(7)9'          ,        
+ /* Policy Number                            */        
+       2   VERS        PIC            '(1)9'          ,        
+ /* Version                                  */        
+       2   CKDGT       CHAR           (  1)           ,        
+ /* Check Digit                              */        
+       2   EFFDT       PIC            '(8)9'          ,        
+ /* Effective Date of Alteration             */        
+       2   SEQ_NO      PIC            '(3)9'          ,        
+ /* Sequence of Alteration                   */        
+       2   TXN_TYPE    CHAR           (  5)           ,        
+ /* TYPE OF ALTERATION                             */        
+ /* 'NEWSP' = New Single Premium                   */        
+ /* 'TOPUP' = Single Premium Top-up                */        
+ /* 'RECOV' = DSS Recovery                         */        
+       2   ALT_NO      PIC            '999'             ,        
+ /* Alteration Number (to help be unique)    */        
+       2   TABLE       PIC            '(3)9'            ,        
+ /* Table - from UKPH.TABLE.                 */        
+       2   DSS_TAX_YEAR PIC        '(4)9',        
+ /* Tax Year from OBCH (CBKYR field) - to distinguish SP's */        
+ /*******************************************************/        
+ /* PURCHASE SECTION                                    */        
+ /*******************************************************/        
+       2   UI_IGNORE CHAR           ( 1)              ,        
+ /* UI Ignore indicator                                */        
+       2   FILLER      CHAR           (303)       ,        
+ /* Free Space                                       */        
+       2   PUR_AMT     FIXED DEC      ( 11,2)     ,        
+ /* Purchase Amount - from UKPH.SPREM                */        
+       2   SOURCE      CHAR             (  1)     ,        
+ /* Source from OBCH - from UKPH.OBCH_SOURCE         */        
+       2   COMM_RT     CHAR             (  1)     ,        
+ /* Commission Rate Code - from UKPH.COMRT           */        
+       2   CHG_APP     CHAR             (  1)     ,        
+ /* Charge Applies Code - derived from Rules         */        
+       2   CHG_PROP    Fixed Dec(7,6),        
+ /* Charge Proportion Code - derived from Rules      */        
+       2   SPOFF      CHAR              (  4)     ,        
+ /* Special Offer Code - from UKPH.SPOFF             */        
+       2   SPOFF_PC   FIXED DEC      (  5,2)      ,        
+ /* Special Offer Percentage - from UKPH.SOXPG       */        
+       2   SPOFF_BASE FIXED DEC      (  9,2)      ,        
+ /* Special Offer Base Amount - from UKPH.AXPAT      */        
+       2   SPOFF_DT   PIC            '(8)9'       ,        
+ /* Special Offer Applied Date - from UKPH.SOXDT     */        
+       2   SPOFF_XAMT FIXED DEC      (  9,2)      ,        
+ /* Special Offer Extra Amount - from UKPH.SOXMT     */        
+       2   SPOFF_DEF  PIC            '999'        ,        
+ /* Special Offer Deferment Period - from UKPH.SODFR */        
+       2   SPOFF_DOP  PIC            '(8)9'       ,        
+ /* Special Offer 'To' DOP - from UKPH.TUDOP         */        
+       2   CAMP_CD    PIC            '9999'       ,        
+ /* Campaign Code - from UKPH.CMPN              */        
+       2   FUND_ARR(10)        ,        
+ /* A Purchase may be only into one Fund Type - this */        
+ /* will be defined by Product Rules                 */        
+         3 F_NAME   CHAR  ( 3) ,        
+ /* Fund Mnemonic - from UKPH.AFTER(n).FUND          */        
+         3 F_PER    FIXED DEC        (3,2);        
+ /* Fund Percentage - from UKPH.AFTER(n).PER         */        
+         
+ /*---------------------------------------------------------*/        
+         
+         
+ /*******************************************************/        
+ /* ENCASHMENT                                          */        
+ /*******************************************************/        
+         
+         
+ DCL 1 WUK501_4  UNALIGNED BASED(P_501)                    ,        
+ /***********************************************/        
+ /* KEY SECTION                                 */        
+ /***********************************************/        
+       2   POLNO      PIC            '(7)9'          ,        
+ /* Policy Number                            */        
+       2   VERS        PIC            '(1)9'          ,        
+ /* Version                                  */        
+       2   CKDGT       CHAR           (  1)           ,        
+ /* Check Digit                              */        
+       2   EFFDT       PIC            '(8)9'          ,        
+ /* Effective Date of Alteration             */        
+       2   SEQ_NO      PIC            '(3)9'          ,        
+ /* Sequence of Alteration                   */        
+       2   TXN_TYPE    CHAR           (  5)           ,        
+ /* TYPE OF ALTERATION                             */        
+ /* 'FENC ' = Full encashment of fund types        */        
+ /* 'PENC ' = Partial Encashment                   */        
+ /* 'AINC ' = Automatic Income                     */        
+       2   ALT_NO      PIC            '999'             ,        
+ /* Alteration Number (to help be unique)    */        
+       2   TABLE       PIC            '(3)9'            ,        
+ /* Table - from UKPH.TABLE.                 */        
+       2   DSS_TAX_YEAR PIC        '(4)9',        
+ /* Tax Year from OBCH (CBKYR field) - to distinguish SP's */        
+ /*******************************************************/        
+ /* ENCASHMENT                                          */        
+ /*******************************************************/        
+       2   UI_IGNORE CHAR           ( 1)              ,        
+ /* UI Ignore indicator                                */        
+       2   FILLER      CHAR           (245)             ,        
+ /* Free Space                                         */        
+       2   DOPAY       PIC            '(8)9'            ,        
+ /* Date of Claim Payment                              */        
+       2   ENC_AMT     FIXED DEC      ( 11,2)           ,        
+ /* Amount paid in Claim - from UKPH.PAIDO       */        
+       2   FUND_TYPE_ARR(5) ,        
+ /* Encashments may (in theory) specify one or more  */        
+ /* Fund_Types. If FUND_TYPE is blank, then the      */        
+ /* contents of FUND_ARR should be ignored. These    */        
+ /* arrays will be initialised by Normalisation      */        
+        3   FUND_TYPE   CHAR          (  1)             ,        
+ /* Fund_Type to be encashed                         */        
+ /* R: Regular Premium                               */        
+ /* O: Redirected Regular Premium                    */        
+ /* S: Single Premium                                */        
+ /* D: DSS                                           */        
+ /* P: Other Protected Rights                        */        
+        3   FUND_ARR(10)        ,        
+ /* No product may have more than 10 funds           */        
+         4   F_NAME   CHAR  ( 3) ;        
+ /* Fund Mnemonic - from UKPH.AFTER(n).FUND          */        
+         
+         
+ /*---------------------------------------------------------*/        
+         
+ /*******************************************************/        
+ /* REDISTRIBUTION                                      */        
+ /*******************************************************/        
+         
+         
+ DCL 1 WUK501_5  UNALIGNED BASED(P_501)                    ,        
+ /***********************************************/        
+ /* KEY SECTION                                 */        
+ /***********************************************/        
+       2   POLNO      PIC            '(7)9'          ,        
+ /* Policy Number                            */        
+       2   VERS        PIC            '(1)9'          ,        
+ /* Version                                  */        
+       2   CKDGT       CHAR           (  1)           ,        
+ /* Check Digit                              */        
+       2   EFFDT       PIC            '(8)9'          ,        
+ /* Effective Date of Alteration             */        
+       2   SEQ_NO      PIC            '(3)9'          ,        
+ /* Sequence of Alteration                   */        
+       2   TXN_TYPE    CHAR           (  5)           ,        
+ /* TYPE OF ALTERATION                             */        
+ /* 'NEWRP' = New Regular Premium                  */        
+ /* 'SWH  ' = Switch                               */        
+ /* 'REDIR' = Redirection                          */        
+       2   ALT_NO      PIC            '999'             ,        
+ /* Alteration Number (to help be unique)    */        
+       2   TABLE       PIC            '(3)9'            ,        
+ /* Table - from UKPH.TABLE.                 */        
+       2   DSS_TAX_YEAR PIC        '(4)9',        
+ /* Tax Year from OBCH (CBKYR field) - to distinguish SP's */        
+ /*******************************************************/        
+ /* REDISTRIBUTION SECTION                              */        
+ /*******************************************************/        
+       2   UI_IGNORE CHAR           ( 1)              ,        
+ /* UI Ignore indicator                                */        
+       2   FILLER      CHAR           (109)             ,        
+ /* Free Space                                         */        
+       2   FREE_SW     CHAR           (  1)             ,        
+ /* Free Switch Indicator - from UKPH.AFTER(n).FREE    */        
+       2   FUND_TYPE_ARR(5) ,        
+ /* Switches may (in theory) specify one or more     */        
+ /* Fund_Types. If FUND_TYPE is blank, then the      */        
+ /* contents of FUND_ARR should be ignored. These    */        
+ /* arrays will be initialised by Normalisation      */        
+        3   FUND_TYPE   CHAR          (  1)             ,        
+ /* Fund_Type to be switched/redirected              */        
+ /* R: Regular Premium                               */        
+ /* O: Redirected Regular Premium                    */        
+ /* S: Single Premium                                */        
+ /* D: DSS                                           */        
+ /* P: Other Protected Rights                        */        
+        3   FUND_ARR(10)        ,        
+ /* No product may have more than 10 funds.          */        
+         4   F_NAME   CHAR  ( 3) ,        
+ /* Fund Mnemonic of Fund to be switched into - from */        
+ /* UKPH.AFTER(n).FUND                               */        
+         4   F_PER    FIXED DEC (3,2);        
+ /* New Percentage allocation of Fund - from UKPH.   */        
+         
+ /*---------------------------------------------------------*/        
+END_PLC(FUK501)

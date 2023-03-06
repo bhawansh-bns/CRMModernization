@@ -1,0 +1,42 @@
+BEGIN_PLC(CUK08991)
+ /*-------------------------------------------------------------------*/        
+ /* CUK08991 : Declarations needed to call module UK08991.            */        
+ /*                                                                   */        
+ /* UK08991 is called by UK08990 AND UK08980 to apply WOP rules       */        
+ /* and calculate WOP charge.                                         */        
+ /*                                                                   */        
+ /* Fill Cuk08991 as follows:                                         */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK08991 Ptr ;        
+ Dcl 1 CUK08991_NAME_TYPE ,        
+       2 Polno       PIC        '(7)9' ,  /*            Policy Number */        
+       2 Effdt       PIC        '(8)9' ,  /*  Effective Date of Slice */        
+       2 Seq_No      PIC        '(3)9' ,  /*        Sequence of Slice */        
+       2 Txn_Type    CHAR       (  5)  ,  /*         Transaction Type */        
+       2 Alt_No      PIC        '999'  ,  /*        Alteration Number */        
+       2 Table       PIC        '(3)9' ,  /*                    Table */        
+       2 WOP_App     CHAR       (1)    ,  /*           WOP Applicable */        
+       2 Bill_Frq    PIC        '(2)9' ,  /*           Bill Frequency */        
+       2 New_Pr      FIXED DEC  ( 11,2),  /*      New Renewal Premium */        
+       2 Wop_Prop    FIXED DEC  ( 7,6) ,  /*           Wop Proportion */        
+       2 Comm_Rt     CHAR       (  1)  ,  /*     Commission Rate Code */        
+       2 Camp_Cd     PIC        '9999' ,  /*            Campaign Code */        
+       2 Status      CHAR       (  3)  ,  /*                   Status */        
+       2 DOE         PIC        '(8)9' ,  /*            Date of Entry */        
+       2 Age_Ent_1   PIC        '(3)9' ,  /*      Age at Entry Life 1 */        
+       2 Age_Ent_2   PIC        '(3)9' ,  /*      Age at Entry Life 1 */        
+       2 DOB_1       PIC        '(8)9' ,  /*          Date of Birth 1 */        
+       2 DOB_2       PIC        '(8)9' ,  /*          Date of Birth 2 */        
+       2 Sex_1       CHAR       (  1)  ,  /*          Sex Code Life 1 */        
+       2 Sex_2       CHAR       (  1)  ,  /*          Sex Code Life 2 */        
+       2 LCover_1    FIXED DEC  ( 11,2),  /* Death Sum Assured Life 1 */        
+       2 LCover_2    FIXED DEC  ( 11,2),  /* Death Sum Assured Life 2 */        
+       2 WOP_Charge    Fixed Dec(11,5),        
+       2 WOP_End_Dt    PIC '(8)9',        
+       2 WOP_Method    Char(1);        
+         
+         
+END_PLC(CUK08991)

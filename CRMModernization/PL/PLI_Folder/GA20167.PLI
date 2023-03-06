@@ -1,0 +1,2872 @@
+ GA20167:PROC OPTIONS(MAIN)(IEU001,JWB001) OPTIONS(FETCHABLE) REORDER;        
+ /********************************************************************/        
+ /* GA20167                                                          */        
+ /*                                                                  */        
+ /*                                                                  */        
+ /*         DEVIS AUTO INTERNET ETHIAS / MY ETHIAS / AFFINITY        */        
+ /*                                                                  */        
+ /*               SCENARIO 7 : AFFICHAGE INFOS REMORQUE              */        
+ /*               =====================================              */        
+ /*                                                                  */        
+ /********************************************************************/        
+ /* EURO=YES AUTHOR=TDMKIP/KIPS C.       INTERV= KIPS C.      .......*/        
+ /*                                                                  */        
+ /********************************************************************/        
+ /*  -------------------------------                                 */        
+ /*  -  M O D I F I C A T I O N S  -                                 */        
+ /*------------------------------------------------------------------*/        
+ /* TDMKIP ! 27/08/03 ! CREATION DU PROGRAMME                        */        
+ /********************************************************************/        
+         
+ DCL ABS       BUILTIN;        
+ DCL ADDR      BUILTIN;        
+ DCL CEIL      BUILTIN;        
+ DCL DATE      BUILTIN;        
+ DCL DATETIME  BUILTIN;        
+ DCL DIM       BUILTIN;        
+ DCL FLOOR     BUILTIN;        
+ DCL INDEX     BUILTIN;        
+ DCL LENGTH    BUILTIN;        
+ DCL LOW       BUILTIN;        
+ DCL MAX       BUILTIN;        
+ DCL MIN       BUILTIN;        
+ DCL MOD       BUILTIN;        
+ DCL NULL      BUILTIN;        
+ DCL ONCODE    BUILTIN;        
+ DCL ONLOC     BUILTIN;        
+ DCL REPEAT    BUILTIN;        
+ DCL STG       BUILTIN;        
+ DCL SUBSTR    BUILTIN;        
+ DCL TIME      BUILTIN;        
+ DCL TRANSLATE BUILTIN;        
+ DCL UNSPEC    BUILTIN;        
+ DCL VERIFY    BUILTIN;        
+ /* TDMOHL 03/05/2005 AJOUT DE ONSOURCE, PLIRETC ET PLIRETV */        
+ DCL ONSOURCE  BUILTIN;        
+ DCL PLIRETC   BUILTIN;        
+ DCL PLIRETV   BUILTIN;        
+         
+ /* TDMSLE : 041103 */        
+ DCL CENTER    BUILTIN;        
+ DCL LEFT      BUILTIN;        
+ DCL RIGHT     BUILTIN;        
+ DCL TRIM      BUILTIN;        
+ DCL UPPERCASE BUILTIN;        
+ DCL PTRADD    BUILTIN;        
+ /* TDMSLE FIN : 041103 */        
+         
+ /* TDMSLE : 041103 -                                         */        
+ /*  MISE EN COMMENTAIRE CAR IL FAUT UTILISER 'TRIM' DE VAPLI */        
+ /* DCL TRIM      EXT ENTRY RETURNS(CHAR(133) VAR BYVALUE);   */        
+ /* DCL LTRIM     EXT ENTRY RETURNS(CHAR(133) VAR BYVALUE);   */        
+ /* DCL RTRIM     EXT ENTRY RETURNS(CHAR(133) VAR BYVALUE);   */        
+ /* TDMSLE FIN : 041103                                       */        
+         
+ /*--------------------------------------------------------- ATTRINIT */        
+  /* Enterprise PL1*/        
+ DCL ATTR1 CHAR(2) VALUE('00C8'X); ##############################        
+ DCL ATTR2 CHAR(2) VALUE('00C9'X); ############################        
+ DCL ATTR3 CHAR(2) VALUE('00F1'X); ###########################        
+ DCL ATTR4 CHAR(2) VALUE('00F9'X); ##############################        
+ DCL ATTR5 CHAR(2) VALUE('00E1'X); #######################        
+ DCL ATTR6 CHAR(2) VALUE('00F0'X); #############################        
+ DCL ATTR7 CHAR(2) VALUE('00F8'X); ################################        
+ DCL ATTR8 CHAR(2) VALUE('00D9'X); ################################        
+         
+ DCL NUMERR_E CHAR(2) VALUE('C0D9'X); ################################        
+ DCL ALPERR_E CHAR(2) VALUE('C0C9'X); ################################        
+ DCL NUMCSR_E CHAR(2) VALUE('C0D1'X); ################################        
+ DCL ALPCSR_E CHAR(2) VALUE('C0C1'X); ################################        
+ DCL NUMDEP_E CHAR(2) VALUE('00D1'X); ################################        
+ DCL ALPDEP_E CHAR(2) VALUE('00C1'X); ################################        
+ DCL NODCSR_E CHAR(2) VALUE('C0C5'X); ################################        
+ DCL NODDEP_E CHAR(2) VALUE('00C5'X); ################################        
+ DCL NODPRT_E CHAR(2) VALUE('00E5'X); ################################        
+         
+ DCL HEX00 CHAR(1)   VALUE('00'X);        
+ DCL HEX02 CHAR(1)   VALUE('02'X);   ################################        
+ DCL HEXFF CHAR(1)   VALUE('FF'X);        
+ DCL HEX3F CHAR(1)   VALUE('3F'X);        
+ DCL HEX15 CHAR(1)   VALUE('15'X);  ##################        
+ DCL HEX4A CHAR(1)   VALUE('4A'X);  ###################        
+ DCL HEX403F CHAR(2) VALUE('403F'X);        
+ DCL HEX40 CHAR(1)   VALUE('40'X);        
+ DCL HEX4B CHAR(1)   VALUE('4B'X);        
+ DCL SCA1  CHAR(2)   VALUE('0080'X); #########################        
+ DCL SCA2  CHAR(2)   VALUE('00C0'X); ##################################        
+ DCL SCA3  CHAR(2)   VALUE('00A0'X); ############################################        
+ DCL SCA4  CHAR(2)   VALUE('0090'X); ############################        
+ /*----------------------------------------------------- END ATTRINIT */        
+ /* -------------------------------------------------------- ATTRIMOD */        
+ /* exemples:   ZONE_A   CHAR(6)                                      */        
+ /*  reverse:   ZONE_A = '  '!!REV_E;                                 */        
+ /*  neutral:   ZONE_A = '  '!!NEU_E;                                 */        
+ /*  rev+neu:   ZONE_A = '  '!!REV_E!!NEU_E;                          */        
+ /* sans effet: ZONE_A = SEF_E;                                       */        
+ /* ----------- 1 Commentaire = 1 ligne ---------------- JCC 09-12-02 */        
+         
+         
+ DCL    SEF_E   CHAR(6)  STATIC INIT('');  ##########################        
+        SEF_E  = LOW(LENGTH(SEF_E));        
+ DCL    BLI_E   CHAR(2)  STATIC ,     #############################        
+        REV_E   CHAR(2)  STATIC ,     #############################        
+        UND_E   CHAR(2)  STATIC ;     #############################        
+ UNSPEC(BLI_E) = '1100000111110001'B;        
+ UNSPEC(REV_E) = '1100000111110010'B;        
+ UNSPEC(UND_E) = '1100000111110100'B;        
+ DCL    BLU_E   CHAR(2)  STATIC ,     #############################        
+        RED_E   CHAR(2)  STATIC ,     #############################        
+        PIN_E   CHAR(2)  STATIC ,     #############################        
+        GRN_E   CHAR(2)  STATIC ,     #############################        
+        TRQ_E   CHAR(2)  STATIC ,     #############################        
+        YEL_E   CHAR(2)  STATIC ,     #############################        
+        NEU_E   CHAR(2)  STATIC ;     #############################        
+ UNSPEC(BLU_E) = '1100001011110001'B;        
+ UNSPEC(RED_E) = '1100001011110010'B;        
+ UNSPEC(PIN_E) = '1100001011110011'B;        
+ UNSPEC(GRN_E) = '1100001011110100'B;        
+ UNSPEC(TRQ_E) = '1100001011110101'B;        
+ UNSPEC(YEL_E) = '1100001011110110'B;        
+ UNSPEC(NEU_E) = '1100001011110111'B;        
+ /*----------------------------------------------------- END ATTRIMOD */        
+         
+ /*---------------------------------------------------------- $DATTIM */        
+ /*      Date & Heure ordinateur sous toutes les formes     */        
+ /*     ------------------------------------------------    */        
+ /*     ->     call $Dates_Times pour rafraichir      <-    */        
+ /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */        
+ DCL $DATE_TIME          CHAR(17) INIT(''); #################################        
+ DCL $DATE_MSK           CHAR(17);        
+ DCL $DATE_HEURE         CHAR(18) INIT(''); #################################        
+ DCL 1 $DATE_TIME_W BASED(ADDR($DATE_TIME)),        
+      2 S    CHAR(1),        
+      2 A    CHAR(1),        
+      2 AA   CHAR(2),        
+      2 MM   CHAR(2),        
+      2 JJ   CHAR(2),        
+      2 HH   CHAR(2),        
+      2 MI   CHAR(2),        
+      2 SS   CHAR(2),        
+      2 CCC  CHAR(3);        
+         
+ DCL $DATE_AAAAMMJJ      CHAR(08);    ####################################        
+ DCL #DATE_AAAAMMJJ      PIC'(08)9'        
+      BASED(ADDR($DATE_AAAAMMJJ));        
+ DCL $DATE_AAMMJJ        CHAR(06);    ####################################        
+ DCL #DATE_AAMMJJ        PIC'(06)9'        
+      BASED(ADDR($DATE_AAMMJJ));        
+ DCL $DATE_SAAMMJJ       CHAR(07);    ####################################        
+ DCL #DATE_SAAMMJJ       PIC'(07)9'        
+      BASED(ADDR($DATE_SAAMMJJ));        
+ DCL $DATE_JJMMAAAA      CHAR(08);    ####################################        
+ DCL #DATE_JJMMAAAA      PIC'(08)9'        
+      BASED(ADDR($DATE_JJMMAAAA));        
+ DCL $DATE_JJMMAA        CHAR(06);    ####################################        
+ DCL #DATE_JJMMAA        PIC'(06)9'        
+      BASED(ADDR($DATE_JJMMAA));        
+         
+ DCL $DATE_AAAA          CHAR(04);    ####################################        
+ DCL #DATE_AAAA          PIC'(04)9'        
+      BASED(ADDR($DATE_AAAA));        
+ DCL $DATE_AA            CHAR(02);    ####################################        
+ DCL #DATE_AA            PIC'(02)9'        
+      BASED(ADDR($DATE_AA));        
+ DCL $DATE_S             CHAR(01);    ####################################        
+ DCL #DATE_S             PIC'(01)9'        
+      BASED(ADDR($DATE_S));        
+ DCL $DATE_SAA           CHAR(03);    ####################################        
+ DCL #DATE_SAA           PIC'(03)9'        
+      BASED(ADDR($DATE_SAA));        
+         
+ DCL $DATE_MM            CHAR(02);    ####################################        
+ DCL #DATE_MM            PIC'(02)9'        
+      BASED(ADDR($DATE_MM));        
+ DCL $DATE_JJ            CHAR(02);    ####################################        
+ DCL #DATE_JJ            PIC'(02)9'        
+      BASED(ADDR($DATE_JJ));        
+         
+ DCL $TIME_HHMMSSCCC     CHAR(09);    ####################################        
+ DCL #TIME_HHMMSSCCC     PIC'(09)9'        
+      BASED(ADDR($TIME_HHMMSSCCC));        
+ DCL $TIME_HHMMSS        CHAR(06);    ####################################        
+ DCL #TIME_HHMMSS        PIC'(06)9'        
+      BASED(ADDR($TIME_HHMMSS));        
+ DCL $TIME_HHMM          CHAR(04);    ####################################        
+ DCL #TIME_HHMM          PIC'(04)9'        
+      BASED(ADDR($TIME_HHMM));        
+ DCL $TIME_HH            CHAR(02);    ####################################        
+ DCL #TIME_HH            PIC'(02)9'        
+      BASED(ADDR($TIME_HH));        
+ DCL $TIME_MM            CHAR(02);    ####################################        
+ DCL #TIME_MM            PIC'(02)9'        
+      BASED(ADDR($TIME_MM));        
+         
+ DCL $DATE_JJ_MM_AAAA    CHAR(10);    ####################################        
+ DCL $DATE#JJ#MM#AAAA    CHAR(10);    ####################################        
+ DCL $DATE_JJ_MM_AA      CHAR(08);    ####################################        
+         
+ DCL $TIME_HH_MM_SS_CCC  CHAR(12);    ####################################        
+ DCL $TIME_HH_MM_SS      CHAR(08);    ####################################        
+ DCL $TIME#HH#MM#SS      CHAR(08);    ####################################        
+ DCL $TIME_HH_MM         CHAR(05);    ####################################        
+         
+ DCL $TIME_STAMP         CHAR(26);    ###########################################        
+ DCL $TIME_STAMP_PL1     CHAR(20);    ###########################################        
+ /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */        
+ $DATE_MSK = 'ABCDEFGHIJKLMNOPQ';        
+         
+ CALL $DATES_TIMES;        
+         
+ $DATES_TIMES: PROC;        
+ $DATE_TIME      = DATETIME();        
+ $DATE_HEURE     = $DATE_TIME_W.JJ!!'/'!!$DATE_TIME_W.MM!!'/'!!        
+                   $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA!!        
+                   ' - '!!$DATE_TIME_W.HH!!':'!!$DATE_TIME_W.MI;        
+ $DATE_AAAAMMJJ     = $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA!!        
+                      $DATE_TIME_W.MM!!$DATE_TIME_W.JJ;        
+ $DATE_JJMMAAAA     = $DATE_TIME_W.JJ!!$DATE_TIME_W.MM!!$DATE_TIME_W.S!!        
+                      $DATE_TIME_W.A!!$DATE_TIME_W.AA;        
+ $DATE_AAMMJJ       = $DATE_TIME_W.AA!!$DATE_TIME_W.MM!!$DATE_TIME_W.JJ;        
+ $DATE_JJMMAA       = $DATE_TIME_W.JJ!!$DATE_TIME_W.MM!!$DATE_TIME_W.AA;        
+ $DATE_SAAMMJJ      = $DATE_TIME_W.S!!$DATE_TIME_W.AA!!$DATE_TIME_W.MM!!        
+                      $DATE_TIME_W.JJ;        
+ $DATE_AAAA         = $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA;        
+ $DATE_AA           = $DATE_TIME_W.AA;        
+ $DATE_S            = $DATE_TIME_W.S;        
+ $DATE_SAA          = $DATE_TIME_W.S!!$DATE_TIME_W.AA;        
+ $DATE_MM           = $DATE_TIME_W.MM;        
+ $DATE_JJ           = $DATE_TIME_W.JJ;        
+ $DATE_JJ_MM_AAAA   = $DATE_TIME_W.JJ!!'/'!!        
+                      $DATE_TIME_W.MM!!'/'!!$DATE_TIME_W.S!!        
+                      $DATE_TIME_W.A!!$DATE_TIME_W.AA;        
+ $DATE#JJ#MM#AAAA   = $DATE_TIME_W.JJ!!'.'!!        
+                      $DATE_TIME_W.MM!!'.'!!$DATE_TIME_W.S!!        
+                      $DATE_TIME_W.A!!$DATE_TIME_W.AA;        
+ $DATE_JJ_MM_AA     = $DATE_TIME_W.JJ!!'/'!!        
+                      $DATE_TIME_W.MM!!'/'!!$DATE_TIME_W.AA;        
+ $TIME_HHMMSSCCC    = $DATE_TIME_W.HH!!$DATE_TIME_W.MI!!        
+                      $DATE_TIME_W.SS!!$DATE_TIME_W.CCC;        
+ $TIME_HHMMSS       = $DATE_TIME_W.HH!!$DATE_TIME_W.MI!!        
+                      $DATE_TIME_W.SS;        
+ $TIME_HHMM         = $DATE_TIME_W.HH!!$DATE_TIME_W.MI;        
+ $TIME_HH           = $DATE_TIME_W.HH;        
+ $TIME_MM           = $DATE_TIME_W.MI;        
+ $TIME_HH_MM_SS_CCC = $DATE_TIME_W.HH!!':'!!$DATE_TIME_W.MI!!':'!!        
+                      $DATE_TIME_W.SS!!':'!!$DATE_TIME_W.CCC;        
+ $TIME_HH_MM_SS     = $DATE_TIME_W.HH!!':'!!$DATE_TIME_W.MI!!':'!!        
+                      $DATE_TIME_W.SS;        
+ $TIME#HH#MM#SS     = $DATE_TIME_W.HH!!'.'!!$DATE_TIME_W.MI!!'.'!!        
+                      $DATE_TIME_W.SS;        
+ $TIME_HH_MM        = $DATE_TIME_W.HH!!':'!!$DATE_TIME_W.MI;        
+ $TIME_STAMP        = $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA!!        
+                      '-'!!$DATE_TIME_W.MM!!'-'!!$DATE_TIME_W.JJ!!'-'!!        
+                      $DATE_TIME_W.HH!!'.'!!$DATE_TIME_W.MI!!'.'!!        
+                      $DATE_TIME_W.SS!!'.'!!$DATE_TIME_W.CCC!!'000';        
+ $TIME_STAMP_PL1    = $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA!!        
+                      $DATE_TIME_W.MM!!$DATE_TIME_W.JJ!!        
+                      $DATE_TIME_W.HH!!$DATE_TIME_W.MI!!        
+                      $DATE_TIME_W.SS!!$DATE_TIME_W.CCC!!'000';        
+ $END $DATES_TIMES;        
+ /*------------------------------------------------------ END $DATTIM */        
+ /********************************************        
+ * DECLARATION DES PARAMETRES DE LA ROUTINE  *        
+ ********************************************/        
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*         INTERFACE DE COMMUNICATION AVEC BEU001                    */        
+ /*         ======================================                    */        
+ /*                                                                   */        
+ /* USAGE :                                                           */        
+ /* CALL BEU001(IEU001,COUNT,FUNCT,DATAPCB,IOAREA,                    */        
+ /*             SSA1, SSA2, SSA3, SSA4, SSA5, SSA6, SSA7);            */        
+ /*********************************************************************/        
+ /* MODE CONVERSION :                                                 */        
+ /*                                                                   */        
+ /* CALL BEU001(IEU001,THREE,'GCV',DATAPCB,IOAREA);                   */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* PROCEDURE DE COMPILATION : TDMFOG.LIB.CNTL(FETCH)                 */        
+ /* MODULE A TRANSFERER PAR L'EQUIPE SYSTEME : FEUT.T.LOAD(BEU001)    */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /* DESCRIPTION DES MESSAGES D'ERREURS : CDRTPGM                      */        
+ /* -----------------------------------                               */        
+ /* DB : PROBLEME BASE DE DONNEES : VOIR LE PCB DATA                  */        
+ /* 01 : COEFFICIENT DE CONVERSION EURO --> FB ERRONE                 */        
+ /* 02 : PARAM. CODE DEVISE DIFFERENT DE 'F' ET 'E'                   */        
+ /* 03 : PARAM. CODE PAGE DIFFERENT DE '500' ET '274'                 */        
+ /* 04 : PARAM. CODE USAGE APPLICATION DIFF. DE : 3 = 3270            */        
+ /*                                        P = HOST PRINTER           */        
+ /*                                        L = LOCAL PRINTER          */        
+ /*                                        Q = MQSERIES               */        
+ /* 05 : CODE DEVISE MAL INSTALLE DANS LE DICTIONNAIRE                */        
+ /* 06 : CODE PAGE MAL INSTALLE DANS LE DICTIONNAIRE                  */        
+ /* 07 : CODE VERSION DE LA DB MAL INSTALLE DANS LE DICTIONNAIRE      */        
+ /* 08 : DESCRIPTION FORME EXTERNE DU SEGMENT ABSENTE DU DICTIONNAIRE */        
+ /* 09 : ERREUR BASE DE DONNEE SUR LA DB DICTIONNAIE                  */        
+ /* 10 : LONGUEUR D'ATTRIBUT MODIFIEE POUR FORMAT TYPE : BF/BE/DE     */        
+ /* 11 : LE FORMAT DE MONTANT DEVISE OU DATE  <> DZ/DF/BF             */        
+ /* 12 : EN ISRT, REPL, LA DATE DOIT OBLIG. ETRE EXPRIMEE EN SAAMMJJ  */        
+ /* 13 : FORMAT DE DONNEE NON RECONNU                                 */        
+ /* 14 : LONGUEUR EN BYTE INADEQUATE POUR UN TYPE BF                  */        
+ /* 15 : LONGUEUR TYPE BF <> 2/4                                      */        
+ /* 16 : LONGUEUR TYPE DE/BE <> 4/8                                   */        
+ /* 17 : EN ISRT, REPL, LA D. COMPLEM. DOIT ETRE EXPRIMEE EN SAAMMJJ  */        
+ /* 18 : MONTANT AU FORMAT ZONED DECIMAL NON NUMERIQUE EN LECTURE     */        
+ /* 19 : MONTANT AU FORMAT PACKED DECIMAL NON NUMERIQUE EN LECTURE    */        
+ /* 20 : MONTANT AU FORMAT ZONED DECIMAL NON NUMERIQUE EN M A J       */        
+ /* 21 : MONTANT AU FORMAT PACKED DECIMAL NON NUMERIQUE EN M A J      */        
+ /* 22 : COUNT < 2 OU > 10                                            */        
+ /* 23 : FONCTION NON IMPLEMENTEE CAR NON SPECIFIQUE A DL1            */        
+ /* 24 : FONCTION INCONNUE                                            */        
+ /* 25 : NOMBRE D'ATTRIBUTS DU SEGMENT DEPASSANT LE MAXIMUM AUTORISE  */        
+ /* 26 : LONGUEUR DE RUBRIQUE MAL DEFINIE AU DICTIONNAIRE             */        
+ /* 27 : COUNT PARAMETER > 7                                          */        
+ /* 28 : PROTOCOLE EURO POSTPOSE JUSQU'A LA CONVERSION DE LA CAISSE   */        
+ /* 29 : PARAMETRE SOCIETE NON RECONNU                                */        
+ /* 30 : PROTOCOLE EURO INTERDIT CAR DB NON CONVERTIE A L'EURO        */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ DCL 1     IEU001,        
+ /*------------------------- I N P U T -------------------------------*/        
+      2    PTR,                        #################################################################        
+       3   METAPCB      PTR,           ####################################################        
+       3   ALTPCB       PTR,           ####################################################        
+      2    INPUT,                      ###############################################################        
+       3   LTSCTRN      CHAR (4),      ###############################################        
+       3   CDDVTRN      CHAR (3),      ###############################################        
+       3   CDPGTRN      CHAR (3),      ###############################################        
+       3   CDTYUSR      CHAR (1),      ###############################################        
+       3   CDPGMID      CHAR (8),      ###############################################        
+       3   CDDFSEG      CHAR (8),      ###############################################        
+       3   LASTCALL     CHAR (30),     ##############################################        
+       3   TBEGCOD(32)  BIT(1),        #################################################        
+                                       /*--!  BIT 1: MAJ EURO         */        
+                                       /*--!    AUTORISEE AVANT PIVOT */        
+                                       /*--!  BIT 2: NE PAS CONVERTIR */        
+                                       /*--!  BIT 3: MAJ BEF          */        
+                                       /*--!    AUTORISEE APRES PIVOT */        
+       3   TBDISPO(128),        
+        4  DBDNAME      CHAR(8),       ################################################        
+        4  DBSTATE      CHAR(1),       ################################################        
+                                       /*--! 0 : UPDATABLE            */        
+                                       /*--! 1 : READ ONLY (NU)       */        
+                                       /*--! 2 : NO ACCESS (NA)       */        
+       3   FILLER       CHAR(200),     ##############################################        
+         
+ /*------------------------ O U T P U T ------------------------------*/        
+      2    OUTPUT,                     ##############################################################        
+       3   CDRTPGM      CHAR (6),      ###############################################        
+       3   LTRTPGM      CHAR (60),     ##############################################        
+       3   DBPTR        PTR,           ####################################################        
+       3   LASTDLI      CHAR (10);     ##############################################        
+         
+ /*------------------- REDEFINITIONS DE IEU001 -----------------------*/        
+ DCL 1     IEU001_R     BASED(ADDR(IEU001.INPUT.FILLER)),        
+       2   CDEVTRN      CHAR(001),     ##############################################        
+                                       /*--!  P : VALEUR PAR DEFAUT   */        
+       2   CDDEVDB      CHAR(003),     ##############################################        
+                                       /*--!  BEF / EUR               */        
+       2   TBDFDBD_PTR  PTR,        
+       2   TBDFATT_PTR  PTR,        
+       2   TBDFSEG_PTR  PTR,        
+       2   SYSTIME      BIN FIXED(31),        
+       2   DATEORD      PIC '(7)9',        
+       2   NBMXCOP_C    FIXED BIN(15),        
+       2   FILLER       CHAR(170);     ##############################################        
+ /*********************************************************************/        
+              /* INTERFACE DL1          */        
+ DCL 1    GA2016J           BASED(JWB001.GXXXXXJ_P),        
+ /*------------------------- I N P U T -------------------------------*/        
+      2   INPUT,        
+       3  IOPCB             PTR,        
+       3  ALTPCB            PTR,        
+       3  PRTPCB            PTR,        
+       3  SPA_PTR           PTR,        
+       3  MID_PTR           PTR,        
+       3  PAGE_PTR          PTR,        
+       3  PAGEER_PTR        PTR,        
+       3  LTNMMTH           CHAR(20),        
+       3  DXI10PCB          PTR,                                                
+       3  DC105PCB          PTR,                                                
+       3  DSM88PCB          PTR,        
+       3  DXI04PCB          PTR,        
+       3  DXI05PCB          PTR,        
+       3  DXI06PCB          PTR,        
+       3  DA215PCB          PTR,                                                
+       3  DA215$PCB         PTR,                                                
+       3  DA2152PCB         PTR,                                                
+       3  DA216PCB          PTR,                                                
+       3  DA223PCB          PTR,                                                
+       3  DEU02PCB          PTR,                                                
+       3  DS101PCB          PTR,        
+       3  DS101S2PCB        PTR,        
+       3  DS101S3PCB        PTR,        
+       3  DS106PCB          PTR,        
+       3  DS108PCB          PTR,        
+       3  DS124PCB          PTR,        
+       3  DSM19PCB          PTR,        
+       3  DS102PCB          PTR,        
+       3  DSM40PCB          PTR,        
+       3  DS133PCB          PTR,        
+       3  DS103PCB          PTR,        
+       3  DS139PCB          PTR,        
+       3  DSM22PCB          PTR,        
+       3  DSM18PCB          PTR,        
+       3  DSM18BPCB         PTR,        
+       3  DD201PCB          PTR,        
+       3  DSM43PCB          PTR,        
+       3  DEU02MPCB         PTR,        
+       3  DEU02DPCB         PTR,        
+       3  DSM55PCB          PTR,        
+       3  DC105MPCB         PTR,        
+       3  DS125PCB          PTR,        
+       3  DS137PCB          PTR,        
+       3  DCO15PCB          PTR,        
+       3  DCO26PCB          PTR,        
+       3  DSM25MPCB         PTR,        
+       3  DS101MPCB         PTR,        
+       3  DS101M2PCB        PTR,        
+       3  DS101M3PCB        PTR,        
+       3  DS106MPCB         PTR,        
+       3  DS108MPCB         PTR,        
+       3  DS124MPCB         PTR,        
+       3  DS125MPCB         PTR,        
+       3  DS137MPCB         PTR,        
+       3  DCO15MPCB         PTR,        
+       3  DCO26MPCB         PTR,        
+       3  DSM22MPCB         PTR,        
+       3  DDO01PCB          PTR,        
+       3  DDO02PCB          PTR,        
+       3  DDO03PCB          PTR,        
+       3  DC105SPCB         PTR,                                                
+       3  DSM60PCB          PTR,                                                
+       3  DSM61PCB          PTR,                                                
+       3  DSM62PCB          PTR,                                                
+       3  DSM63PCB          PTR,                                                
+       3  DSM64PCB          PTR,                                                
+       3  DSM65PCB          PTR,                                                
+       3  DSM66PCB          PTR,                                                
+       3  DSM67PCB          PTR,                                                
+       3  DSM68PCB          PTR,                                                
+       3  DSM69PCB          PTR,                                                
+       3  DS102$PCB          PTR,                                               
+       3  DS128PCB          PTR,                                                
+       3  DS132PCB          PTR,                                                
+       3  DS134PCB          PTR,                                                
+       3  DS137$PCB          PTR,                                               
+       3  DSM01PCB          PTR,                                                
+       3  DSM06PCB          PTR,                                                
+       3  DSM07PCB          PTR,                                                
+       3  DSM09PCB          PTR,                                                
+       3  DS146PCB          PTR, ################################################                   
+       3  DSM80PCB          PTR, ################################################                   
+       3  DSMB9PCB          PTR; ################################################                   
+             /* SERVICE                */        
+ /*******************************************************************/        
+ /* INTERFACE GENERAL POUR TOUS LES SERVICES                        */        
+ /*******************************************************************/        
+         
+ DCL 1  JWB001,        
+      2   CDEVCLI    CHAR(01),      ########################################        
+      2   RETOUR     BIT (1),       #########################################        
+      2   LEVEL      PIC '9',       #########################################        
+      2   ATTRIB     CHAR(02),      ########################################        
+      2   LTNMSER    CHAR(08),      ########################################        
+      2   ENTREE,        
+       3  DBSCRAT,        
+        4 METAPCB    PTR,           ##############################################        
+        4 DBSCRPCB   PTR,           ##############################################        
+        4 LTSGSCR    CHAR(08),      #########################################        
+       3  DBTABLE,        
+        4 METAPCB    PTR,           ##############################################        
+        4 DBTABPCB   PTR,           ##############################################        
+        4 LTSGTAB    CHAR(08),      #########################################        
+        4 CDDFTAB    CHAR(08),      #########################################        
+       3  DBCOMDE,        
+        4 METAPCB    PTR,           ##############################################        
+        4 DBCDEPCB   PTR,           ##############################################        
+        4 LTSGCDE    CHAR(08),      #########################################        
+        4 CDDFCDE    CHAR(08),      #########################################        
+       3  CDTRACE    PIC '9',       ##########################################        
+       3  TBTRACE_I  FIXED (5),     ########################################        
+       3  BOTBDB2    BIT (1),       ##########################################        
+       3  LTNMBUS    CHAR(20),      #########################################        
+       3  LTNMOBJ    CHAR(20),      #########################################        
+       3  LTNMMTH    CHAR(20),      #########################################        
+      2   SORTIE,        
+       3  CDRTPGM    CHAR(09),      #########################################        
+       3  CDRTDB2    BIN FIXED(31), ####################################        
+       3  SQLERRM    CHAR (70) VAR, ####################################        
+       3  CDROLLB    BIT(1),        ###########################################        
+       3  LSTCALL    CHAR(12),      #########################################        
+       3  LSTSERV    CHAR(12),      #########################################        
+       3  TBTRACE (100),            ###############################################        
+        4 FLAG_TRACE CHAR(01),        
+        4 MSGE_TRACE CHAR(40),        
+      2   GXXXXXJ_P  PTR;           ##############################################        
+         
+ /* EXPLICATIONS:                                                    */        
+ /*                                                                  */        
+ /* APPEL DU BUS 'LTNMBUS' POUR EXECUTION DE LA FONCTION 'LTNMFCT'   */        
+ /* DE L'OBJET 'LTNMOBJ'                                             */        
+ /*                                                                  */        
+ /* LES TRACES SONT AFFICHEES EN FCT DE CDTRACE (0->9)               */        
+ /* ->  0 PAS DE TRACE, 9 TRACE COMPLETES                            */        
+         
+         
+              /* BUS                    */        
+         
+ /********************************************        
+ * INTERFACES AVEC LES SCENARIOS             *        
+ ********************************************/        
+ DCL XEU100  ENTRY OPTIONS(FETCHABLE);        
+         
+ DCL KGI012 ENTRY;            #####################################################        
+ /*********************************************************************/        
+ /* INTERFACE : KGI012J POUR LES METHODES DE TRAITEMENT DES MONTANTS  */        
+ /*********************************************************************/        
+ /*********************************************************************/        
+ /* ATTENTION : TDMSLE - LOGIQUE PREVUE EN FRANCAIS UNIQUEMENT        */        
+ /* 06/06/2002            AU NIVEAU DU MONTANT EN LETTRE              */        
+ /*********************************************************************/        
+         
+ DCL 1 KGI012J,        
+      2 INPUT        CHAR (300),    ################################################        
+      2 OUTPUT       CHAR (600);    ################################################        
+         
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*             REDEFINITION EN INPUT                                 */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ DCL 1 KGI012J_RI BASED(ADDR(KGI012J.INPUT)),        
+    /* ----- FORMAT D'ENTREE OBLIGATOIRE ---- */        
+     /* CHAMPS PERMETTANT LE TRAITEMENT SUIVANT LA METHODE */        
+      2 CDFMTMT     CHAR (20),     #################################################        
+      2 MTIN_F15    FIXED (15),    ################################################        
+         
+      2 LTIN_C25    CHAR (25) VAR, #############################################        
+                                   /*  + EVENTUELLEMENT              */        
+                                   /*    + LA VIRGULE                */        
+                                   /*    + LA DEVISE (AVANT/APRES)   */        
+                                   /*    + LE SIGNE  (AVANT/APRES)   */        
+         
+      2 NBDECIN     FIXED (02),    ################################################        
+                                   /*  OBLIGATOIRE                   */        
+         
+      2 CDMSKOUT    CHAR (11),     #################################################        
+                                   /*  EN SORTIE                     */        
+         
+      2 CDDVTRN     CHAR (03),     #################################################        
+      2 CDLGTRN     PIC '9',       ###################################################        
+         
+      2 NBLENOUT    FIXED (03),    ################################################        
+                                   /*  MAX 26 POUR LE MASQUE         */        
+                                   /*  MIN 20 POUR LES LETTRES       */        
+                                   /*   -> SEPARATEUR APRES 'NBLENOUT*/        
+                                   /* SI =0 ALORS UTILISATION DE LA  */        
+                                   /*   TAILLE NECESSAIRE            */        
+         
+      2 TBEGCOD (32)     BIT (01),    #############################################        
+           /*   BIT  1 : VALABLE POUR LA VALIDATION ET LE FORMATAGE  */        
+           /*             MAIS TOUJOURS UNE VIRGULE EN SORTIE        */        
+           /*   BIT  1 : 0 = MONTANT AVEC VIRGULE COMME SEPARATEUR   */        
+           /*                 DE DECIMALE                            */        
+           /*            1 = MONTANT AVEC POINT OU VIRGULE           */        
+           /*                 COMME SEPARATEUR DE DECIMALE           */        
+           /*                                                        */        
+           /*   BIT  2 : VALABLE UNIQUEMENT POUR LE FORMATAGE        */        
+           /*   BIT  2 : 0 = NBDECIN = NBR DECIMALE EN ENTREE        */        
+           /*                 OBLIGATOIRE                            */        
+           /*            1 = NBDECIN = NBR DECIMALE EN ENTREE        */        
+           /*                 MAXIMALE ENCODEE                       */        
+           /*                                                        */        
+           /*   BIT  3 : VALABLE UNIQUEMENT POUR LE FORMATAGE        */        
+           /*   BIT  3 : 0 = VALEUR MONETAIRE SANS CHANGEMENT        */        
+           /*                 MTMNT_F15 - SANS MODIF NOMBRE DECIMALE */        
+           /*                 ENCODE                                 */        
+           /*            1 = VALEUR MONETAIRE EN ENTIER MTMNT_F15    */        
+           /*                 - AVEC MODIF NOMBRE DECIMALE ENCODE    */        
+           /*                                                        */        
+           /*   BIT  4 : VALABLE POUR LE FORMATAGE DES MONTANTS NULS */        
+           /*             AVEC P OU B POUR LA POSITION 5             */        
+           /*   BIT  4 : 0 = MONTANT NUL -> AFFICHAGE DE BLANCS      */        
+           /*            1 = MONTANT NUL -> AFFICHAGE 0,XX SUIVANT   */        
+           /*                 LE NOMBRE DE CHIFFRES APRES LA VIRGULE */        
+           /*                                                        */        
+           /*   BIT  4 : VALABLE POUR LE FORMATAGE DES MONTANTS NULS */        
+           /*             AVEC Z POUR LA POSITION 5                  */        
+           /*   BIT  4 : 0 = MONTANT NUL -> AFFICHAGE 0,XX SUIVANT   */        
+           /*                 LE NOMBRE DE CHIFFRES APRES LA VIRGULE */        
+           /*            1 = MONTANT NUL -> AFFICHAGE DE BLANCS      */        
+           /*                                                        */        
+           /*   BIT  5 : VALABLE ACCEPTATION MONTANT POSITIF         */        
+           /*             UNIQUEMENT                                 */        
+           /*   BIT  5 : 0 = MONTANT POSITIF ET NEGATIF ACCEPTE      */        
+           /*            1 = MONTANT POSITIF UNIQUEMENT              */        
+           /*                                                        */        
+           /*   BIT  6 : VALABLE ACCEPTATION OU REFUS MONTANT        */        
+           /*             NUL                                        */        
+           /*   BIT  6 : 0 = MONTANT NUL ACCEPTE                     */        
+           /*            1 = MONTANT NUL REFUSE                      */        
+           /*                                                        */        
+           /*   BIT  7 : VALABLE ACCEPTATION OU REFUS MONTANT        */        
+           /*             .99 AU LIEU DE 0.99                        */        
+           /*   BIT  7 : 0 = MONTANT 0.99 OBLIGATOIRE                */        
+           /*            1 = MONTANT .99 ET 0.99 ACCEPTE             */        
+           /*                                                        */        
+           /*   BIT  8 : SUPPRESSION DU 1ER SEPARATEUR (EXTREME GCHE)*/        
+           /*           QUAND DEPASSEMENT D'UN CHIFFRE (ERREUR '006')*/        
+           /*           EX : 1234.567.890,12 AU LIEU DE              */        
+           /*             1.234.567.890,12                           */        
+           /*           MASQUE = $....12V02$                         */        
+           /*          ATTENTION : UNIQUEMENT AVEC SEPARATEUR        */        
+           /*   BIT  8 : 0 = MONTANT 1.234.567.890,12 ERREUR CLASSIQ.*/        
+           /*            1 = MONTANT 1234.567.890,12 AUCUNE ERREUR   */        
+           /*                                                        */        
+         
+      2 FILLER      CHAR (222);        
+         
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*             REDEFINITION EN OUTPUT                                */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ DCL 1 KGI012J_RO BASED(ADDR(KGI012J.OUTPUT)),        
+    /* FORMAT DE SORTIE */        
+      2 LTMNT_C26   CHAR (26) VAR, #############################################        
+                                   /*  CADRAGE A GAUCHE SUIVANT      */        
+                                   /*  LA LONG. DE 'NBLENOUT'        */        
+         
+      2 MTMNT_F15   FIXED (15),    ################################################        
+      2 NBDECOUT    FIXED (02),    ################################################        
+                                   /*  AVEC LE FIXED (15)            */        
+         
+      2 LTMTLET_C250 CHAR (250) VAR, ###########################################        
+         
+      2 FILLER      CHAR (310);        
+         
+         
+ /********************************************************************/        
+ /*                                                                  */        
+ /* METHODE :                                                        */        
+ /*    - VALID_MONTANT         : VALIDATION DU MONTANT               */        
+ /*                                                                  */        
+ /*    - FORMATAGE             : FORMATAGE SUIVANT LE MASQUE         */        
+ /*                            :  (UN SEUL FORMAT PAR MASQUE EN      */        
+ /*                            :   SORTIE)                           */        
+ /*                                                                  */        
+ /*    - CONVERT_EN_LETTRES    : CONVERSION D'UN MONTANT EN LETTRES  */        
+ /*                                                                  */        
+ /* ATTENTION :                                                      */        
+ /*    TOUTES METHODES VALIDENT LE MONTANT EN ENTREE                 */        
+ /*    TOUTES METHODES DOIVENT ALIMENTER 'NBDECIN'                   */        
+ /*    UTILISATION DU CODE DEVISE VENANT DE IEU001 SI CDDVTRN NON    */        
+ /*        INITIALISE                                                */        
+ /*                                                                  */        
+ /********************************************************************/        
+ /********************************************************************/        
+ /* MASQUE CDMSKOUT :                                                */        
+ /*                                                                  */        
+ /*    - POS 1    : $ TOUJOURS                                       */        
+ /*    - POS 2    : DEVISE                                           */        
+ /*                   -> G : AVEC DEVISE A GAUCHE DU MONTANT         */        
+ /*                   -> D : AVEC DEVISE A DROITE DU MONTANT         */        
+ /*                   -> B : SANS DEVISE                             */        
+ /*    - POS 3,4  : SIGNE DEVANT OU DERRIERE LE MONTANT              */        
+ /*                   -> SG : TOUJOURS LE SIGNE A GAUCHE DU MONTANT  */        
+ /*                   -> SD : TOUJOURS LE SIGNE A DROITE DU MONTANT  */        
+ /*                   -> -G : AFFICHE - A GAUCHE DU MONTANT SI < 0   */        
+ /*                   -> -D : AFFICHE - A DROITE DU MONTANT SI < 0   */        
+ /*                   -> BB : N'AFFICHE JAMAIS LE SIGNE              */        
+ /*    - POS 5    : PRESENTATION DES MONTANTS POUR LES ZEROS NON     */        
+ /*               :  SIGNIFICATIFS ET LES SEPARATEURS DE MILLIERS    */        
+ /*                   -> Z : AFF. 0 SI MONTANT NUL - SANS SEPARATEUR */        
+ /*                   -> * : AFF. * SI MONTANT NUL - SANS SEPARATEUR */        
+ /*                        :  TOUJOURS SANS SIGNE FORCE SIGNE = AA   */        
+ /*                   -> P : AFFICHE DES . COMME SEPARATEUR          */        
+ /*                        :  TOUJOURS DES BLANCS SI MONTANT NUL     */        
+ /*                   -> B : AFFICHE DES BLANCS COMME SEPARATEUR     */        
+ /*                        :  TOUJOURS DES BLANCS SI MONTANT NUL     */        
+ /*    - POS 6,7  : NOMBRE DE CARACTERES AVANT LA VIRGULE            */        
+ /*               :  Y COMPRIS LES . OU LES ESPACES                  */        
+ /*               :  MAX 19 CARACTERES - MINIMUM 1 CARACTERE         */        
+ /*    - POS 8    : V TOUJOURS                                       */        
+ /*    - POS 9,10 : NOMBRE DE CHIFFRES APRES LA VIRGULE (MAX (14)    */        
+ /*    - POS 11   : $ TOUJOURS                                       */        
+ /*                                                                  */        
+ /********************************************************************/        
+ /********************************************************************/        
+ /*                                                                  */        
+ /* MESSAGE D'ERREUR (JWB001.CDRTPGM = $LTNMPRJ !! 'XXX')            */        
+ /*------------------------------------------------------------------*/        
+ /*                                                                  */        
+ /*    001 : LA METHODE N'EXISTE PAS                                 */        
+ /*    002 : LE CODE DEVISE N'EXISTE PAS                             */        
+ /*    003 : LE MASQUE INCORRECT                                     */        
+ /*    004 : CODE INCORRECT - INTERNE AU PROGRAMME                   */        
+ /*    005 : MONTANT INVALIDE                                        */        
+ /*    006 : LA ZONE 'ENTIER' DU MASQUE EST TROP PETITE POUR         */        
+ /*        :  CONTENIR LE MONTANT                                    */        
+ /*    007 : LA ZONE RECEPTRICE EST TROP PETITE                      */        
+ /*    008 : LA TAILLE DU MASQUE EST > A LA TAILLE DE LA VARIABLE    */        
+ /*        :  DE RECEPTION                                           */        
+ /*    009 : LA NOMBRE DE DECIMALE EST < A 0 OU > 14                 */        
+ /*    010 : LA TAILLE DONNEE EST TROP PETITE                        */        
+ /*    011 : LE CODE LANGUE DEMANDE N'EST PAS TRAITE                 */        
+ /*    012 : LE NOMBRE DE DECIMALE EST TROP GRAND                    */        
+ /*    013 : LE CODE FORMAT N'EXISTE PAS                             */        
+ /*    014 : LE NBR DECIMALE ATTENDU NE CORRESPOND PAS AU NBR RECU   */        
+ /*    015 : LE MONTANT EST NEGATIF - REFUSE                         */        
+ /*    016 : LE MONTANT EST NUL - REFUSE                             */        
+ /*                                                                  */        
+ /********************************************************************/        
+         
+ /* NRB - TDMWEL - Generation le 21/02/2002 - 16:15        Lgth=02010 */        
+ /* NRB - TDMSAU - Generation le 27/03/2000 - 09:51        Lgth=02010 */        
+ /*******************        
+ *  SEGMENT SCRATCH *        
+ *******************/        
+ DCL  1 SMSCRAT ,                           ###############################################################        
+                                            /*DB!  !DCR10   !SMSCRAT  */        
+                                            /*DB!  !DDO09   !SMSCRAT  */        
+ /*K*/ 2 NOIDSCR  CHAR(10),                 /*CD!  !NOM DE LA SCRATCH */        
+       2 LTNMSCR  CHAR(2000);               ###################################################        
+         
+         
+  DCL 1 SSA_SMSCRAT,        
+         2 FIL1         CHAR (8)       INIT ('SMSCRAT'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KSMSCRAT'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUE        CHAR (10),        
+         2 FIL4         CHAR (1)       INIT (')');        
+  /*DCL   LTNMSCR_R        CHAR (2000)      DEF SMSCRAT.LTNMSCR ; */        
+  DCL   LTNMSCR_R CHAR (2000) BASED(ADDR(SMSCRAT.LTNMSCR)) ;        
+         
+ /********************************************        
+ *                    SPA                    *        
+ ********************************************/        
+ /*---------------------------------------------------------- SCENARI */        
+ /*  DFINITION DES VARIABLES D'INITIALISATION DU SCENARIO             */        
+ /*  ----------------------------------------------------             */        
+              /* BLOCAGE CODE OPERATION */        
+              /* NOUVEAU CANEVAS */        
+         
+ /*---------------------------------------------------------- SPAAREA */        
+ DCL     SPA001_P            PTR;        
+ DCL 1   SPA001_R            BASED(SPA001_P),        
+      2  CDPOSTE             CHAR (4),        
+      2  LTPOSTE             CHAR (25),        
+      2  RESERVE             CHAR (1);        
+ DCL 1   SCENARI             BASED(SPA001_P),        
+      2  NOPGACT             CHAR (1),       #########################################        
+      2  NOPGPRV(6)          CHAR (1),       #########################################        
+      2  NUMIDLL(6)          BIN FIXED(15),  ####################################        
+      2  TBCATOP             CHAR (06),      ########################################        
+      2  CDTYSEL             CHAR (01),      ########################################        
+      2  NBPAGE1             PIC '99',       #########################################        
+      2  TBSCENA (16)        BIT (1);        ##########################################        
+         
+ DCL     SPA002_P            PTR;        
+ DCL 1   SCENA02             BASED(SPA002_P),        
+      2  NOIDCLI             CHAR (08),      ########################################        
+      2  NOIDSCR             PIC '9999',     #######################################        
+      2  RFSIGNA             CHAR (08);      ########################################        
+         
+ SPA001_P = ADDR(SPA.LTOPTR2);        
+ SPA002_P = ADDR(SPA.LTRUE1A);        
+         
+ DCL DADESIN_SPA_F          FIXED DEC(7) BASED (ADDR(SPA.DADESIN_C));        
+         
+ DCL 1   SPA        BASED(GA2016J.SPA_PTR),        
+         
+         
+     /*  PARTIE FIXE  */        
+         
+      2  LL_SPA              BIN FIXED(15),        
+      2  XXXX                CHAR (4),        
+      2  TRANSAC             CHAR (8),        
+      2  MSG_SPA             CHAR (1),      ##########################################        
+      2  CDTYECR             CHAR (01),     ###############################        
+      2  CDRTTSS             CHAR (02),     ########################################        
+      2  NORFPRT             CHAR (08),     ##################################        
+      2  CDSCTRN             CHAR (01),     #########################################        
+      2  CDATTRN             CHAR (02),     ########################################        
+      2  LTSCTRN             CHAR (04),     ####################################        
+      2  CDEVTRN             CHAR (01),     #########################################        
+      2  CDUTTRN             CHAR (08),     #########################################        
+      2  CDOPTRN             CHAR (05),     #################################        
+      2  TBRETRN(6)          CHAR (08),     #####################################        
+      2  TBFCACT(24)         BIT  (1),      ######################################        
+      2  CMDEXEC             CHAR (01),     ########################################        
+      2  LTOPTRN             CHAR (30),     ######################################        
+      2  LTOPTR2             CHAR (30),     ######################################        
+      2  TRANS1              CHAR (08),     #######################################        
+      2  TRANS2              CHAR (08),     #######################################        
+      2  CDLGTRN             PIC '9',       #######################################        
+      2  NOIDAFF             FIXED (7),     ################################        
+      2  LTNMAFF             CHAR (30),     ##############################        
+      2  CDRSAFF             CHAR (1),      #######################################        
+      2  CDSEXAF             CHAR (1),      ##############################        
+      2  CDLGEAF             CHAR (1),      ###############################        
+      2  CDPOGEO             FIXED(5),      #########################################        
+      2  NORULOC             FIXED(7),      #########################################        
+      2  LTRUE1A             CHAR (20),     ##################################        
+      2  CDCPOAF             CHAR (06),     ##############################        
+      2  LTLOCAF             CHAR (25),     ##################################        
+      2  NOHA1AF             BIN FIXED(15), #############################        
+      2  NOHA1FR             CHAR (01),     ##################################        
+      2  NOHA2AF             CHAR (04),     #####################################        
+      2  LTRUEAF             CHAR(25),      #######################        
+      2  CDPAYAF             CHAR(03),      #############################        
+      2  NOIDPOL             FIXED (8),     ################################        
+      2  CDTYPOL             CHAR (2),      ##################################        
+      2  CDLGPOL             CHAR (1),      ######################################        
+      2  CDETAPO             CHAR (1),      ##########################################        
+      2  LTNMALP             CHAR (06),     #####################################        
+      2  NODOMPO             FIXED(11),     ######################################        
+      2  NOCPTPO             FIXED(11),     #####################################        
+      2  NOIDNAI             FIXED (7),     ##################################        
+      2  NOIDPLQ             CHAR (5),      ################################        
+      2  NOIDCHA             CHAR (20),     ################################        
+      2  TBTYPAF             BIT (240),     ################################        
+                                            /* 60 : CHOIX EURO  */        
+      2  TBSEXAF (2)         CHAR (01),     #####################################        
+      2  CDGRPCL             CHAR (01),     #####################################        
+      2  CDCMGES             CHAR (08),     ####################################        
+      2  CDCMPRO             CHAR (01),     #######################################        
+      2  NOTL1AF             FIXED (3),     ######################################        
+      2  NOTL2AF             FIXED (9),     ######################################        
+      2  NOIDSIN             FIXED (9),     ######################################        
+      2  NOPPAFF             FIXED (7),     ########################################        
+      2  CDCATOP             CHAR (01),     ########################################        
+      2  LTOPCOM             CHAR (30),     ########################################        
+      2  TRANS3              CHAR (08),     ########################################        
+      2  NOORAFF             FIXED (7),     ######################################        
+      2  NOIDFAC             CHAR (03),     ####################################        
+      2  DANAIAF             FIXED (10),    ###################################        
+      2  NOIDFND             CHAR  (03),    #################################        
+      2  NOIDMAT             CHAR  (11),    #####################################        
+      2  NONATAF             FIXED (11),    ##############################        
+      2  LTABRFP             CHAR  (30),    ##############################        
+                                            /*  OU CAISSE ET TRANSIT*/        
+                                            /* VOIR SPACODEF        */        
+                                            /* OU GROUPE+MEDECIN    */        
+                                            /* OU RENTE T1          */        
+      2  CDEGCOU             CHAR  (01),    ########################################        
+      2  TBEGCOD_AFF         BIT   (40),    ########################################        
+      2  CDNATPA_RT          CHAR  (02),    ########################################        
+                                            /* D5: NUMERO DU PROPRIET.*/        
+      2  DAIMPPA_RT          FIXED (5),     #########################################        
+      2  CDAPPPR             CHAR  (02),    #######################################        
+      2  CDCATTR             CHAR (01),     ###############################        
+      2  CDRFPRT             CHAR (03),     #########################################        
+      2  NOAVECO             PIC'(3)9',     #########################################        
+      2  NOIDFAM             FIXED (7),     ####################################        
+                                            /* NO INTERVENANT PRODUCT.*/        
+      2  CDTRASW             CHAR  (01),    #######################################        
+      2  TBCDCLI             CHAR  (09),    #######################################        
+      2  CDALCLI             CHAR  (01),    #######################################        
+      2  CDLGFAM             CHAR  (01),    #######################################        
+      2  CDLGRUE             CHAR  (01),    #######################################        
+      2  NOIDREM             PIC '99',      ################################        
+      2  NBSINPO             FIXED BIN(15), #################################        
+      2  CDEVTRA             CHAR (01),     ####################################        
+      2  NOAF1EX             FIXED(07),     #####################################        
+      2  SW_MEMOSIN          CHAR (1),      ######################################        
+      2  NOAF2EX             BIN FIXED (15),################################        
+      2  ANSINPO             PIC '99',      #######################################        
+      2  CDTYFND             CHAR  (01),    ####################################        
+                                            /* EN SINISTRE, = A SI*/        
+                                            /* PAIEMENT TYPE 89 */        
+      2  DADESIN_C           CHAR  (04),    ####################################        
+      2  NOIDCRT_SC          FIXED (7),     #####################################        
+      2  NOIDSIN_RL          FIXED (9),     #######################################        
+      2  CDTYPOL_RL          CHAR  (02),    ######################################        
+      2  TBEGGES (8)         BIT   (01),    ######################################        
+                                            /* 1=SUIVI GESTIONNAIRE */        
+                                            /* 2=SUPER GESTIONNAIRE */        
+                                            /* 3=COMMANDE DE MAJ    */        
+                                            /* 4=CDE NON PROTEGEE   */        
+                                            /* 5= ON=KERNEL CONVERTI*/        
+                                            /* 6= ON=NOUVEAU CANEVAS*/        
+                                            /* 7=DEVISE OUTPUT T.T. */        
+                                            /* 8=CLAUSIER TYPE "U"  */        
+      2  NORTMEM             CHAR  (02),    ############################        
+      2  CDDVTRN             CHAR  (01),    ######################################        
+      2  CDPGTRN             CHAR  (01),    ######################################        
+      2  CDDVPOL             CHAR  (01),    ######################################        
+      2  CDMODTT             CHAR  (01),    ######################################        
+      2  NOTYPDC             PIC '99',      ########################################        
+         
+     /*  PARTIE VARIABLE : A L'USAGE D'UNE TRANSACTION APPELANTE */        
+         
+            /* SPA FIXE                         */        
+ /*------------------------------------------------------------------*/        
+ /*          UTILISE :          GA2016                               */        
+ /*------------------------------------------------------------------*/        
+ /* DCL 1    SPA                                                     */        
+ /*------------------------------------------------------------------*/        
+ /* ---- SPA COMPLEMENTAIRE LONGUEUR 200 --------------------------- */        
+      2  MEMOCMD,                           ##############################################################        
+       3 CDNATOP             CHAR(01),      #########################################        
+       3 CDTYPOP             CHAR(01),      #########################################        
+       3 CDOBJOP             CHAR(03),      #########################################        
+      2  LTOBJOP             CHAR(75),      #########################################        
+      2  NOSQMEM             BIN FIXED(15), ####################################        
+      2  CDTTAPP             CHAR(2),       ##########################################        
+      2  CDAPPEL             CHAR(1),       ##########################################        
+      2  CDMMSEL             CHAR(3),       ##########################################        
+      2  LTINTKN             CHAR(20),      #########################################        
+                                            /* VOIR SPAAREAK         */        
+      2  CDLASTK             CHAR(1),       ##########################################        
+      2  NOIDRSQ             FIXED(05),     ########################################        
+      2  NOLTGEN             CHAR(13),      #########################################        
+      2  RSVSPAC             CHAR(75),      #########################################        
+ /* ---------------------------------------------------------------- */        
+      2  INFOS_USER, #####################################        
+         3 NOIDUSR   PIC'(7)9',        
+         3 NOSQUSR   PIC'99',        
+         3 TYPUSER   CHAR(7),        
+         3 CDLGUSR   CHAR(1),        
+         3 TBEGUSR(16) BIT(1), ####################################        
+         
+         3 CDSTAT    CHAR(05),        
+         3 LTSITE    CHAR(10),        
+         3 CDAFGRP   CHAR(07),        
+         3 CDMSETH   CHAR(01), ##################################        
+         3 CDTYSOU   CHAR(5),        
+      2   SPAS1096,        
+ /*       sert au retour d'identification quand la personne n'est        
+          pas encore affiliee , elle ne peut pas continuer ...        
+          PS : ces donnees sont utilisees dans l'identification !!!  */        
+       3   CDDEST            CHAR(05),    #########################################        
+       3   NODEVI            CHAR(13),    #########################################        
+                                          /* 00SAAMMJJnnnn           */        
+       3   CDMODULO          CHAR(02),    #########################################        
+       3   LTEMAIL           CHAR(50),        
+       3   CDTYPRO           CHAR(2),     ##########################################        
+       3   CDGEPRO           CHAR(2),     ##########################################        
+       3   FILLSP1           CHAR(30),        
+         
+      2   SPAVAR,        
+         
+       3   LTOBJOP_016       CHAR(75), #########################################        
+         
+ /*       Infos identification : Uniquement si SPA.NOIDAFF > 0       */        
+       3   IDENTI,        
+        4   CDRSAFF          CHAR (1),        
+        4   NOIDAFF          FIXED(7),        
+        4   LTNMAFF          CHAR (30),        
+        4   LTPRAFF          CHAR (15),        
+        4   DANAIAF          PIC'(8)9', ########################################        
+        4   CDSEXAF          CHAR (1),        
+        4   CDLGEAF          CHAR (1),        
+        4   LTRUEAF          CHAR (25),        
+        4   NOHA1AF          BIN FIXED(15),        
+        4   NOHA2AF          CHAR (04),        
+        4   LTLOCAF          CHAR (25),        
+        4   CDCPOAF          CHAR (06),        
+        4   EMAILAF          CHAR (50),        
+        4   CDTYPRO          CHAR(2),  ##########################################        
+        4   CDGEPRO          CHAR(2),  ##########################################        
+        4   DADEPER          PIC'(8)9', ########################################        
+         
+       3   CDTYPOP           CHAR(01), #########################################        
+       3   CDLIMIT           CHAR(01), #########################################        
+       3   CDBLOCK           CHAR(01), #########################################        
+       3   NEWDEVI           CHAR(01), #########################################        
+       3   NOIDDEV           CHAR(13), #########################################        
+       3   DEVISAF           CHAR(13), #########################################        
+       3   VERSDEV           FIXED(03),########################################        
+       3   AUTORSO           CHAR(01), #########################################        
+ /*   R_ETAPE = "A2016n" pour etre sr de raz la SPAVAR !!!          */        
+       3   R_ETAPE           CHAR(06), #########################################        
+       3   DAVALID           CHAR(10), #########################################        
+       3   NBRELAN           PIC '9',  ##########################################        
+         
+       3   FILLSP2           CHAR(10),        
+         
+ /*       vehicule choisi en guidance WA2083                         */        
+      2   SCENARIO_1,        
+ /*       ===========                                                */        
+       3   ANNCSTR           PIC'(4)9',   ########################################        
+       3   MARDEBU           CHAR(40),    #########################################        
+       3   TXTCARB           CHAR(08),    #########################################        
+         
+       3   NOIDMAR           FIXED(07),        
+       3   NOIDMOD           FIXED(07),        
+       3   NOIDTYP           FIXED(07),        
+       3   LTMARQU           CHAR(40),        
+       3   LTMODEL           CHAR(40),        
+       3   LTTYPEV           CHAR(40),        
+       3   NBRTRAN           FIXED(03),        
+       3   NBTYPKW           FIXED(03),        
+       3   CDTYOP3           CHAR(01),    ##########################################        
+       3   CDTYDM3           CHAR(01),    ##########################################        
+       3   PRIHTVA           FIXED(9,2),        
+       3   NBRPORT           FIXED(03),        
+       3   LTBOITE           CHAR(50),        
+       3   LTCARBU           CHAR(50),        
+       3   TYPCYLI           FIXED(05),        
+       3   NBCVDIN           FIXED(03),        
+       3   NBVITES           FIXED(03),        
+       3   CDSPORT           CHAR(01),        
+       3   POIDVID           FIXED(05),        
+       3   TAXETMC           FIXED(9,2),        
+       3   DAFINIM           PIC'(6)9',        
+       3   CDECOV2           CHAR(01),     #########################################        
+         
+ /*       Options montes d'origine et accessoires supplementaires    */        
+ /*       08.06.2010 New Tarifs : on ne passe plus sur cette page    */        
+      2   SCENARIO_4,        
+ /*       ===========                                                */        
+ /*        
+       3   TAB_OPT(100),        
+        4   NOIDTXT          FIXED(07),        
+        4   PRIOPTI          FIXED(09,2),        
+ */        
+ /*       les 14 accessoires/options e memoriser dans le devis    */        
+       3   TAB_SUP(14),        
+        4   LTOPTSU          CHAR(50),        
+        4   PRIOPSU          FIXED(09,2),        
+ /*       Options selectionnees                                      */        
+ /*    3   SEL_OPT(100)      CHAR(01),          Y/N                  */        
+       3   TOTALAC           FIXED(9,2),        
+         
+ /*       Infos conducteur                                           */        
+      2   SCENARIO_5,        
+ /*       ===========                                                */        
+       3   DANAIPR           PIC'(8)9',      ############################        
+       3   CDPOPRE           PIC'(4)9',        
+       3   VACATVH           FIXED(9,2),        
+       3   CDPOSRM           CHAR(1),        ##########################################        
+       3   CDUSAVH           CHAR(1),        ##########################################        
+       3   CDCDC26           CHAR(1),        ##########################################        
+       3   CDASTMC           CHAR(1),        ##########################################        
+       3   BOVHOCC           CHAR(1),        ##########################################        
+       3   NBSINIS           PIC '99',       #########################################        
+       3   DAPERMI           PIC'(8)9',      ########################################        
+       3   BOAUTCP           CHAR(1),        ##########################################        
+       3   CDTYPRO           CHAR(2),        ##########################################        
+       3   CDGEPRO           CHAR(2),        ##########################################        
+       3   BOHOREC           CHAR(1),        ##########################################        
+       3   NBKMPAN           PIC'(6)9',      ########################################        
+       3   AGEPREN           PIC'99',        ##########################################        
+       3   STARTOK           CHAR(01),       #########################################        
+ /*        Si CDJEUNE = 1=> voir donnees du scenario 8               */        
+       3   CDJEUNE           PIC'9',         ###########################################        
+       3   AGEPERM           PIC'99',        ##########################################        
+         
+ /*       Resultat devis auto                                        */        
+      2   SCENARIO_6,        
+ /*       ===========                                                */        
+       3   CDPADIV           CHAR(02),       #########################################        
+       3   CDBMDET           PIC'99',        ##########################################        
+       3   CDCIBCL           CHAR(02),       #########################################        
+       3   CDPROMO           CHAR(01),       #########################################        
+                                             /* 1= eco + > 10.000kms */        
+                                             /* 2= < 10.000kms       */        
+                                             /* 3= < 10.000kms + eco */        
+       3   NBKMAVH           PIC'999',       #########################################        
+       3   RESULTAT_AUTO,        
+        4   MTGARCI          FIXED(13,2),    ######################################        
+        4   MTGACAS          FIXED(13,2),    ######################################        
+        4   MTGACA1          FIXED(13,2),    ######################################        
+        4   MTGAASS          FIXED(13,2),    ######################################        
+         
+ /*         mobility                                                 */        
+        4   MTGAMOB          FIXED(13,2),    ######################################        
+        4   MTGAMO1          FIXED(13,2),    ######################################        
+        4   MTGAMO2          FIXED(13,2),    ######################################        
+         
+ /*         Montants mini omniums                                    */        
+        4   MTGAOM1          FIXED(13,2),    ######################################        
+        4   MTGAOM2          FIXED(13,2),    ######################################        
+         
+ /*         Montants des omniums pour chaque niveau de franchise     */        
+        4   TB_OMNI(3),        
+          5  MTGAOM3         FIXED(13,2),    ######################################        
+          5  MTGAOM4         FIXED(13,2),    ######################################        
+         
+        4   TBPRIME(20),        
+          5  CDTYGAR          CHAR(03),      ########################################        
+          5  CDTFGAR          CHAR(02),      ########################################        
+          5  NUVSTRF          PIC'99',       #########################################        
+          5  MTPBMRD          FIXED(13,2),   #####################################        
+         
+       3   RESULTAT_AUTO_PROMO,        
+        4   MTGARCI          FIXED(13,2),    ######################################        
+        4   MTGACAS          FIXED(13,2),    ######################################        
+        4   MTGACA1          FIXED(13,2),    ######################################        
+        4   MTGAASS          FIXED(13,2),    ######################################        
+         
+ /*         mobility                                                 */        
+        4   MTGAMOB          FIXED(13,2),    ######################################        
+        4   MTGAMO1          FIXED(13,2),    ######################################        
+        4   MTGAMO2          FIXED(13,2),    ######################################        
+         
+ /*         Montants mini omniums                                    */        
+        4   MTGAOM1          FIXED(13,2),    ######################################        
+        4   MTGAOM2          FIXED(13,2),    ######################################        
+         
+ /*         Montants des omniums pour chaque niveau de franchise     */        
+        4   TB_OMNI(3),        
+          5  MTGAOM3         FIXED(13,2),    ######################################        
+          5  MTGAOM4         FIXED(13,2),    ######################################        
+         
+        4   TBPRIME(20),        
+          5 CDTYGAR          CHAR(03),       #########################################        
+          5 CDTFGAR          CHAR(02),       #########################################        
+          5 NUVSTRF          PIC'99',        ##########################################        
+          5 MTPBMRD          FIXED(13,2),    ######################################        
+         
+       3   RESULTAT_REM,        
+        4   MTRMRCI          FIXED(13,2),    ######################################        
+        4   MTRMVO1          FIXED(13,2),    ######################################        
+        4   MTRMIN1          FIXED(13,2),    ######################################        
+        4   MTRMBRI          FIXED(13,2),    ######################################        
+        4   MTRMDM3          FIXED(13,2),    ######################################        
+        4   MTRMDM4          FIXED(13,2),    ######################################        
+         
+        4   TBPRIME(10),        
+          5 CDTYGAR          CHAR(03),       #########################################        
+          5 CDTFGAR          CHAR(02),       #########################################        
+          5 NUVSTRF          PIC'99',        ##########################################        
+          5 MTPBMRD          FIXED(13,2),    ######################################        
+         
+ /*       Garanties choisies                                         */        
+       3   SELECT_GAR,        
+        4   CDSERCI          CHAR(01),       #########################################        
+        4   CDSECAS          CHAR(01),       #########################################        
+        4   CDSECA1          CHAR(01),       #########################################        
+        4   CDSEASS          CHAR(01),       #########################################        
+        4   CDTYPOM          CHAR(01),       #########################################        
+                                             /* choisie : 1,2,3,4    */        
+        4   CDNIVFR          CHAR(01),       #########################################        
+                                             /* choisi 1,2,3         */        
+                                             /* !!! si jeune         */        
+        4   CDSEMOB          CHAR(01),       #########################################        
+        4   CDSEMO1          CHAR(01),       #########################################        
+         
+ /*       pour la remorque                                           */        
+        4   CDRMRCI          CHAR(01),       #########################################        
+        4   CDRMVO1          CHAR(01),       #########################################        
+        4   CDRMIN1          CHAR(01),       #########################################        
+        4   CDRMBRI          CHAR(01),       #########################################        
+        4   CDRMDM3          CHAR(01),       #########################################        
+        4   CDRMDM4          CHAR(01),       #########################################        
+         
+ /*       Infos remorque                                             */        
+      2   SCENARIO_7,        
+ /*       ===========                                                */        
+       3   LTMARRM           CHAR(15),        
+       3   ANCSTRM           PIC'(4)9',        
+       3   MTCATRM           FIXED(9,2),        
+       3   MTACTRM           FIXED(9,2),        
+       3   NUPDSRM           PIC'(5)9',        
+         
+ /*       Infos tarif jeune                                          */        
+      2   SCENARIO_8,        
+ /*       ===========                                                */        
+       3   NBSINDM           PIC'99',        
+       3   CDJEUFA           CHAR(01), #########################################        
+       3   CDTY2PO           CHAR(01), #########################################        
+       3   CDSTACO           CHAR(01), #########################################        
+       3   CDENFCH           CHAR(01), #########################################        
+       3   CDSTART           CHAR(01), #########################################        
+         
+ /*       souscription 1                                             */        
+      2   SCENARIO_9,        
+ /*       ===========                                                */        
+       3   NUMCPIE           CHAR(5),  ##########################################        
+       3   NOIDPOC           CHAR(15), #########################################        
+       3   DAECHRC           CHAR(08), #########################################        
+       3   CDRESRI           CHAR(01), #########################################        
+       3   CDTYPRE           CHAR(01), #########################################        
+       3   NUMSMRS           CHAR(06), #########################################        
+         
+ /*       souscription 2                                             */        
+      2   SCENARIO_10,      #########################################################        
+ /*       ===========                                                */        
+       3   LTNOMCO           CHAR(30), #########################################        
+       3   LTPRECO           CHAR(30), #########################################        
+       3   DANAICO           CHAR(08), #########################################        
+       3   LTEMPPR           CHAR(20), #########################################        
+       3   CDTYPPR           CHAR(01), #########################################        
+       3   CDCONAL           CHAR(1),  ##########################################        
+       3   CDCONIV           CHAR(1),  ##########################################        
+       3   CDCONFU           CHAR(1),  ##########################################        
+       3   NBSINVO           PIC'9',   ###########################################        
+       3   NBSINDM           PIC'9',   ###########################################        
+       3   NBDEPER           PIC'9',   ###########################################        
+         
+ /*       souscription 3                                             */        
+      2   SCENARIO_11,       #########################################################        
+ /*       ===========                                                */        
+       3   LTNMHA1           CHAR(30), #########################################        
+       3   LTPRHA1           CHAR(30), #########################################        
+       3   DANAIS1           PIC'(8)9',########################################        
+       3   ANPERM1           CHAR(04), #########################################        
+       3   CDQUHA1           CHAR(01), #########################################        
+       3   LTQUHA1           CHAR(12), #########################################        
+       3   LTNMHA2           CHAR(30), #########################################        
+       3   LTPRHA2           CHAR(30), #########################################        
+       3   DANAIS2           PIC'(8)9',########################################        
+       3   ANPERM2           CHAR(04), #########################################        
+       3   CDQUHA2           CHAR(01), #########################################        
+       3   LTQUHA2           CHAR(12), #########################################        
+       3   LTNMHA3           CHAR(30), #########################################        
+       3   LTPRHA3           CHAR(30), #########################################        
+       3   DANAIS3           PIC'(8)9',########################################        
+       3   ANPERM3           CHAR(04), #########################################        
+       3   CDQUHA3           CHAR(01), #########################################        
+       3   LTQUHA3           CHAR(12), #########################################        
+         
+ /*       souscription 4                                             */        
+      2   SCENARIO_12,       #########################################################        
+ /*       ===========                                                */        
+       3   NUPLQVH           CHAR(07), #########################################        
+       3   LTCHAVH           CHAR(17), #########################################        
+       3   NUPLQRM           CHAR(07), #########################################        
+       3   LTCHARM           CHAR(17), #########################################        
+       3   DAEFFRC           PIC'(8)9',########################################        
+       3   DAEFFAU           PIC'(8)9',########################################        
+       3   CDMODPA           CHAR(01), #########################################        
+       3   NBKMCPT           FIXED(7), #########################################        
+         
+      2   FILLER             CHAR(112);        
+         
+ /********************************************************************/        
+ /* CDPROMO : code promo permanente (nov 2009)                       */        
+ /* 1 = 15% sur RC  et Omnium                                        */        
+ /* si moins de 10000 kms/an                                         */        
+ /*                                                                  */        
+ /* 2 = 25% sur RC  et 15% sur Omnium                                */        
+ /* si moins de 10000 kms/an ET vehicule eco                         */        
+ /*                                                                  */        
+ /* 3 = 10% sur RC                                                   */        
+ /* si vehicule eco (et pas < 10000kms/an)                           */        
+ /********************************************************************/        
+             /* SPA VARIABLE                     */        
+         
+ /***************************/        
+ /*    FICHIERS             */        
+ /***************************/        
+ DCL SYSPRINT FILE STREAM OUTPUT PRINT;        
+         
+ /***************************/        
+ /*    DESCRIPTION DU MID   */        
+ /***************************/        
+ DCL 1 MID7 BASED(GA2016J.MID_PTR),        
+ /* >>> HEADER DU MID         */        
+      2   LL                  BIN FIXED(15),        
+      2   Z1                  CHAR(1),        
+      2   Z2                  CHAR(1),        
+      2   HEADER,        
+       3  TRANSAC             CHAR (08),  ############################        
+       3  NOIDCLI             CHAR (08),  ############################        
+       3  NOIDSCR             CHAR (04),  ############################        
+       3  RFSIGNA             CHAR (08),  ############################        
+       3  CDLGTRN             CHAR (01),  ############################        
+       3  CDDVTRN             CHAR (01),  ############################        
+       3  CLE                 CHAR (01),  ############################        
+       3  CDOPTRN             CHAR (05),  ############################        
+       3  CDIDSES             CHAR (01),  ############################        
+       3  NODOACT             CHAR (02),  ############################        
+       3  RESERVE             CHAR (07),  ############################        
+ /*     HEADER DU MID     <<< */        
+         
+ /* ------------------------------------------------------------ */        
+ /* DCL 1   MID7   UTILISE : TA2016   TA2016   GA20167           */        
+ /* ------------------------------------------------------------ */        
+  /* INFOS_STAT */        
+ /*-----------------------------------------------------------*/        
+ /*   MID    UTILISE POUR LES STATISTIQUES DU SITE ETHIAS     */        
+ /*-----------------------------------------------------------*/        
+ /* CKI 17.02.06 : SI MFS => AJOUT DANS INPUT JSM328M LONG 59 */        
+ /*   (VOIR PPH102)                                           */        
+ /*-----------------------------------------------------------*/        
+      2  CDLGPAG     CHAR (01),        
+      2  CDENTREE    CHAR (01),        
+      2  CDTYPVI     CHAR (07),        
+      2  NOPGACT     CHAR (16),        
+      2  NOPGDEM     CHAR (16),        
+      2  NOIDUSR     PIC '(07)9',        
+      2  NOSQUSR     PIC '99',        
+      2  BANNER      CHAR (09),        
+         
+   2  LTMARRM          CHAR(15),     #############################################        
+   2  ANCSTRM          CHAR(04),     #############################################        
+   2  MTCATRM          CHAR(10),     #############################################        
+   2  MTACTRM          CHAR(10),     #############################################        
+   2  NUPDSRM          CHAR(05);     #############################################        
+         
+ /***************************/        
+ /*    DESCRIPTION DU MOD   */        
+ /***************************/        
+ DCL 1 PAGE7 BASED(GA2016J.PAGE_PTR),        
+ /* >>> HEADER PAGE 1       */        
+      2  LL                 BIN FIXED(15),        
+      2  ZZ                 BIN FIXED(15),        
+      2  LPG                CHAR(02),        
+      2  SCA                CHAR(02),        
+      2  CDEXTOP            CHAR(08),  ##################################        
+      2  NOIDSCR            CHAR(04),  ##################################        
+      2  RFSIGNA            CHAR(08),  ##################################        
+      2  CDLGTRN            CHAR(01),  ##################################        
+      2  CDSCTRN            CHAR(01),  ##################################        
+      2  LTSCTRN_A          CHAR(08),        
+      2  LTSCTRN            CHAR(04),        
+      2  LTOPTRN            CHAR(30),        
+      2  CDOPTRN_A          CHAR(08),        
+      2  CDOPTRN            CHAR(05),        
+      2  BOMETRN            CHAR(01),        
+      2  LTMETRN            CHAR(79),        
+      2  RESERVE            CHAR(10),        
+ /*     HEADER PAGE  1  <<< */        
+ /* -------------------------------------------------------------- */        
+ /* DCL 1   PAGE7     TRANSACTION: TA2016   TA2016   GA20167       */        
+ /* -------------------------------------------------------------- */        
+ /* >>> HEADER 2 MOD      */        
+      2  LTRFCSR            CHAR (07),  ####################################        
+      2  NURFCSI            CHAR (03),  ####################################        
+      2  NURFCSJ            CHAR (03),  ####################################        
+      2  LTRFPOS            CHAR (07),  ####################################        
+      2  NURFPSI            CHAR (03),  ####################################        
+      2  NURFPSJ            CHAR (03),  ####################################        
+      2  CDBTENT            CHAR (10),  ####################################        
+      2  LTOPCDE            CHAR (60),  ####################################        
+      2  RSERVE2            CHAR (60),  ####################################        
+ /*     HEADER 2 MOD  <<< */        
+      2 NOIDUSR         PIC'(7)9',        
+      2 NOSQUSR         PIC '99',        
+      2 NEWUSER         CHAR(1),        
+      2 CDENTREE        CHAR (01),        
+      2 NOIDPAG         CHAR(07),        
+         
+   2  LTMARRM          CHAR(15),     #############################################        
+   2  ANCSTRM          CHAR(04),     #############################################        
+   2  MTCATRM          CHAR(10),     #############################################        
+   2  MTACTRM          CHAR(10),     #############################################        
+   2  NUPDSRM          CHAR(05),     #############################################        
+         
+   2  LTMARQU          CHAR(40),     #############################################        
+   2  LTLIBTYP         CHAR(40),     #############################################        
+   2  LTNBRPORT        CHAR(2),        
+   2  LTNBTYPKW        CHAR(3),        
+   2  AGEPREN          CHAR(2),      ##############################################        
+   2  VABMACT          CHAR(2),      ##############################################        
+   2  VAACCVH          CHAR(10),     #############################################        
+   2  VACATVH          CHAR(10);     #############################################        
+         
+ DCL  1  PAGE7TXT       CHAR(STG(PAGE7)) BASED(ADDR(PAGE7));        
+         
+         
+ /***************************************/        
+ /*    DESCRIPTION DU MESSAGE D'ERREUR  */        
+ /***************************************/        
+ DCL 1 PAGEER BASED(GA2016J.PAGEER_PTR),        
+         
+ /************************************************************/        
+ /*    PAGE D'ERREUR                                         */        
+ /************************************************************/        
+      2  LL                 BIN FIXED(15),        
+      2  ZZ                 BIN FIXED(15),        
+      2  LPG                CHAR (1),        
+      2  LTOPTRN            CHAR(30),        
+      2  LTMETRN            CHAR(79),        
+      2  CDLGTRN            CHAR(01),   ##############################        
+      2  LTRTPG1            CHAR(79),   ##############################        
+      2  LTRTPG2            CHAR(79),   ##############################        
+      2  LTRTPG3            CHAR(79);   ##############################        
+         
+         
+ /*================== CONSTANTES ================================*/        
+         
+ DCL ON                  BIT(1)     VALUE('1'B);        
+ DCL OFF                 BIT(1)     VALUE('0'B);        
+ DCL NUM                 CHAR(10)   VALUE('0123456789');        
+ DCL NUMB                CHAR(11)   VALUE('0123456789 ');        
+         
+ /********************************************************************/        
+ /*     DECLARATION DES CARACTERES POUR TABLE 274                    */        
+ /********************************************************************/        
+         
+ DCL MINUS274 CHAR (41)        
+              VALUE ('abcdefghijklmnopqrstuvwxyzeee');        
+         
+      /*CARACTERES MINUSCULES EN CODE PAGE 274*/        
+ /********************************************************************/        
+ /*     DECLARATION DES CARACTERES POUR TABLE 500                    */        
+ /********************************************************************/        
+         
+ DCL MINUS500 CHAR (41)        
+              VALUE ('abcdefghijklmnopqrstuvwxyz{}@\');        
+         
+      /*CARACTERES MINUSCULES EN CODE PAGE 500*/        
+ /********************************************************************/        
+ /*     DECLARATION DES CARACTERES POUR TABLE 274 ET TABLE 500       */        
+ /********************************************************************/        
+         
+ DCL MINUS CHAR (41);        
+ DCL MAJUS CHAR (41)        
+           VALUE ('ABCDEFGHIJKLMNOPQRSTUVWXYZEEEEUUUAAAIIOOC');        
+         
+                        /*CARACTERES MAJUSCULES + DECLARATION DE MINUS*/        
+         
+ /*================== VARIABLES =================================*/        
+         
+ DCL ERREUR       STATIC BIT(1)     INIT('0'B);        
+         
+ DCL CDRTPGM_W    STATIC CHAR (09)  INIT ('');        
+         
+ DCL (IND,I, J, K ,X, Y) FIXED BIN (31);        
+ DCL INTER_C1            CHAR(1);        
+ DCL INTER_P1            PIC'9'       DEF INTER_C1;        
+ DCL INTER_C2            CHAR(2);        
+ DCL INTER_P2            PIC'(2)9'    DEF INTER_C2;        
+ DCL INTER_Z2            PIC'Z9';        
+ DCL INTER_C3            CHAR(3);        
+ DCL INTER_P3            PIC'(3)9'    DEF INTER_C3;        
+ DCL INTER_Z3            PIC'ZZ9';        
+ DCL INTER_F3            FIXED(03);        
+ DCL INTER_C4            CHAR(4);        
+ DCL INTER_P4            PIC'(4)9'    DEF INTER_C4;        
+ DCL INTER_F4            FIXED(04);        
+ DCL INTER_C5            CHAR(5);        
+ DCL INTER_P5            PIC'(5)9'    DEF INTER_C5;        
+ DCL INTER_Z5            PIC'(4)Z9';        
+ DCL INTER_F5            FIXED(05);        
+ DCL INTER_C6            CHAR(6);        
+ DCL INTER_P6            PIC'(6)9'    DEF INTER_C6;        
+ DCL INTER_C7            CHAR(7);        
+ DCL INTER_P7            PIC'(7)9'    DEF INTER_C7;        
+ DCL INTER_Z7            PIC'ZZZZZZ9';        
+ DCL INTER_F7            FIXED(07);        
+ DCL INTER_C8            CHAR(8);        
+ DCL INTER_P8            PIC'(8)9'    DEF INTER_C8;        
+ DCL INTER_F8            FIXED(08);        
+ DCL INTER_C9            CHAR(9);        
+ DCL INTER_P9            PIC'(9)9'    DEF INTER_C9;        
+ DCL INTER_F9            FIXED(09);        
+ DCL INTER_P10           PIC'(10)9';        
+ DCL INTER_C10           CHAR(10)     DEF INTER_P10;        
+ DCL INTER_C11           CHAR(11);        
+ DCL INTER_P11           PIC'(11)9'   DEF INTER_C11;        
+ DCL INTER_F11           FIXED(11);        
+ DCL INTER_F15           FIXED(15);        
+ DCL TXT001 (3)          CHAR(1)     INIT (        
+   'P'        
+  ,'D'        
+  ,'T'        
+                                   );        
+ /********************************************        
+ * DECLARATION DES PCB                       *        
+ ********************************************/        
+ /*---------------------------------------------------------- PCBINIT */        
+ /*------------------------------------------------------ END PCBINIT */        
+ /*-------------------------------------------------------- FCTINIVA */        
+    DCL  CEETDLI ENTRY OPTIONS (ASM);        
+    DCL  PLITDLI ENTRY;        
+    DCL  GN    CHAR(4)               VALUE ('GN  ');        
+    DCL  GU    CHAR(4)               VALUE ('GU  ');        
+    DCL  GHU   CHAR(4)               VALUE ('GHU ');        
+    DCL  GNP   CHAR(4)               VALUE ('GNP ');        
+    DCL  GHN   CHAR(4)               VALUE ('GHN ');        
+    DCL  GHNP  CHAR(4)               VALUE ('GHNP');        
+    DCL  GCV   CHAR(4)               VALUE ('GCV ');        
+    DCL  ISRT  CHAR(4)               VALUE ('ISRT');        
+    DCL  DLET  CHAR(4)               VALUE ('DLET');        
+    DCL  REPL  CHAR(4)               VALUE ('REPL');        
+    DCL  CHNG  CHAR(4)               VALUE ('CHNG');        
+    DCL  LOG   CHAR(4)               VALUE ('LOG ');        
+    DCL  STAT  CHAR(4)               VALUE ('STAT');        
+    DCL  ROLL  CHAR(4)               VALUE ('ROLL');        
+    DCL  ROLB  CHAR(4)               VALUE ('ROLB');        
+    DCL  PURG  CHAR(4)               VALUE ('PURG');        
+    DCL  CMD   CHAR(4)               VALUE ('CMD ');        
+    DCL  GCMD  CHAR(4)               VALUE ('GCMD');        
+    DCL  CHKP  CHAR(4)               VALUE ('CHKP');        
+    DCL  XRST  CHAR(4)               VALUE ('XRST');        
+    DCL  DEQ   CHAR(4)               VALUE ('DEQ ');        
+    DCL  ONE   FIXED BIN (31)        VALUE (0001B);        
+    DCL  TWO   FIXED BIN (31)        VALUE (0010B);        
+    DCL  THREE FIXED BIN (31)        VALUE (0011B);        
+    DCL  FOUR  FIXED BIN (31)        VALUE (0100B);        
+    DCL  FIVE  FIXED BIN (31)        VALUE (0101B);        
+    DCL  SIX   FIXED BIN (31)        VALUE (0110B);        
+    DCL  SEVEN FIXED BIN (31)        VALUE (0111B);        
+    DCL  EIGHT FIXED BIN (31)        VALUE (1000B);        
+    DCL  NINE  FIXED BIN (31)        VALUE (1001B);        
+ /*----------------------------------------------------- END FCTINIVA */        
+ /*-------------------------------------------------------- TPPCBMSK */        
+   DCL ALTPCB PTR;        
+    DCL  1  ALT      BASED(ALTPCB),        
+           2  LTERM                CHAR(8),        
+           2  RESERVED             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  DATEIMS              FIXED(7),        
+           2  TIMEIMS              FIXED(7,1),        
+           2  SEQUENCE             BIN FIXED(31),        
+           2  MODNAME              CHAR(8),        
+           2  USERFIELD            CHAR(8);        
+ /*---------------------------------------------------- END TPPCBMSK */        
+ ALTPCB= GA2016J.ALTPCB;        
+         
+         
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DC105PCB             PTR;        
+    DCL  LKEY_DC105 FIXED BINARY(31,0);        
+         
+    DCL  1  DC105           BASED(DC105PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DC105 REFER(DC105.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DC105PCB= GA2016J.DC105PCB;        
+         
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DA215PCB             PTR;        
+    DCL  LKEY_DA215 FIXED BINARY(31,0);        
+         
+    DCL  1  DA215           BASED(DA215PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DA215 REFER(DA215.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DA215PCB= GA2016J.DA215PCB;        
+         
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DA215$PCB             PTR;        
+         
+    DCL  LKEY_DA215$ FIXED BINARY(31,0);        
+         
+    DCL  1  DA215$           BASED(DA215$PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DA215$ REFER(DA215$.KEYLEN)        
+ );        
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DA215$PCB= GA2016J.DA215$PCB;        
+         
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DA2152PCB             PTR;        
+         
+    DCL  LKEY_DA2152 FIXED BINARY(31,0);        
+         
+    DCL  1  DA2152           BASED(DA2152PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DA2152 REFER(DA2152.KEYLEN)        
+ );        
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DA2152PCB= GA2016J.DA2152PCB;        
+         
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DA216PCB             PTR;        
+    DCL  LKEY_DA216 FIXED BINARY(31,0);        
+         
+    DCL  1  DA216           BASED(DA216PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DA216 REFER(DA216.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DA216PCB= GA2016J.DA216PCB;        
+         
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DA223PCB             PTR;        
+    DCL  LKEY_DA223 FIXED BINARY(31,0);        
+         
+    DCL  1  DA223           BASED(DA223PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DA223 REFER(DA223.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DA223PCB= GA2016J.DA223PCB;        
+         
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DEU02PCB             PTR;        
+    DCL  LKEY_DEU02 FIXED BINARY(31,0);        
+         
+    DCL  1  DEU02           BASED(DEU02PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DEU02 REFER(DEU02.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DEU02PCB= GA2016J.DEU02PCB;        
+         
+ /********************************************        
+ * GESTION DES ERREURS                       *        
+ ********************************************/        
+ DCL 1   MESS_TRACE  STATIC,                ################################################        
+      2  LL_TR              BIN FIXED(15)   INIT(44),        
+      2  ZZ_TR              BIN FIXED(15)   INIT(0),        
+      2  TRACE              CHAR(40);        
+ DCL 1   TB_TRACE(100) STATIC,        
+      2  FLAG_TRACE         CHAR(01),        
+      2  MSGE_TRACE         CHAR(40);        
+ DCL     ITRACE             BIN FIXED (31)  STATIC;        
+ DCL     ERR_MSG     STATIC CHAR(79);        
+ DCL     PTRMSG             PTR;        
+ DCL 1   ERR_DBA            BASED(PTRMSG),        
+      2  FILL1              CHAR(12),        
+      2  FILL2              CHAR(04),        
+      2  DBD_DBA            CHAR(08),        
+      2  FILL3              CHAR(08),        
+      2  CALL_DBA           CHAR(10),        
+      2  FILL4              CHAR(05),        
+      2  KEY_DBA            CHAR(24),        
+      2  FILL5              CHAR(05),        
+      2  ST_DBA             CHAR(02),        
+      2  FILL6              CHAR(01);        
+ TB_TRACE(*)='';        
+ ITRACE=0;        
+ PTRMSG=ADDR(ERR_MSG);        
+         
+         
+ /* VARIABLE PERMETTANT D'AFFICHER LA DATE ET L'HEURE DE COMPILATION */        
+         
+ /* VARIABLE MAX CHECK POINT : NBR MAX. DE LOTS AUTORISE AVANT CHKPT */        
+ /*------------------------------------------------------------ DEBUG */        
+ PT: PROC;        
+ /******************************/        
+ /*       MEMO TRACE           */        
+ /******************************/        
+ JWB001.TBTRACE_I = JWB001.TBTRACE_I+1;        
+ IF JWB001.TBTRACE_I > 100        
+    THEN DO;        
+         JWB001.TBTRACE_I = 1;        
+         JWB001.FLAG_TRACE(*) = '';        
+         END;        
+ JWB001.FLAG_TRACE(JWB001.TBTRACE_I) = '*';        
+ JWB001.MSGE_TRACE(JWB001.TBTRACE_I) = TRACE;        
+                               IF JWB001.CDTRACE > 0 THEN        
+      PUT SKIP EDIT(TRACE)(A);        
+ $END PT;        
+         
+ DEBUG: PROC;        
+ /**************************************/        
+ /*       PRINTING   TRACE             */        
+ /**************************************/        
+ DCL KT BIN FIXED(31);        
+ PUT FILE(SYSPRINT) EDIT('- PROGRAM TRACE: -')        
+                        (SKIP(3),A)        
+                        ('------------------')        
+                        (SKIP,A);        
+ DO KT=1 TO 100;        
+    IF JWB001.MSGE_TRACE(KT)^=''        
+       THEN PUT FILE(SYSPRINT)        
+            EDIT(JWB001.FLAG_TRACE(KT),        
+                 JWB001.MSGE_TRACE(KT))        
+                                   (SKIP,A,A);        
+ END;        
+ PUT FILE(SYSPRINT) EDIT('------------------')        
+                        (SKIP,A);        
+ $END DEBUG;        
+ /*-------------------------------------------------------- END DEBUG */        
+ /*-------------------------------------------------------------------*/        
+ ERR_DL1:PROC REORDER;        
+ /********************************************************************/        
+ /*                                                                  */        
+ /*                PROCEDURE DL1 : ERREUR DATA BASE                  */        
+ /*                                                                  */        
+ /********************************************************************/        
+ JWB001.CDRTPGM = 'ERR_DL1';        
+ PUT PAGE EDIT('A20167',  ' - VERSION DU : * 18.AUG.10 16.17.25 * - ',        
+         
+               'LAST SV CALL = ',JWB001.LSTCALL,        
+               'LAST DB CALL = ',JWB001.LSTSERV)        
+              (SKIP,A, A,(2) (SKIP,A,A));        
+         
+         
+ CALL DEBUG;        
+         
+ $END ERR_DL1;        
+ /*-------------------------------------------------------------------*/        
+                        /* ERREUR DE DATA BASE - 'ERR_DL1' + JWB001  */        
+ ON ERROR SNAP        
+    BEGIN ;        
+          ON ERROR SYSTEM;        
+          PUT PAGE EDIT('A20167', ' - VERSION DU : * 18.AUG.10 16.17.25        
+ * - ',        
+          ' ON ERROR CONDITION',        
+          'ONCODE    = ',ONCODE,        
+          'ONLOC     = ',ONLOC,        
+          'ONSOURCE  = ',ONSOURCE)        
+          (SKIP,A,A,        
+           SKIP,A,        
+           SKIP,A,F(5),        
+           SKIP,A,A(10),        
+           SKIP,A,A);        
+         
+           PUT SKIP EDIT('LAST SERV CALL = ',JWB001.LSTCALL,        
+                         'LAST DB2  CALL = ',JWB001.LSTSERV)        
+              (SKIP,A,A);        
+         
+         
+          CALL DEBUG;        
+          SIGNAL ERROR;        
+    END;        
+ /*-------------------------------------------------------------------*/        
+      /* ERREUR PLI - SANS IOPCB, AVEC JWB001      */        
+ /*********************************************************************/        
+ /* TDMXXX !   DATE   ! DESCRIPTION DE LA MODIF                       */        
+ /* ------ ! -------- ! ----------------------------------------------*/        
+ /* TDMOHL ! 22042002 ! AJOUT INCLUDE PCBINIVA,FCTINIVA               */        
+ /* TDMOHL ! 28042003 ! CHANGE INCLUDE FCTINIVA -> FCTINIVA           */        
+ /* TDMOHL ! 15112004 ! AJOUT DECLARATION XEU100                      */        
+ /*********************************************************************/        
+ ERRORMSG: PROC(ERRORNUMBER,LANGAGECODE,ERRORMESSAGE) REORDER;        
+ /***********************************/        
+ /* RECHERCHE D'UN MESSAGE D'ERREUR */        
+ /***********************************/        
+         
+ DCL ERRORNUMBER    CHAR(*),        
+     LANGAGECODE    PIC '9',        
+     ERRORMESSAGE   CHAR(*);        
+         
+ DCL XEU100 ENTRY OPTIONS(FETCHABLE);        
+         
+ /*---------------------------------------------------------- PCBINIT */        
+ /*------------------------------------------------------ END PCBINIT */        
+ /*-------------------------------------------------------- FCTINIVA */        
+    DCL  CEETDLI ENTRY OPTIONS (ASM);        
+    DCL  PLITDLI ENTRY;        
+    DCL  GN    CHAR(4)               VALUE ('GN  ');        
+    DCL  GU    CHAR(4)               VALUE ('GU  ');        
+    DCL  GHU   CHAR(4)               VALUE ('GHU ');        
+    DCL  GNP   CHAR(4)               VALUE ('GNP ');        
+    DCL  GHN   CHAR(4)               VALUE ('GHN ');        
+    DCL  GHNP  CHAR(4)               VALUE ('GHNP');        
+    DCL  GCV   CHAR(4)               VALUE ('GCV ');        
+    DCL  ISRT  CHAR(4)               VALUE ('ISRT');        
+    DCL  DLET  CHAR(4)               VALUE ('DLET');        
+    DCL  REPL  CHAR(4)               VALUE ('REPL');        
+    DCL  CHNG  CHAR(4)               VALUE ('CHNG');        
+    DCL  LOG   CHAR(4)               VALUE ('LOG ');        
+    DCL  STAT  CHAR(4)               VALUE ('STAT');        
+    DCL  ROLL  CHAR(4)               VALUE ('ROLL');        
+    DCL  ROLB  CHAR(4)               VALUE ('ROLB');        
+    DCL  PURG  CHAR(4)               VALUE ('PURG');        
+    DCL  CMD   CHAR(4)               VALUE ('CMD ');        
+    DCL  GCMD  CHAR(4)               VALUE ('GCMD');        
+    DCL  CHKP  CHAR(4)               VALUE ('CHKP');        
+    DCL  XRST  CHAR(4)               VALUE ('XRST');        
+    DCL  DEQ   CHAR(4)               VALUE ('DEQ ');        
+    DCL  ONE   FIXED BIN (31)        VALUE (0001B);        
+    DCL  TWO   FIXED BIN (31)        VALUE (0010B);        
+    DCL  THREE FIXED BIN (31)        VALUE (0011B);        
+    DCL  FOUR  FIXED BIN (31)        VALUE (0100B);        
+    DCL  FIVE  FIXED BIN (31)        VALUE (0101B);        
+    DCL  SIX   FIXED BIN (31)        VALUE (0110B);        
+    DCL  SEVEN FIXED BIN (31)        VALUE (0111B);        
+    DCL  EIGHT FIXED BIN (31)        VALUE (1000B);        
+    DCL  NINE  FIXED BIN (31)        VALUE (1001B);        
+ /*----------------------------------------------------- END FCTINIVA */        
+         
+ /*******************************************/        
+ /* DB DES TABLES                           */        
+ /*******************************************/        
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DBTABPCB             PTR;        
+    DCL  LKEY_TAB FIXED BINARY(31,0);        
+         
+    DCL  1  TAB           BASED(DBTABPCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_TAB REFER(TAB.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DBTABPCB = JWB001.DBTABLE.DBTABPCB;        
+         
+ /******************/        
+ /* SEGMENT TABLE  */        
+ /******************/        
+ /* NRB - TDMOHL - GENERATION LE 22/05/2007 - 14:28        LGTH=00274 */        
+ /*****************************************************/        
+ /*  TABLE MAIN :                                     */        
+ /*****************************************************/        
+         
+ DCL  1 TBGI_MAIN ,                         #############################################################        
+                                            /*TB!  !DPH01   !PHTABLE  */        
+                                            /*TB!  !DRH01   !RHTABLE  */        
+                                            /*TB!  !DND01   !NDTAB    */        
+                                            /*TB!  !DSM25   !C1TAB    */        
+                                            /*TB!  !DDO03   !C1TAB    */        
+                                            /*TB!  !DIB15   !C1TAB    */        
+                                            /*TB!  !DCR01   !CRTABLE  */        
+                                            /*TB!  !DLG01   !TABLE    */        
+                                            /*TB!  !DCT01   !CTTABLE  */        
+                                            /*TB!  !DC201   !C2TABLE  */        
+                                            /*TB!  !DCI02   !CITAB    */        
+                                            /*TB!  !DSMC0   !C1TAB    */        
+                                            /*TB!  !DAV01   !AVTABLE  */        
+                                            /*TB!  !DCD01   !CDTAB    */        
+                                            /*TB!  !DCL01   !CLTABLE  */        
+                                            /*TB!  !DCP11   !CPTAB    */        
+                                            /*TB!  !DCO39   !COTAB    */        
+                                            /*TB!  !DC101   !C1TAB    */        
+                                            /*TB!  !DC102   !C1TAB    */        
+                                            /*TB!  !DC103   !C1TAB    */        
+                                            /*TB!  !DC301   !C3TABLE  */        
+                                            /*TB!  !DDP01   !DPTAB    */        
+                                            /*TB!  !DGA01   !GATABLE  */        
+                                            /*TB!  !DGI01   !GITABLE  */        
+                                            /*TB!  !DGZ02   !GZTABLE  */        
+                                            /*TB!  !DLP03   !LPTABLE  */        
+                                            /*TB!  !DNC02   !NCTABLE  */        
+                                            /*TB!  !DPS01   !PSTABLE  */        
+                                            /*TB!  !DP101   !P1TABLE  */        
+                                            /*TB!  !DRD01   !RDTABLE  */        
+                                            /*TB!  !DSP01   !SPTABLE  */        
+                                            /*TB!  !DSW02   !SWTAB    */        
+                                            /*TB!  !DXI01   !XITABLE  */        
+                                            /*TB!  !DFP24   !FPTABLE  */        
+       2 TBTXCOD  CHAR(4),                  ######################################################        
+       2 TBTXA01  CHAR(20),                 #####################################################        
+       2 TBTXL01  CHAR(250);                ####################################################        
+         
+         
+    DCL 1 SSA_C1TAB,        
+         2 FIL1         CHAR (8)       INIT ('C1TAB  '),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KC1TAB  '),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUE        CHAR (24),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+ /* NRB - TDMVAN - Generation le 11/04/2000 - 09:20        Lgth=00274 */        
+ /******************************************        
+ *  SEGMENT TABLE                          *        
+ *  MESSAGES D'ERREUR                      *        
+ ******************************************/        
+         
+ DCL  1 TBGI_T004 ,                    #############################################################        
+ /*K*/ 2 TBTXCOD  CHAR(4),             /*CD!  !CODE TABLE             */        
+ /*K*/ 2 TBTXA01  CHAR(20),            /*CD!  !ARGUMENT DE LA TABLE   */        
+       2 LTMEERR(3)  CHAR(66),         ##################################################        
+       2 $FILLER$ CHAR(052);           ####################################################        
+ /* NRB - TDMOHL - GENERATION LE 17/10/2006 - 09:33        LGTH=00274 */        
+ /*-------------------------------------------------------------------*/        
+ /*-- DICTIONNAIRE DES MESSAGES D'ERREUR                              */        
+ /*-------------------------------------------------------------------*/        
+ DCL  1 TBGI_W004 ,                  #############################################################        
+                                     /*TB!  !DSM25   !C1TAB           */        
+                                     /*TB!  !DCR01   !CRTABLE         */        
+                                     /*TB!  !DPH01   !PHTABLE         */        
+                                     /*TB!  !DDO03   !C1TAB           */        
+                                     /*TB!  !DLG01   !TABLE           */        
+                                     /*TB!  !DND01   !NDTAB           */        
+                                     /*TB!  !DRH01   !RHTABLE         */        
+                                     /*TB!  !DC201   !C2TABLE         */        
+                                     /*TB!  !AEDBTAB1!TABLE           */        
+                                     /*TB!  !DGZ02   !GZTABLE         */        
+                                     /*TB!  !DC301   !C3TABLE         */        
+                                     /*--!  !L'06 ERRORNUMBER         */        
+ /*K*/ 2 TBTXCOD  CHAR(4),           /*CD!  !CODE TABLE               */        
+ /*K*/ 2 TBTXA01  CHAR(20),          /*CD!  !CODE MSG = KKPPPNNNIL    */        
+                                     /*--!  !KK  = PROJET             */        
+                                     /*--!  !PPP = NO PROGRAMME       */        
+                                     /*--!  !NNN = NO MESSAGE         */        
+                                     /*--!  !I   = NO SCENARIO        */        
+                                     /*--!  !L   = LANGUE (F/N/A/E)   */        
+       2 LTMEERR  CHAR(79),          #####################################################        
+       2 FILLER  CHAR(170),          #####################################################        
+       2 CDEGARG  CHAR(1);           ######################################################        
+         
+ /*******************************************/        
+ /* AUTRES DECLARATIONS                     */        
+ /*******************************************/        
+ DCL CLAUSE        CHAR(7);        
+ DCL METAPCB_W     PTR;        
+ DCL CDDFSEG_W     CHAR (8);        
+ DCL CDTABLE_W     CHAR (4);        
+ DCL CDLGTRN_W     PIC '9';        
+ DCL (I,J,L,M,K)   FIXED BIN(31);        
+         
+ /* SAUVER L'ENVIRONNEMENT */        
+         
+ METAPCB_W = IEU001.METAPCB;        
+ CDDFSEG_W = IEU001.CDDFSEG;        
+ CDLGTRN_W = LANGAGECODE;        
+         
+ IEU001.METAPCB = JWB001.DBTABLE.METAPCB;        
+ SSA_C1TAB.FIL1 = JWB001.DBTABLE.LTSGTAB;        
+ SSA_C1TAB.FIL3 = 'K' !! SUBSTR(JWB001.DBTABLE.LTSGTAB,1,7);        
+ IEU001.CDDFSEG = JWB001.DBTABLE.CDDFTAB;        
+         
+ ERRORMESSAGE = '';        
+ IF ERRORNUMBER = '' THEN        
+      ERRORNUMBER = 'UNSPECI';        
+         
+ DO WHILE (ERRORMESSAGE = '');        
+ CDTABLE_W = SUBSTR(JWB001.DBTABLE.CDDFTAB,4,4);        
+ IF CDTABLE_W = 'W004' THEN        
+      DO;        
+      SSA_C1TAB.VALUE = 'W004' !! SUBSTR(ERRORNUMBER,1,9)        
+                               !! TRANSLATE(CDLGTRN_W,'FNAE','1234');        
+      CALL XEU100(IEU001,FOUR,GU,TAB,TBGI_W004,SSA_C1TAB);        
+      END;        
+ ELSE DO;        
+      SSA_C1TAB.VALUE = CDTABLE_W !! ERRORNUMBER;        
+      CALL XEU100(IEU001,FOUR,GU,TAB,TBGI_T004,SSA_C1TAB);        
+      END;        
+         
+ SELECT (IEU001.CDRTPGM);        
+   WHEN('  ')        
+     IF CDTABLE_W = 'W004' THEN        
+          DO;        
+          ERRORMESSAGE = TBGI_W004.LTMEERR;        
+          IF ERRORMESSAGE = '' THEN        
+               ERRORMESSAGE = ERRORNUMBER;        
+          END;        
+     ELSE DO;        
+          IF CDLGTRN_W < 1 ! CDLGTRN_W > 3 THEN        
+               ERRORMESSAGE = TBGI_T004.LTMEERR(1);        
+          ELSE IF TBGI_T004.LTMEERR(CDLGTRN_W) = '' THEN        
+                    ERRORMESSAGE = TBGI_T004.LTMEERR(1);        
+               ELSE ERRORMESSAGE = TBGI_T004.LTMEERR(CDLGTRN_W);        
+          IF ERRORMESSAGE = '' THEN        
+               ERRORMESSAGE = ERRORNUMBER;        
+          END;        
+   WHEN ('DBAPGE')        
+             DO;        
+             IF CDTABLE_W = 'W004' THEN        
+                  DO;        
+                  IF CDLGTRN_W = 1 THEN        
+                       ERRORMESSAGE = ERRORNUMBER;        
+                  ELSE CDLGTRN_W = 1;        
+                  END;        
+             ELSE ERRORMESSAGE = ERRORNUMBER;        
+             IEU001.CDRTPGM = ' ';        
+             END;        
+   OTHERWISE DO;        
+             CALL ERR_DL1;        
+             RETURN;        
+             END;        
+   END;        
+ END;        
+         
+ /* RETABLIR L'ENVIRONNEMMENT */        
+         
+ IEU001.METAPCB = METAPCB_W;        
+ IEU001.CDDFSEG = CDDFSEG_W;        
+         
+ L=LENGTH(ERRORMESSAGE);        
+ M=L;        
+ K=INDEX(ERRORMESSAGE,'#');        
+ IF K^=0 & SUBSTR(ERRORMESSAGE,K+7)=''  THEN        
+      DO;        
+      CLAUSE=SUBSTR(ERRORMESSAGE,K,7);        
+      J=INDEX(CLAUSE,' ');        
+      IF J=0 & VERIFY(SUBSTR(ERRORMESSAGE,K+8,L-(K+8)),' ')=0 THEN        
+           DO;        
+           SPA.TBFCACT(2)='1'B;        
+           SPA.LTOPCOM=SUBSTR(CLAUSE,2,2)!!'#' !!SUBSTR(CLAUSE,4);        
+           SUBSTR(ERRORMESSAGE,K)='';        
+           DO J=L TO 1 BY -1        
+              WHILE(SUBSTR(ERRORMESSAGE,J,1)=' ');        
+           END;        
+           IF JWB001.CDEVCLI = '3' THEN        
+                SUBSTR(ERRORMESSAGE,J+1)=' (F2:...)'!!HEX3F;        
+           ELSE SUBSTR(ERRORMESSAGE,J+1)=' (F2:...)';        
+           END;        
+      END;        
+ ELSE IF JWB001.CDEVCLI = '3' THEN        
+           DO;        
+           DO I=L BY -1 TO 1 WHILE(SUBSTR(ERRORMESSAGE,I,1) = ' ');        
+              M=M-1;                                                            
+           END;                                                                 
+           SELECT(M);                                                           
+             WHEN(0)ERRORMESSAGE=HEX403F;                                       
+             WHEN(L);                                                           
+             OTHER SUBSTR(ERRORMESSAGE,M+1)=HEX3F;                              
+           END;                                                                 
+           END;        
+ $END ERRORMSG;        
+                        /* RECHERCHE MESSAGE D'ERREUR DANS DB TABLES */        
+         
+ /*-----------------------------------------------*/        
+         
+ /*******************************        
+ *     RACINE DU SCENARIO       *        
+ *******************************/        
+         
+ IF SPA.CDPGTRN ='5' THEN        
+  DO;        
+   MINUS = MINUS500;        
+  END;        
+ ELSE        
+  DO;        
+   MINUS = MINUS274;        
+  END;        
+         
+ IF JWB001.CDTRACE >= 3 THEN DO;        
+   PUT SKIP EDIT('SPA.MSG_SPA:',SPA.MSG_SPA)(A);        
+   PUT SKIP EDIT('SCENARI.NOPGACT:',SCENARI.NOPGACT)(A);        
+   PUT SKIP EDIT('MID7.CDOPTRN:',MID7.CDOPTRN)(A);        
+ END;        
+ IF JWB001.CDTRACE=9        
+ THEN DO;        
+   PUT SKIP EDIT('--------------------------')(A);        
+   PUT SKIP EDIT('!RACINE/CDRTPGM:'!!JWB001.CDRTPGM,'!')(A);        
+   PUT SKIP EDIT('!RACINE/BOACCES:',SCENARI.TBSCENA(2),'        !')(A);        
+         
+   PUT SKIP EDIT('!RACINE/BOVALID:',SCENARI.TBSCENA(4),'        !')(A);        
+         
+   PUT SKIP EDIT('!RACINE/BOUPDTE:',SCENARI.TBSCENA(7),'        !')(A);        
+         
+   PUT SKIP EDIT('!RACINE/BOSUITE:',SCENARI.TBSCENA(8),'        !')(A);        
+         
+   PUT SKIP EDIT('!RACINE/BOSWTCH:',SCENARI.TBSCENA(9),'        !')(A);        
+         
+   PUT SKIP EDIT('!RACINE/BOSCROL:',SCENARI.TBSCENA(5),'        !')(A);        
+         
+   PUT SKIP EDIT('!RACINE/BOERRAC:',SCENARI.TBSCENA(3),'        !')(A);        
+         
+   PUT SKIP EDIT('!RACINE/BOREPOS:',SCENARI.TBSCENA(6),'        !')(A);        
+         
+   PUT SKIP EDIT('--------------------------')(A);        
+ END;        
+         
+ SELECT(JWB001.LTNMMTH);        
+    WHEN('SCENA_INIT')   CALL F1;        
+    WHEN('CTX_GET')      CALL F2;        
+    WHEN('CTX_SAVE')     CALL F3;        
+    WHEN('CTRL_ACCES')   CALL F4;        
+    WHEN('PAGE_DFT')     CALL F5;        
+    WHEN('PAGE_INIT')    CALL F6;        
+    WHEN('PAGE_SCROLL')  CALL F7;        
+    WHEN('PAGE_XML')     CALL F8;        
+    WHEN('PAGE9_XML')    CALL F9;        
+    WHEN('VALID_SYN')    CALL FA;        
+    WHEN('VALID_CTX')    CALL FB;        
+    WHEN('UPDATE_DB')    CALL FC;        
+    WHEN('SWITCH_SC')    CALL FD;        
+    WHEN('TEST_SCROLL')  CALL FE;        
+    WHEN('CTX_CLEAR')    CALL FF;        
+    WHEN('TEST_PF1 ')    CALL FG;        
+    WHEN('TEST_BOUTON')  CALL FH;        
+    OTHER        
+       DO;        
+       JWB001.CDRTPGM = 'A20167' !! '01';        
+       IF JWB001.CDTRACE >= 3 THEN        
+         DO;        
+           PUT SKIP LIST( '!!! NOM DE METHODE NON REPERTORIE !!!');        
+           PUT SKIP LIST('CONTENU DE L''INTERFACE GA20167:');        
+           PUT SKIP EDIT('METHODE =',JWB001.LTNMMTH) (A,A);        
+         END;        
+       END;        
+ END;        
+         
+ IF JWB001.CDTRACE=9        
+ THEN DO;        
+   PUT SKIP EDIT('------------------------------')(A);        
+   PUT SKIP EDIT('!END RACINE/CDRTPGM:'!!JWB001.CDRTPGM,'!')(A);        
+   PUT SKIP EDIT('!END RACINE/BOACCES:',SCENARI.TBSCENA(2),'        !')(        
+ A);        
+   PUT SKIP EDIT('!END RACINE/BOVALID:',SCENARI.TBSCENA(4),'        !')(        
+ A);        
+   PUT SKIP EDIT('!END RACINE/BOUPDTE:',SCENARI.TBSCENA(7),'        !')(        
+ A);        
+   PUT SKIP EDIT('!END RACINE/BOSUITE:',SCENARI.TBSCENA(8),'        !')(        
+ A);        
+   PUT SKIP EDIT('!END RACINE/BOSWTCH:',SCENARI.TBSCENA(9),'        !')(        
+ A);        
+   PUT SKIP EDIT('!END RACINE/BOSCROL:',SCENARI.TBSCENA(5),'        !')(        
+ A);        
+   PUT SKIP EDIT('!END RACINE/BOERRAC:',SCENARI.TBSCENA(3),'        !')(        
+ A);        
+   PUT SKIP EDIT('!END RACINE/BOREPOS:',SCENARI.TBSCENA(6),'        !')(        
+ A);        
+   PUT SKIP EDIT('------------------------------')(A);        
+ END;        
+ /*-----------------------------------------------*/        
+         
+ F1: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F1';        
+         
+     CALL PT;        
+ /**********************************************        
+ * VERIFIER L'EXISTENCE DU SCENARIO            *        
+ * CHARGER LA ZONE DE COMMUNICATION 'WKSCENA'  *        
+ **********************************************/        
+         
+ SCENARI.NUMIDLL(LEVEL) = STG(MID7);    ########################################        
+         
+ SCENARI.TBSCENA(2) = ON;        
+         
+ SCENARI.TBSCENA(4) = ON;        
+         
+ SCENARI.TBSCENA(7) = OFF;        
+         
+ SCENARI.TBSCENA(8) = OFF;        
+         
+ SCENARI.TBSCENA(9) = OFF;        
+         
+ SCENARI.TBSCENA(5) = OFF;        
+         
+ SCENARI.TBSCENA(3) = OFF;        
+         
+ SCENARI.TBSCENA(6) = OFF;        
+         
+ SCENARI.TBSCENA(1) = ON;        
+         
+ SCENARI.TBSCENA(11) = OFF;        
+         
+ SELECT(MID7.CDLGTRN);        
+   WHEN('1','F') SPA.CDLGTRN = 1;        
+   WHEN('2','N') SPA.CDLGTRN = 2;        
+   OTHER;        
+ END;        
+         
+     TRACE = 'GA20167 ===> ' !! 'END F1';        
+         
+     CALL PT;        
+ $END F1;        
+ /*-----------------------------------------------*/        
+ F2: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F2';        
+         
+     CALL PT;        
+ /***************************************************/        
+ /* RECHARGER LA RUBRIQUE COLLECTEE PAR LA GUIDANCE */        
+ /***************************************************/        
+         
+     TRACE = 'GA20167 ===> ' !! 'END F2';        
+         
+     CALL PT;        
+ $END F2;        
+ /*-----------------------------------------------*/        
+ F3: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F3';        
+         
+     CALL PT;        
+ /********************************************        
+ * INVOQUER LA GUIDANCE                      *        
+ ********************************************/        
+         
+     TRACE = 'GA20167 ===> ' !! 'END F3';        
+         
+     CALL PT;        
+ $END F3;        
+ /*-----------------------------------------------*/        
+ F4: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F4';        
+         
+     CALL PT;        
+ /********************************************        
+ * CONTROLE D'ACCES AUX RESSOURCES           *        
+ ********************************************/        
+ SCENARI.TBSCENA(2) = OFF;        
+         
+         
+     TRACE = 'GA20167 ===> ' !! 'END F4';        
+         
+     CALL PT;        
+ $END F4;        
+ /*-----------------------------------------------*/        
+ F5: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F5';        
+         
+     CALL PT;        
+ /********************************************        
+ * PAGE7 : VALEURS PAR DEFAUT                *        
+ ********************************************/        
+ IF JWB001.RETOUR !        
+    (JWB001.CDEVCLI ^='3' &  SPA.MSG_SPA = '1')  THEN        
+      DO;        
+      CALL F6_2;        
+      PAGE7 = MID7, BY NAME;        
+      END;        
+ ELSE DO;        
+      SUBSTR(PAGE7TXT,09,STG(PAGE7) - 8) = ' ';        
+      END;        
+         
+ PAGE7.LL        = STG(PAGE7);        
+ PAGE7.LTSCTRN_A = LOW(2) !! SPA.CDATTRN !! LOW(4);        
+         
+     TRACE = 'GA20167 ===> ' !! 'END F5';        
+         
+     CALL PT;        
+ $END F5;        
+ /*-----------------------------------------------*/        
+         
+ F6: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F6';        
+         
+     CALL PT;        
+ /********************************************        
+ * PAGE7 : ACCES DB ET CHARGEMENT PAGE7      *        
+ ********************************************/        
+ CDRTPGM_W = '';        
+ ERREUR    = OFF;        
+         
+ CALL F6_1; #################################        
+ CALL F6_2; ############################        
+ IF ERREUR        
+   THEN DO;        
+          CALL ERRORMSG(CDRTPGM_W,SPA.CDLGTRN,PAGE7.LTMETRN);        
+        END;        
+         
+     TRACE = 'GA20167 ===> ' !! 'END F6';        
+         
+     CALL PT;        
+ $END F6;        
+         
+ /*-----------------------------------------------*/        
+         
+ F6_1: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F6_1';        
+         
+     CALL PT;        
+ /********************************************        
+ * PAGE7 : ACCES DB ET CHARGEMENT PAGE7      *        
+ ********************************************/        
+ CDRTPGM_W = '';        
+ ERREUR    = OFF;        
+         
+     TRACE = 'GA20167 ===> ' !! 'END F6_1';        
+         
+     CALL PT;        
+ $END F6_1;        
+         
+ /*-----------------------------------------------*/        
+         
+ F6_2: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F6_2';        
+         
+     CALL PT;        
+ /********************************************        
+ * PAGE7 : ACCES DB ET CHARGEMENT PAGE7      *        
+ ********************************************/        
+ PAGE7.LTMARRM = SCENARIO_7.LTMARRM;        
+         
+ IF SCENARIO_7.ANCSTRM > 0        
+  THEN PAGE7.ANCSTRM = SCENARIO_7.ANCSTRM;        
+  ELSE PAGE7.ANCSTRM = '';        
+         
+ IF SCENARIO_7.MTCATRM > 0        
+   THEN DO;        
+          INTER_F15 = SCENARIO_7.MTCATRM * 100;        
+          INTER_C10 = F_MTFTC(INTER_F15,'$BBBZ07V02$',2,10);        
+          PAGE7.MTCATRM = INTER_C10;        
+        END;        
+   ELSE PAGE7.MTCATRM = '';        
+         
+ IF SCENARIO_7.MTACTRM > 0        
+   THEN DO;        
+          INTER_F15 = SCENARIO_7.MTACTRM * 100;        
+          INTER_C10 = F_MTFTC(INTER_F15,'$BBBZ07V02$',2,10);        
+          PAGE7.MTACTRM = INTER_C10;        
+        END;        
+   ELSE PAGE7.MTACTRM = '';        
+         
+ IF SCENARIO_7.NUPDSRM > 0        
+   THEN DO;        
+          INTER_Z5 = SCENARIO_7.NUPDSRM;        
+          PAGE7.NUPDSRM = INTER_Z5;        
+        END;        
+   ELSE PAGE7.NUPDSRM = '';        
+         
+ PAGE7.LTMARQU   = SCENARIO_1.LTMARQU;        
+ PAGE7.LTLIBTYP  = TRIM(SCENARIO_1.LTMODEL !! ' ' !!        
+                   SCENARIO_1.LTTYPEV);        
+ INTER_P1        = SCENARIO_1.NBRPORT;        
+ PAGE7.LTNBRPORT = INTER_C1 !! TRIM(TXT001(SPA.CDLGTRN));        
+ INTER_Z3 = SCENARIO_1.NBTYPKW;        
+ PAGE7.LTNBTYPKW = INTER_Z3;        
+ INTER_Z2 = SCENARIO_5.AGEPREN;        
+ PAGE7.AGEPREN = INTER_Z2;        
+ PAGE7.VABMACT = SCENARIO_6.CDBMDET;        
+         
+ INTER_F15 = SCENARIO_4.TOTALAC;        
+ INTER_F15 = INTER_F15 * 100;        
+ INTER_C10 = F_MTFTC(INTER_F15,'$BBBZ07V02$',2,10);        
+ PAGE7.VAACCVH = INTER_C10;        
+         
+ INTER_F15 = SCENARIO_5.VACATVH * 100;        
+ INTER_C10 = F_MTFTC(INTER_F15,'$BBBZ07V02$',2,10);        
+ PAGE7.VACATVH = INTER_C10;        
+         
+ IF SPA.CDOPTRN = 'A2M20'        
+   THEN PAGE7.CDEXTOP = 'M20';        
+         
+     TRACE = 'GA20167 ===> ' !! 'END F6_2';        
+         
+     CALL PT;        
+ $END F6_2;        
+         
+ /*-----------------------------------------------*/        
+         
+ F7: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F7';        
+         
+     CALL PT;        
+ /********************************************        
+ * PAGE7 : SCROLLING                         *        
+ ********************************************/        
+     TRACE = 'GA20167 ===> ' !! 'END F7';        
+         
+     CALL PT;        
+ $END F7;        
+ /*-----------------------------------------------*/        
+         
+ F8: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F8';        
+         
+     CALL PT;        
+ /********************************************        
+ * PAGE7 : PRESENTATION XML                  *        
+ ********************************************/        
+         
+     TRACE = 'GA20167 ===> ' !! 'END F8';        
+         
+     CALL PT;        
+ $END F8;        
+ /*-----------------------------------------------*/        
+         
+ F9: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'F9';        
+         
+     CALL PT;        
+ /********************************************        
+ * PAGE9 : PRESENTATION XML                  *        
+ ********************************************/        
+         
+     TRACE = 'GA20167 ===> ' !! 'END F9';        
+         
+     CALL PT;        
+ $END F9;        
+ /*-----------------------------------------------*/        
+         
+ FA: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FA';        
+         
+     CALL PT;        
+ /********************************************        
+ * VALIDATION SYNTAXIQUE                     *        
+ ********************************************/        
+ CALL FE;        
+ IF SCENARI.TBSCENA(9) THEN RETURN;        
+         
+ ERREUR = OFF;        
+ CDRTPGM_W = '';        
+         
+ IF MID7.MTCATRM = ',00' THEN MID7.MTCATRM = '0,00';        
+ IF MID7.MTACTRM = ',00' THEN MID7.MTACTRM = '0,00';        
+ IF JWB001.CDTRACE >= 3 THEN DO;        
+ PUT SKIP LIST('MID7.CLE = ',MID7.CLE);        
+ PUT SKIP LIST('MID7.LTMARRM = ',MID7.LTMARRM);        
+ PUT SKIP LIST('MID7.ANCSTRM = ',MID7.ANCSTRM);        
+ PUT SKIP LIST('MID7.MTCATRM = ',MID7.MTCATRM);        
+ PUT SKIP LIST('MID7.MTACTRM = ',MID7.MTACTRM);        
+ PUT SKIP LIST('MID7.NUPDSRM = ',MID7.NUPDSRM);        
+ END;        
+ MID7.NUPDSRM = TRANSLATE(MID7.NUPDSRM,'0',' ');        
+ /* MID7.ANCSTRM = TRANSLATE(MID7.ANCSTRM,'0',' '); */        
+ /*        
+ PUT SKIP LIST('MID7.NUPDSRM = ',MID7.NUPDSRM);        
+ */        
+         
+ /* Controler le MID */        
+ /* ---------------- */        
+ CALL FA_1;        
+         
+ IF ERREUR        
+   THEN DO;        
+          JWB001.CDRTPGM = CDRTPGM_W;        
+          RETURN;        
+        END;        
+         
+     TRACE = 'GA20167 ===> ' !! 'END FA';        
+         
+     CALL PT;        
+ $END FA;        
+ /*-----------------------------------------------*/        
+ FA_1: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FA_1';        
+         
+     CALL PT;        
+ /************************        
+ * VALIDATION SYNTAXIQUE *        
+ ************************/        
+ DCL W_MTRM              FIXED(11,2);        
+         
+ /* Marque remorque */        
+         
+ IF MID7.LTMARRM = ''        
+   THEN DO;        
+          CDRTPGM_W = 'A20167' !! '007';        
+          ERREUR = ON;        
+          RETURN;        
+        END;        
+ ELSE        
+ SCENARIO_7.LTMARRM = MID7.LTMARRM;        
+         
+ /* Ann{e de construction de la remorque */        
+ IF VERIFY(MID7.ANCSTRM,NUM) > 0        
+   THEN DO;        
+          CDRTPGM_W = 'A20167' !! '001';        
+          ERREUR = ON;        
+          RETURN;        
+        END;        
+   ELSE DO;        
+          INTER_C4 = MID7.ANCSTRM;        
+          SCENARIO_7.ANCSTRM = INTER_P4;        
+        END;        
+ IF SCENARIO_7.ANCSTRM > #DATE_AAAA        
+   THEN DO;        
+          CDRTPGM_W = 'A20167' !! '001';        
+          ERREUR = ON;        
+          RETURN;        
+        END;        
+         
+ /* Valeur catalogue */        
+ INTER_F15 = F_MTCTF(MID7.MTCATRM,2);        
+ IF ERREUR THEN        
+   DO;        
+     CDRTPGM_W = 'A20167' !! '002';        
+     RETURN;        
+   END;        
+ IF INTER_F15 >= 999999999 THEN        
+   DO;        
+     IF JWB001.CDTRACE >= 3 THEN        
+     DO;        
+     PUT SKIP LIST('Valeur catalogue remorque  =',INTER_F15);        
+     PUT SKIP LIST('Valeur catalogue erronn{e ..',        
+                    MID7.MTCATRM);        
+     END;        
+     CDRTPGM_W = 'A20167' !! '002';        
+     ERREUR = ON;        
+     RETURN;        
+   END;        
+ IF INTER_F15 > 0        
+   THEN DO;        
+          W_MTRM = INTER_F15;        
+          W_MTRM = W_MTRM / 100.00;        
+          SCENARIO_7.MTCATRM = W_MTRM;        
+        END;        
+   ELSE SCENARIO_7.MTCATRM = 0;        
+         
+ /* Valeur actuelle  */        
+         
+ INTER_F15 = F_MTCTF(MID7.MTACTRM,2);        
+ IF ERREUR THEN        
+   DO;        
+     CDRTPGM_W = 'A20167' !! '003';        
+     RETURN;        
+   END;        
+ IF INTER_F15 >= 999999999 THEN        
+   DO;        
+     IF JWB001.CDTRACE >= 3 THEN        
+     DO;        
+     PUT SKIP LIST('Valeur actuelle remorque  =',INTER_F15);        
+     PUT SKIP LIST('Valeur actuelle erronn{e ..',        
+                    MID7.MTACTRM);        
+     END;        
+     CDRTPGM_W = 'A20167' !! '003';        
+     ERREUR = ON;        
+     RETURN;        
+   END;        
+ IF INTER_F15 > 0        
+   THEN DO;        
+          W_MTRM = INTER_F15;        
+          W_MTRM = W_MTRM / 100.00;        
+          SCENARIO_7.MTACTRM = W_MTRM;        
+        END;        
+   ELSE SCENARIO_7.MTACTRM = 0;        
+         
+ /* Poids de la remorque */        
+ IF VERIFY(MID7.NUPDSRM,NUM) > 0        
+   THEN DO;        
+          CDRTPGM_W = 'A20167' !! '004';        
+          ERREUR = ON;        
+          RETURN;        
+        END;        
+   ELSE DO;        
+          INTER_C5 = MID7.NUPDSRM;        
+          SCENARIO_7.NUPDSRM = INTER_P5;        
+        END;        
+ IF SCENARIO_7.NUPDSRM > 99000        
+   THEN DO;        
+          SCENARIO_7.NUPDSRM = 0;        
+          CDRTPGM_W = 'A20167' !! '006';        
+          ERREUR = ON;        
+          RETURN;        
+        END;        
+         
+ IF JWB001.CDTRACE >= 3 THEN DO;        
+ PUT SKIP LIST('SCENARIO_7.LTMARRM = ',SCENARIO_7.LTMARRM);        
+ PUT SKIP LIST('SCENARIO_7.ANCSTRM = ',SCENARIO_7.ANCSTRM);        
+ PUT SKIP LIST('SCENARIO_7.MTCATRM = ',SCENARIO_7.MTCATRM);        
+ PUT SKIP LIST('SCENARIO_7.MTACTRM = ',SCENARIO_7.MTACTRM);        
+ PUT SKIP LIST('SCENARIO_7.NUPDSRM = ',SCENARIO_7.NUPDSRM);        
+ END;        
+     TRACE = 'GA20167 ===> ' !! 'END FA_1';        
+         
+     CALL PT;        
+ $END FA_1;        
+ /*-----------------------------------------------*/        
+ FB: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FB';        
+         
+     CALL PT;        
+ /********************************************        
+ * VALIDATION CONTEXTUELLE                   *        
+ ********************************************/        
+ ERREUR = OFF;        
+ CDRTPGM_W = '';        
+         
+ CALL FE;        
+ IF SCENARI.TBSCENA(9) THEN RETURN;        
+         
+         
+ CALL FB_1;        
+         
+ IF ERREUR        
+   THEN DO;        
+          JWB001.CDRTPGM = CDRTPGM_W;        
+          RETURN;        
+        END;        
+         
+ SCENARI.TBSCENA(8) = ON; ##########################################        
+         
+ SCENARI.TBSCENA(9) = ON;        
+         
+         
+     TRACE = 'GA20167 ===> ' !! 'END FB';        
+         
+     CALL PT;        
+ $END FB;        
+ /*-----------------------------------------------*/        
+ FB_1: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FB_1';        
+         
+     CALL PT;        
+ /************************        
+ * VALIDATION SYNTAXIQUE *        
+ ************************/        
+ DCL AGE_REM           FIXED(3);        
+         
+ IF SCENARIO_7.MTCATRM = 0 THEN        
+   DO;        
+     CDRTPGM_W = 'A20167' !! '002';        
+     ERREUR = ON;        
+     RETURN;        
+   END;        
+         
+ AGE_REM = #DATE_AAAA - SCENARIO_7.ANCSTRM;        
+         
+ IF JWB001.CDTRACE >= 3 THEN        
+   PUT SKIP LIST('AGE_REM = ',AGE_REM);        
+         
+ IF AGE_REM > 5        
+  & SCENARIO_7.MTACTRM = 0 THEN        
+   DO;        
+     CDRTPGM_W = 'A20167' !! '005';        
+     ERREUR = ON;        
+     RETURN;        
+   END;        
+         
+     TRACE = 'GA20167 ===> ' !! 'END FB_1';        
+         
+     CALL PT;        
+ $END FB_1;        
+ /*-----------------------------------------------*/        
+ FC: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FC';        
+         
+     CALL PT;        
+ /********************************************        
+ * UPDATE DES DB                             *        
+ ********************************************/        
+         
+     TRACE = 'GA20167 ===> ' !! 'END FC';        
+         
+     CALL PT;        
+ $END FC;        
+ /*-------------------------------------------------------------------*/        
+ FD: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FD';        
+         
+     CALL PT;        
+ /********************************************        
+ * SWITCHING VERS UN AUTRE SCENARIO          *        
+ ********************************************/        
+ IF SCENARI.TBSCENA(3)        
+         
+   THEN DO;        
+       /* SPA.CDOPTRN = 'A2DVI';*/        
+          RETURN;        
+        END;        
+         
+ SPAVAR.R_ETAPE = '';        
+         
+ SELECT(MID7.CLE);        
+   WHEN('A') DO;        
+       SCENARI.NOPGACT = '1';        
+       SPAVAR.R_ETAPE  = 'A20161'; ########################################        
+     END;        
+   WHEN('B') DO;        
+       SCENARI.NOPGACT = '1';        
+       SPAVAR.R_ETAPE  = 'A20162'; ########################################        
+     END;        
+   WHEN('C') DO;        
+       SCENARI.NOPGACT = '1';        
+       SPAVAR.R_ETAPE  = 'A20163'; ########################################        
+     END;        
+   WHEN('D') DO;        
+       SCENARI.NOPGACT = '1';        
+       SPAVAR.R_ETAPE  = 'A20164';  #######################################        
+     END;        
+   WHEN('E') DO;        
+       SCENARI.NOPGACT = '4';        
+       SPAVAR.R_ETAPE  = 'A20165';  #######################################        
+     END;        
+   WHEN('F') DO;        
+       SCENARI.NOPGACT = '5';        
+       SPAVAR.R_ETAPE  = 'A20166';  ###########################################        
+     END;        
+   WHEN('G') DO;        
+     IF INFOS_USER.CDAFGRP = ''        
+      & SCENARIO_5.CDJEUNE = 1 THEN        
+       DO;        
+         SCENARI.NOPGACT = '8';        
+         SPAVAR.R_ETAPE  = 'A20167';  ######################################        
+       END;        
+     ELSE; ##################################################################        
+     END;        
+   OTHER SCENARI.NOPGACT = '6'; ###########################        
+ END;        
+ JWB001.CDRTPGM  = 'DUMMY';        
+         
+     TRACE = 'GA20167 ===> ' !! 'END FD';        
+         
+     CALL PT;        
+ $END FD;        
+ /*-----------------------------------------------*/        
+         
+ FE: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FE';        
+         
+     CALL PT;        
+ /********************************************        
+ * TEST SI SCROLLING EST DEMANDE             *        
+ ********************************************/        
+ SCENARI.TBSCENA(9) = OFF;        
+         
+ SCENARI.TBSCENA(8) = OFF;        
+         
+         
+ SELECT(MID7.CLE);        
+   WHEN('A','B','C','D','E','F','G')        
+   DO;        
+     SCENARI.TBSCENA(9) = ON; #####################################        
+         
+     SCENARI.TBSCENA(8) = ON;        
+         
+   END;        
+   OTHER;        
+ END;        
+         
+     TRACE = 'GA20167 ===> ' !! 'END FE';        
+         
+     CALL PT;        
+ $END FE;        
+ /*-----------------------------------------------*/        
+         
+ FF: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FF';        
+         
+     CALL PT;        
+ /********************************************        
+ * TEST SI SCROLLING EST DEMANDE             *        
+ ********************************************/        
+     TRACE = 'GA20167 ===> ' !! 'END FF';        
+         
+     CALL PT;        
+ $END FF;        
+ /*-----------------------------------------------*/        
+         
+ FG: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FG';        
+         
+     CALL PT;        
+ /******************************************************        
+ * TEST DES TOUCHES EQUIVALENTES A PF1 EN CONFIRMATION *        
+ ******************************************************/        
+     TRACE = 'GA20167 ===> ' !! 'END FG';        
+         
+     CALL PT;        
+ $END FG;        
+ /*-----------------------------------------------*/        
+ FH: PROC REORDER ;        
+     TRACE = 'GA20167 ===> ' !! 'FH';        
+         
+     CALL PT;        
+ /******************************************************        
+ * TEST DES TOUCHES EQUIVALENTES A PF1 EN CONFIRMATION *        
+ ******************************************************/        
+         
+ TRACE = 'GA20167 ===> ' !! 'END FH';        
+         
+ CALL PT;        
+         
+ $END FH;        
+ /*-----------------------------------------------*/        
+         
+ /* --------------- */        
+ /*     INCLUDE     */        
+ /* --------------- */        
+ /*------------------------------------------------------------------*/        
+ F_MTFTC: PROC(MT_W,MS_W,DC_W,LN_W) RETURNS(CHAR(10));        
+         TRACE = 'GA20167 ===> ' !! 'F_MTFTC';        
+         
+         CALL PT;        
+ /*******************************        
+ * FORMATAGE DU MONTANT         *        
+ * RETURN : MONTANT FORMATE     *        
+ *******************************/        
+ DCL MT_W              FIXED(15);        
+ DCL MS_W              CHAR(11);        
+ DCL DC_W              PIC '9';        
+ DCL LN_W              PIC '99';        
+         
+ KGI012J_RI = '';        
+ KGI012J_RO = '';        
+ KGI012J_RI.CDFMTMT     = 'MTIN_F15';        
+ KGI012J_RI.CDDVTRN     = IEU001.CDDVTRN;        
+ KGI012J_RI.CDLGTRN     = SPA.CDLGTRN;        
+ KGI012J_RI.MTIN_F15 = MT_W;        
+ KGI012J_RI.CDMSKOUT = MS_W;        
+ KGI012J_RI.NBLENOUT = LN_W;        
+ KGI012J_RI.NBDECIN  = DC_W;        
+ JWB001.LTNMMTH = 'FORMATAGE';        
+ JWB001.LSTCALL = 'FIX_TO_CH.1';        
+         
+ CALL KGI012(IEU001,JWB001,KGI012J);        
+         
+ SELECT(JWB001.CDRTPGM);        
+   WHEN('') RETURN(SUBSTR(KGI012J_RO.LTMNT_C26, 1,LN_W));        
+   OTHER    RETURN('');        
+ END;        
+         
+ $END F_MTFTC;        
+         
+ /*-----------------------------------------------------------------*/        
+ F_MTCTF: PROC(MT_W,DC_W) RETURNS(FIXED(15));        
+             TRACE = 'GA20167 ===> ' !! 'F_MTCTF';        
+         
+             CALL PT;        
+ /***********************************        
+ * CONVERSION MONTANT CHAR EN FIXED *        
+ * RETURN : MONTANT EN FIXED        *        
+ ***********************************/        
+ DCL MT_W CHAR(*); ################################        
+ DCL DC_W PIC '9';   ##################################        
+         
+ KGI012J = '';        
+ KGI012J_RI = '';        
+ KGI012J_RO = '';        
+ KGI012J_RI.CDFMTMT  = 'LTIN_C25';        
+ KGI012J_RI.CDDVTRN  = IEU001.CDDVTRN;        
+ KGI012J_RI.CDLGTRN  = SPA.CDLGTRN;        
+ KGI012J_RI.LTIN_C25 = MT_W;        
+ KGI012J_RI.NBDECIN  = DC_W;        
+ JWB001.LTNMMTH = 'VALID_MONTANT';        
+ JWB001.LSTCALL = 'FMTCF.1';        
+ KGI012J_RI.TBEGCOD(1) = ON;###########################        
+ KGI012J_RI.TBEGCOD(2) = ON;#############################################        
+ KGI012J_RI.TBEGCOD(3) = ON;#############################################        
+ KGI012J_RI.TBEGCOD(5) = ON;#############################################        
+ KGI012J_RI.TBEGCOD(7) = ON;#############################################        
+         
+ CALL KGI012(IEU001,JWB001,KGI012J);        
+         
+ SELECT(JWB001.CDRTPGM);        
+   WHEN('') RETURN(KGI012J_RO.MTMNT_F15);        
+   OTHER DO;        
+         IF JWB001.CDTRACE >= 3 THEN        
+         PUT SKIP EDIT('ERREUR INTERNE CONVERSION MONTANT')(A);        
+         ERREUR = ON;        
+   END;        
+ END;        
+         
+ RETURN(0);        
+         
+ $END F_MTCTF;        
+ /* ------------------------------------------------------------------*/        
+ $$END GA20167;        

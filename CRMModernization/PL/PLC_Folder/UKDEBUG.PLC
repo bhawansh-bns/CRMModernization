@@ -1,0 +1,120 @@
+BEGIN_PLC(UKDEBUG)
+ /********************************************************************/        
+ /* UKDEBUG Debugging macro declarations.                            */        
+ /*                                                                  */        
+ /* TESTNO is a preprocessor variable which must be set to 1 to      */        
+ /* compile any debug statements. Set TESTNO = 0 for production.     */        
+ /*                                                                  */        
+ /* DBGLIST is an external variable which set by the calling         */        
+ /* module. It is used to activate debug statements for any          */        
+ /* required program. It should contain a list of program numbers    */        
+ /* for which you require debugging code.                            */        
+ /* E.g.  8970*8971*                                                 */        
+ /* The following will include all debug code:                       */        
+ /* E.g.  *ALL*                                                      */        
+ /*                                                                  */        
+ /*                                                                  */        
+ /* Macro Parameters:                                                */        
+ /*                                                                  */        
+ /* PROG()         Program number (4 digits). Mandatory.             */        
+ /* IF()           Conditional debug clause.                         */        
+ /*                                                                  */        
+ /* LIST()         PUT SKIP LIST elements                            */        
+ /* EDIT()         PUT SKIP EDIT()() elements                        */        
+ /* ATTR()         Formatting list for PUT SKIP EDIT                 */        
+ /* DATA()         PUT SKIP DATA elements. Note: No Based Variables  */        
+ /*                                                                  */        
+ /* Examples of use:(Semicolons omitted to avoid compiler warnings)  */        
+ /*                                                                  */        
+ /* #DEBUG PROG(8970) LIST('Entering OB08970.')                      */        
+ /* #DEBUG PROG(8970) LIST('Parameter = ',PARM_VAR)                  */        
+ /* #DEBUG PROG(8970) DATA(PARM_VAR)                                 */        
+ /*                                                                  */        
+ /* #DEBUG PROG(8970) EDIT('Parameter = ',PARM_VAR) ATTR(a,a(10))    */        
+ /*   produces the following code:                                   */        
+ /*                                                                  */        
+ /*   IF (INDEX(DEBUGLIST,'ALL') | INDEX(DEBUGLIST,'8970') THEN      */        
+ /*      DO                                                          */        
+ /*      PUT SKIP EDIT('Parameter = ',PARM_VAR)(a,a(10))             */        
+ /*      END                                                         */        
+ /*                                                                  */        
+ /* #DEBUG PROG(8970) IF(VAL > 0) LIST('VAL = '||VAL)                */        
+ /*   produces the following code:                                   */        
+ /*                                                                  */        
+ /*   IF (INDEX(DEBUGLIST,'ALL') | INDEX(DEBUGLIST,'8970')           */        
+ /*      & (VAL > 0) THEN                                            */        
+ /*      DO                                                          */        
+ /*      PUT SKIP LIST('VAL = '||VAL)                                */        
+ /*      END                                                         */        
+ /*                                                                  */        
+ /********************************************************************/        
+ /*                                                                  */        
+ /* AC  28/6/96  Created.                                            */        
+ /* AC  3/7/96   DEBUGLIST changed to DBGLIST. <=7 characters long   */        
+ /*                                                                  */        
+ /*                                                                  */        
+ /********************************************************************/        
+         
+  %DCL TESTNO FIXED;        
+  %    TESTNO = 0;  /* TESTNO = 0 for no debug code compiled */        
+         
+  %IF TESTNO=0 %THEN %GOTO SKIPDCL1;        
+    DCL  DBGLIST  CHAR(80) EXTERNAL;        
+  %SKIPDCL1:;        
+         
+    %DCL #DEBUG ENTRY;        
+    %#DEBUG: PROC (PROG,LIST,DATA,EDIT,ATTR,IF)        
+    STATEMENT RETURNS(CHAR);        
+         
+      DCL PROG CHAR; /* Program number eg. 8491 for OB08491 */        
+      DCL LIST CHAR; /* PUT LIST statement. */        
+      DCL DATA CHAR; /* PUT DATA statement. */        
+      DCL EDIT CHAR; /* PUT EDIT(vars)(attributes) statement */        
+      DCL ATTR CHAR; /* Attributes for PUT EDIT statement */        
+      DCL IF   CHAR; /* Condition for debug statement execution */        
+         
+      IF(TESTNO=0) THEN        
+      RETURN('/* No debug macro selected by TESTNO in UKDEBUG */');        
+         
+      DCL CONDITION CHAR; /* To build IF clause */        
+         
+      /* Condition : Does PROG appear in DebugList string OR        
+                     does 'ALL' appear, otherwise no output */        
+      CONDITION = '(INDEX(DBGLIST,''ALL'')>0 | INDEX(DBGLIST,'''        
+                  ||PROG||''')>0)';        
+         
+      /* Add the user's IF clause to the condition */        
+      IF(PARMSET(IF)) THEN        
+         CONDITION = CONDITION || ' & (/* If clause */ '        
+                               || IF || ' )';        
+      IF (PARMSET(PROG))        
+         THEN DO;        
+         NOTE('Debug Macro Error : PROG not set');        
+         RETURN('/* Debug Macro Error : PROG not set */');        
+         END;        
+         
+      IF(PARMSET(EDIT) & PARMSET(ATTR))        
+         THEN DO;        
+         NOTE('Debug Macro Error : ATTR not set');        
+         RETURN('/* Debug Macro Error : ATTR not set */');        
+         END;        
+         
+      IF PARMSET(LIST) THEN        
+         RETURN('/* UK Debug Macro LIST option */ IF '        
+                ||CONDITION||' THEN DO; PUT SKIP LIST('        
+                ||LIST||'); END; /* End of Debug */ ');        
+         
+      IF PARMSET(DATA) THEN        
+         RETURN('/* UK Debug Macro DATA option */ IF '        
+                ||CONDITION||' THEN DO; PUT SKIP DATA('        
+                ||DATA||'); END; /* End of Debug */ ');        
+         
+      IF PARMSET(EDIT) THEN        
+         RETURN('/* UK Debug Macro EDIT option */ IF '        
+                ||CONDITION||' THEN DO; PUT SKIP EDIT('        
+                ||EDIT||')('        
+                ||ATTR||'); END; /* End of Debug */ ');        
+         
+    %$END #DEBUG;        
+    /* End of Macro */        
+END_PLC(UKDEBUG)

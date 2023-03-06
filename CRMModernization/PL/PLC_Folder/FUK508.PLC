@@ -1,0 +1,12 @@
+BEGIN_PLC(FUK508)
+ /*-------------------------------------------------------------------*/        
+ /* Unit Integrity Reinvestment Date file                             */        
+ /* This is the layout of the timestamp used to drive UK08970         */        
+ /* reinvestment.                                                     */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+ Dcl 1 WUK508_REC,        
+     3 Rinv_Date   Pic '(8)9' ,     /* Reinvestment Date              */        
+     3 Xfiller     Char (72)  ;        
+         
+END_PLC(FUK508)

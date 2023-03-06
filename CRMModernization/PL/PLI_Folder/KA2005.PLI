@@ -1,0 +1,2105 @@
+                                                                                
+ /********************************************************************/         
+ /*                                                                  */         
+ /* KA2005                                                           */         
+ /*                                                                  */         
+ /*   OBJET : SERVICE ACCES DB DA215 : EUROTAX NEW                   */         
+ /*                         DB DA216 : EUROTAX NEW                   */         
+ /*                         DB DC105 : EUROTAX OLD                   */         
+ /*   =============================================                  */         
+ /*                                                                  */         
+ /********************************************************************/         
+ /*                                                                  */         
+ /* AUTHOR      = TDMDAM                                             */         
+ /* TEAM LEADER = TDMWYN                                             */         
+ /*                                                                  */         
+ /********************************************************************/         
+ /* INFORMATIONS :                                                   */         
+ /* ------------                                                     */         
+ /*                                                                  */         
+ /* LISTE DES DATA BASES DLI UTILISEES :                             */         
+ /*    - POINTEUR SUR  DEU02 ==> DB DICTIONNAIRE                     */         
+ /*    - POINTEUR SUR  DA215 ==> DB EUROTAX NEW                      */         
+ /*    - POINTEUR SUR  DA216 ==> DB EUROTAX NEW                      */         
+ /*    - POINTEUR SUR  DC105 ==> DB EUROTAX OLD                      */         
+ /********************************************************************/         
+ /*                                                                  */         
+ /* ATTENTION : A RECOPIER DANS L'INTERFACE KA2005J                  */         
+ /* =========                                                        */         
+ /*                                                                  */         
+ /*------------------------------------------------------------------*/         
+ /* DERNIER MESSAGE  D'ERREUR (JWB001.CDRTPGM = $LTNMPRJ !! '016')   */         
+ /*------------------------------------------------------------------*/         
+ /********************************************************************/         
+ /*  NOTES :                                                         */         
+ /*  -----                                                           */         
+ /*                                                                  */         
+ /*                                                                  */         
+ /********************************************************************/         
+ /*  -------------------------------                                 */         
+ /*  -  M O D I F I C A T I O N S  -                                 */         
+ /*------------------------------------------------------------------*/         
+ /* TDMDAM ! 29/11/05 ! #000 : CREATION DU PROGRAMME                 */         
+ /* TDMLEN ! 10/01/08 ! #001 : GESTION VEHICULES VERTS               */         
+ /* TDMLEN ! 15/01/08 ! #002 : GESTION 0-115 ET 115-120 POUR STAT.   */         
+ /* TDMLEN ! 21/04/10 ! #003 : GESTION SEGMENTATION TARIF V3         */         
+ /* TDMLEN ! 10/05/10 ! #004 : GESTION VEHICULES ECO 2010            */         
+ /********************************************************************/         
+                                                                                
+ /* (STRINGRANGE,SUBSCRIPTRANGE): */                                            
+ KA2005 : PROC OPTIONS(MAIN)(IEU001, JWB001, KA2005J) REORDER;                                
+                                                                                
+ /********************************************************************/         
+ /*  DECLARATION DES PARAMETRES PASSES AU SERVICE                    */         
+ /********************************************************************/         
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*         INTERFACE DE COMMUNICATION AVEC BEU001                    */        
+ /*         ======================================                    */        
+ /*                                                                   */        
+ /* USAGE :                                                           */        
+ /* CALL BEU001(IEU001,COUNT,FUNCT,DATAPCB,IOAREA,                    */        
+ /*             SSA1, SSA2, SSA3, SSA4, SSA5, SSA6, SSA7);            */        
+ /*********************************************************************/        
+ /* MODE CONVERSION :                                                 */        
+ /*                                                                   */        
+ /* CALL BEU001(IEU001,THREE,'GCV',DATAPCB,IOAREA);                   */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* PROCEDURE DE COMPILATION : TDMFOG.LIB.CNTL(FETCH)                 */        
+ /* MODULE A TRANSFERER PAR L'EQUIPE SYSTEME : FEUT.T.LOAD(BEU001)    */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /* DESCRIPTION DES MESSAGES D'ERREURS : CDRTPGM                      */        
+ /* -----------------------------------                               */        
+ /* DB : PROBLEME BASE DE DONNEES : VOIR LE PCB DATA                  */        
+ /* 01 : COEFFICIENT DE CONVERSION EURO --> FB ERRONE                 */        
+ /* 02 : PARAM. CODE DEVISE DIFFERENT DE 'F' ET 'E'                   */        
+ /* 03 : PARAM. CODE PAGE DIFFERENT DE '500' ET '274'                 */        
+ /* 04 : PARAM. CODE USAGE APPLICATION DIFF. DE : 3 = 3270            */        
+ /*                                        P = HOST PRINTER           */        
+ /*                                        L = LOCAL PRINTER          */        
+ /*                                        Q = MQSERIES               */        
+ /* 05 : CODE DEVISE MAL INSTALLE DANS LE DICTIONNAIRE                */        
+ /* 06 : CODE PAGE MAL INSTALLE DANS LE DICTIONNAIRE                  */        
+ /* 07 : CODE VERSION DE LA DB MAL INSTALLE DANS LE DICTIONNAIRE      */        
+ /* 08 : DESCRIPTION FORME EXTERNE DU SEGMENT ABSENTE DU DICTIONNAIRE */        
+ /* 09 : ERREUR BASE DE DONNEE SUR LA DB DICTIONNAIE                  */        
+ /* 10 : LONGUEUR D'ATTRIBUT MODIFIEE POUR FORMAT TYPE : BF/BE/DE     */        
+ /* 11 : LE FORMAT DE MONTANT DEVISE OU DATE  <> DZ/DF/BF             */        
+ /* 12 : EN ISRT, REPL, LA DATE DOIT OBLIG. ETRE EXPRIMEE EN SAAMMJJ  */        
+ /* 13 : FORMAT DE DONNEE NON RECONNU                                 */        
+ /* 14 : LONGUEUR EN BYTE INADEQUATE POUR UN TYPE BF                  */        
+ /* 15 : LONGUEUR TYPE BF <> 2/4                                      */        
+ /* 16 : LONGUEUR TYPE DE/BE <> 4/8                                   */        
+ /* 17 : EN ISRT, REPL, LA D. COMPLEM. DOIT ETRE EXPRIMEE EN SAAMMJJ  */        
+ /* 18 : MONTANT AU FORMAT ZONED DECIMAL NON NUMERIQUE EN LECTURE     */        
+ /* 19 : MONTANT AU FORMAT PACKED DECIMAL NON NUMERIQUE EN LECTURE    */        
+ /* 20 : MONTANT AU FORMAT ZONED DECIMAL NON NUMERIQUE EN M A J       */        
+ /* 21 : MONTANT AU FORMAT PACKED DECIMAL NON NUMERIQUE EN M A J      */        
+ /* 22 : COUNT < 2 OU > 10                                            */        
+ /* 23 : FONCTION NON IMPLEMENTEE CAR NON SPECIFIQUE A DL1            */        
+ /* 24 : FONCTION INCONNUE                                            */        
+ /* 25 : NOMBRE D'ATTRIBUTS DU SEGMENT DEPASSANT LE MAXIMUM AUTORISE  */        
+ /* 26 : LONGUEUR DE RUBRIQUE MAL DEFINIE AU DICTIONNAIRE             */        
+ /* 27 : COUNT PARAMETER > 7                                          */        
+ /* 28 : PROTOCOLE EURO POSTPOSE JUSQU'A LA CONVERSION DE LA CAISSE   */        
+ /* 29 : PARAMETRE SOCIETE NON RECONNU                                */        
+ /* 30 : PROTOCOLE EURO INTERDIT CAR DB NON CONVERTIE A L'EURO        */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ DCL 1     IEU001,        
+ /*------------------------- I N P U T -------------------------------*/        
+      2    PTR,                        #################################################################        
+       3   METAPCB      PTR,           ####################################################        
+       3   ALTPCB       PTR,           ####################################################        
+      2    INPUT,                      ###############################################################        
+       3   LTSCTRN      CHAR (4),      ###############################################        
+       3   CDDVTRN      CHAR (3),      ###############################################        
+       3   CDPGTRN      CHAR (3),      ###############################################        
+       3   CDTYUSR      CHAR (1),      ###############################################        
+       3   CDPGMID      CHAR (8),      ###############################################        
+       3   CDDFSEG      CHAR (8),      ###############################################        
+       3   LASTCALL     CHAR (30),     ##############################################        
+       3   TBEGCOD(32)  BIT(1),        #################################################        
+                                       /*--!  BIT 1: MAJ EURO         */        
+                                       /*--!    AUTORISEE AVANT PIVOT */        
+                                       /*--!  BIT 2: NE PAS CONVERTIR */        
+                                       /*--!  BIT 3: MAJ BEF          */        
+                                       /*--!    AUTORISEE APRES PIVOT */        
+       3   TBDISPO(128),        
+        4  DBDNAME      CHAR(8),       ################################################        
+        4  DBSTATE      CHAR(1),       ################################################        
+                                       /*--! 0 : UPDATABLE            */        
+                                       /*--! 1 : READ ONLY (NU)       */        
+                                       /*--! 2 : NO ACCESS (NA)       */        
+       3   FILLER       CHAR(200),     ##############################################        
+         
+ /*------------------------ O U T P U T ------------------------------*/        
+      2    OUTPUT,                     ##############################################################        
+       3   CDRTPGM      CHAR (6),      ###############################################        
+       3   LTRTPGM      CHAR (60),     ##############################################        
+       3   DBPTR        PTR,           ####################################################        
+       3   LASTDLI      CHAR (10);     ##############################################        
+         
+ /*------------------- REDEFINITIONS DE IEU001 -----------------------*/        
+ DCL 1     IEU001_R     BASED(ADDR(IEU001.INPUT.FILLER)),        
+       2   CDEVTRN      CHAR(001),     ##############################################        
+                                       /*--!  P : VALEUR PAR DEFAUT   */        
+       2   CDDEVDB      CHAR(003),     ##############################################        
+                                       /*--!  BEF / EUR               */        
+       2   TBDFDBD_PTR  PTR,        
+       2   TBDFATT_PTR  PTR,        
+       2   TBDFSEG_PTR  PTR,        
+       2   SYSTIME      BIN FIXED(31),        
+       2   DATEORD      PIC '(7)9',        
+       2   NBMXCOP_C    FIXED BIN(15),        
+       2   FILLER       CHAR(170);     ##############################################        
+ /*********************************************************************/        
+ /*******************************************************************/        
+ /* INTERFACE GENERAL POUR TOUS LES SERVICES                        */        
+ /*******************************************************************/        
+         
+ DCL 1  JWB001,        
+      2   CDEVCLI    CHAR(01),      ########################################        
+      2   RETOUR     BIT (1),       #########################################        
+      2   LEVEL      PIC '9',       #########################################        
+      2   ATTRIB     CHAR(02),      ########################################        
+      2   LTNMSER    CHAR(08),      ########################################        
+      2   ENTREE,        
+       3  DBSCRAT,        
+        4 METAPCB    PTR,           ##############################################        
+        4 DBSCRPCB   PTR,           ##############################################        
+        4 LTSGSCR    CHAR(08),      #########################################        
+       3  DBTABLE,        
+        4 METAPCB    PTR,           ##############################################        
+        4 DBTABPCB   PTR,           ##############################################        
+        4 LTSGTAB    CHAR(08),      #########################################        
+        4 CDDFTAB    CHAR(08),      #########################################        
+       3  DBCOMDE,        
+        4 METAPCB    PTR,           ##############################################        
+        4 DBCDEPCB   PTR,           ##############################################        
+        4 LTSGCDE    CHAR(08),      #########################################        
+        4 CDDFCDE    CHAR(08),      #########################################        
+       3  CDTRACE    PIC '9',       ##########################################        
+       3  TBTRACE_I  FIXED (5),     ########################################        
+       3  BOTBDB2    BIT (1),       ##########################################        
+       3  LTNMBUS    CHAR(20),      #########################################        
+       3  LTNMOBJ    CHAR(20),      #########################################        
+       3  LTNMMTH    CHAR(20),      #########################################        
+      2   SORTIE,        
+       3  CDRTPGM    CHAR(09),      #########################################        
+       3  CDRTDB2    BIN FIXED(31), ####################################        
+       3  SQLERRM    CHAR (70) VAR, ####################################        
+       3  CDROLLB    BIT(1),        ###########################################        
+       3  LSTCALL    CHAR(12),      #########################################        
+       3  LSTSERV    CHAR(12),      #########################################        
+       3  TBTRACE (100),            ###############################################        
+        4 FLAG_TRACE CHAR(01),        
+        4 MSGE_TRACE CHAR(40),        
+      2   GXXXXXJ_P  PTR;           ##############################################        
+         
+ /* EXPLICATIONS:                                                    */        
+ /*                                                                  */        
+ /* APPEL DU BUS 'LTNMBUS' POUR EXECUTION DE LA FONCTION 'LTNMFCT'   */        
+ /* DE L'OBJET 'LTNMOBJ'                                             */        
+ /*                                                                  */        
+ /* LES TRACES SONT AFFICHEES EN FCT DE CDTRACE (0->9)               */        
+ /* ->  0 PAS DE TRACE, 9 TRACE COMPLETES                            */        
+         
+         
+ /*********************************************************************/        
+ /* INTERFACE : KA2005J                                               */        
+ /*                                                                   */        
+ /*     SERVICE D'ACCES DB EUROTAX                                    */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ DCL 1 KA2005J   ###############,        
+      2 PTRPCB       CHAR (256),    ################################################        
+      2 INPUT        CHAR (100),    ################################################        
+      2 OUTPUT       CHAR (1000);   ###############################################        
+         
+ /*********************************************************************/        
+ /*             REDEFINITION DES POINTEURS                            */        
+ /*  REMARQUES : PTR = CHAR (04)                                      */        
+ /*********************************************************************/        
+         
+ DCL 1 KA2005J_P      BASED(ADDR(KA2005J.PTRPCB)),        
+      2 DEU02PCB      PTR,               ######################################################        
+      2 DC105PCB      PTR,               ######################################################        
+      2 DA215PCB      PTR,               ######################################################        
+      2 DA215$PCB     PTR,               ######################################################        
+      2 DA216PCB      PTR;               ######################################################        
+         
+ /*********************************************************************/        
+ /*             REDEFINITIONS PAR TYPE                                */        
+ /*********************************************************************/        
+         
+ /*********************************************************************/        
+ /*             ACCES INFO EUROTAX                                    */        
+ /*********************************************************************/        
+ /*********************************************************************/        
+ /* METHODE : CONSULT_VEHIC                                           */        
+ /*********************************************************************/        
+         
+ /* -------------------- INPUT -------------------------------------- */        
+ DCL 1 KA2005J_I01                    BASED(ADDR(KA2005J.INPUT)),        
+       2 LTMRQVH  CHAR(20),         #####################################################        
+       2 CDTYPVH  DEC FIXED(5),     #################################################        
+       2 NOIDTYP  CHAR(07),         #####################################################        
+       2 CDCATVH  CHAR(03),         #####################################################        
+       2 FILLER   CHAR(67);         #####################################################        
+         
+ /* -------------------- OUTPUT ------------------------------------- */        
+ DCL 1 KA2005J_O01                    BASED(ADDR(KA2005J.OUTPUT)),        
+       2 LTMRQVH  CHAR(40),         #####################################################        
+       2 LTMODVH  CHAR(40),         #####################################################        
+       2 CDTYPVS  CHAR(01),         #####################################################        
+       2 CDTYPDS  CHAR(01),         #####################################################        
+       2 CDTYPOP  CHAR(01),         #####################################################        
+       2 CDTYPDM  CHAR(01),         #####################################################        
+       2 CDSPORT  CHAR(01),         #####################################################        
+       2 CDCABRI  CHAR(01),         #####################################################        
+       2 CDECOVH  CHAR(01),         #####################################################        
+       2 CDTYOP3  CHAR(01),         #####################################################        
+       2 CDTYDM3  CHAR(01),         #####################################################        
+       2 CDECOV2  CHAR(01),         #####################################################        
+       2 FILLER   CHAR(910);        ####################################################        
+         
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* LISTE DES METHODES UTILISEES :                                    */        
+ /*                                                                   */        
+ /*            CONSULT_VEHIC (CONSULTATION)                           */        
+ /*                      => INPUT  : _I01.LTMRQVH                     */        
+ /*                                  _I01.CDTYPVH OU                  */        
+ /*                                  _I01.NOIDTYP                     */        
+ /*                                  _I01.CDCATVH                     */        
+ /*                         OUTPUT : _O01                             */        
+ /*                         PCB UTILISES : DA215PCB                   */        
+ /*                                        DA216PCB                   */        
+ /*                                        DC105PCB                   */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /* MESSAGE D'ERREUR (JWB001.CDRTPGM = $LTNMPRJ !! 'XX')              */        
+ /*-------------------------------------------------------------------*/        
+ /*                                                                   */        
+ /*    001 : METHODE NON REPERTORIEE                                  */        
+ /*    002 : LONGUEUR REDEFINITON KA2005J_I01 TROP GRANDE             */        
+ /*    003 : LONGUEUR REDEFINITON KA2005J_O01 TROP GRANDE             */        
+ /*    004 : ZONE(S) OBLIGATOIRE(S) NON PRCISEE(S)                   */        
+ /*    005 : MARQUE DE VOITURE INCONNUE DANS EUROTAX OLD              */        
+ /*    006 : PROBLEME D'ACCES AUX INFORMATIONS EUROTAX NEW            */        
+ /*********************************************************************/        
+         
+                                                                                
+ /********************************************************************/         
+ /*  BUILTINS & DECLARATIONS STANDARDS                               */         
+ /********************************************************************/         
+         
+ DCL ABS       BUILTIN;        
+ DCL ADDR      BUILTIN;        
+ DCL CEIL      BUILTIN;        
+ DCL DATE      BUILTIN;        
+ DCL DATETIME  BUILTIN;        
+ DCL DIM       BUILTIN;        
+ DCL FLOOR     BUILTIN;        
+ DCL INDEX     BUILTIN;        
+ DCL LENGTH    BUILTIN;        
+ DCL LOW       BUILTIN;        
+ DCL MAX       BUILTIN;        
+ DCL MIN       BUILTIN;        
+ DCL MOD       BUILTIN;        
+ DCL NULL      BUILTIN;        
+ DCL ONCODE    BUILTIN;        
+ DCL ONLOC     BUILTIN;        
+ DCL REPEAT    BUILTIN;        
+ DCL STG       BUILTIN;        
+ DCL SUBSTR    BUILTIN;        
+ DCL TIME      BUILTIN;        
+ DCL TRANSLATE BUILTIN;        
+ DCL UNSPEC    BUILTIN;        
+ DCL VERIFY    BUILTIN;        
+ /* TDMOHL 03/05/2005 AJOUT DE ONSOURCE, PLIRETC ET PLIRETV */        
+ DCL ONSOURCE  BUILTIN;        
+ DCL PLIRETC   BUILTIN;        
+ DCL PLIRETV   BUILTIN;        
+         
+ /* TDMSLE : 041103 */        
+ DCL CENTER    BUILTIN;        
+ DCL LEFT      BUILTIN;        
+ DCL RIGHT     BUILTIN;        
+ DCL TRIM      BUILTIN;        
+ DCL UPPERCASE BUILTIN;        
+ DCL PTRADD    BUILTIN;        
+ /* TDMSLE FIN : 041103 */        
+         
+ /* TDMSLE : 041103 -                                         */        
+ /*  MISE EN COMMENTAIRE CAR IL FAUT UTILISER 'TRIM' DE VAPLI */        
+ /* DCL TRIM      EXT ENTRY RETURNS(CHAR(133) VAR BYVALUE);   */        
+ /* DCL LTRIM     EXT ENTRY RETURNS(CHAR(133) VAR BYVALUE);   */        
+ /* DCL RTRIM     EXT ENTRY RETURNS(CHAR(133) VAR BYVALUE);   */        
+ /* TDMSLE FIN : 041103                                       */        
+         
+    /* BUILTINS STANDARDS                          */                           
+         
+ /*---------------------------------------------------------- $DATTIM */        
+ /*      Date & Heure ordinateur sous toutes les formes     */        
+ /*     ------------------------------------------------    */        
+ /*     ->     call $Dates_Times pour rafraichir      <-    */        
+ /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */        
+ DCL $DATE_TIME          CHAR(17) INIT(''); #################################        
+ DCL $DATE_MSK           CHAR(17);        
+ DCL $DATE_HEURE         CHAR(18) INIT(''); #################################        
+ DCL 1 $DATE_TIME_W BASED(ADDR($DATE_TIME)),        
+      2 S    CHAR(1),        
+      2 A    CHAR(1),        
+      2 AA   CHAR(2),        
+      2 MM   CHAR(2),        
+      2 JJ   CHAR(2),        
+      2 HH   CHAR(2),        
+      2 MI   CHAR(2),        
+      2 SS   CHAR(2),        
+      2 CCC  CHAR(3);        
+         
+ DCL $DATE_AAAAMMJJ      CHAR(08);    ####################################        
+ DCL #DATE_AAAAMMJJ      PIC'(08)9'        
+      BASED(ADDR($DATE_AAAAMMJJ));        
+ DCL $DATE_AAMMJJ        CHAR(06);    ####################################        
+ DCL #DATE_AAMMJJ        PIC'(06)9'        
+      BASED(ADDR($DATE_AAMMJJ));        
+ DCL $DATE_SAAMMJJ       CHAR(07);    ####################################        
+ DCL #DATE_SAAMMJJ       PIC'(07)9'        
+      BASED(ADDR($DATE_SAAMMJJ));        
+ DCL $DATE_JJMMAAAA      CHAR(08);    ####################################        
+ DCL #DATE_JJMMAAAA      PIC'(08)9'        
+      BASED(ADDR($DATE_JJMMAAAA));        
+ DCL $DATE_JJMMAA        CHAR(06);    ####################################        
+ DCL #DATE_JJMMAA        PIC'(06)9'        
+      BASED(ADDR($DATE_JJMMAA));        
+         
+ DCL $DATE_AAAA          CHAR(04);    ####################################        
+ DCL #DATE_AAAA          PIC'(04)9'        
+      BASED(ADDR($DATE_AAAA));        
+ DCL $DATE_AA            CHAR(02);    ####################################        
+ DCL #DATE_AA            PIC'(02)9'        
+      BASED(ADDR($DATE_AA));        
+ DCL $DATE_S             CHAR(01);    ####################################        
+ DCL #DATE_S             PIC'(01)9'        
+      BASED(ADDR($DATE_S));        
+ DCL $DATE_SAA           CHAR(03);    ####################################        
+ DCL #DATE_SAA           PIC'(03)9'        
+      BASED(ADDR($DATE_SAA));        
+         
+ DCL $DATE_MM            CHAR(02);    ####################################        
+ DCL #DATE_MM            PIC'(02)9'        
+      BASED(ADDR($DATE_MM));        
+ DCL $DATE_JJ            CHAR(02);    ####################################        
+ DCL #DATE_JJ            PIC'(02)9'        
+      BASED(ADDR($DATE_JJ));        
+         
+ DCL $TIME_HHMMSSCCC     CHAR(09);    ####################################        
+ DCL #TIME_HHMMSSCCC     PIC'(09)9'        
+      BASED(ADDR($TIME_HHMMSSCCC));        
+ DCL $TIME_HHMMSS        CHAR(06);    ####################################        
+ DCL #TIME_HHMMSS        PIC'(06)9'        
+      BASED(ADDR($TIME_HHMMSS));        
+ DCL $TIME_HHMM          CHAR(04);    ####################################        
+ DCL #TIME_HHMM          PIC'(04)9'        
+      BASED(ADDR($TIME_HHMM));        
+ DCL $TIME_HH            CHAR(02);    ####################################        
+ DCL #TIME_HH            PIC'(02)9'        
+      BASED(ADDR($TIME_HH));        
+ DCL $TIME_MM            CHAR(02);    ####################################        
+ DCL #TIME_MM            PIC'(02)9'        
+      BASED(ADDR($TIME_MM));        
+         
+ DCL $DATE_JJ_MM_AAAA    CHAR(10);    ####################################        
+ DCL $DATE#JJ#MM#AAAA    CHAR(10);    ####################################        
+ DCL $DATE_JJ_MM_AA      CHAR(08);    ####################################        
+         
+ DCL $TIME_HH_MM_SS_CCC  CHAR(12);    ####################################        
+ DCL $TIME_HH_MM_SS      CHAR(08);    ####################################        
+ DCL $TIME#HH#MM#SS      CHAR(08);    ####################################        
+ DCL $TIME_HH_MM         CHAR(05);    ####################################        
+         
+ DCL $TIME_STAMP         CHAR(26);    ###########################################        
+ DCL $TIME_STAMP_PL1     CHAR(20);    ###########################################        
+ /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - */        
+ $DATE_MSK = 'ABCDEFGHIJKLMNOPQ';        
+         
+ CALL $DATES_TIMES;        
+         
+ $DATES_TIMES: PROC;        
+ $DATE_TIME      = DATETIME();        
+ $DATE_HEURE     = $DATE_TIME_W.JJ!!'/'!!$DATE_TIME_W.MM!!'/'!!        
+                   $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA!!        
+                   ' - '!!$DATE_TIME_W.HH!!':'!!$DATE_TIME_W.MI;        
+ $DATE_AAAAMMJJ     = $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA!!        
+                      $DATE_TIME_W.MM!!$DATE_TIME_W.JJ;        
+ $DATE_JJMMAAAA     = $DATE_TIME_W.JJ!!$DATE_TIME_W.MM!!$DATE_TIME_W.S!!        
+                      $DATE_TIME_W.A!!$DATE_TIME_W.AA;        
+ $DATE_AAMMJJ       = $DATE_TIME_W.AA!!$DATE_TIME_W.MM!!$DATE_TIME_W.JJ;        
+ $DATE_JJMMAA       = $DATE_TIME_W.JJ!!$DATE_TIME_W.MM!!$DATE_TIME_W.AA;        
+ $DATE_SAAMMJJ      = $DATE_TIME_W.S!!$DATE_TIME_W.AA!!$DATE_TIME_W.MM!!        
+                      $DATE_TIME_W.JJ;        
+ $DATE_AAAA         = $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA;        
+ $DATE_AA           = $DATE_TIME_W.AA;        
+ $DATE_S            = $DATE_TIME_W.S;        
+ $DATE_SAA          = $DATE_TIME_W.S!!$DATE_TIME_W.AA;        
+ $DATE_MM           = $DATE_TIME_W.MM;        
+ $DATE_JJ           = $DATE_TIME_W.JJ;        
+ $DATE_JJ_MM_AAAA   = $DATE_TIME_W.JJ!!'/'!!        
+                      $DATE_TIME_W.MM!!'/'!!$DATE_TIME_W.S!!        
+                      $DATE_TIME_W.A!!$DATE_TIME_W.AA;        
+ $DATE#JJ#MM#AAAA   = $DATE_TIME_W.JJ!!'.'!!        
+                      $DATE_TIME_W.MM!!'.'!!$DATE_TIME_W.S!!        
+                      $DATE_TIME_W.A!!$DATE_TIME_W.AA;        
+ $DATE_JJ_MM_AA     = $DATE_TIME_W.JJ!!'/'!!        
+                      $DATE_TIME_W.MM!!'/'!!$DATE_TIME_W.AA;        
+ $TIME_HHMMSSCCC    = $DATE_TIME_W.HH!!$DATE_TIME_W.MI!!        
+                      $DATE_TIME_W.SS!!$DATE_TIME_W.CCC;        
+ $TIME_HHMMSS       = $DATE_TIME_W.HH!!$DATE_TIME_W.MI!!        
+                      $DATE_TIME_W.SS;        
+ $TIME_HHMM         = $DATE_TIME_W.HH!!$DATE_TIME_W.MI;        
+ $TIME_HH           = $DATE_TIME_W.HH;        
+ $TIME_MM           = $DATE_TIME_W.MI;        
+ $TIME_HH_MM_SS_CCC = $DATE_TIME_W.HH!!':'!!$DATE_TIME_W.MI!!':'!!        
+                      $DATE_TIME_W.SS!!':'!!$DATE_TIME_W.CCC;        
+ $TIME_HH_MM_SS     = $DATE_TIME_W.HH!!':'!!$DATE_TIME_W.MI!!':'!!        
+                      $DATE_TIME_W.SS;        
+ $TIME#HH#MM#SS     = $DATE_TIME_W.HH!!'.'!!$DATE_TIME_W.MI!!'.'!!        
+                      $DATE_TIME_W.SS;        
+ $TIME_HH_MM        = $DATE_TIME_W.HH!!':'!!$DATE_TIME_W.MI;        
+ $TIME_STAMP        = $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA!!        
+                      '-'!!$DATE_TIME_W.MM!!'-'!!$DATE_TIME_W.JJ!!'-'!!        
+                      $DATE_TIME_W.HH!!'.'!!$DATE_TIME_W.MI!!'.'!!        
+                      $DATE_TIME_W.SS!!'.'!!$DATE_TIME_W.CCC!!'000';        
+ $TIME_STAMP_PL1    = $DATE_TIME_W.S!!$DATE_TIME_W.A!!$DATE_TIME_W.AA!!        
+                      $DATE_TIME_W.MM!!$DATE_TIME_W.JJ!!        
+                      $DATE_TIME_W.HH!!$DATE_TIME_W.MI!!        
+                      $DATE_TIME_W.SS!!$DATE_TIME_W.CCC!!'000';        
+ $END $DATES_TIMES;        
+ /*------------------------------------------------------ END $DATTIM */        
+                      /* PERMET D'AVOIR LA DATE ET L'HEURE DU JOUR   */         
+                                                                                
+ /********************************************************************/         
+ /* FICHIERS                                                         */         
+ /********************************************************************/         
+ DCL     SYSPRINT FILE  STREAM OUTPUT PRINT;  ####################################         
+                                                                                
+ /********************************************************************/         
+ /*  DECLARATION DES PCB                                             */         
+ /********************************************************************/         
+ /*---------------------------------------------------------- PCBINIT */        
+ /*------------------------------------------------------ END PCBINIT */        
+ /*-------------------------------------------------------- FCTINIVA */        
+    DCL  CEETDLI ENTRY OPTIONS (ASM);        
+    DCL  PLITDLI ENTRY;        
+    DCL  GN    CHAR(4)               VALUE ('GN  ');        
+    DCL  GU    CHAR(4)               VALUE ('GU  ');        
+    DCL  GHU   CHAR(4)               VALUE ('GHU ');        
+    DCL  GNP   CHAR(4)               VALUE ('GNP ');        
+    DCL  GHN   CHAR(4)               VALUE ('GHN ');        
+    DCL  GHNP  CHAR(4)               VALUE ('GHNP');        
+    DCL  GCV   CHAR(4)               VALUE ('GCV ');        
+    DCL  ISRT  CHAR(4)               VALUE ('ISRT');        
+    DCL  DLET  CHAR(4)               VALUE ('DLET');        
+    DCL  REPL  CHAR(4)               VALUE ('REPL');        
+    DCL  CHNG  CHAR(4)               VALUE ('CHNG');        
+    DCL  LOG   CHAR(4)               VALUE ('LOG ');        
+    DCL  STAT  CHAR(4)               VALUE ('STAT');        
+    DCL  ROLL  CHAR(4)               VALUE ('ROLL');        
+    DCL  ROLB  CHAR(4)               VALUE ('ROLB');        
+    DCL  PURG  CHAR(4)               VALUE ('PURG');        
+    DCL  CMD   CHAR(4)               VALUE ('CMD ');        
+    DCL  GCMD  CHAR(4)               VALUE ('GCMD');        
+    DCL  CHKP  CHAR(4)               VALUE ('CHKP');        
+    DCL  XRST  CHAR(4)               VALUE ('XRST');        
+    DCL  DEQ   CHAR(4)               VALUE ('DEQ ');        
+    DCL  ONE   FIXED BIN (31)        VALUE (0001B);        
+    DCL  TWO   FIXED BIN (31)        VALUE (0010B);        
+    DCL  THREE FIXED BIN (31)        VALUE (0011B);        
+    DCL  FOUR  FIXED BIN (31)        VALUE (0100B);        
+    DCL  FIVE  FIXED BIN (31)        VALUE (0101B);        
+    DCL  SIX   FIXED BIN (31)        VALUE (0110B);        
+    DCL  SEVEN FIXED BIN (31)        VALUE (0111B);        
+    DCL  EIGHT FIXED BIN (31)        VALUE (1000B);        
+    DCL  NINE  FIXED BIN (31)        VALUE (1001B);        
+ /*----------------------------------------------------- END FCTINIVA */        
+               /* DB DICTIONNAIRE               */                              
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DEU02PCB             PTR;        
+    DCL  LKEY_DEU02 FIXED BINARY(31,0);        
+         
+    DCL  1  DEU02           BASED(DEU02PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DEU02 REFER(DEU02.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DEU02PCB= KA2005J_P.DEU02PCB;                                                  
+                                                                                
+                 /* DB EUROTAX OLD                */                            
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      TABPCB             PTR;        
+    DCL  LKEY_TAB FIXED BINARY(31,0);        
+         
+    DCL  1  TAB           BASED(TABPCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_TAB REFER(TAB.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ TABPCB= KA2005J_P.DC105PCB;                                                    
+                                                                                
+               /* DB EUROTAX NEW                */                              
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DA215PCB             PTR;        
+    DCL  LKEY_DA215 FIXED BINARY(31,0);        
+         
+    DCL  1  DA215           BASED(DA215PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DA215 REFER(DA215.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DA215PCB= KA2005J_P.DA215PCB;                                                  
+                                                                                
+                                     /* DB EUROTAX NEW                */        
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DA215$PCB             PTR;        
+         
+    DCL  LKEY_DA215$ FIXED BINARY(31,0);        
+         
+    DCL  1  DA215$           BASED(DA215$PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DA215$ REFER(DA215$.KEYLEN)        
+ );        
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DA215$PCB= KA2005J_P.DA215$PCB;                                                
+                                                                                
+               /* DB EUROTAX NEW                */                              
+ /*-------------------------------------------------------- DBPCBMSK */        
+   DCL      DA216PCB             PTR;        
+    DCL  LKEY_DA216 FIXED BINARY(31,0);        
+         
+    DCL  1  DA216           BASED(DA216PCB) ,        
+         
+           2  DBDNAME              CHAR(8),        
+           2  SEGLEVEL             CHAR(2),        
+           2  STATUS               CHAR(2),        
+           2  PROCOPT              CHAR(4),        
+           2  RESERVED             CHAR(4),        
+           2  SEGNAME              CHAR(8),        
+           2  KEYLEN               FIXED BIN(31),        
+           2  SENSEG               FIXED BIN(31),        
+           2  KEYAREA              CHAR(LKEY_DA216 REFER(DA216.KEYLEN));        
+         
+ /*---------------------------------------------------- END DBPCBMSK */        
+ DA216PCB= KA2005J_P.DA216PCB;                                                  
+                                                                                
+                                                                                
+ /********************************************************************/         
+ /*  SEGMENTS DE DB                                                  */         
+ /********************************************************************/         
+ /* NRB - TDMOHL - GENERATION LE 22/05/2007 - 14:28        LGTH=00274 */        
+ /*****************************************************/        
+ /*  TABLE MAIN :                                     */        
+ /*****************************************************/        
+         
+ DCL  1 TBGI_MAIN ,                         #############################################################        
+                                            /*TB!  !DPH01   !PHTABLE  */        
+                                            /*TB!  !DRH01   !RHTABLE  */        
+                                            /*TB!  !DND01   !NDTAB    */        
+                                            /*TB!  !DSM25   !C1TAB    */        
+                                            /*TB!  !DDO03   !C1TAB    */        
+                                            /*TB!  !DIB15   !C1TAB    */        
+                                            /*TB!  !DCR01   !CRTABLE  */        
+                                            /*TB!  !DLG01   !TABLE    */        
+                                            /*TB!  !DCT01   !CTTABLE  */        
+                                            /*TB!  !DC201   !C2TABLE  */        
+                                            /*TB!  !DCI02   !CITAB    */        
+                                            /*TB!  !DSMC0   !C1TAB    */        
+                                            /*TB!  !DAV01   !AVTABLE  */        
+                                            /*TB!  !DCD01   !CDTAB    */        
+                                            /*TB!  !DCL01   !CLTABLE  */        
+                                            /*TB!  !DCP11   !CPTAB    */        
+                                            /*TB!  !DCO39   !COTAB    */        
+                                            /*TB!  !DC101   !C1TAB    */        
+                                            /*TB!  !DC102   !C1TAB    */        
+                                            /*TB!  !DC103   !C1TAB    */        
+                                            /*TB!  !DC301   !C3TABLE  */        
+                                            /*TB!  !DDP01   !DPTAB    */        
+                                            /*TB!  !DGA01   !GATABLE  */        
+                                            /*TB!  !DGI01   !GITABLE  */        
+                                            /*TB!  !DGZ02   !GZTABLE  */        
+                                            /*TB!  !DLP03   !LPTABLE  */        
+                                            /*TB!  !DNC02   !NCTABLE  */        
+                                            /*TB!  !DPS01   !PSTABLE  */        
+                                            /*TB!  !DP101   !P1TABLE  */        
+                                            /*TB!  !DRD01   !RDTABLE  */        
+                                            /*TB!  !DSP01   !SPTABLE  */        
+                                            /*TB!  !DSW02   !SWTAB    */        
+                                            /*TB!  !DXI01   !XITABLE  */        
+                                            /*TB!  !DFP24   !FPTABLE  */        
+       2 TBTXCOD  CHAR(4),                  ######################################################        
+       2 TBTXA01  CHAR(20),                 #####################################################        
+       2 TBTXL01  CHAR(250);                ####################################################        
+         
+         
+    DCL 1 SSA_C1TAB,        
+         2 FIL1         CHAR (8)       INIT ('C1TAB  '),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KC1TAB  '),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUE        CHAR (24),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+     /* UTILISATION POUR LES CHECK POINT           */                           
+                                                                                
+ /* NRB - TDMLEN - GENERATION LE 10/05/2010 - 15:14        LGTH=00274 */        
+ DCL  1 TABLE_A233 ,                   ############################################################        
+                                       /*TB!  !DSM25   !C1TAB         */        
+                                       /*--!  ! !!! DEF SUR TABLE !!! */        
+ /*K*/ 2 TBTXCOD  CHAR(4),             /*CD!  !CODE TABLE             */        
+ /*K*/ 2 TBTXA01  CHAR(20),            /*CD!  !ARGUMENT               */        
+       2 LTTYPVH  CHAR(20),            #####################################################        
+       2 CDDEBCH  CHAR(3),             ######################################################        
+       2 CDSPORT  CHAR(1),             ######################################################        
+       2 CDCABRI  CHAR(1),             ######################################################        
+       2 CDTYPEV  CHAR(1),             ######################################################        
+       2 DAMODIF  PIC'(7)9',           ####################################################        
+       2 NOIDGES  PIC'(7)9',           ####################################################        
+       2 CDTYP2V  CHAR(1),             ######################################################        
+       2 CDTYPVS  CHAR(1),             ######################################################        
+       2 CDTYPDS  CHAR(1),             ######################################################        
+       2 CDCATVH  CHAR(1),             ######################################################        
+       2 CDTYPVH  CHAR(5),             ######################################################        
+       2 CDTYOP1  CHAR(1),             ######################################################        
+       2 CDTYDM1  CHAR(1),             ######################################################        
+       2 CDECOVH  CHAR(1),             ######################################################        
+       2 CDTYOP3  CHAR(1),             ######################################################        
+       2 CDTYDM3  CHAR(1),             ######################################################        
+       2 CDVEHTT  CHAR(1),             ######################################################        
+       2 CDECOV2  CHAR(1),             ######################################################        
+       2 FILLER  CHAR(194);            #####################################################        
+         
+     /* SEGMENT EUROTAX OLD                        */                           
+                                                                                
+ /* COPY DA215-DA216*/                                                          
+ /* NRB - TDMKIP - GENERATION LE 24/01/2007 - 17:02        LGTH=00300 */        
+ /****************************************************************        
+ *  MARQUES DE VOITURES PARTICULIERS (MARKET = BE , VEHTYPE = 10)*        
+ ****************************************************************/        
+         
+ DCL  1 A2EUT11 ,                        ###############################################################        
+ /*K*/ 2 CDTYPTB  CHAR(2),               /*CD!  !TYPE DE SEGMENT (11) */        
+ /*K*/ 2 NOIDMAR  DEC FIXED(7),          /*NO!  !NO. DE LA MARQUE     */        
+ /*K*/ 2 FILLKEY  CHAR(16),              /*FI!  !RESERVE              */        
+       2 KA2EUT1  CHAR(8),               ######################################################        
+       2 LTMARQU  CHAR(40),              #####################################################        
+       2 KA2EUT2  DEC FIXED(7),          #################################################        
+       2 KA2EUT3  CHAR(16),              #####################################################        
+       2 CDTTERR  PIC'9',                #######################################################        
+       2 DATECRE  DEC FIXED(7),          #################################################        
+       2 DATEMAJ  DEC FIXED(7),          #################################################        
+       2 DADEBIM  PIC'(6)9',             ####################################################        
+       2 DAFINIM  PIC'(6)9',             ####################################################        
+       2 TBEGCOD(16)  BIT(1),            ###################################################        
+       2 FILLER  CHAR(187);              #####################################################        
+         
+    DCL 1 SSA_A2EUT11,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTAX'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (2)       INIT ('11'),        
+         2 VALUE1       DEC FIXED(7),        
+         2 VALUEF       CHAR (16)      INIT (' '),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+    DCL 1 SSA2_A2EUT11,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTI2'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (2)       INIT ('11'),        
+         2 VALUE1       CHAR (08)      INIT (' '),        
+         2 VALUE2       CHAR (40),        
+         2 VALUE3       DEC FIXED(7),        
+         2 VALUEF       CHAR (16)      INIT (' '),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+ DCL A2EUT11_R        CHAR(STG(A2EUT11)) BASED(ADDR(A2EUT11));                  
+ /* NRB - TDMKIP - GENERATION LE 24/01/2007 - 17:03        LGTH=00300 */        
+ /****************************************************************        
+ *  MODELES DE VOITURES PARTICULIERS (MARKET = BE , VEHTYPE = 10)*        
+ ****************************************************************/        
+         
+ DCL  1 A2EUT12 ,                        ###############################################################        
+ /*K*/ 2 CDTYPTB  CHAR(2),               /*CD!  !TYPE DE SEGMENT      */        
+ /*K*/ 2 NOIDMAR  DEC FIXED(7),          /*NO!  !NO. DE MARQUE (T11)  */        
+ /*K*/ 2 NOIDMOD  DEC FIXED(7),          /*NO!  !NO. DE MODELE        */        
+ /*K*/ 2 FILLKEY  CHAR(12),              /*FI!  !RESERVE              */        
+       2 KA2EUT1  CHAR(4),               ######################################################        
+       2 KA2EUT2  DEC FIXED(7),          #################################################        
+       2 LTMODEL  CHAR(40),              #####################################################        
+       2 KA2EUT3  DEC FIXED(7),          #################################################        
+       2 KA2EUT4  CHAR(16),              #####################################################        
+       2 CDTTERR  PIC'9',                #######################################################        
+       2 DATECRE  DEC FIXED(7),          #################################################        
+       2 DATEMAJ  DEC FIXED(7),          #################################################        
+       2 DADEBIM  PIC'(6)9',             ####################################################        
+       2 DAFINIM  PIC'(6)9',             ####################################################        
+       2 TBEGCOD(16)  BIT(1),            ###################################################        
+       2 FILLER  CHAR(187);              #####################################################        
+         
+    DCL 1 SSA_A2EUT12,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTAX'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (02)      INIT ('12'),        
+         2 VALUE1       DEC FIXED(7),        
+         2 VALUE2       DEC FIXED(7),        
+         2 VALUEF       CHAR (12)      INIT (' '),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+    DCL 1 SSA2_A2EUT12,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTI2'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (02)      INIT ('12'),        
+         2 VALUE1       CHAR (04)      INIT (' '),        
+         2 VALUE2       DEC FIXED(7),        
+         2 VALUE3       CHAR (40),        
+         2 VALUE4       DEC FIXED(7),        
+         2 VALUEF       CHAR (16)      INIT (' '),        
+         2 FIL4         CHAR (1)       INIT (')');        
+ DCL A2EUT12_R        CHAR(STG(A2EUT12)) BASED(ADDR(A2EUT12));                  
+ /* NRB - TDMGAS - GENERATION LE 01/06/2010 - 10:40        LGTH=00300 */        
+ /**************************************************************        
+ *  TYPES DE VOITURES PARTICULIERS (MARKET = BE , VEHTYPE = 10)*        
+ **************************************************************/        
+         
+ DCL  1 A2EUT13 ,                       ###############################################################        
+ /*K*/ 2 CDTYPTB  CHAR(2),              /*CD!  !TYPE DE SEGMENT (13)  */        
+ /*K*/ 2 NOIDMAR  DEC FIXED(7),         /*NO!  !NO ID MARQUE (T11)    */        
+ /*K*/ 2 NOIDMOD  DEC FIXED(7),         /*NO!  !NO ID MODELE (T12)    */        
+ /*K*/ 2 NOIDTYP  DEC FIXED(7),         /*NO!  !NO ID TYPE            */        
+ /*K*/ 2 FILLKEY  CHAR(8),              /*FI!  !RESERVE               */        
+       2 KA2EUT1  DEC FIXED(7),         #################################################        
+       2 KA2EUT2  DEC FIXED(7),         #################################################        
+       2 LTTYPEV  CHAR(60),             #####################################################        
+       2 DADEBIM  PIC'(6)9',            ####################################################        
+       2 DAFINIM  PIC'(6)9',            ####################################################        
+       2 TXTCLAS  CHAR(8),              ######################################################        
+       2 TXTCATV  CHAR(8),              ######################################################        
+       2 TXTCARO  CHAR(8),              ######################################################        
+       2 NBRPORT  DEC FIXED(3),         #################################################        
+       2 NPLAMIN  DEC FIXED(3),         #################################################        
+       2 NPLAMAX  DEC FIXED(3),         #################################################        
+       2 NBRTRAN  DEC FIXED(3),         #################################################        
+       2 NBSIEGE  CHAR(10),             #####################################################        
+       2 NBTYPKW  DEC FIXED(3),         #################################################        
+       2 NBCVDIN  DEC FIXED(3),         #################################################        
+       2 NBCVFIS  DEC FIXED(5,2),       ###############################################        
+       2 TXTBOIT  CHAR(8),              ######################################################        
+       2 NBVITES  DEC FIXED(3),         #################################################        
+       2 NBRCYLI  DEC FIXED(3),         #################################################        
+       2 TYPCYLI  DEC FIXED(5),         #################################################        
+       2 POIDVID  DEC FIXED(5),         #################################################        
+       2 POIDTRA  DEC FIXED(5),         #################################################        
+       2 POIDMAX  DEC FIXED(5),         #################################################        
+       2 HAUTEUR  DEC FIXED(5),         #################################################        
+       2 LARGEUR  DEC FIXED(5),         #################################################        
+       2 LONGUEU  DEC FIXED(5),         #################################################        
+       2 CAPRESE  DEC FIXED(5,1),       ###############################################        
+       2 TXTCARB  CHAR(8),              ######################################################        
+       2 CDSPORT  CHAR(1),              ######################################################        
+       2 CDSPOSE  CHAR(1),              ######################################################        
+       2 TAXETMC  DEC FIXED(9),         #################################################        
+       2 CDVOLSM  CHAR(1),              ######################################################        
+       2 CDDMSMA  CHAR(1),              ######################################################        
+       2 DERPRIX  DEC FIXED(9),         #################################################        
+       2 ANNEPRI  PIC'(4)9',            ####################################################        
+       2 MOISPRI  PIC'99',              ######################################################        
+       2 CDTTERR  PIC'9',               #######################################################        
+       2 DATECRE  DEC FIXED(7),         #################################################        
+       2 DATEMAJ  DEC FIXED(7),         #################################################        
+       2 CDOMETH  CHAR(1),              ######################################################        
+       2 CDDMETH  CHAR(1),              ######################################################        
+       2 TCO2EMI  DEC FIXED(5),         #################################################        
+       2 CDTYOP3  CHAR(1),              ######################################################        
+       2 CDTYDM3  CHAR(1),              ######################################################        
+       2 CDECOV2  CHAR(1),              ######################################################        
+       2 TXTMOTE  CHAR(8),              ######################################################        
+       2 FILLER  CHAR(60);              ######################################################        
+         
+    DCL 1 SSA_A2EUT13,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTAX'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (02)      INIT ('13'),        
+         2 VALUE1       DEC FIXED(7),        
+         2 VALUE2       DEC FIXED(7),        
+         2 VALUE3       DEC FIXED(7),        
+         2 VALUEF       CHAR (08),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+    DCL 1 SSA2_A2EUT13,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTI2'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (02)      INIT ('13'),        
+         2 VALUE1       DEC FIXED(7),        
+         2 VALUE2       DEC FIXED(7),        
+         2 VALUE3       CHAR (60),        
+         2 FIL4         CHAR (1)       INIT (')');        
+ DCL A2EUT13_R        CHAR(STG(A2EUT13)) BASED(ADDR(A2EUT13));                  
+                                                                                
+ /* NRB - TDMKIP - GENERATION LE 24/01/2007 - 17:03        LGTH=00300 */        
+ /****************************************************************        
+ *  MARQUES D'UTILIATIRES            (MARKET = BE , VEHTYPE = 20)*        
+ ****************************************************************/        
+         
+ DCL  1 A2EUT21 ,                        ###############################################################        
+ /*K*/ 2 CDTYPTB  CHAR(2),               /*CD!  !TYPE DE SEGMENT (21) */        
+ /*K*/ 2 NOIDMAR  DEC FIXED(7),          /*NO!  !NO. DE LA MARQUE     */        
+ /*K*/ 2 FILLKEY  CHAR(16),              /*FI!  !RESERVE              */        
+       2 KA2EUT1  CHAR(8),               ######################################################        
+       2 LTMARQU  CHAR(40),              #####################################################        
+       2 KA2EUT2  DEC FIXED(7),          #################################################        
+       2 KA2EUT3  CHAR(16),              #####################################################        
+       2 CDTTERR  PIC'9',                #######################################################        
+       2 DATECRE  DEC FIXED(7),          #################################################        
+       2 DATEMAJ  DEC FIXED(7),          #################################################        
+       2 DADEBIM  PIC'(6)9',             ####################################################        
+       2 DAFINIM  PIC'(6)9',             ####################################################        
+       2 TBEGCOD(16)  BIT(1),            ###################################################        
+       2 FILLER  CHAR(187);              #####################################################        
+         
+    DCL 1 SSA_A2EUT21,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTAX'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (2)       INIT ('21'),        
+         2 VALUE1       DEC FIXED(7),        
+         2 VALUEF       CHAR (16)      INIT (' '),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+    DCL 1 SSA2_A2EUT21,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTI2'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (2)       INIT ('21'),        
+         2 VALUE1       CHAR (08)      INIT (' '),        
+         2 VALUE2       CHAR (40),        
+         2 VALUE3       DEC FIXED(7),        
+         2 VALUEF       CHAR (16)      INIT (' '),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+ DCL A2EUT21_R        CHAR(STG(A2EUT21)) BASED(ADDR(A2EUT21));                  
+ /* NRB - TDMKIP - GENERATION LE 24/01/2007 - 17:04        LGTH=00300 */        
+ /****************************************************************        
+ *  MODELES D'UTILITAIRES            (MARKET = BE , VEHTYPE = 20)*        
+ ****************************************************************/        
+         
+ DCL  1 A2EUT22 ,                        ###############################################################        
+ /*K*/ 2 CDTYPTB  CHAR(2),               /*CD!  !TYPE DE SEGMENT      */        
+ /*K*/ 2 NOIDMAR  DEC FIXED(7),          /*NO!  !NO. DE MARQUE (T21)  */        
+ /*K*/ 2 NOIDMOD  DEC FIXED(7),          /*NO!  !NO. DE MODELE        */        
+ /*K*/ 2 FILLKEY  CHAR(12),              /*FI!  !RESERVE              */        
+       2 KA2EUT1  CHAR(4),               ######################################################        
+       2 KA2EUT2  DEC FIXED(7),          #################################################        
+       2 LTMODEL  CHAR(40),              #####################################################        
+       2 KA2EUT3  DEC FIXED(7),          #################################################        
+       2 KA2EUT4  CHAR(16),              #####################################################        
+       2 CDTTERR  PIC'9',                #######################################################        
+       2 DATECRE  DEC FIXED(7),          #################################################        
+       2 DATEMAJ  DEC FIXED(7),          #################################################        
+       2 DADEBIM  PIC'(6)9',             ####################################################        
+       2 DAFINIM  PIC'(6)9',             ####################################################        
+       2 TBEGCOD(16)  BIT(1),            ###################################################        
+       2 FILLER  CHAR(187);              #####################################################        
+         
+    DCL 1 SSA_A2EUT22,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTAX'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (02)      INIT ('22'),        
+         2 VALUE1       DEC FIXED(7),        
+         2 VALUE2       DEC FIXED(7),        
+         2 VALUEF       CHAR (12)      INIT (' '),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+    DCL 1 SSA2_A2EUT22,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTI2'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (02)      INIT ('22'),        
+         2 VALUE1       CHAR (04)      INIT (' '),        
+         2 VALUE2       DEC FIXED(7),        
+         2 VALUE3       CHAR (40),        
+         2 VALUE4       DEC FIXED(7),        
+         2 VALUEF       CHAR (16)      INIT (' '),        
+         2 FIL4         CHAR (1)       INIT (')');        
+ DCL A2EUT22_R        CHAR(STG(A2EUT22)) BASED(ADDR(A2EUT22));                  
+ /* NRB - TDMGAS - GENERATION LE 01/06/2010 - 10:40        LGTH=00300 */        
+ /**************************************************************        
+ *  TYPES D'UTILITAIRES            (MARKET = BE , VEHTYPE = 20)*        
+ **************************************************************/        
+         
+ DCL  1 A2EUT23 ,                       ###############################################################        
+ /*K*/ 2 CDTYPTB  CHAR(2),              /*CD!  !TYPE DE SEGMENT (23)  */        
+ /*K*/ 2 NOIDMAR  DEC FIXED(7),         /*NO!  !NO ID MARQUE (T21)    */        
+ /*K*/ 2 NOIDMOD  DEC FIXED(7),         /*NO!  !NO ID MODELE (T22)    */        
+ /*K*/ 2 NOIDTYP  DEC FIXED(7),         /*NO!  !NO ID TYPE            */        
+ /*K*/ 2 FILLKEY  CHAR(8),              /*FI!  !RESERVE               */        
+       2 KA2EUT1  DEC FIXED(7),         #################################################        
+       2 KA2EUT2  DEC FIXED(7),         #################################################        
+       2 LTTYPEV  CHAR(60),             #####################################################        
+       2 DADEBIM  PIC'(6)9',            ####################################################        
+       2 DAFINIM  PIC'(6)9',            ####################################################        
+       2 TXTCLAS  CHAR(8),              ######################################################        
+       2 TXTCATV  CHAR(8),              ######################################################        
+       2 TXTCARO  CHAR(8),              ######################################################        
+       2 NBRPORT  DEC FIXED(3),         #################################################        
+       2 NPLAMIN  DEC FIXED(3),         #################################################        
+       2 NPLAMAX  DEC FIXED(3),         #################################################        
+       2 NBRTRAN  DEC FIXED(3),         #################################################        
+       2 NBSIEGE  CHAR(10),             #####################################################        
+       2 NBTYPKW  DEC FIXED(3),         #################################################        
+       2 NBCVDIN  DEC FIXED(3),         #################################################        
+       2 NBCVFIS  DEC FIXED(5,2),       ###############################################        
+       2 TXTBOIT  CHAR(8),              ######################################################        
+       2 NBVITES  DEC FIXED(3),         #################################################        
+       2 NBRCYLI  DEC FIXED(3),         #################################################        
+       2 TYPCYLI  DEC FIXED(5),         #################################################        
+       2 POIDVID  DEC FIXED(5),         #################################################        
+       2 POIDTRA  DEC FIXED(5),         #################################################        
+       2 POIDMAX  DEC FIXED(5),         #################################################        
+       2 HAUTEUR  DEC FIXED(5),         #################################################        
+       2 LARGEUR  DEC FIXED(5),         #################################################        
+       2 LONGUEU  DEC FIXED(5),         #################################################        
+       2 CAPRESE  DEC FIXED(5,1),       ###############################################        
+       2 TXTCARB  CHAR(8),              ######################################################        
+       2 CDSPORT  CHAR(1),              ######################################################        
+       2 CDSPOSE  CHAR(1),              ######################################################        
+       2 TAXETMC  DEC FIXED(9),         #################################################        
+       2 CDVOLSM  CHAR(1),              ######################################################        
+       2 CDDMSMA  CHAR(1),              ######################################################        
+       2 DERPRIX  DEC FIXED(9),         #################################################        
+       2 ANNEPRI  PIC'(4)9',            ####################################################        
+       2 MOISPRI  PIC'99',              ######################################################        
+       2 CDTTERR  PIC'9',               #######################################################        
+       2 DATECRE  DEC FIXED(7),         #################################################        
+       2 DATEMAJ  DEC FIXED(7),         #################################################        
+       2 CDOMETH  CHAR(1),              ######################################################        
+       2 CDDMETH  CHAR(1),              ######################################################        
+       2 TCO2EMI  DEC FIXED(5),         #################################################        
+       2 CDTYOP3  CHAR(1),              ######################################################        
+       2 CDTYDM3  CHAR(1),              ######################################################        
+       2 CDECOV2  CHAR(1),              ######################################################        
+       2 TXTMOTE  CHAR(8),              ######################################################        
+       2 FILLER  CHAR(60);              ######################################################        
+         
+    DCL 1 SSA_A2EUT23,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTAX'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (02)      INIT ('23'),        
+         2 VALUE1       DEC FIXED(7),        
+         2 VALUE2       DEC FIXED(7),        
+         2 VALUE3       DEC FIXED(7),        
+         2 VALUEF       CHAR (08),        
+         2 FIL4         CHAR (1)       INIT (')');        
+         
+    DCL 1 SSA2_A2EUT23,        
+         2 FIL1         CHAR (8)       INIT ('A2EUTAX'),        
+         2 FIL2         CHAR (1)       INIT ('*'),        
+         2 CC           CHAR (3)       INIT ('---'),        
+         2 PAR          CHAR (1)       INIT ('('),        
+         2 FIL3         CHAR (8)       INIT ('KA2EUTI2'),        
+         2 OPER         CHAR (2)       INIT ('= '),        
+         2 VALUET       CHAR (02)      INIT ('23'),        
+         2 VALUE1       DEC FIXED(7),        
+         2 VALUE2       DEC FIXED(7),        
+         2 VALUE3       CHAR (60),        
+         2 FIL4         CHAR (1)       INIT (')');        
+ DCL A2EUT23_R        CHAR(STG(A2EUT23)) BASED(ADDR(A2EUT23));                  
+                                                                                
+                                                                                
+ /********************************************************************/         
+ /*  REDEFINITIONS DES SEGMENTS                                      */         
+ /********************************************************************/         
+                                                                                
+ /********************************************************************/         
+ /*  INTERFACE ET ENTRIES POUR DLI                                   */         
+ /********************************************************************/         
+ DCL XEU100  ENTRY OPTIONS(FETCHABLE);                                          
+                                                                                
+ /********************************************************************/         
+ /*  INTERFACE ET ENTRIES NON DLI                                    */         
+ /********************************************************************/         
+                                                                                
+ /*********************************************************************/        
+ /* INTERFACE : KA2151J                                               */        
+ /*                                                                   */        
+ /*                 SERVICE D'ACCES DB EUROTAX                        */        
+ /*                                                                   */        
+ /*         V O I T U R E S     P A R T I C U L I E R S               */        
+ /*                  U T I L I T A I R E S                            */        
+ /*                      M O T O S                                    */        
+ /*         *******************************************               */        
+ /*               DB    DA215 , DA216                                 */        
+ /*                                                                   */        
+ /*********************************************************************/        
+                                 /* LIMITE EXPLO MARQUES              */        
+                                 /* LIMITE EXPLO MODELES              */        
+                                 /* LIMITE EXPLO TYPES                */        
+                                 /* LIMITE EXPLO EQUIPEMENTS          */        
+                                 /* LIMITE EXPLO CONTENU D'UN PACK    */        
+         
+ DCL 1 KA2151J,        
+      2 PTRPCB       CHAR (256),    ################################################        
+      2 INPUT        CHAR (2000),   ###############################################        
+      2 OUTPUT       CHAR (20000);  ##############################################        
+         
+ /*********************************************************************/        
+ /*             REDEFINITION DES POINTEURS                            */        
+ /*  REMARQUES : PTR = CHAR (04)                                      */        
+ /*********************************************************************/        
+         
+ DCL 1 KA2151J_P      BASED(ADDR(KA2151J.PTRPCB)),        
+      2 DEU02PCB      PTR,               ######################################################        
+      2 DA215PCB      PTR,               ######################################################        
+      2 DA215$PCB     PTR,               ######################################################        
+      2 DA2152PCB     PTR,               ######################################################        
+      2 DA216PCB      PTR;               ######################################################        
+         
+ /*********************************************************************/        
+ /*                S E G M E N T S     I N D I V I D U E L S          */        
+ /*                =========================================          */        
+ /* METHODE : CONSULT_YY_XXX                                          */        
+ /* METHODE : SUPPR_YY_XXX                                            */        
+ /* METHODE : CREAT_YY_XXX                                            */        
+ /* METHODE : MODIF_YY_XXX                                            */        
+ /*                                                                   */        
+ /*     YY = VP(VOITURES) , UT(UTILITAIRES), MO(MOTOS)                */        
+ /*    XXX = MAK , Marque ..................A2EUTnn (T11,T21,T41)     */        
+ /*          MOD : Modele ..................A2EUTnn (T12,T22,T42)     */        
+ /*          TYP : Type de vehicule.........A2EUTnn (T13,T23,T43)     */        
+ /*          PRI : Prix d'un type de vehic..A2EUTnn (T14,T24,T44)     */        
+ /*          EQT : Equipements pour un type.A2EUTnn (T15,T25,T45)     */        
+ /*          CON : Contenu d'un pack .......A2EUTnn (T16,T26,T46)     */        
+ /*          TXT : Libelle d'un equipement..A2EUTnn (T17,T27,T47)     */        
+ /*          COT : Cotation d'un type.......A2EUTnn (T18,T28,T48)     */        
+ /*                                                                   */        
+ /* INPUT : LE SEGMENT A2EUTnn                                        */        
+ /* OUTPUT: LE SEGMENT A2EUTnn                                        */        
+ /*                                                                   */        
+ /* Exemple dans le programme appelant pour 'CONSULT_VP_MAK'          */        
+ /* -------                                                           */        
+ /* DCL A2EUT11_R         CHAR(STG(A2EUT11)) BASED(ADDR(A2EUT11));    */        
+ /*         A2EUT11.CDTYPTB = '11';                                   */        
+ /*         A2EUT11.NOIDMAR = numero de marque                        */        
+ /*     KA2151J_A2EUTAX_I = A2EUT11_R;                                */        
+ /* En output :                                                       */        
+ /*     A2EUT11_R = KA2151J_A2EUTAX_O;                                */        
+ /*                                                                   */        
+ /* -------------------- INPUT -------------------------------------- */        
+ DCL 1 KA2151J_A2EUTAX_I  CHAR(300)    BASED(ADDR(KA2151J.INPUT));        
+         
+ /* -------------------- OUTPUT ------------------------------------- */        
+ DCL 1 KA2151J_A2EUTAX_O  CHAR(300)    BASED(ADDR(KA2151J.OUTPUT));        
+         
+ /*********************************************************************/        
+ /*                     E X P L O R A T I O N S                       */        
+ /*                     =======================                       */        
+ /* METHODE : EXPLO_1P_YY_XXX                                         */        
+ /* METHODE : EXPLO_PS_YY_XXX                                         */        
+ /* METHODE : EXPLO_PP_YY_XXX                                         */        
+ /*                                                                   */        
+ /*     YY = VP(VOITURES) , UT(UTILITAIRES), MO(MOTOS)                */        
+ /*    XXX = MAK : Toutes les marques d'une categorie (VP,UT ou MO)   */        
+ /*          MOD : tous les modeles pour une marque                   */        
+ /*          TYP : tous les type pour un modele et une marque         */        
+ /*          EQT : tous les equipements d'un Type                     */        
+ /*          CON : tous les equipements contenu dans un pack          */        
+ /*                                                                   */        
+ /* INPUT :                                                           */        
+ /* O indique que la donnee est obligatoire                           */        
+ /* F indique que la donnee est facultative uniqt pour EXPLO_1P_YY_XXX*/        
+ /*   sinon la donnee est Obligatoire pour suivant/precedent          */        
+ /*                                                                   */        
+ /* !!ANNECTR : Zero => pas de test sur date debut et fin d'importat. */        
+ /*                     Donc on prend tout                            */        
+ /* REMARQUE EXPLO MAK,MOD,TYP :                                      */        
+ /* ==========================                                        */        
+ /* Ces explo se font sur l'index secondaire trie par libelle.        */        
+ /* Pour les explo suivant/precedent il faut en plus du NOIDMAR       */        
+ /* renvoyer le LTMARQU pour se repositionner le o on etait arrive   */        
+ /* (Idem pour Explo MOD et TYP)                                      */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ /* -------------------- INPUT ---------------------------------------*/        
+         
+ DCL 1 KA2151J_EXPMAK_I                   BASED(ADDR(KA2151J.INPUT)),        
+      2 CDTYPTB        CHAR(02),     ################################################        
+      2 NBITEXP        BIN FIXED(15),###########################################        
+      2 NOIDMAR        DEC FIXED(07),###########################################        
+      2 LTMARQU        CHAR(40),     ################################################        
+      2 ANNECTR        PIC '(4)9',   ##############################################        
+      2 CDTTERR        CHAR(01),     ################################################        
+      2 CDSPORT        CHAR(01),     ################################################        
+      2 CDSPOSE        CHAR(02),     ################################################        
+      2 TXTCLAS        CHAR(08),     ################################################        
+      2 TXTCATV        CHAR(08),     ################################################        
+      2 TXTCARO        CHAR(08),     ################################################        
+      2 TXTCARB        CHAR(08),     ################################################        
+      2 LIBMARQ        CHAR(40),     ################################################        
+                                     /* Le ? est obligatoire pour     */        
+                                     /* delimiter les champs e tester */        
+                                     /* (A?RO? etc..)                 */        
+      2 NOUVEAU        CHAR(01);     ################################################        
+                                     /*   nouveaux vehicules          */        
+         
+ DCL 1 KA2151J_EXPMOD_I                   BASED(ADDR(KA2151J.INPUT)),        
+      2 CDTYPTB        CHAR(02),     ################################################        
+      2 NBITEXP        BIN FIXED(15),###########################################        
+      2 NOIDMAR        DEC FIXED(07),###########################################        
+      2 NOIDMOD        DEC FIXED(07),###########################################        
+      2 LTMODEL        CHAR(40),     ################################################        
+      2 ANNECTR        PIC '(4)9',   ##############################################        
+      2 CDTTERR        CHAR(01),     ################################################        
+      2 CDSPORT        CHAR(01),     ################################################        
+      2 CDSPOSE        CHAR(02),     ################################################        
+      2 TXTCLAS        CHAR(08),     ################################################        
+      2 TXTCATV        CHAR(08),     ################################################        
+      2 TXTCARO        CHAR(08),     ################################################        
+      2 TXTCARB        CHAR(08),     ################################################        
+      2 NOUVEAU        CHAR(01);     ################################################        
+                                     /*   nouveaux vehicules          */        
+         
+ DCL 1 KA2151J_EXPTYP_I                   BASED(ADDR(KA2151J.INPUT)),        
+      2 CDTYPTB        CHAR(02),     ################################################        
+      2 NBITEXP        BIN FIXED(15),###########################################        
+      2 NOIDMAR        DEC FIXED(07),###########################################        
+      2 NOIDMOD        DEC FIXED(07),###########################################        
+      2 NOIDTYP        DEC FIXED(07),###########################################        
+      2 LTTYPEV        CHAR(60),     ################################################        
+      2 ANNECTR        PIC '(4)9',   ##############################################        
+      2 CDTTERR        CHAR(01),     ################################################        
+      2 CDSPORT        CHAR(01),     ################################################        
+      2 CDSPOSE        CHAR(02),     ################################################        
+      2 TXTCLAS        CHAR(08),     ################################################        
+      2 TXTCATV        CHAR(08),     ################################################        
+      2 TXTCARO        CHAR(08),     ################################################        
+      2 TXTCARB        CHAR(08),     ################################################        
+      2 NOUVEAU        CHAR(01);     ################################################        
+                                     /*   nouveaux vehicules          */        
+         
+ DCL 1 KA2151J_EXPEQT_I                   BASED(ADDR(KA2151J.INPUT)),        
+      2 CDTYPTB        CHAR(02),     ################################################        
+      2 NBITEXP        BIN FIXED(15),###########################################        
+      2 NOIDTYP        DEC FIXED(07),###########################################        
+      2 NOIDADD        DEC FIXED(11),###########################################        
+      2 ANNECTR        PIC '(4)9',   ##############################################        
+      2 CDTYPEQ        CHAR(03),     ################################################        
+                                     /*                     O=Options */        
+                                     /*                     P=Packs   */        
+                                     /*                 blanc = tout  */        
+                                     /*   Ex: "SO "=Serie + Options   */        
+      2 CDMULTI        CHAR(01),     ################################################        
+                                     /*         les doubles           */        
+      2 DAFINIM        PIC'(6)9',    ###############################################        
+                                     /*   (AAAAMM : obligatoire si    */        
+                                     /*    CDMULTI#'Y')               */        
+      2 CDGARAN        CHAR(01);     ################################################        
+                                     /*         les garanties         */        
+         
+ DCL 1 KA2151J_EXPCON_I                   BASED(ADDR(KA2151J.INPUT)),        
+      2 CDTYPTB        CHAR(02),     ################################################        
+      2 NBITEXP        BIN FIXED(15),###########################################        
+      2 NOIDTYP        DEC FIXED(07),###########################################        
+      2 NOIDPAC        DEC FIXED(07),###########################################        
+      2 NOIDEQT        DEC FIXED(07),###########################################        
+      2 DATEDEB        DEC FIXED(07),###########################################        
+      2 ANNECTR        PIC '(4)9',   ##############################################        
+      2 CDMULTI        CHAR(01),     ################################################        
+                                     /*         les doubles           */        
+      2 DAFINIM        PIC'(6)9';    ###############################################        
+                                     /*   (AAAAMM : obligatoire si    */        
+                                     /*    CDMULTI#'Y')               */        
+         
+ /* -------------------- OUTPUT ------------------------------------- */        
+         
+ DCL 1 KA2151J_EXPMAK_O                   BASED(ADDR(KA2151J.OUTPUT)),        
+      2 NBELMTB        BIN FIXED(15),    ###########################################        
+      2 TBIDELM (50),        
+       3 NOIDMAR            FIXED(07),   ##########################################        
+       3 LTMARQU            CHAR(40),    ###########################################        
+       3 CDTTERR            CHAR(01);    ###########################################        
+         
+ DCL 1 KA2151J_EXPMOD_O                   BASED(ADDR(KA2151J.OUTPUT)),        
+      2 NBELMTB        BIN FIXED(15),    ###########################################        
+      2 TBIDELM (50),        
+       3 NOIDMOD            FIXED(07),   ##########################################        
+       3 LTMODEL            CHAR(40),    ###########################################        
+       3 CDTTERR            CHAR(01);    ###########################################        
+         
+ DCL 1 KA2151J_EXPTYP_O                   BASED(ADDR(KA2151J.OUTPUT)),        
+      2 NBELMTB        BIN FIXED(15),    ###########################################        
+      2 TBIDELM (50),        
+       3 NOIDTYP            FIXED(07),   ##########################################        
+       3 LTTYPEV            CHAR(60),    ###########################################        
+       3 CDTTERR            CHAR(01),    ###########################################        
+       3 DADEBIM            PIC'(6)9',   ##########################################        
+       3 DAFINIM            PIC'(6)9',   ##########################################        
+       3 NBRPORT            FIXED(03),   ##########################################        
+       3 NBTYPKW            FIXED(03),   ##########################################        
+       3 NBVITES            FIXED(03),   ##########################################        
+       3 TXTBOIT            CHAR(08),    ###########################################        
+       3 TYPCYLI            FIXED(05),   ##########################################        
+       3 NBCVDIN            FIXED(03),   ##########################################        
+       3 TCO2EMI            FIXED(05),   ##########################################        
+       3 CDECOV2            CHAR(01),    ###########################################        
+       3 FILLER             CHAR(26);    ###########################################        
+         
+ DCL 1 KA2151J_EXPEQT_O                   BASED(ADDR(KA2151J.OUTPUT)),        
+      2 NBELMTB        BIN FIXED(15),    ###########################################        
+      2 TBIDELM (50),        
+       3 NOIDADD            FIXED(11),   ##########################################        
+       3 NOIDEQT            FIXED(07),   ##########################################        
+       3 DATEDEB            FIXED(07),   ##########################################        
+       3 DATEFIN            FIXED(07),   ##########################################        
+       3 LTTXTEQ(2)         CHAR(80),    ###########################################        
+       3 LTTXTST(2)         CHAR(40),    ###########################################        
+       3 CDTYPEQ            CHAR(01),    ###########################################        
+       3 PRIHTVA            FIXED(09),   ##########################################        
+       3 PRITVAC            FIXED(09);   ##########################################        
+         
+ DCL 1 KA2151J_EXPCON_O                   BASED(ADDR(KA2151J.OUTPUT)),        
+      2 NBELMTB        BIN FIXED(15),    ###########################################        
+      2 TBIDELM (50),        
+       3 NOIDPAC            FIXED(07),   ##########################################        
+       3 NOIDEQT            FIXED(07),   ##########################################        
+       3 LTTXTEQ(2)         CHAR(80),    ###########################################        
+       3 LTTXTST(2)         CHAR(40),    ###########################################        
+       3 DATEDEB            FIXED(07),   ##########################################        
+       3 DATEFIN            FIXED(07),   ##########################################        
+       3 PRIHTVA            FIXED(09),   ##########################################        
+       3 PRITVAC            FIXED(09);   ##########################################        
+         
+ /*********************************************************************/        
+ /*                P R I X   D ' U N   V E H I C U L E                */        
+ /*                ===================================                */        
+ /* METHODE : YY_PRIX                                                 */        
+ /*                                                                   */        
+ /*     YY = VP(VOITURES) , UT(UTILITAIRES), MO(MOTOS)                */        
+ /*                                                                   */        
+ /* !!ANNECTR : Zero => Renvoi le dernier prix connu pour le vehicule */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ /* -------------------- INPUT ---------------------------------------*/        
+         
+ DCL 1 KA2151J_PRIX_I                  BASED(ADDR(KA2151J.INPUT)),        
+      2 CDTYPTB       CHAR(02),      #################################################        
+      2 NOIDTYP       DEC FIXED(07), ############################################        
+      2 ANNECTR       PIC'(4)9';     ################################################        
+         
+ /* -------------------- OUTPUT ------------------------------------- */        
+ DCL 1 KA2151J_PRIX_O                  BASED(ADDR(KA2151J.OUTPUT)),        
+      2 DATEDEB       DEC FIXED(07), ############################################        
+      2 PRIHTVA       DEC FIXED(09), ############################################        
+      2 PRITVAC       DEC FIXED(09), ############################################        
+      2 TAUXTVA       DEC FIXED(5,2);###########################################        
+         
+         
+ /*********************************************************************/        
+ /*                C O T A T I O N S                                  */        
+ /*                =================                                  */        
+ /* METHODE : YY_COTATION                                             */        
+ /*                                                                   */        
+ /*     YY = VP(VOITURES) , UT(UTILITAIRES), MO(MOTOS)                */        
+ /*********************************************************************/        
+         
+ /* -------------------- INPUT ---------------------------------------*/        
+         
+ DCL 1 KA2151J_COTAT_I                 BASED(ADDR(KA2151J.INPUT)),        
+      2 CDTYPTB        CHAR(02),     ################################################        
+      2 NOIDTYP        DEC FIXED(07),###########################################        
+      2 ANNIMAT        PIC'(4)9',    ###############################################        
+      2 MOIIMAT        PIC'99',      #################################################        
+      2 KILOMRE        DEC FIXED(09);###########################################        
+         
+ /* -------------------- OUTPUT ------------------------------------- */        
+ DCL 1 KA2151J_COTAT_O                 BASED(ADDR(KA2151J.OUTPUT)),        
+      2 ANNEVAL        PIC'(4)9',    ###############################################        
+      2 MOISVAL        PIC'99',      #################################################        
+      2 KILOMTH        DEC FIXED(09),###########################################        
+      2 COTAREV        DEC FIXED(09),###########################################        
+      2 COTARAC        DEC FIXED(09);###########################################        
+         
+ /*********************************************************************/        
+ /*      A C C E S    P A R    L E S    I N D E X   (DA216)           */        
+ /*      ==================================================           */        
+ /*                                                                   */        
+ /* METHODE : MAR_MOD_YY_TYP  ...........(index '10','20','40')       */        
+ /*   renvoi  Numero de Marque et de Modele d'un type donne           */        
+ /*                                                                   */        
+ /*     YY = VP(VOITURES) , UT(UTILITAIRES), MO(MOTOS)                */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /* Utilise par le BMP de chargement pour partiel (AA2243)            */        
+ /*                                                                   */        
+ /* METHODE : EQT_ADD_YY ................(Index '12','22','42')       */        
+ /*   renvoi  Numero addition et type pour un equipement donne        */        
+ /*                                                                   */        
+ /* METHODE : EQT_CON_YY ................(Index '13','23','43')       */        
+ /*   renvoi  Numero de pack  et type pour un equipement donne        */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ /* -------------------- INPUT ---------------------------------------*/        
+         
+ DCL 1 KA2151J_A2IXEUT_I               BASED(ADDR(KA2151J.INPUT)),        
+      2 NOIDTYP           DEC FIXED(07),        
+      2 NOIDEQT           DEC FIXED(07);        
+         
+ /* -------------------- OUTPUT ------------------------------------- */        
+         
+ DCL 1 KA2151J_A2IXEUT_O               BASED(ADDR(KA2151J.OUTPUT)),        
+      2 NOIDMAR           DEC FIXED(07),        
+      2 NOIDMOD           DEC FIXED(07),        
+      2 NOIDTYP           DEC FIXED(07),        
+      2 NOIDADD           DEC FIXED(11),        
+      2 NOIDPAC           DEC FIXED(07);        
+         
+ /*********************************************************************/        
+ /*        LE TAUX TMC POUR DES NOUV. VOITURES ET OCCASION            */        
+ /*      ==================================================           */        
+ /*                                                                   */        
+ /* METHODE : YY_TMC                                                  */        
+ /*                                                                   */        
+ /*     YY = VP(VOITURES) , UT(UTILITAIRES), MO(MOTOS)                */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ /* -------------------- INPUT ---------------------------------------*/        
+         
+ DCL 1 KA2151J_TMC_I               BASED(ADDR(KA2151J.INPUT)),        
+      2 NOIDMAR            DEC FIXED(07),######################        
+      2 NOIDMOD            DEC FIXED(07),######################        
+      2 NOIDTYP            DEC FIXED(07),######################        
+      2 TMC_MOIS           CHAR(02),     ##############################        
+      2 TMC_ANNEE          CHAR(04);     ###############################        
+ /* -------------------- OUTPUT ------------------------------------- */        
+ DCL 1 KA2151J_TMC_O               BASED(ADDR(KA2151J.OUTPUT)),        
+       2 TMC_NOUV          DEC FIXED(09),        
+       2 TMC_OCCAS         DEC FIXED(09);        
+ /*********************************************************************/        
+         
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* MESSAGE D'ERREUR (JWB001.CDRTPGM = $LTNMPRJ !! 'XXX')             */        
+ /*    001 : NOM DE METHODE PAS CONNU                                 */        
+ /*    002 : TAILLE INPUT INCORRECTE                                  */        
+ /*    003 : DONNEES SEGMENT INPUT INVALIDES                          */        
+ /*    004 : DONNEES SEGMENT OUTPUT INVALIDES                         */        
+ /*    005 : TAILLE INPUT EXPLORATION INCORRECTE                      */        
+ /*    006 : TAILLE OUTPUT EXPLORATION INCORRECTE                     */        
+ /*    007 : NOMBRE D'ITEMS A EXPLORER INVALIDE                       */        
+ /*    008 : NOMBRE D'ITEMS A EXPLORER > LIMITE PREVUE                */        
+ /*    009 : EXPLORATION S/P : CLE DE DEPART NON RENSEIGNEE           */        
+ /*    010 : TRAITEMENT INDEX PAS PREVU                               */        
+ /*    011 : EXPLORATION : DONNEES INPUT INVALIDES                    */        
+ /*    012 : TAILLE INPUT YY_PRIX INCORRECTE                          */        
+ /*    013 : TAILLE OUTPUT YY_PRIX INCORRECTE                         */        
+ /*    014 : TAILLE INPUT YY_COTATION INCORRECTE                      */        
+ /*    015 : TAILLE OUTPUT YY_COTATION INCORRECTE                     */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         /* INTERFACE DB EUROTAX            */                                  
+ DCL KA2151  ENTRY;          #############################################################              
+                                                                                
+ /********************************************************************/         
+ /* REDEFINITIONS DES STRUCTURES BASEES                              */         
+ /********************************************************************/         
+ DCL KA2005J_I01_LIKE  LIKE KA2005J_I01;                                        
+                                                                                
+ DCL KA2005J_O01_LIKE  LIKE KA2005J_O01;                                        
+                                                                                
+ /********************************************************************/         
+ /* VARIABLES CONSTANTES                                             */         
+ /********************************************************************/         
+ DCL      ON          BIT (1)        VALUE ('1'B);                              
+ DCL      OFF         BIT (1)        VALUE ('0'B);                              
+                                                                                
+ /********************************************************************/         
+ /* TABLEAUX                                                         */         
+ /********************************************************************/         
+                                                                                
+ /********************************************************************/         
+ /* INDICES                                                          */         
+ /********************************************************************/         
+                                                                                
+ /********************************************************************/         
+ /* ZONES D'EDITION                                                  */         
+ /********************************************************************/         
+                                                                                
+ /********************************************************************/         
+ /* DECLARATIONS PROPRES AU PROGRAMME                                */         
+ /********************************************************************/         
+ DCL CDEURTX_I  PIC'9999999';###################################################                              
+ DCL NOIDMAR_W  FIXED(07);                                                      
+ DCL NOIDMOD_W  FIXED(07);                                                      
+ DCL NOIDTYP_W  PIC'99999'; #####################################################                                  
+ DCL LIB_LTMRQVH      CHAR(50) STATIC;                                          
+ DCL LIB_LTMODVH      CHAR(70) STATIC;                                          
+ DCL LIB_LTTYPVH      CHAR(60) STATIC;                                          
+ DCL IMAX             BIN FIXED (31);                                           
+ DCL I                BIN FIXED (31);                                           
+                                                                                
+ /********************************************************************/         
+ /* CONTROLE FLUX DU PROGRAMME                                       */         
+ /********************************************************************/         
+ DCL METAPCB_W        PTR;              ######################################################         
+                                                                                
+ /********************************************************************/         
+ /* MESSAGE D'ERREUR - TRACE POUR DEBUGGING - REPRISE D'ERREUR       */         
+ /********************************************************************/         
+ DCL 1   MESS_TRACE  STATIC,                ################################################        
+      2  LL_TR              BIN FIXED(15)   INIT(44),        
+      2  ZZ_TR              BIN FIXED(15)   INIT(0),        
+      2  TRACE              CHAR(40);        
+ DCL 1   TB_TRACE(100) STATIC,        
+      2  FLAG_TRACE         CHAR(01),        
+      2  MSGE_TRACE         CHAR(40);        
+ DCL     ITRACE             BIN FIXED (31)  STATIC;        
+ DCL     ERR_MSG     STATIC CHAR(79);        
+ DCL     PTRMSG             PTR;        
+ DCL 1   ERR_DBA            BASED(PTRMSG),        
+      2  FILL1              CHAR(12),        
+      2  FILL2              CHAR(04),        
+      2  DBD_DBA            CHAR(08),        
+      2  FILL3              CHAR(08),        
+      2  CALL_DBA           CHAR(10),        
+      2  FILL4              CHAR(05),        
+      2  KEY_DBA            CHAR(24),        
+      2  FILL5              CHAR(05),        
+      2  ST_DBA             CHAR(02),        
+      2  FILL6              CHAR(01);        
+ TB_TRACE(*)='';        
+ ITRACE=0;        
+ PTRMSG=ADDR(ERR_MSG);        
+         
+         
+ /* VARIABLE PERMETTANT D'AFFICHER LA DATE ET L'HEURE DE COMPILATION */        
+         
+ /* VARIABLE MAX CHECK POINT : NBR MAX. DE LOTS AUTORISE AVANT CHKPT */        
+ /*------------------------------------------------------------ DEBUG */        
+ PT: PROC;        
+ /******************************/        
+ /*       MEMO TRACE           */        
+ /******************************/        
+ JWB001.TBTRACE_I = JWB001.TBTRACE_I+1;        
+ IF JWB001.TBTRACE_I > 100        
+    THEN DO;        
+         JWB001.TBTRACE_I = 1;        
+         JWB001.FLAG_TRACE(*) = '';        
+         END;        
+ JWB001.FLAG_TRACE(JWB001.TBTRACE_I) = '*';        
+ JWB001.MSGE_TRACE(JWB001.TBTRACE_I) = TRACE;        
+                   IF JWB001.CDTRACE = 6 !        
+                      JWB001.CDTRACE = 9 THEN        
+      PUT SKIP EDIT(TRACE)(A);        
+ $END PT;        
+         
+ DEBUG: PROC;        
+ /**************************************/        
+ /*       PRINTING   TRACE             */        
+ /**************************************/        
+ DCL KT BIN FIXED(31);        
+ PUT FILE(SYSPRINT) EDIT('- PROGRAM TRACE: -')        
+                        (SKIP(3),A)        
+                        ('------------------')        
+                        (SKIP,A);        
+ DO KT=1 TO 100;        
+    IF JWB001.MSGE_TRACE(KT)^=''        
+       THEN PUT FILE(SYSPRINT)        
+            EDIT(JWB001.FLAG_TRACE(KT),        
+                 JWB001.MSGE_TRACE(KT))        
+                                   (SKIP,A,A);        
+ END;        
+ PUT FILE(SYSPRINT) EDIT('------------------')        
+                        (SKIP,A);        
+ $END DEBUG;        
+ /*-------------------------------------------------------- END DEBUG */        
+       /* MEMO TRACE - PRINTING TRACE - AVEC JWB001 */                          
+                                                                                
+ /*-------------------------------------------------------------------*/        
+ ERR_DL1:PROC REORDER;        
+ /********************************************************************/        
+ /*                                                                  */        
+ /*                PROCEDURE DL1 : ERREUR DATA BASE                  */        
+ /*                                                                  */        
+ /********************************************************************/        
+ JWB001.CDRTPGM = 'ERR_DL1';        
+ PUT PAGE EDIT('KA2005',  ' - VERSION DU : * 18.AUG.10 14.01.35 * - ',        
+         
+               'LAST SV CALL = ',JWB001.LSTCALL,        
+               'LAST DB CALL = ',JWB001.LSTSERV)        
+              (SKIP,A, A,(2) (SKIP,A,A));        
+         
+         
+ CALL DEBUG;        
+         
+ $END ERR_DL1;        
+ /*-------------------------------------------------------------------*/        
+                   /* SOIT ERREUR DE DATA BASE - 'ERR_DL1' + JWB001  */         
+                                                                                
+ ON ERROR SNAP        
+    BEGIN ;        
+          ON ERROR SYSTEM;        
+          PUT PAGE EDIT('KA2005', ' - VERSION DU : * 18.AUG.10 14.01.35        
+ * - ',        
+          ' ON ERROR CONDITION',        
+          'ONCODE    = ',ONCODE,        
+          'ONLOC     = ',ONLOC,        
+          'ONSOURCE  = ',ONSOURCE)        
+          (SKIP,A,A,        
+           SKIP,A,        
+           SKIP,A,F(5),        
+           SKIP,A,A(10),        
+           SKIP,A,A);        
+         
+           PUT SKIP EDIT('LAST SERV CALL = ',JWB001.LSTCALL,        
+                         'LAST DB2  CALL = ',JWB001.LSTSERV)        
+              (SKIP,A,A);        
+         
+         
+          CALL DEBUG;        
+          SIGNAL ERROR;        
+    END;        
+ /*-------------------------------------------------------------------*/        
+      /* ABEND PL1                                 */                           
+                                                                                
+ /*********************************************************************/        
+ /*  RACINE                                                           */        
+ /*********************************************************************/        
+ IF JWB001.CDTRACE >= 5                                                         
+  THEN DO;                                                                      
+        PUT SKIP EDIT('KA2005 ===> ','START METHODE : ',JWB001.LTNMMTH)         
+         
+                                                          (A,A,A);              
+       END;                                                                     
+                                                                                
+ IF JWB001.CDRTPGM ^= ''                                                        
+  THEN RETURN;                                                                  
+                                                                                
+ CALL F0;   #######################################################################                                               
+                                                                                
+ IF JWB001.CDRTPGM = ''                                                         
+  THEN DO;                                                                      
+        SELECT (JWB001.LTNMMTH);                                                
+                                                                                
+         /********************************************/                         
+         /* CONSULTATION                             */                         
+         /********************************************/                         
+                                                                                
+            WHEN('CONSULT_VEHIC') CALL F1;                                      
+            OTHER       ###############################################################                              
+             DO;                                                                
+              JWB001.CDRTPGM = 'KA2005' !! '001';                               
+              PUT SKIP LIST('!!! NOM DE METHODE NON REPERTORIE !!!');           
+              PUT SKIP EDIT('METHODE =',JWB001.LTNMMTH) (A,A);                  
+             END;                                                               
+        END;                                                                    
+       END;                                                                     
+                                                                                
+                                                                                
+ /* RESTAURATION DU METAPCB D'ORIGINE DANS IEU001 */                            
+ IEU001.METAPCB = METAPCB_W;                                                    
+                                                                                
+ IF JWB001.CDTRACE >= 5                                                         
+  THEN DO;                                                                      
+        PUT SKIP EDIT('KA2005 ===> ','END   CDRTPGM : ',JWB001.CDRTPGM)         
+         
+                                                          (A,A,A);              
+       END;                                                                     
+ /*-------------------------------------------------------------------*/        
+                                                                                
+ F0: PROC REORDER;                                                              
+ TRACE = 'KA2005 ===> ' !! 'F0';                                                
+         
+ CALL PT;                                                                       
+ /*********************************************************************/        
+ /* INITIALISATION                                                    */        
+ /*********************************************************************/        
+                                                                                
+ /* SAUVEGARDE DU METAPCB D'ORIGINE DE IEU001 */                                
+ METAPCB_W = IEU001.METAPCB;                                                    
+                                                                                
+ /* INITIALISATION DU METAPCB PASSE AU SERVICE */                               
+ IEU001.METAPCB = KA2005J_P.DEU02PCB;                                           
+                                                                                
+ /* VERIFICATION DE LA TAILLE DE LA REDEFINITION */                             
+ IF (STG(KA2005J_I01)) > (STG(KA2005J.INPUT))                                   
+  THEN DO;                                                                      
+        JWB001.CDRTPGM = 'KA2005' !! '002';                                     
+        RETURN;                                                                 
+       END;                                                                     
+                                                                                
+ IF (STG(KA2005J_O01)) > (STG(KA2005J.OUTPUT))                                  
+  THEN DO;                                                                      
+        JWB001.CDRTPGM = 'KA2005' !! '007';                                     
+        RETURN;                                                                 
+       END;                                                                     
+                                                                                
+ /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/        
+ TRACE = 'KA2005 ===> ' !! 'END F0';                                            
+         
+ CALL PT;                                                                       
+ $END F0;                                                                        
+ /*-------------------------------------------------------------------*/        
+ /*-------------------------------------------------------------------*/        
+                                                                                
+ F1: PROC REORDER ;                                                             
+ TRACE = 'KA2005 ===> ' !! 'F1';                                                
+         
+ CALL PT;                                                                       
+ /*********************************************************************/        
+ /* METHODE CONSULT_VEHIC  CONSULTATION                               */        
+ /*********************************************************************/        
+                                                                                
+  IF KA2005J_I01.CDTYPVH ^= 0 & KA2005J_I01.NOIDTYP ^= ''                       
+  THEN                                                                          
+    DO;                                                                         
+      JWB001.CDRTPGM = 'KA2005' !! '004';                                       
+      RETURN;                                                                   
+    END;                                                                        
+                                                                                
+  IF KA2005J_I01.NOIDTYP ^= ''                                                  
+  THEN                                                                          
+     CALL F11;                                                                  
+  ELSE                                                                          
+     CALL F12;                                                                  
+                                                                                
+ /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/        
+ TRACE = 'KA2005 ===> ' !! 'END F1';                                            
+         
+ CALL PT;                                                                       
+ $END F1;                                                                        
+ /*-------------------------------------------------------------------*/        
+ /*-------------------------------------------------------------------*/        
+                                                                                
+ F11: PROC REORDER;                                                             
+ TRACE = 'KA2005 ===> ' !! 'F21';                                               
+         
+ CALL PT;                                                                       
+ /*********************************************************************/        
+ /* METHODE CONSULT_VEHIC  EUROTAX NEW                                */        
+ /*********************************************************************/        
+ KA2005J_O01 = '';                                                              
+                                                                                
+ IF JWB001.CDTRACE = 9                                                          
+  THEN DO;                                                                      
+        KA2005J_I01_LIKE = KA2005J_I01, BY NAME;                                
+        PUT SKIP DATA(KA2005J_I01_LIKE);                                        
+       END;                                                                     
+                                                                                
+ CDEURTX_I = KA2005J_I01.NOIDTYP;                                               
+                                                                                
+ KA2151J             = '';                                                      
+ KA2151J_P.DEU02PCB  = KA2005J_P.DEU02PCB;                                      
+ KA2151J_P.DA215PCB  = KA2005J_P.DA215PCB;                                      
+ KA2151J_P.DA215$PCB = KA2005J_P.DA215$PCB;                                     
+ KA2151J_P.DA216PCB  = KA2005J_P.DA216PCB;                                      
+                                                                                
+ /* APPEL AU SERVICE DB  :  CHERCHER NOIDMAR ET NOIDMOD */                      
+ KA2151J.INPUT             = '';                                                
+ KA2151J.OUTPUT            = '';                                                
+ KA2151J_A2IXEUT_I.NOIDTYP = CDEURTX_I;                                         
+                                                                                
+ IF KA2005J_I01.CDCATVH = '310'                                                 
+  THEN DO;                                                                      
+        JWB001.LTNMMTH = 'MAR_MOD_UT_TYP';                                      
+        JWB001.LSTCALL = 'F_EUROTAX.1';                                         
+       END;                                                                     
+  ELSE DO;                                                                      
+        JWB001.LTNMMTH = 'MAR_MOD_VP_TYP';                                      
+        JWB001.LSTCALL = 'F_EUROTAX.2';                                         
+       END;                                                                     
+                                                                                
+ CALL KA2151(IEU001,JWB001,KA2151J);                                            
+                                                                                
+ SELECT (JWB001.CDRTPGM);                                                       
+  WHEN ('')                                                                     
+    DO;                                                                         
+      NOIDMAR_W = KA2151J_A2IXEUT_O.NOIDMAR;                                    
+      NOIDMOD_W = KA2151J_A2IXEUT_O.NOIDMOD;                                    
+    END;                                                                        
+  OTHER                                                                         
+    DO;                                                                         
+      JWB001.CDRTPGM = 'KA2005' !! '006';                                       
+      RETURN;                                                                   
+    END;                                                                        
+ END;                                                                           
+                                                                                
+ /* APPEL AU SERVICE DB  :  LIRE LA MARQUE */                                   
+ IF KA2005J_I01.CDCATVH = '310'                                                 
+    THEN                                                                        
+      DO;                                                                       
+      A2EUT21.CDTYPTB   = '21';                                                 
+      A2EUT21.NOIDMAR   = NOIDMAR_W;                                            
+      A2EUT21.FILLKEY   = ' ';                                                  
+                                                                                
+      KA2151J.INPUT     = '';                                                   
+      KA2151J.OUTPUT    = '';                                                   
+                                                                                
+      JWB001.LTNMMTH    = 'CONSULT_UT_MAK';                                     
+      JWB001.LSTCALL    = 'F_EUROTAX.3';                                        
+      KA2151J_A2EUTAX_I = A2EUT21_R;                                            
+      END;                                                                      
+    ELSE                                                                        
+      DO;                                                                       
+      A2EUT11.CDTYPTB   = '11';                                                 
+      A2EUT11.NOIDMAR   = NOIDMAR_W;                                            
+      A2EUT11.FILLKEY   = ' ';                                                  
+                                                                                
+      KA2151J.INPUT     = '';                                                   
+      KA2151J.OUTPUT    = '';                                                   
+                                                                                
+      JWB001.LTNMMTH    = 'CONSULT_VP_MAK';                                     
+      JWB001.LSTCALL    = 'F_EUROTAX.4';                                        
+      KA2151J_A2EUTAX_I = A2EUT11_R;                                            
+      END;                                                                      
+                                                                                
+ CALL KA2151(IEU001,JWB001,KA2151J);                                            
+                                                                                
+ SELECT (JWB001.CDRTPGM);                                                       
+  WHEN ('')                                                                     
+    DO;                                                                         
+       IF KA2005J_I01.CDCATVH = '310'                                           
+          THEN                                                                  
+            DO;                                                                 
+              A2EUT21_R           = KA2151J_A2EUTAX_O;                          
+              LIB_LTMRQVH         = A2EUT21.LTMARQU;                            
+              KA2005J_O01.LTMRQVH = LIB_LTMRQVH;                                
+            END;                                                                
+          ELSE                                                                  
+            DO;                                                                 
+              A2EUT11_R           = KA2151J_A2EUTAX_O;                          
+              LIB_LTMRQVH         = A2EUT11.LTMARQU;                            
+              KA2005J_O01.LTMRQVH = LIB_LTMRQVH;                                
+            END;                                                                
+    END;                                                                        
+  OTHER                                                                         
+    DO;                                                                         
+      JWB001.CDRTPGM = 'KA2005' !! '006';                                       
+      RETURN;                                                                   
+    END;                                                                        
+ END;                                                                           
+                                                                                
+  /* APPEL AU SERVICE DB  :  LIRE LE MODELE */                                  
+ IF KA2005J_I01.CDCATVH = '310'                                                 
+    THEN                                                                        
+      DO;                                                                       
+      A2EUT22.CDTYPTB = '22';                                                   
+      A2EUT22.NOIDMAR = NOIDMAR_W;                                              
+      A2EUT22.NOIDMOD = NOIDMOD_W;                                              
+      A2EUT22.FILLKEY = ' ';                                                    
+                                                                                
+      KA2151J.INPUT   = '';                                                     
+      KA2151J.OUTPUT  = '';                                                     
+                                                                                
+      JWB001.LTNMMTH    = 'CONSULT_UT_MOD';                                     
+      JWB001.LSTCALL    = 'F_EUROTAX.5';                                        
+      KA2151J_A2EUTAX_I = A2EUT22_R;                                            
+      END;                                                                      
+                                                                                
+    ELSE                                                                        
+      DO;                                                                       
+      A2EUT12.CDTYPTB = '12';                                                   
+      A2EUT12.NOIDMAR = NOIDMAR_W;                                              
+      A2EUT12.NOIDMOD = NOIDMOD_W;                                              
+      A2EUT12.FILLKEY = ' ';                                                    
+                                                                                
+      KA2151J.INPUT   = '';                                                     
+      KA2151J.OUTPUT  = '';                                                     
+                                                                                
+      JWB001.LTNMMTH    = 'CONSULT_VP_MOD';                                     
+      JWB001.LSTCALL    = 'F_EUROTAX.6';                                        
+      KA2151J_A2EUTAX_I = A2EUT12_R;                                            
+      END;                                                                      
+                                                                                
+ CALL KA2151(IEU001,JWB001,KA2151J);                                            
+                                                                                
+ SELECT (JWB001.CDRTPGM);                                                       
+  WHEN ('')                                                                     
+    DO;                                                                         
+       IF KA2005J_I01.CDCATVH = '310'                                           
+          THEN                                                                  
+            DO;                                                                 
+              A2EUT22_R          = KA2151J_A2EUTAX_O;                           
+              LIB_LTMODVH        = A2EUT22.LTMODEL;                             
+            END;                                                                
+          ELSE                                                                  
+            DO;                                                                 
+              A2EUT12_R          = KA2151J_A2EUTAX_O;                           
+              LIB_LTMODVH        = A2EUT12.LTMODEL;                             
+            END;                                                                
+    END;                                                                        
+  OTHER                                                                         
+    DO;                                                                         
+      JWB001.CDRTPGM = 'KA2005' !! '006';                                       
+      RETURN;                                                                   
+    END;                                                                        
+ END;                                                                           
+                                                                                
+ IMAX = STG(LIB_LTMODVH);                                                       
+ DO I = IMAX TO 1 BY -1 WHILE(SUBSTR(LIB_LTMODVH, I, 1) = ' ');                 
+ END;                                                                           
+                                                                                
+ /* APPEL AU SERVICE DB  :  LIRE LE TYPE   */                                   
+ KA2151J.INPUT   = '';                                                          
+ KA2151J.OUTPUT  = '';                                                          
+                                                                                
+ IF KA2005J_I01.CDCATVH = '310'                                                 
+    THEN                                                                        
+      DO;                                                                       
+      A2EUT23.CDTYPTB = '23';                                                   
+      A2EUT23.NOIDMAR = NOIDMAR_W;                                              
+      A2EUT23.NOIDMOD = NOIDMOD_W;                                              
+      A2EUT23.NOIDTYP = CDEURTX_I;                                              
+      A2EUT23.FILLKEY = ' ';                                                    
+                                                                                
+      JWB001.LTNMMTH    = 'CONSULT_UT_TYP';                                     
+      JWB001.LSTCALL    = 'F_EUROTAX.7';                                        
+      KA2151J_A2EUTAX_I = A2EUT23_R;                                            
+      END;                                                                      
+    ELSE                                                                        
+      DO;                                                                       
+      A2EUT13.CDTYPTB = '13';                                                   
+      A2EUT13.NOIDMAR = NOIDMAR_W;                                              
+      A2EUT13.NOIDMOD = NOIDMOD_W;                                              
+      A2EUT13.NOIDTYP = CDEURTX_I;                                              
+      A2EUT13.FILLKEY = ' ';                                                    
+                                                                                
+      JWB001.LTNMMTH    = 'CONSULT_VP_TYP';                                     
+      JWB001.LSTCALL    = 'F_EUROTAX.8';                                        
+      KA2151J_A2EUTAX_I = A2EUT13_R;                                            
+      END;                                                                      
+                                                                                
+ CALL KA2151(IEU001,JWB001,KA2151J);                                            
+                                                                                
+ SELECT (JWB001.CDRTPGM);                                                       
+  WHEN ('')                                                                     
+    DO;                                                                         
+       IF KA2005J_I01.CDCATVH = '310'                                           
+          THEN                                                                  
+              DO;                                                               
+              A2EUT23_R           = KA2151J_A2EUTAX_O;                          
+              LIB_LTTYPVH         = SUBSTR(LIB_LTMODVH,1,I) !! ' ' !!           
+                                                    A2EUT23.LTTYPEV;            
+              KA2005J_O01.LTMODVH = LIB_LTTYPVH;                                
+              KA2005J_O01.CDTYPVS = A2EUT23.CDVOLSM;                            
+              KA2005J_O01.CDTYPDS = A2EUT23.CDDMSMA;                            
+              KA2005J_O01.CDTYPOP = A2EUT23.CDOMETH;                            
+              KA2005J_O01.CDTYPDM = A2EUT23.CDDMETH;                            
+              KA2005J_O01.CDSPORT = A2EUT23.CDSPORT;                            
+              IF A2EUT23.TXTCARO = '00010004' THEN                              
+                   KA2005J_O01.CDCABRI = '1';                                   
+              ELSE KA2005J_O01.CDCABRI = ' ';                                   
+              IF A2EUT23.TCO2EMI >= 1 & #########################################                              
+                 A2EUT23.TCO2EMI <= 115 THEN                                    
+                   KA2005J_O01.CDECOVH = '1';                                   
+              ELSE                                                              
+              IF A2EUT23.TCO2EMI > 115 & ########################################                             
+                 A2EUT23.TCO2EMI <= 120 THEN                                    
+                   KA2005J_O01.CDECOVH = '2';                                   
+              ELSE KA2005J_O01.CDECOVH = '';                                    
+              KA2005J_O01.CDTYOP3 = A2EUT23.CDTYOP3; ############################                 
+              KA2005J_O01.CDTYDM3 = A2EUT23.CDTYDM3; ############################                 
+              KA2005J_O01.CDECOV2 = A2EUT23.CDECOV2; ############################                 
+            END;                                                                
+          ELSE                                                                  
+              DO;                                                               
+              A2EUT13_R           = KA2151J_A2EUTAX_O;                          
+              LIB_LTTYPVH         = SUBSTR(LIB_LTMODVH,1,I) !! ' ' !!           
+                                                    A2EUT13.LTTYPEV;            
+              KA2005J_O01.LTMODVH = LIB_LTTYPVH;                                
+              KA2005J_O01.CDTYPVS = A2EUT13.CDVOLSM;                            
+              KA2005J_O01.CDTYPDS = A2EUT13.CDDMSMA;                            
+              KA2005J_O01.CDTYPOP = A2EUT13.CDOMETH;                            
+              KA2005J_O01.CDTYPDM = A2EUT13.CDDMETH;                            
+              KA2005J_O01.CDSPORT = A2EUT13.CDSPORT;                            
+              IF A2EUT13.TXTCARO = '00010004' THEN                              
+                   KA2005J_O01.CDCABRI = '1';                                   
+              ELSE KA2005J_O01.CDCABRI = ' ';                                   
+              IF A2EUT13.TCO2EMI >= 1 & #########################################                              
+                 A2EUT13.TCO2EMI <= 115 THEN                                    
+                   KA2005J_O01.CDECOVH = '1';                                   
+              ELSE                                                              
+              IF A2EUT13.TCO2EMI > 115 & ########################################                             
+                 A2EUT13.TCO2EMI <= 120 THEN                                    
+                   KA2005J_O01.CDECOVH = '2';                                   
+              ELSE KA2005J_O01.CDECOVH = '';                                    
+              KA2005J_O01.CDTYOP3 = A2EUT13.CDTYOP3; ############################                 
+              KA2005J_O01.CDTYDM3 = A2EUT13.CDTYDM3; ############################                 
+              KA2005J_O01.CDECOV2 = A2EUT13.CDECOV2; ############################                 
+            END;                                                                
+    END;                                                                        
+  OTHER                                                                         
+    DO;                                                                         
+      JWB001.CDRTPGM = 'KA2005' !! '006';                                       
+      RETURN;                                                                   
+    END;                                                                        
+ END;                                                                           
+                                                                                
+                                                                                
+ IF JWB001.CDTRACE = 9                                                          
+  THEN DO;                                                                      
+        KA2005J_O01_LIKE = KA2005J_O01, BY NAME;                                
+        PUT SKIP DATA(KA2005J_O01_LIKE);                                        
+       END;                                                                     
+                                                                                
+ /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/        
+ TRACE = 'KA2005 ===> ' !! 'END F11';                                           
+         
+ CALL PT;                                                                       
+ $END F11;                                                                       
+ /*-------------------------------------------------------------------*/        
+ /*-------------------------------------------------------------------*/        
+                                                                                
+ F12: PROC REORDER;                                                             
+ TRACE = 'KA2005 ===> ' !! 'F12';                                               
+         
+ CALL PT;                                                                       
+ /*********************************************************************/        
+ /* METHODE CONSULT_VEHIC  EUROTAX OLD                                */        
+ /*********************************************************************/        
+ KA2005J_O01 = '';                                                              
+                                                                                
+ IF JWB001.CDTRACE = 9                                                          
+  THEN DO;                                                                      
+        KA2005J_I01_LIKE = KA2005J_I01, BY NAME;                                
+        PUT SKIP DATA(KA2005J_I01_LIKE);                                        
+       END;                                                                     
+                                                                                
+ NOIDTYP_W = KA2005J_I01.CDTYPVH;                                               
+ SSA_C1TAB.VALUE = 'A233' !! SUBSTR(KA2005J_I01.LTMRQVH,1,15) !!                
+                   NOIDTYP_W;                                                   
+                                                                                
+ LASTCALL='LCVH.01';                                                            
+ CDDFSEG ='CSMA2330';                                                           
+ CALL XEU100(IEU001,FOUR,GU,TAB,TABLE_A233,SSA_C1TAB);                          
+ SELECT(TAB.STATUS);                                                            
+   WHEN('')                                                                     
+     DO;                                                                        
+       KA2005J_O01.LTMRQVH = KA2005J_I01.LTMRQVH;                               
+       KA2005J_O01.LTMODVH = TABLE_A233.LTTYPVH;                                
+       KA2005J_O01.CDSPORT = TABLE_A233.CDSPORT;                                
+       KA2005J_O01.CDCABRI = TABLE_A233.CDCABRI;                                
+       KA2005J_O01.CDTYPOP = TABLE_A233.CDTYOP1;                                
+       KA2005J_O01.CDTYPDM = TABLE_A233.CDTYDM1;                                
+       KA2005J_O01.CDTYPVS = TABLE_A233.CDTYPVS;                                
+       KA2005J_O01.CDTYPDS = TABLE_A233.CDTYPDS;                                
+       KA2005J_O01.CDECOVH = TABLE_A233.CDECOVH; ################################                     
+       KA2005J_O01.CDTYOP3 = TABLE_A233.CDTYOP3; ################################                     
+       KA2005J_O01.CDTYDM3 = TABLE_A233.CDTYDM3; ################################                     
+       KA2005J_O01.CDECOV2 = TABLE_A233.CDECOV2; ################################                     
+     END;                                                                       
+   WHEN('GE')                                                                   
+     DO;                                                                        
+       JWB001.CDRTPGM = 'KA2005' !! '005';                                      
+       RETURN;                                                                  
+     END;                                                                       
+   OTHER                                                                        
+     CALL ERR_DL1;                                                              
+ END;                                                                           
+                                                                                
+ IF JWB001.CDTRACE = 9                                                          
+  THEN DO;                                                                      
+        KA2005J_O01_LIKE = KA2005J_O01, BY NAME;                                
+        PUT SKIP DATA(KA2005J_O01_LIKE);                                        
+       END;                                                                     
+                                                                                
+ /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/        
+ TRACE = 'KA2005 ===> ' !! 'END F12';                                           
+         
+ CALL PT;                                                                       
+ $END F12;                                                                       
+ /*-------------------------------------------------------------------*/        
+ /*-------------------------------------------------------------------*/        
+                                                                                
+ $$END KA2005;                                                                    

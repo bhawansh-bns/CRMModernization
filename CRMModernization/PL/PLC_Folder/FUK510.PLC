@@ -1,0 +1,671 @@
+BEGIN_PLC(FUK510)
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* Test reporting record layout.                                     */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /* UK08970 - After processing all transaction for the month:         */        
+ /*           Assign from FUK502                                      */        
+ /*           Assign from FUK500                                      */        
+ /*           Call UK09009 to calculate fund values and assign.       */        
+ /*           Write out record.                                       */        
+ /* UK08985 - Assign initial and premium units amounts invested.      */        
+ /* UK08990 - Assign all charges.                                     */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ /* Set TESTREP = 0 to turn of test report in production */        
+ % DCL TESTREP FIXED ;        
+ % TESTREP = 1 ;        
+         
+ %if TESTREP=0 %then %goto SKIP510;        
+         
+ /* if you increase this length from 6000 then also amend 9492        
+    field ZTERM_OUT accordingly */        
+         
+ Dcl 1 WUK510A_REC     CHAR(6000) ;        
+ /*Dcl 1 WUK510A_REC     CHAR(5000) ; */        
+ /*Dcl 1 WUK510A_REC     CHAR(3310) ; */        
+ Dcl 1 WUK510 Based(Addr(WUK510A)),        
+       2 POLNO   PIC '(7)9',        
+ /* Policy Number                            */        
+       2 VERS     PIC '(1)9',        
+ /* Version                                  */        
+       2 Effdt    PIC '(8)9',        
+ /* Date of record. Investment date. */        
+       2 TABLE    PIC '(3)9',        
+ /* Table Number */        
+ /*****************************************************/        
+ /* RP investment.                                    */        
+ /*****************************************************/        
+       2   IFnd_Amt   Fixed Dec(15,3),        
+ /* Amount invested in initial funds */        
+       2   PFnd_Amt   Fixed Dec(15,3),        
+ /* Amount invested in premium funds */        
+ /*****************************************************/        
+ /* Fund value. Calculated by UK09009                 */        
+ /*****************************************************/        
+       2   Bid_Value      Fixed Dec(15,3),        
+  /*   2   Afac           Fixed Dec(5,4) RMJ 15/08/07 */        
+       2   Afac           Fixed Dec(7,6),        
+       2   Surr_Value     Fixed Dec(15,3),        
+       2   SP_Value       Fixed Dec(15,3),        
+       2   IUVal          Fixed Dec(15,3),        
+       2   PUVal          Fixed Dec(15,3),        
+ /*****************************************************/        
+ /* Charges.                                          */        
+ /*****************************************************/        
+       2   WOP_Charge               Fixed Dec(11,3),        
+       2   DAB_Charge               Fixed Dec(11,3),        
+       2   Disability_Charge        Fixed Dec(11,5),        
+       2   Life_Charge              Fixed Dec(11,5),        
+       2   PTD_Charge               Fixed Dec(11,3),        
+       2   SI_Charge                Fixed Dec(11,3),        
+       2   CC_Charge                Fixed Dec(11,3),        
+       2   Contract_Charge          Fixed Dec(11,3),        
+       2   Slice_Charge             Fixed Dec(11,3),        
+ /*****************************************************/        
+ /* Policy contract section. From WUK502.             */        
+ /*****************************************************/        
+       2 STATUS     CHAR (3),        
+ /* Status */        
+       2 INH_CD     CHAR (1),        
+ /* Inhibit Code */        
+       2 BEN_PAY    CHAR (1),        
+ /* Benefit in Payment */        
+       2 STAFF      CHAR (1),        
+ /* Staff Rate */        
+       2 TERM_CON   PIC '(2)9',        
+ /* Term to Conversion */        
+       2 TERM       PIC '(2)9',        
+ /* Term */        
+       2 DOP        PIC            '(8)9'               ,        
+ /* Date of Proposal */        
+       2 DOE        PIC            '(8)9'            ,        
+ /* Date of Entry */        
+       2 DOM        PIC            '(8)9'            ,        
+ /* Date of Maturity */        
+       2   CNACC       CHAR           (  1)             ,        
+ /* Country of Accounting */        
+       2   CURR        CHAR           (  1)             ,        
+ /* Currency */        
+       2   IMPAIR      CHAR           (  2)             ,        
+ /* Impairment Code */        
+       2   BILL_TYPE   CHAR           (  1)             ,        
+ /* Bill Type */        
+       2   GROUPED     CHAR           (  1)             ,        
+ /* Grouped Extra Investment Applies */        
+       2   IX_OPT      CHAR           (  1)             ,        
+ /* Increase Option Code */        
+       2   SPOL_CD     CHAR           (  1)             ,        
+ /* Special Policy Code */        
+       2   POLFEE_APP  CHAR           (  1)             ,        
+ /* Policy Fee Applies Code */        
+ /***********************************************/        
+ /* CLIENT SECTION - from UKPH                  */        
+ /***********************************************/        
+       2   AGE_ENT_1   PIC            '(3)9'            ,        
+ /* Age at Entry Life 1 */        
+       2   DOB_1       PIC            '(8)9'            ,        
+ /* Date of Birth 1 */        
+       2   DOB_2       PIC            '(8)9'            ,        
+ /* Date of Birth 2 */        
+       2   SEX_1       CHAR           (  1)             ,        
+ /* Sex Code Life 1 */        
+       2   SEX_2       CHAR           (  1)             ,        
+ /* Sex Code Life 2 */        
+       2   SMOKER_1    CHAR           (  1)             ,        
+ /* Non Smoker Code 1 */        
+       2   SMOKER_2    CHAR           (  1)             ,        
+ /* Non Smoker Code 2 */        
+       2   MAT_SUM     FIXED DEC      ( 11,2)            ,        
+ /* MATURITY SUM ASSURED */        
+       2   LCOVER_1    FIXED DEC      ( 11,2)            ,        
+ /* DEATH SUM ASSURED LIFE 1 */        
+       2   LCOVER_2    FIXED DEC      ( 11,2)            ,        
+ /* DEATH SUM ASSURED LIFE 2 */        
+       2   LCOVER_Fund CHAR           (  1)              ,        
+ /* LIFE COVER FUND RELATIONSHIP */        
+       2   DCOVER_1    FIXED DEC      ( 11,2)            ,        
+ /* DISABILITY SUM ASSURED LIFE 1 */        
+       2   DCOVER_2    FIXED DEC      ( 11,2)            ,        
+ /* DISABILITY SUM ASSURED LIFE 2 */        
+       2   DEFER_1     PIC            '(3)9'             ,        
+ /* DEFERMENT PERIOD LIFE 1 */        
+       2   DEFER_2     PIC            '(3)9'             ,        
+ /* DEFERMENT PERIOD LIFE 2 */        
+       2   DEND_AGE_1  PIC            '(2)9'             ,        
+ /* DISABILITY COVER ENDING AGE LIFE 1 */        
+       2   DEND_AGE_2  PIC            '(2)9'             ,        
+ /* DISABILITY COVER ENDING AGE LIFE 2 */        
+       2   ESCAL       FIXED DEC      (  3,1)            ,        
+ /* ESCALATION RATE */        
+       2   DAB_CD      CHAR           (  1)              ,        
+ /* DAB Code */        
+       2   DAB_END     PIC            '(8)9'             ,        
+ /* Date DAB Cover Ceasing */        
+       2   PUP_END     FIXED DEC      ( 11,2)            ,        
+ /* Paid-up Endowment Amount */        
+       2   PUP_DTH     FIXED DEC      ( 11,2)            ,        
+ /* Paid-up Death Amount */        
+       2   CON_CHG     FIXED DEC      ( 11,2)            ,        
+ /* Contract Charge */        
+       2   WOP_APP     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code */        
+       2   WOP_ACT     CHAR           (  1)              ,        
+ /* Waiver of Premium Active Code */        
+       2   WOP_PROP    FIXED DEC   (  5,4 )              ,        
+ /* Waiver of Premium Proportion  */        
+       2   ILSP1       CHAR           (  1)              ,        
+ /* Illness Paid Life 1 */        
+       2   ILSP2       CHAR           (  1)              ,        
+ /* Illness Paid Life 2 */        
+       2   ICOVER_1    FIXED DEC      (  9,2)            ,        
+ /* Serious Illness Cover Life 1 */        
+       2   ICOVER_2    FIXED DEC      (  9,2)            ,        
+ /* Serious Illness Cover Life 2 */        
+       2   CONT_PROT   FIXED DEC      ( 11,2)            ,        
+ /* Contribution Protection Amount */        
+       2   CCOVER_1    FIXED DEC      ( 11,2)            ,        
+ /* Crisis Cover Life 1 */        
+       2   CCOVER_2    FIXED DEC      ( 11,2)            ,        
+ /* Crisis Cover Life 2 */        
+       2   CC_MULT1    PIC'99'                           ,        
+ /* Crisis Cover Multiple 1 */        
+       2   CC_MULT2    PIC'99'                           ,        
+ /* Crisis Cover Multiple 2 */        
+       2   PCOVER_1    FIXED DEC     (11,2)              ,        
+ /* Total Permanent Disability Cover Life 1 */        
+       2   PCOVER_2    FIXED DEC     (11,2)              ,        
+ /* Total Permanent Disability Cover Life 2 */        
+       2   MED_FAC_1  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 */        
+       2   MED_FAC_2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 */        
+       2   PRM_FAC_1  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 */        
+       2   PRM_FAC_2  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 */        
+       2   PRM_FAC_DT PIC            '(8)9'               ,        
+ /* Extra Premium Factor Termination Date */        
+       2   ADD_FAC_1  FIXED DEC      (  9,4)              ,        
+ /* Extra Additive Loading 1 */        
+       2   ADD_FAC_2  FIXED DEC      (  9,4)              ,        
+ /* Extra Additive Loading 2 */        
+       2   OCC_C_1    CHAR           (  1)                ,        
+ /* Occupation Class Life 1 */        
+       2   OCC_C_2    CHAR           (  1)                ,        
+ /* Occupation Class Life 2 */        
+       2   ILL_FAC_1  PIC            '(3)9'               ,        
+ /* Extra Serious Illness Factor 1 */        
+       2   ILL_FAC_2  PIC            '(3)9'               ,        
+ /* Extra Serious Illness Factor 2 */        
+       2   T_OCC_FC_1 PIC'999'                            ,        
+ /* Temporary Extra %age occupational loading 1 */        
+       2   T_OCC_FC_2 PIC'999'                            ,        
+ /* Temporary Extra %age occupational loading 2 */        
+       2   T_OCC_DT_1 PIC'99999999'                       ,        
+ /* Temporary Extra %age occupational loading end    */        
+ /* date 1 */        
+       2   T_OCC_DT_2 PIC'99999999'                       ,        
+ /* Temporary Extra %age occupational loading end    */        
+ /* date 1 */        
+       2   T_MED_FC_1 PIC'999'                            ,        
+ /* Temporary Extra %age medical loading 1 */        
+       2   T_MED_FC_2 PIC'999'                            ,        
+ /* Temporary Extra %age medical loading 2 */        
+       2   T_MED_DT_1 PIC'99999999'                       ,        
+ /* Temporary Extra %age medical loading end date 1  */        
+       2   T_MED_DT_2 PIC'99999999'                       ,        
+ /* Temporary Extra %age medical loading end date 2  */        
+       2   T_MIL_FC_1 PIC'999'                            ,        
+ /* Temporary per mille loading 1 */        
+       2   T_MIL_FC_2 PIC'999'                            ,        
+ /* Temporary per mille loading 2 */        
+       2   P_MIL_FC_1 PIC'999'                            ,        
+ /* Per mille loading 1 */        
+       2   P_MIL_FC_2 PIC'999'                            ,        
+ /* Per mille loading 2 */        
+       2   BILL_FRQ   PIC            '99'                ,        
+ /* Bill Frequency   */        
+       2   NEW_PR    FIXED DEC      (11,2)              ,        
+ /* Current Regular Premium */        
+ /*------------------------------------------------------------------*/        
+ /* FUK500 : Unit Account                                            */        
+ /*-- ---------------------------------------------------------------*/        
+     2 F_Types     (5)              ,   /* Array of Fund Types       */        
+       3 F_Type    Char      (1)    ,   /* Fund Type                 */        
+       3 Funds     (10)             ,   /* Array of Funds            */        
+         4 F_Name  Char      (3)    ,   /* Fund Name                 */        
+         4 F_Per   Fixed Dec (3,2)  ,   /* Fund Percentage           */        
+         4 In_Pur  Fixed Dec (15,3) ,   /* Initial Units Purchased   */        
+         4 In_Sur  Fixed Dec (15,3) ,   /* Initial Units Surrendered */        
+         4 Pr_Pur  Fixed Dec (15,3) ,   /* Premium Units Purchased   */        
+         4 Pr_Sur  Fixed Dec (15,3) ,   /* Premium Units Surrendered */        
+       3 Prices    (10)             ,   /* Array of Funds            */        
+         4 IN_BID_PRC    FIXED DEC      (9,6)    ,        
+         4 IN_OFFER_PRC  FIXED DEC      (9,6)    ,        
+         4 PR_BID_PRC    FIXED DEC      (9,6)    ,        
+         4 PR_OFFER_PRC  FIXED DEC      (9,6)    ,        
+     2 F_TypePr    (5)              ,   /* Premiums By Fund Type     */        
+       3 F_TYPE_PR       FIXED DEC      (11,2) ,        
+       2   SRA         PIC            '(3)9'            ,        
+ /* Selected Retirement Age */        
+       2   TOT_V5_PTD_PRE97  FIXED DEC     (11,2)         ,        
+ /* Total V5 SP Paid To Date Pre 1997             */        
+       2   AGE_AT_1   PIC            '(3)9'               ,        
+ /* Age Attained Life 1 */        
+       2   AGE_AT_2   PIC            '(3)9'               ,        
+ /* Age Attained Life 2 */        
+       2   ADJ_AGE_1  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 1 */        
+       2   ADJ_AGE_2  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 2 */        
+       2   ILL_AGE_1  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 1 - Serious Illness */        
+       2   ILL_AGE_2  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 2 - Serious Illness */        
+       2   AGE_NX_1   PIC            '(3)9'               ,        
+ /* Age Next Birthday Life 1 */        
+       2   AGE_NX_2   PIC            '(3)9'               ,        
+ /* Age Next Birthday Life 2 */        
+       2   ANB_ATE_1  PIC            '(3)9'               ,        
+ /* Age Next Birthday at Entry - Life 1 */        
+       2   ANB_ATE_2  PIC            '(3)9'               ,        
+ /* Age Next Birthday at Entry - Life 2 */        
+       2   DT_1ST_RP  PIC            '(8)9'               ,        
+ /* Date of First RP Payment */        
+       2   CURR_DUR   FIXED DEC      (  3,0)             ,        
+ /* Duration in Months     */        
+       2   CURT_DUR   FIXED DEC      (  3,0)             ,        
+ /* Duration in Years      */        
+       2   IX_BASE    CHAR           (  1)               ,        
+ /* Indexation Basis */        
+       2   SU_CHARGE  FIXED DEC      (11,3)               ,        
+ /* Setup Charge calculated in UK08981, allocated in Uk08990 */        
+       2   CAMP_CD    PIC            '(4)9'               ,        
+ /* Campaign Code */        
+       2   DO1DSS     PIC            '(8)9'               ,        
+ /* Date of First DSS payment */        
+       2   CONV_DATE  PIC            '(8)9'               ,        
+ /* Date of Initial Unit Conversion  */        
+       2   AUTO_SW    CHAR           (  1)                ,        
+ /* PIS Indicator  - Derived by Normaliasation    */        
+       2   SUS_DATE   PIC            '(8)9'               ,        
+ /* Date of Suspension */        
+       2   DO1SP      PIC            '(8)9'               ,        
+ /* Date of First SP */        
+       2   Wop_End_Dt PIC            '(8)9'               ,        
+ /* Date of WOP End */        
+       2   Bonus_Date PIC            '(8)9'               ,        
+ /* Date of Last Bonus */        
+       2   Loan_Amt   FIXED DEC      (11,2)               ,        
+ /* Outstanding Global Loan                       */        
+       2   ALT_CHARGE FIXED DEC      (11,2)               ,        
+ /* Setup Charge calculated in UK08981, allocated in Uk08990 */        
+       2   Stamp_duty FIXED DEC      (11,2)               ,        
+ /* Stamp Duty calculated in UK08981, allocated in Uk08990 */        
+       2   STRA        PIC            '(3)9'              ,        
+ /* State Retirement Age */        
+       2   PRDOM       PIC            '(8)9'              ,        
+ /* Protected Rights DOM */        
+       2   Pol_Fee     FIXED DEC      (11,2)              ,        
+ /* Policy Fee                                    */        
+       2   Cash_Factor FIXED DEC     (7,6)               ,        
+ /* Cashing Factor                                */        
+       2   SAD_Fee     FIXED DEC     (11,5)              ,        
+ /* Sum Assured Death Fee                         */        
+       2   TOT_Ptd     FIXED DEC     (11,2)              ,        
+ /* Total Regular Premiums Paid To Date           */        
+       2   Mths_Paid   PIC '(4)9'                        ,        
+ /* Number of Months Paid                         */        
+       2   TOT_V5_PTD  FIXED DEC     (11,2)              ,        
+ /* Total V5 SP Paid To Date                      */        
+       2   TOT_SP_PTD  FIXED DEC     (11,2)              ,        
+ /* Total SP Paid To Date                         */        
+       2   CURTATE_PROB_1 FIXED DEC (7,6)                ,        
+ /* Cumulative Probability Life 1                 */        
+       2   CURTATE_PROB_2 Fixed DEC (7,6)                ,        
+ /* Cumulative Probability Life 2                 */        
+       2   PTD_CODE       Fixed DEC (3,2)                ,        
+ /* Permanent Total Disability  Code (0,1,2,3)    */        
+       2 Occ_Load_1    Pic '999'   ,        
+ /* Occupational Loading 1     */        
+       2 Occ_Load_2    Pic '999'   ,        
+ /* Occupational Loading 2     */        
+       2   DIS_Fee     FIXED DEC     (11,2)              ,        
+ /* Sum Assured Death Fee                         */        
+ /*---------------------------------------------------------------*/        
+ /* Fields specific to TQL and Older products                     */        
+ /*---------------------------------------------------------------*/        
+       2   Pol_Fee_Vers  PIC '9'                         ,        
+ /* Policy Fee Version Applies (TQL)              */        
+       2   Fund_Fact_V1  FIXED DEC (11,2)                ,        
+ /* Fund Factor Version 1 (TQL)                   */        
+       2   Fund_Fact_V2  FIXED DEC (11,2)                ,        
+ /* Fund Factor Version 2 (TQL)                   */        
+       2   Fund_Fact_V3  FIXED DEC (11,2)                ,        
+ /* Fund Factor Version 3 (TQL)                   */        
+       2   Tot_Ptd_V1  FIXED DEC     (11,2)              ,        
+ /* Total Regular Premiums Paid To Date (TQL)     */        
+       2   Tot_Ptd_V2  FIXED DEC     (11,2)              ,        
+ /* Total Regular Premiums Paid To Date (TQL)     */        
+       2   Tot_Ptd_V3  FIXED DEC     (11,2)              ,        
+ /* Total Regular Premiums Paid To Date (TQL)     */        
+       2   Life_1_or_2_V1          Char (1)                  ,        
+ /* Life 1 or 2 (TQL)                             */        
+       2   Life_1_or_2_V2          Char (1)                  ,        
+ /* Life 1 or 2 (TQL)                             */        
+       2   Life_1_or_2_V3          Char (1)                  ,        
+ /* Life 1 or 2 (TQL)                             */        
+       2   MED_FAC_1_V1  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 (TQL) */        
+       2   MED_FAC_1_V2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 (TQL) */        
+       2   MED_FAC_1_V3  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 (TQL) */        
+       2   MED_FAC_2_V1  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 (TQL) */        
+       2   MED_FAC_2_V2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 (TQL) */        
+       2   MED_FAC_2_V3  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 (TQL) */        
+       2   PRM_FAC_1_V1  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 (TQL) */        
+       2   PRM_FAC_1_V2  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 (TQL) */        
+       2   PRM_FAC_1_V3  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 (TQL) */        
+       2   PRM_FAC_2_V1  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 (TQL) */        
+       2   PRM_FAC_2_V2  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 (TQL) */        
+       2   PRM_FAC_2_V3  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 (TQL) */        
+       2   PTD_V1                     Pic  '9'               ,        
+ /* Permanent Total Disability Indicator (TQL)      */        
+       2   PTD_V3                     Pic  '9'               ,        
+ /* Permanent Total Disability Indicator (TQL)      */        
+       2   WOP_APP_V1     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code (TQL) */        
+       2   WOP_APP_V3     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code (TQL) */        
+       2   Auto_Inc_Amt   Fixed Dec (11,2)          ,        
+ /* Automatic Income Amount */        
+       2   Auto_Inc_Per   Fixed Dec (5,2)          ,        
+ /* Automatic Income Percentage */        
+       2   Cash_Freq      Pic '99' ,        
+ /* Automatic Income Cashing Frequency */        
+       2   Orig_Table     Pic '999' ,        
+ /* Original Table */        
+       2   Life_1_or_2    Char (1)  ,        
+ /* Life 1 or 2 */        
+       2   Claim_Pend     CHAR           (  1)              ,        
+ /* Claim Pending                        */        
+       2   Highest_AP FIXED DEC      (13,2)              ,        
+ /* Highest Annual Premium */        
+       2   STATUS_V1  CHAR           (  3)                ,        
+ /* Status TQL Version 1   */        
+       2   STATUS_V2  CHAR           (  3)                ,        
+ /* Status TQL Version 2   */        
+       2   STATUS_V3  CHAR           (  3)                ,        
+ /* Status TQL Version 3   */        
+       2   Orig_SP_Amt FIXED DEC     (11,2)              ,        
+ /* Total SP Paid To Date                         */        
+       2   Extra_Prm   FIXED DEC     (11,2)              ,        
+ /* Extra Premium                                 */        
+       2   Prem_paid_V1   FIXED DEC     (11,2)              ,        
+ /* Current Premium on Version 1                  */        
+       2   Prem_paid_V2   FIXED DEC     (11,2)              ,        
+ /* Current Premium on Version 2                  */        
+       2   Prem_paid_V3   FIXED DEC     (11,2)              ,        
+ /* Current Premium on Version 3                  */        
+       2   SV_V1   FIXED DEC     (11,2)              ,        
+ /* Surrender Value on Version 1                  */        
+       2   SV_V2   FIXED DEC     (11,2)              ,        
+ /* Surrender Value on Version 2                  */        
+       2   SV_V3   FIXED DEC     (11,2)              ,        
+ /* Surrender Value on Version 3                  */        
+       2   CC_V1   FIXED DEC     (11,2)              ,        
+ /* Life Charge on Version 1                      */        
+       2   CC_V2   FIXED DEC     (11,2)              ,        
+ /* PTD_Charge on Version 2                       */        
+       2   CC_V3   FIXED DEC     (11,2)              ,        
+ /* SI_Charge on Version 3                        */        
+       2   SUS_FLAG    Char (1)                      ,        
+ /* Suspended Flag - Y if ever suspended          */        
+       2   IX_OPT_0_TO_6       Char (1)              ,        
+ /* Y if Index Option changed from 0 to 6         */        
+       2   TOT_P_ENC  FIXED DEC  (11,2)              ,        
+ /* Total Amount of Partial Encashments           */        
+       2   PREV_STATUS     CHAR  (3)                 ,        
+ /* Status of policy in previous month      K05563*/        
+       2   PENSIM_EYE      CHAR  (6)                 ,        
+ /* 'PENSIM' store for UK08978 processing   K06504*/        
+ /* new mortality/charging stuff from UK08990...     RMJ   */        
+       2   MORT_AGE_ADJ_RULE1  CHAR  (5)              ,        
+       2   MORT_AGE_ADJ_RULE2  CHAR  (5)              ,        
+       2   MORT_AGE_ADJ_VAL1   PIC'S999'              ,        
+       2   MORT_AGE_ADJ_VAL2   PIC'S999'              ,        
+       2   MORT_RATE_RULE1     CHAR  (5)              ,        
+       2   MORT_RATE_RULE2     CHAR  (5)              ,        
+       2   MORT_RATE_RULE_VAL1 CHAR (2)               ,        
+       2   MORT_RATE_RULE_VAL2 CHAR (2)               ,        
+       2   MORT_RATE_VAL1      PIC'9V(6)9'            ,        
+       2   MORT_RATE_VAL2      PIC'9V(6)9'            ,        
+       2   MORT_AGE_NEXT_BDAY1 PIC'999'               ,        
+       2   MORT_AGE_NEXT_BDAY2 PIC'999'               ,        
+       2   LC_SAR              PIC'(9)9V(4)9'         ,        
+       2   MORTAB1             CHAR (8)               ,        
+       2   MORTAB2             CHAR (8)               ,        
+ /* ...new mortality/charging stuff from UK08990     RMJ   */        
+ /* uninvested amount etc from UK09009...     RMJ   */        
+       2   UNINV_AMT           FIXED DEC(11,2)        ,        
+       2   POLVAL_TO_ZERO      CHAR  (1)              ,        
+       2   REGVAL_TO_ZERO      CHAR  (1)              ,        
+       2   EXPENSE_DEDUC       FIXED DEC(13,5)        ,        
+       2   ABAR_VAL            FIXED DEC(13,7)        ,        
+ /* ...uninvested amount etc from UK09009     RMJ   */        
+ /* disability & crisis stuff from UK09645...     RMJ   */        
+       2   DISAB_ADJ1          fixed dec(15,7),        
+       2   DISAB_ADJ2          fixed dec(15,7),        
+       2   DISAB_CHARGE        fixed dec(15,7),        
+       2   DISAB_DCADJ         CHAR(2),        
+       2   DISAB_DCDEF         CHAR(2),        
+       2   DISAB_DCESC         CHAR(2),        
+       2   DISAB_DCFAC         CHAR(2),        
+       2   DISAB_DCFOR         CHAR(2),        
+       2   DISAB_DCOCC         CHAR(2),        
+       2   DISAB_DCRED         CHAR(2),        
+       2   DISAB_DCSEX         CHAR(2),        
+       2   DISAB_DCSMK         CHAR(2),        
+       2   DISAB_DCTAB         CHAR(2),        
+       2   DISAB_DCTRM         CHAR(2),        
+       2   DISAB_DEF_FAC1      Fixed Dec(15,5),        
+       2   DISAB_DEF_FAC2      Fixed Dec(15,5),        
+       2   DISAB_DEF_RATE1     fixed dec(15,7),        
+       2   DISAB_DEF_RATE2     fixed dec(15,7),        
+       2   DISAB_END_FAC1      Fixed Dec(15,5),        
+       2   DISAB_END_FAC2      Fixed Dec(15,5),        
+       2   DISAB_ESC_LOAD      Fixed Dec(7,6),        
+       2   DISAB_ESC_LOAD1     fixed dec(15,7),        
+       2   DISAB_ESC_LOAD2     fixed dec(15,7),        
+       2   DISAB_ESC_740     fixed dec(15,7),        
+       2   DISAB_ESCAL_FAC1      Fixed Dec(15,5),        
+       2   DISAB_ESCAL_FAC2      Fixed Dec(15,5),        
+       2   DISAB_FACTOR1     fixed dec(15,7),        
+       2   DISAB_FACTOR2     fixed dec(15,7),        
+       2   DISAB_INC1      fixed dec(15,7),        
+       2   DISAB_INC2      fixed dec(15,7),        
+       2   DISAB_L1_DEF653A     fixed dec(15,7),        
+       2   DISAB_L1_DEF653B     fixed dec(15,7),        
+       2   DISAB_L1_DEF653C     fixed dec(15,7),        
+       2   DISAB_L1_DEF653D     fixed dec(15,7),        
+       2   DISAB_L1_DEF653E     fixed dec(15,7),        
+       2   DISAB_L1_DEF653F     fixed dec(15,7),        
+       2   DISAB_L1_DEF653G     fixed dec(15,7),        
+       2   DISAB_L1_DEF653H     fixed dec(15,7),        
+       2   DISAB_L1_DEF653I     fixed dec(15,7),        
+       2   DISAB_L1_DEF653J     fixed dec(15,7),        
+       2   DISAB_L1_DEF653K     fixed dec(15,7),        
+       2   DISAB_L1_DEF653L     fixed dec(15,7),        
+       2   DISAB_L1_D11_RATE     fixed dec(15,7),        
+       2   DISAB_L1_D12_RATE     fixed dec(15,7),        
+       2   DISAB_L1_D13_RATE     fixed dec(15,7),        
+       2   DISAB_L1_D14_RATE     fixed dec(15,7),        
+       2   DISAB_L1_D19_RATE     fixed dec(15,7),        
+       2   DISAB_L1_D20_RATE     fixed dec(15,7),        
+       2   DISAB_L1_D4_RATE      fixed dec(15,7),        
+       2   DISAB_L1_D5_RATE      fixed dec(15,7),        
+       2   DISAB_L1_D7_RATE      fixed dec(15,7),        
+       2   DISAB_L1_RED653A      fixed dec(15,7),        
+       2   DISAB_L1_RED653B      fixed dec(15,7),        
+       2   DISAB_L1_RED653C      fixed dec(15,7),        
+       2   DISAB_L1_S1_RSLT      fixed dec(15,7),        
+       2   DISAB_L1_S2_RSLT      fixed dec(15,7),        
+       2   DISAB_L1_S3_RATE      fixed dec(15,7),        
+       2   DISAB_L1_S3_RSLT      fixed dec(15,7),        
+       2   DISAB_L1_S4_RATE      fixed dec(15,7),        
+       2   DISAB_L1_S4_RSLT      fixed dec(15,7),        
+       2   DISAB_L1_S5_RSLT      fixed dec(15,7),        
+       2   DISAB_L2_DEF653A      fixed dec(15,7),        
+       2   DISAB_L2_DEF653B      fixed dec(15,7),        
+       2   DISAB_L2_DEF653C      fixed dec(15,7),        
+       2   DISAB_L2_DEF653D      fixed dec(15,7),        
+       2   DISAB_L2_DEF653E      fixed dec(15,7),        
+       2   DISAB_L2_DEF653F      fixed dec(15,7),        
+       2   DISAB_L2_DEF653G      fixed dec(15,7),        
+       2   DISAB_L2_DEF653H      fixed dec(15,7),        
+       2   DISAB_L2_DEF653I      fixed dec(15,7),        
+       2   DISAB_L2_DEF653J      fixed dec(15,7),        
+       2   DISAB_L2_DEF653K      fixed dec(15,7),        
+       2   DISAB_L2_DEF653L      fixed dec(15,7),        
+       2   DISAB_L2_D11_RATE     fixed dec(15,7),        
+       2   DISAB_L2_D12_RATE     fixed dec(15,7),        
+       2   DISAB_L2_D14_RATE     fixed dec(15,7),        
+       2   DISAB_L2_D19_RATE     fixed dec(15,7),        
+       2   DISAB_L2_D20_RATE     fixed dec(15,7),        
+       2   DISAB_L2_D4_RATE      fixed dec(15,7),        
+       2   DISAB_L2_D5_RATE      fixed dec(15,7),        
+       2   DISAB_L2_D7_RATE      fixed dec(15,7),        
+       2   DISAB_L2_RED653A      fixed dec(15,7),        
+       2   DISAB_L2_RED653B      fixed dec(15,7),        
+       2   DISAB_L2_RED653C      fixed dec(15,7),        
+       2   DISAB_L2_S3_RATE      fixed dec(15,7),        
+       2   DISAB_L2_S3_RSLT      fixed dec(15,7),        
+       2   DISAB_L2_S4_RATE      fixed dec(15,7),        
+       2   DISAB_L2_S4_RSLT      fixed dec(15,7),        
+       2   DISAB_L2_S5_RSLT      fixed dec(15,7),        
+       2   DISAB_L2_S6_RSLT      fixed dec(15,7),        
+       2   DISAB_L2_S7_RSLT      fixed dec(15,7),        
+       2   DISAB_L2_S8_RSLT      fixed dec(15,7),        
+       2   DISAB_OCC_LOAD       Fixed Dec(7,6),        
+       2   DISAB_OCC_LOAD1      fixed dec(15,7),        
+       2   DISAB_OCC_LOAD2      fixed dec(15,7),        
+       2   DISAB_OCC_740      fixed dec(15,7),        
+       2   DISAB_RATE      fixed dec(15,7),        
+       2   DISAB_RATE_740      fixed dec(15,7),        
+       2   DISAB_RATE1           Fixed Dec(15,5),        
+       2   DISAB_RATE2           Fixed Dec(15,5),        
+       2   DISAB_RED_LOAD1      fixed dec(15,7),        
+       2   DISAB_RED_LOAD2      fixed dec(15,7),        
+       2   DISAB_SEX_LOAD        Fixed Dec(7,6),        
+       2   DISAB_SEX_LOAD1      fixed dec(15,7),        
+       2   DISAB_SEX_LOAD2      fixed dec(15,7),        
+       2   DISAB_SMK_FAC1      fixed dec(15,7),        
+       2   DISAB_SMK_FAC2      fixed dec(15,7),        
+       2   DISAB_S6_RSLT      fixed dec(15,7),        
+       2   DISAB_TERM_LOAD1      fixed dec(15,7),        
+       2   DISAB_TERM_LOAD2      fixed dec(15,7),        
+       2   DISAB_DCSAR         CHAR(2),        
+       2   DISAB_SAR1          FIXED Dec (13,4),        
+       2   DISAB_SAR2          FIXED Dec (13,4),        
+       2   CC_CCFOR         CHAR(2),        
+       2   CC_CCEXT         CHAR(2),        
+       2   CC_CCRAT         CHAR(2),        
+       2   CC_S1_RATE      fixed dec(15,7),        
+       2   CC_S2_RATE      fixed dec(15,7),        
+       2   CC_S3_RATE      fixed dec(15,7),        
+       2   CC_S4_RATE      fixed dec(15,7),        
+       2   CC_S5_RATE      fixed dec(15,7),        
+       2   CC_S6_RATE      fixed dec(15,7),        
+       2   CC_S7_RATE      fixed dec(15,7),        
+       2   CC_S8_RATE      fixed dec(15,7),        
+    /* 2   CC_Charge       Fixed Dec(15,6), */        
+       2   CC_EXTRA1       Fixed Dec(3,0),        
+       2   CC_EXTRA2       Fixed Dec(3,0),        
+       2   CC_RATE1        fixed dec(15,7),        
+       2   CC_RATE2        fixed dec(15,7),        
+       2   CC_ANB1         Fixed dec(15,0),        
+       2   CC_sex1         Fixed dec(15,0),        
+       2   CC_smk1         Fixed dec(15,0),        
+       2   CC_ANB2         Fixed dec(15,0),        
+       2   CC_sex2         Fixed dec(15,0),        
+       2   CC_smk2         Fixed dec(15,0),        
+       2   JLSD_dur_mths          Fixed dec(15),        
+       2   JLSD_LCMR1             CHAR(2),        
+       2   JLSD_last_ann_dtx      Pic'(8)9',        
+       2   JLSD_last_ann_pqx      Fixed Dec(9,8),        
+       2   JLSD_last_ann_facx     Fixed Dec (15,7),        
+       2   JLSD_LCMR2             CHAR(2),        
+       2   JLSD_last_ann_dty      Pic'(8)9',        
+       2   JLSD_last_ann_pqy      Fixed Dec(9,8) ,        
+       2   JLSD_last_ann_facy     Fixed Dec (15,7) ,        
+       2   JLSD_this_ann_dtx      Pic'(8)9',        
+       2   JLSD_this_ann_qx       Fixed Dec(9,8) ,        
+       2   JLSD_this_ann_facx     Fixed Dec (15,7) ,        
+       2   JLSD_this_ann_dty      Pic'(8)9',        
+       2   JLSD_this_ann_qy       Fixed Dec(9,8) ,        
+       2   JLSD_this_ann_facy     Fixed Dec (15,7) ,        
+       2   JLSD_nmths             Fixed Dec (3,0),        
+       2   JLSD_prev_anb_dtx      Pic'(8)9',        
+       2   JLSD_prev_anb_aqx      Fixed Dec (15,8) ,        
+       2   JLSD_prev_anb_facx     Fixed Dec (15,7) ,        
+       2   JLSD_prev_anb_dty      Pic'(8)9',        
+       2   JLSD_prev_anb_aqy      Fixed Dec (15,8) ,        
+       2   JLSD_prev_anb_facy     Fixed Dec (15,7),        
+       2   JLSD_prev_anb_a1a      Fixed Dec (15,8) ,        
+       2   JLSD_prev_anb_fac1a    Fixed Dec (15,7) ,        
+       2   JLSD_prev_anb_a2a      Fixed Dec (15,8) ,        
+       2   JLSD_prev_anb_fac2a    Fixed Dec (15,7) ,        
+       2   JLSD_prev_anb_a1b      Fixed Dec (15,8) ,        
+       2   JLSD_prev_anb_fac1b    Fixed Dec (15,7) ,        
+       2   JLSD_prev_anb_a2b      Fixed Dec (15,8) ,        
+       2   JLSD_prev_anb_fac2b    Fixed Dec (15,7) ,        
+       2   JLSD_prev_anb_a1c      Fixed Dec (15,8) ,        
+       2   JLSD_prev_anb_fac1c    Fixed Dec (15,7) ,        
+       2   JLSD_prev_anb_a2c      Fixed Dec (15,8) ,        
+       2   JLSD_prev_anb_fac2c    Fixed Dec (15,7) ,        
+       2   JLSD_Curt_Prob_1a      Fixed Dec(9,7),        
+       2   JLSD_Curt_Prob_2a      Fixed Dec(9,7),        
+       2   JLSD_Ann_Rate1         Fixed Dec(7,6),        
+       2   JLSD_Ann_Rate2         Fixed Dec(7,6),        
+       2   JLSD_Curt_Prob_1b      Fixed Dec(9,7),        
+       2   JLSD_Curt_Prob_2b      Fixed Dec(9,7),        
+       2   JLSD_Curt_tpx          Fixed Dec(9,8),        
+       2   JLSD_Curt_tpy          Fixed Dec(9,8),        
+       2   JLSD_s1r3              Fixed Dec (15,11),        
+       2   JLSD_s1r4              Fixed Dec (15,11),        
+       2   JLSD_charge_rate       Fixed Dec (15,8),        
+       2   JLSD_life_charge       Fixed Dec (15,5),        
+       2   JLSD_curt_mort_pqx1g   Fixed Dec(9,8) ,        
+       2   JLSD_curt_mort_fac1g   Fixed Dec (15,7) ,        
+       2   JLSD_curt_mort_pqy2g   Fixed Dec(9,8) ,        
+       2   JLSD_curt_mort_fac2g   Fixed Dec (15,7) ,        
+       2   JLSD_curt_mort_qx1j    Fixed Dec(9,8) ,        
+       2   JLSD_curt_mort_fac1j   Fixed Dec (15,7) ,        
+       2   JLSD_curt_mort_qy2j    Fixed Dec(9,8) ,        
+       2   JLSD_curt_mort_fac2j   Fixed Dec (15,7) ,        
+       2   JLSD_curt_mort_pqx1h   Fixed Dec(9,8) ,        
+       2   JLSD_curt_mort_fac1h   Fixed Dec (15,7) ,        
+       2   JLSD_curt_mort_pqy2h   Fixed Dec(9,8) ,        
+       2   JLSD_curt_mort_fac2h   Fixed Dec (15,7),        
+       2   JLSD_curt_mort_qx1k    Fixed Dec(9,8),        
+       2   JLSD_curt_mort_fac1k   Fixed Dec (15,7),        
+       2   JLSD_curt_mort_qy2k    Fixed Dec(9,8),        
+       2   JLSD_curt_mort_fac2k   Fixed Dec (15,7);        
+    /* remember last item must have ;               */        
+ /* ...disability & crisis stuff from UK09645     RMJ   */        
+         
+ %SKIP510:;        
+END_PLC(FUK510)

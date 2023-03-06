@@ -1,0 +1,33 @@
+BEGIN_PLC(N040INVB)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040INVB                                       */        
+    /*   GENERATION  : 016                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : JANUARY 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : 'INVB' DATA AREA FOR USE BY THE N040 DIARY     */        
+    /*                 PROCEDURES.                                    */        
+    /*                 INVESTMENT FILE DATA IS LOADED TO THIS         */        
+    /*                 STRUCTURE THE FIRST TIME THE FILE IS READ FOR  */        
+    /*                 A POLICY, IN PROCEDURE N040P02.                */        
+    /*                 AFTER ALL DIARY PROCESSING IS COMPLETE FOR     */        
+    /*                 THE POLICY IT IS USED IN THE CROSS CHECKING    */        
+    /*                 PROCEDURE, N040P04.                            */        
+    /*                 USED IN CONJUNCTION WITH N040TWA.              */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 INVB BASED(TWA.INV_BEFORE_PTR),        
+                3 C77011          PIC'(11)9',       /* POLICY NUMBER  */        
+                3 FDB(32),                          /* FUND DETAIL    */        
+                  5 C46003        PIC'999',         /* INVESTMENT FUND*/        
+                  5 A09009        FIXED DEC (9,3),  /* INV.UNITS      */        
+                  5 R12005        FIXED DEC (5,2),  /* INV SPREAD     */        
+                  5 A09109        FIXED DEC (9,3),  /* PROT UNITS     */        
+                  5 A09209        FIXED DEC (9,3),  /* EMPLOYEE UNITS */        
+                  5 A09413        FIXED DEC (13,3); /* RESV.UNITS     */        
+END_PLC(N040INVB)

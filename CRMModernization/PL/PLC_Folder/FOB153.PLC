@@ -1,0 +1,32 @@
+BEGIN_PLC(FOB153)
+ /* OB MORTALITY RATES FILE   */        
+         
+         
+ DCL 1 WOB153  UNALIGNED,        
+ /* LAST CHANGED ER 221282 - ORIGINAL                            */        
+ /* THIS FILE HOLDS MORTALITY RATES FROM VARIOUS                 */        
+ /* MORTALITY TABLES                                             */        
+ /* IT ALSO HAS ADJUSTMENT FACTORS FOR USE                       */        
+ /* IN LIFE COVER CALCULATIONS ON CASES WITH                     */        
+ /* OCCUPATIONAL LOADINGS                                        */        
+ /*                                       */        
+       2   MTAB     CHAR           (  5)                   ,        
+ /* MORTALITY TABLE                          */        
+ /* 'A4952','A6770',ETC                          */        
+       2   ULTSL    CHAR           (  3)                   ,        
+ /* ULT/SELECT                               */        
+ /* 'ULT' - ULTIMATE                             */        
+ /* 'SL0' - SELECT                               */        
+ /* 'SL1' - SELECT +1, ETC                       */        
+       2   AGE      PIC            '(3)9'                  ,        
+ /* AGE                                      */        
+       2   QX       FIXED DEC      (  7,6)                 ,        
+ /* MORTALITY RATE                           */        
+ /* SINGLE LIFE                                  */        
+       2   OCADJ    FIXED DEC      (  3,0)                 ,        
+ /* OCCUPATIONAL ADJUSTMENT                  */        
+ /* USED TO ADJUST QX FOR OCCUPATIONAL           */        
+ /* LOADINGS, WHEN DOING LIFE COVER              */        
+ /* CALCULATIONS.                                */        
+       2   FILL01  CHAR           (  3)                   ;        
+END_PLC(FOB153)

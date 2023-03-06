@@ -1,0 +1,98 @@
+BEGIN_PLC(I085C01)
+     DCL INREC_T_N                      CHAR(525)        
+                                        BASED(ADDR(INREC_TN));        
+     DCL 01 INREC_TN                    STATIC,        
+            03 REC_IDENT                CHAR(1),        
+            03 SPARE_1                  CHAR(524);        
+         
+         
+     DCL INREC_T_1                      CHAR(525)        
+                                        BASED(ADDR(INREC_T1));        
+     DCL 01 INREC_T1                    STATIC,        
+            03 REC_IDENT                CHAR(1),        
+            03 PERMIT_NO                CHAR(12),        
+            03 SPARE_1                  CHAR(16),        
+            03 TAX_DISTRICT_NUM         CHAR(3),        
+            03 PAYE_REF                 CHAR(7),        
+            03 TAX_DISTRICT_NAME        CHAR(40),        
+            03 SPARE_2                  CHAR(6),        
+            03 TAX_YEAR_START           CHAR(4),        
+            03 EMPER_NAME               CHAR(36),        
+            03 EMPER_ADDR               CHAR(60),        
+            03 ECON                     CHAR(9),        
+            03 SPARE_4                  CHAR(329),        
+            03 CONTROL_CHARS            CHAR(2);        
+         
+         
+     DCL INREC_T_2                      CHAR(525)        
+                                        BASED(ADDR(INREC_T2));        
+     DCL 01 INREC_T2                    STATIC,        
+            03 REC_IDENT                CHAR(1),        
+            03 OUR_REFERENCE            CHAR(14),        
+            03 SURNAME                  CHAR(20),        
+            03 FORNAME_1                CHAR(7),        
+            03 FORNAME_2                CHAR(7),        
+            03 DOB                      CHAR(8),        
+            03 GENDER                   CHAR(1),        
+            03 ADDR_1                   CHAR(27),        
+            03 ADDR_2                   CHAR(27),        
+            03 ADDR_3                   CHAR(27),        
+            03 ADDR_4                   CHAR(27),        
+            03 POST_CODE                CHAR(8),        
+            03 PAY_REFUND_SYMBOL        CHAR(1),        
+            03 TAX_CODE                 CHAR(7),        
+            03 WM_INDICATOR             CHAR(1),        
+            03 NI_NUMBER                CHAR(9),        
+            03 SPARE_2                  CHAR(25),        
+            03 NI_CONTRIB_TABLE         CHAR(1),        
+            03 LEL_1                    CHAR(4),        
+            03 ET_1                     CHAR(4),        
+            03 UEL_1                    CHAR(5),        
+            03 EE_ER_CONTRIB_PAYBLE     CHAR(9),        
+            03 EE_ER_CONTRIB_NEG        CHAR(1),        
+            03 EE_CONTRIB_PAYBLE        CHAR(8),        
+            03 SCON                     CHAR(9),        
+            03 SPARE_3                  CHAR(3),        
+            03 SSP                      CHAR(6),        
+            03 SMP                      CHAR(8),        
+            03 SPP                      CHAR(6),        
+            03 SAP                      CHAR(6),        
+            03 TOTAL_GROSS_PAY          CHAR(9),        
+            03 TOTAL_TAX                CHAR(9),        
+            03 TAX_REFUND_SYMBOL        CHAR(1),        
+            03 PREV_GROSS_PAY           CHAR(9),        
+            03 PREV_TAX_PAY             CHAR(9),        
+            03 EMPLY_START              CHAR(8),        
+            03 EMPLY_END                CHAR(8),        
+            03 SUPERANNU_CONTRIB        CHAR(5),        
+            03 SUPERANNU_REFUND         CHAR(1),        
+            03 EE_CONTRIB_WIDOWS        CHAR(4),        
+            03 STUDENT_LOAN_DED         CHAR(5),        
+            03 TAX_CREDIT               CHAR(7),        
+            03 WEEK_IND                 CHAR(1),        
+            03 TAX_PAY_EMPLY            CHAR(9),        
+            03 PENSION_IND              CHAR(1),        
+            03 DIRECTOR_IND             CHAR(1),        
+            03 THE_REST                 CHAR(151);        
+         
+         
+     DCL INREC_T_3                      CHAR(525)        
+                                        BASED(ADDR(INREC_T3));        
+     DCL 01 INREC_T3                    STATIC,        
+            03 REC_IDENT                CHAR(1),        
+            03 TOTAL_ER_EE_NI           CHAR(11),        
+            03 TOTAL_ER_EE_NEG          CHAR(1),        
+            03 TOTAL_TAX                CHAR(12),        
+            03 TAX_REFUND_SYMBOL        CHAR(1),        
+            03 COUNT_TYPE2_RECS         CHAR(7),        
+            03 ZEROES                   CHAR(98),        
+            03 THE_REST                 CHAR(394);        
+         
+         
+     DCL INREC_T_4                      CHAR(525)        
+                                        BASED(ADDR(INREC_T4));        
+     DCL 01 INREC_T4                    STATIC,        
+            03 REC_IDENT                CHAR(1),        
+            03 END_OF_DATA              CHAR(11),        
+            03 THE_REST                 CHAR(513);        
+END_PLC(I085C01)

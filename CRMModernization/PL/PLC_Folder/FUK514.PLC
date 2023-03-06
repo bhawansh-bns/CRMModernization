@@ -1,0 +1,26 @@
+BEGIN_PLC(FUK514)
+ /*------------------------------------------------------------------*/        
+ /* FUK514 : Pre April 97 DSS funds                                  */        
+ /*                                                                  */        
+ /*          This has been introduced as part of the PIA DSS         */        
+ /*          requirement.                                            */        
+ /*                                                                  */        
+ /*          Lrecl : 420                                             */        
+ /*------------------------------------------------------------------*/        
+ Dcl 1 WUK514_REC,        
+     3 PolNo     Pic      '(7)9'  ,   /* Policy Number         KEY */        
+     3 Vers      Pic       '9'    ,   /* Version               KEY */        
+     3 DSS_Dt    Char      (8)    ,   /* Funds as at this date     */        
+     3 F_Type    Char      (1)    ,   /* Fund Type                 */        
+     3 In_Inv    Fixed Dec (11,2) ,   /* Total Investment in Init. */        
+     3 Pr_Inv    Fixed Dec (11,2) ,   /* Total Investment in Prem. */        
+     3 Funds     (10)             ,   /* Array of Funds            */        
+       5 F_Name  Char      (3)    ,   /* Fund Name                 */        
+       5 F_Per   Fixed Dec (3,2)  ,   /* Fund Percentage           */        
+       5 In_Pur  Fixed Dec (15,3) ,   /* Initial Units Purchased   */        
+       5 In_Sur  Fixed Dec (15,3) ,   /* Initial Units Surrendered */        
+       5 Pr_Pur  Fixed Dec (15,3) ,   /* Premium Units Purchased   */        
+       5 Pr_Sur  Fixed Dec (15,3) ,   /* Premium Units Surrendered */        
+     3 XFiller   Char      (13)   ;        
+ /*------------------------------------------------------------------*/        
+END_PLC(FUK514)

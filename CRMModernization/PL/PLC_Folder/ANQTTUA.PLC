@@ -1,0 +1,17 @@
+BEGIN_PLC(ANQTTUA)
+ /*********************************************************************        
+  *             P A R A M E T E R   S T R U C T U R E                 *        
+  *********************************************************************/        
+         
+    DCL 1 ANNUITY_QUOTATION_TUA UNAL BASED(AQ_TUA_PTR),        
+          2 TUA_END          CHAR(1),        
+          2 ASS_VAL_VERSION  PIC'99999',        
+          2 MT_VERSION       PIC'99999',        
+          2 INTEREST_RATE    FIXED(5,2),        
+          2 PAYING_POLICY    CHAR(11);        
+         
+    DCL   AQ_TUA_PTR         PTR;        
+         
+    AQ_TUA_PTR = ADDR(TUA.TUA_END);        
+         
+END_PLC(ANQTTUA)

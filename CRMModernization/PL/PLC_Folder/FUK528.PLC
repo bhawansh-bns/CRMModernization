@@ -1,0 +1,20 @@
+BEGIN_PLC(FUK528)
+ /*--------------------------------------------------------------+        
+                                                                        
+                                                                        
+   FUK528   : UKUI Daily Run Control File                               
+                                                                        
+                                                                        
+   Martin O'Carroll                                                     
+   October 1998                                                         
+                                                                        
+ +--------------------------------------------------------------*/        
+ Dcl 1 WUK528,        
+       2 Reinv_Dt      Pic        '(8)9'    , /* Last reinvest date  */        
+       2 FRunInd       Char        (01)     , /* Successful run Y/N  */        
+       2 LastPol       Pic        '(7)9'    , /* Latest processed    */        
+                                              /* 0 at EOF            */        
+       2 Program       Char        (07)     , /* Update Program      */        
+       2 TimeSt        Char        (17)     , /* Timestamp           */        
+       2 Filler        Char        (40)     ; /* Filler              */        
+END_PLC(FUK528)

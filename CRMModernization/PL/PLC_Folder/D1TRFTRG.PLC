@@ -1,0 +1,43 @@
+BEGIN_PLC(D1TRFTRG)
+ /*******************************************************************/        
+ /* PLIINC - D1TRFTRG                                               */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY N733 TO POPULATE DOC1 TRIGGER RECORDS   */        
+ /* FOR THE BLACKBOX TO PROCESS                                     */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF TRANSFER DATA TO BE WRITTEN TO THE  */        
+ /* BLACKBOX TRIGGER FILE.                                          */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL TRF_DATA                       CHAR (403) BASED (ADDR(TRF));        
+     DCL 1 TRF,        
+           3 PENSION_PROVIDER,        
+             5 ADDRESS_NAME             CHAR (30),        
+             5 ADDRESS_NAME_2           CHAR (30),        
+             5 ADD_1                    CHAR (30),        
+             5 ADD_2                    CHAR (30),        
+             5 ADD_3                    CHAR (30),        
+             5 ADD_4                    CHAR (30),        
+             5 ADD_5                    CHAR (30),        
+             5 POSTCODE                 CHAR (08),        
+             5 REFERENCE                CHAR (30),        
+           3 TRAN_CERT,        
+             5 POLICY_NO                CHAR (11),        
+             5 PSO_REF                  CHAR (11),        
+             5 TRF_SCHEME               CHAR (25),        
+             5 TRF_SCH_TYPE             CHAR (06),        
+             5 ASCON_NO                 CHAR (15),        
+             5 EFF_DATE                 PIC '(8)9',        
+             5 TRF_PAY_AMT              PIC '(7)Z9V.99',        
+             5 NON_PRT_RT               PIC '(7)Z9V.99',        
+             5 NPI_AMOUNT               PIC '(7)Z9V.99',        
+             5 PROT_RT_PRE              PIC '(7)Z9V.99',        
+             5 PROT_RT_POST             PIC '(7)Z9V.99',        
+             5 DSS_CONTR                PIC '(7)Z9V.99',        
+             5 TRANSFER_IN              CHAR (01),        
+             5 TAX_FREE                 CHAR (01),        
+             5 PROTECTED_RIGHTS         CHAR (01),        
+             5 NI_NUMBER                CHAR (09),        
+             5 PAYMENT_MEDIUM           CHAR (01);        
+END_PLC(D1TRFTRG)

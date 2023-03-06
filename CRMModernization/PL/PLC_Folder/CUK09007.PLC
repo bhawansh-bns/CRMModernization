@@ -1,0 +1,51 @@
+BEGIN_PLC(CUK09007)
+         
+ /*-------------------------------------------------------------------*/        
+ /* CUK09007 : Declarations needed to call module UK09007.            */        
+ /*                                                                   */        
+ /* UK09007 is called by any module wishing to allocate a money       */        
+ /* amount across all funds within one fund type.                     */        
+ /*                                                                   */        
+ /* Note that this module should be used only in the situation        */        
+ /* described above. It should not be used where the allocation is    */        
+ /* across multiple fund types, or uses only a subset of the funds    */        
+ /* within the fund type.                                             */        
+ /*                                                                   */        
+ /* Fill Cuk09007 as follows:                                         */        
+ /* In_Amt        : Amount by which the initial funds are to be       */        
+ /*               : reduced.                                          */        
+ /* Pr_Amt        : Amount by which the premium funds are to be       */        
+ /*               : reduced.                                          */        
+ /* F_Type        : Fund type                                         */        
+ /* Add_Subtr     : Add or Subtract indicator. 'A' where the fund     */        
+ /*                 is to be increased and 'S' where the fund is to   */        
+ /*                 be decreased.                                     */        
+ /* Method        : Allocation method. 3 are allowed:                 */        
+ /*                 'BYPER': Apportioned by Fund Percentage           */        
+ /*                 'BYRAT': Apportioned by Unit Ratio                */        
+ /*                 'BYVAL': Apportioned by Fund Value                */        
+ /*                                                                   */        
+ /* For all methods UK09007 uses CUK09009 (Valued Funds) to calculate */        
+ /* the revised Unit Balance. It is the responsibility of the calling */        
+ /* program to ensure that UK09009 has been called before UK09007.    */        
+ /*                                                                   */        
+ /* Audit Trail:                                                      */        
+ /*                                                                   */        
+ /* 18/12/96 MH: Method added to layout.                              */        
+ /* 11/02/97 RM: In_Amt and Pr_Amt extended to fixed dec 15,5 as a    */        
+ /*              result of rounding rules.                            */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK09007 Ptr ;        
+ Dcl 1 CUK09007_NAME_TYPE ,        
+     3 In_Amt           Fixed Dec   (15,5)  , /* Initial Money Amt    */        
+     3 Pr_Amt           Fixed Dec   (15,5)  , /* Premium Money Amt    */        
+     3 Add_Subtr        Char        (1)     , /* Add or Subtract      */        
+     3 Reason           Pic        '999'    , /* Reason Code          */        
+     3 F_Type           Char        (1)     , /* Fund Type            */        
+     3 Method           Char        (5)     ; /* Allocation Method    */        
+ /*-------------------------------------------------------------------*/        
+         
+         
+END_PLC(CUK09007)

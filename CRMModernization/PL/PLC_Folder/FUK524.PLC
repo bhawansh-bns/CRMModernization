@@ -1,0 +1,21 @@
+BEGIN_PLC(FUK524)
+ /*------------------------------------------------------------------*/        
+ /* WUK524 : Global Reinvestment Price Structure for UKUI.           */        
+ /* rmj 05/11/2001 reduce dim and funds to 61 (remove P1M).          */        
+ /* OLW 15/03/2004 Add UIS,EFP,EM1 and EC1 to match Fuk506 (ILD242)  */        
+ /*------------------------------------------------------------------*/        
+ Dcl   WUK524_DIM      Fixed Dec (3) init (65) ;            /*ILD242 */        
+ /*Dcl   WUK524_DIM      Fixed Dec (3) init (61)              ILD242 */        
+ Dcl 1 WUK524_REC,        
+     3 Effdt           Pic      '(8)9'  , /* Effective Date          */        
+     3 Funds (65)                       , /* Fund Array       ILD242 */        
+ /*  3 Funds (61)                            Fund Array       ILD242 */        
+     5 F_Name          Char      (3)    , /* Fund Name               */        
+     5   In_Bid_Prc    Fixed Dec (9,6)  , /* Initial Bid Price       */        
+     5   Pr_Bid_Prc    Fixed Dec (9,6)  , /* Premium Bid Price       */        
+     5   In_Offer_Prc  Fixed Dec (9,6)  , /* Initial Offer Price     */        
+     5   Pr_Offer_Prc  Fixed Dec (9,6)  , /* Premium Offer Price     */        
+     5   Pr_Bid_Prc_Ds Fixed Dec (9,6)  ; /* Premium Bid Price DSS   */        
+         
+ /*------------------------------------------------------------------*/        
+END_PLC(FUK524)

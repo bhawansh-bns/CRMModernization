@@ -1,0 +1,33 @@
+BEGIN_PLC(L596FLE1)
+  DCL L596REC               CHAR (80);        
+  DCL P                     PTR;        
+  DCL 1 PLN                 BASED (P),        
+        3  TYPE             PIC  '9',            /* CHAR 1     */        
+        3  PROD             CHAR (3),            /* CHAR 2-4   */        
+        3  CURR             CHAR (2),            /* CHAR 5-6   */        
+        3  SUB_TYPE         PIC  '9',            /* CHAR 7     */        
+        3  FI               PIC '99',            /* CHAR 8 -9  */        
+        3  ACCOUNT          CHAR (5),            /* CHAR 10-14 */        
+        3  TRAN_GRP         PIC '99',            /* CHAR 15-16 */        
+        3  SPARE_FUND       CHAR (16),           /* CHAR 17-32 */        
+        3  VALUE            FIXED (13,2),        /* CHAR 33-39 */        
+        3  COMPANY          PIC '99',            /* CHAR 40-41 */        
+        3  DESCRIPTION      CHAR (13),           /* CHAR 42-54 */        
+        3  POLY             CHAR (11),           /* CHAR 55-65 */        
+        3  COST             CHAR (4),            /* CHAR 66-69 */        
+        3  SPARE_9          CHAR (11);           /* CHAR 70-80 */        
+         
+  DCL 1 FND                 BASED (P),        
+        3  TYPE             PIC '9',             /* CHAR 1      */        
+        3  SPARE_PROD       CHAR (15),           /* CHAR 2-16   */        
+        3  COST             CHAR (4),            /* CHAR 17-20  */        
+        3  CURR             CHAR (2),            /* CHAR 21-22  */        
+        3  FUND_ID          CHAR (3),            /* CHAR 23-25  */        
+        3  FI               PIC '99',            /* CHAR 26-27  */        
+        3  ACCOUNT          CHAR (5),            /* CHAR 28-32  */        
+        3  VALUE            FIXED (13,2),        /* CHAR 33-39  */        
+        3  COMPANY          PIC '99',            /* CHAR 40-41  */        
+        3  DESCRIPTION      CHAR (13),           /* CHAR 42-54  */        
+        3  SPARE_9          CHAR (26);           /* CHAR 55-80  */        
+    P = ADDR(L596REC);        
+END_PLC(L596FLE1)

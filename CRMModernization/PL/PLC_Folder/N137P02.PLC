@@ -1,0 +1,50 @@
+BEGIN_PLC(N137P02)
+ /********************************************************************/        
+ /* DATE: 10/09/2007  BY: S THARINI           PRJ: CA CONVERSION     */        
+ /**          CALCULATE PLAN REVIEW LETTER IDENTITY                  */        
+ /** NOTE, THIS INCLUDE MEMBER IS USED BY BOTH N137P00 AND N138P00   */        
+ /*                                                                  */        
+ /* AMENDMENT HISTORY                                                */        
+ /********************************************************************/        
+ SELECT;        
+     /* PROTECTION PRODUCT & PASS REVIEW */        
+      WHEN (INP_REC.REVIEW_TYPE = 1 &        
+            INP_REC.REVIEW_PREM <= INP_REC.CURRENT_PREM)        
+      LET.LETTER_ID = 'PBR/PASS';        
+     /* PROTECTION PRODUCT & FAIL REVIEW */        
+      WHEN (INP_REC.REVIEW_TYPE = 1 &        
+            INP_REC.REVIEW_PREM > INP_REC.CURRENT_PREM)        
+      LET.LETTER_ID = 'PBR/FAIL';        
+     /* ENDOWMENT PRODUCT & ABI REVIEW & RED */        
+      WHEN (INP_REC.REVIEW_TYPE = 2 &        
+            INP_REC.ASSESS_TYPE = 2 &        
+            INP_REC.LETTER_TYPE = 'R')        
+            LET.LETTER_ID = 'EABI/RED';        
+      /* ENDOWMENT PRODUCT & ABI REVIEW & AMBER */        
+       WHEN (INP_REC.REVIEW_TYPE = 2 &        
+             INP_REC.ASSESS_TYPE = 2 &        
+             INP_REC.LETTER_TYPE = 'A')        
+             LET.LETTER_ID = 'EABI/AMBER';        
+      /* ENDOWMENT PRODUCT & ABI REVIEW & GREEN */        
+       WHEN (INP_REC.REVIEW_TYPE = 2 &        
+             INP_REC.ASSESS_TYPE = 2 &        
+             INP_REC.LETTER_TYPE = 'G')        
+             LET.LETTER_ID = 'EABI/GREEN';        
+      /* ENDOWMENT PRODUCT & BULK REVIEW INCLUDED & RED */        
+       WHEN (INP_REC.REVIEW_TYPE = 2 &        
+            (INP_REC.ASSESS_TYPE = 1 | INP_REC.ASSESS_TYPE = 3) &        
+            INP_REC.LETTER_TYPE = 'R')        
+            LET.LETTER_ID = 'EBR/RED';        
+      /* ENDOWMENT PRODUCT & BULK REVIEW INCLUDED & AMBER */        
+       WHEN (INP_REC.REVIEW_TYPE = 2 &        
+            (INP_REC.ASSESS_TYPE = 1 | INP_REC.ASSESS_TYPE = 3) &        
+             INP_REC.LETTER_TYPE = 'A')        
+            LET.LETTER_ID = 'EBR/AMBER';        
+      /* ENDOWMENT PRODUCT & BULK REVIEW INCLUDED & GREEN */        
+       WHEN (INP_REC.REVIEW_TYPE = 2 &        
+            (INP_REC.ASSESS_TYPE = 1 | INP_REC.ASSESS_TYPE = 3) &        
+             INP_REC.LETTER_TYPE = 'G')        
+            LET.LETTER_ID = 'EBR/GREEN';        
+       OTHERWISE LET.LETTER_ID = 'ERROR';        
+ END;        
+END_PLC(N137P02)

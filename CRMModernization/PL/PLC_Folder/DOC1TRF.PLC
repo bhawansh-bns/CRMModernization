@@ -1,0 +1,43 @@
+BEGIN_PLC(DOC1TRF)
+ /*******************************************************************/        
+ /* PLIINC - DOC1TRF                                                */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY THE CWA / DOC1 INTERFACE PROGRAM        */        
+ /* DOC1P00 AND ANY OF ITS SUBROUTINES THAT REFER TO TRANSFER       */        
+ /* STATEMENT (TRF) DATA                                            */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF TRF DATA TO BE WRITTEN TO THE FILE  */        
+ /* CREATED FOR DOC1.                                               */        
+ /*                                                                 */        
+ /* THE VARIABLES IN THIS STRUCTURE HAVE TO BE DECLARED AS EXTERNAL */        
+ /* AS THE DATA NEEDS TO BE ACCESSIBLE TO BOTH THE TOP-LEVEL        */        
+ /* INTERFACE DOC1P00 AND ANY SUBROUTINES.                          */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL TRF_DTA                        CHAR (206) EXTERNAL;        
+         
+     DCL 1 TRF_STRUC                    BASED (ADDR(TRF_DTA)),        
+           3 TRF_SORT_1                 CHAR (15),        
+           3 TRF_SORT_2                 CHAR (15),        
+           3 TRF_SORT_3                 CHAR (15),        
+           3 TRF_SEQ_NUM                PIC '(3)9',        
+           3 TRF_TRIGGER_ID             CHAR (09),        
+           3 TRF_RECORD_ID              CHAR (03),        
+           3 TRF_RECORD_DATA_FLAG       CHAR (01),        
+           3 TRF_POLICY_NO              CHAR (11),        
+           3 TRF_PSO_REF                CHAR (11),        
+           3 TRF_TRF_SCHEME             CHAR (25),        
+           3 TRF_TRF_SCH_TYPE           CHAR (06),        
+           3 TRF_ASCON_NO               CHAR (15),        
+           3 TRF_EFF_DATE               PIC '(8)9',        
+           3 TRF_TRF_PAY_AMT            PIC '(7)Z9V.99',        
+           3 TRF_NON_PRT_RT             PIC '(7)Z9V.99',        
+           3 TRF_NPI_AMOUNT             PIC '(7)Z9V.99',        
+           3 TRF_PROT_RT_PRE            PIC '(7)Z9V.99',        
+           3 TRF_PROT_RT_POST           PIC '(7)Z9V.99',        
+           3 TRF_DSS_CONTR              PIC '(7)Z9V.99',        
+           3 TRF_TRANSFER_IN            CHAR (01),        
+           3 TRF_TAX_FREE               CHAR (01),        
+           3 TRF_PROTECTED_RIGHTS       CHAR (01);        
+END_PLC(DOC1TRF)

@@ -1,0 +1,167 @@
+BEGIN_PLC(D115R03)
+         
+ /*********************************************************************/        
+ /*     <AL> ON: 22/10/2008  BY: COLM CORMICAN      CCID      R03184  */        
+ /*                                    LP00601      DEFECT    2190    */        
+ /* ADJUST BACHIDS4 INCREASE LETTER TO INCLUDE CIB/PDB ON LEVBEN.     */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /* SETUP FINFOUND OUTPUT- CREATE THE OUTPUT DATASTREAMS FOR LEVLET   */        
+ /* LEVPOL, LEVLIF, LEVBEN, LEVINC, LEVPRE AND LEVPCE                 */        
+ /* FOR BACHIDS4  AND BACHITD2                                        */        
+ /*********************************************************************/        
+  SETUP_DESIGNER_IDS4: PROC;        
+         
+      LEVLET_LETTER_DATE        =  D115_R3.LETTER_DATE;        
+         
+ /* LEVPOL*/        
+         
+      LEVPOL_REC_ID             =  'LEVPOL';        
+      LEVPOL_POL_NO             =  D115_R3.POL_NO;        
+      LEVPOL_PRODUCT_NAME       =  D115_R3.PLAN_NAME;        
+      LEVPOL_PREM_DUE_DATE      =  D115_R3.ANNIV_DATE1;        
+      LEVPOL_LIFE_INS_COVER_AMT =  0;        
+      LEVPOL_BENEFIT_INCREASE   =  D115_R3.TICK_BEN;        
+      LEVPOL_TICK_LIFE_COVER    =  '';        
+      LEVPOL_TICK_FINAL         =  '';        
+      LEVPOL_TICK_SALARY        =  '';        
+      LEVPOL_TICK_MAINTAIN      =  '';        
+      LEVPOL_TICK_INCREASE      =  '';        
+      LEVPOL_TICK_GUARANTEE     =  D115_R3.TICK_GTEE;        
+      LEVPOL_OLD_LETTER_ID      =  STORED_RECORD_TYPE;        
+      LEVPOL_TICK_THRESHOLD     =  '';        
+         
+ /* LEVLIF */        
+      LEVLIF_REC_ID             =  'LEVLIF';        
+      LEVLIF_LIFE_NAME_1        =  D115_R3.LIFE_1;        
+      LEVLIF_LIFE_NAME_2        =  D115_R3.LIFE_2;        
+      LEVLIF_DEATH_BEN_AMT      =  0;        
+      LEVLIF_LIFE_COVER_AMT     =  0;        
+      LEVLIF_CRIT_ILL_PREP_AMT  =  0;        
+      LEVLIF_PERM_DIS_PREP_AMT  =  0;        
+      LEVLIF_ELD_CARE_PREP_AMT  =  0;        
+      LEVLIF_ACC_DEATH_AMT      =  0;        
+      LEVLIF_INSURED_NAME       =  D115_R3.LIFE_INSURED;        
+         
+ /* LEVBEN */        
+      LEVBEN_REC_ID             =  'LEVBEN';        
+      LEVBEN_CRIT_ILL_L1        =  D115_R3.S67009;        
+      LEVBEN_PERM_TOT_DIS_L1    =  D115_R3.S67209;        
+      LEVBEN_ELD_CARE_L1        =  '';        
+      LEVBEN_INCOME_PROT_L1     =  D115_R3.S14005;        
+      LEVBEN_INCOME_INC_L1      =  0;        
+      LEVBEN_SURG_CASH_L1       =  0;        
+      LEVBEN_DEATH_BEN_L1       =  D115_R3.S09007;        
+      LEVBEN_CRIT_ILL_COV_L1    =  D115_R3.O98009;        
+      LEVBEN_CRIT_ILL_PERM_L1   =  D115_R3.S29209;        
+         
+      IF LEVPOL_OLD_LETTER_ID = 'BACHIDS4'        
+      THEN DO;        
+           LEVBEN_ACC_DEATH_L1  =  D115_R3.S02007;        
+           LEVBEN_ACC_DEATH_L2  =  D115_R3.S02109;        
+           LEVBEN_FAM_INCOME_L1 =  0;        
+           LEVBEN_FAM_INCOME_L2 =  0;        
+      END;        
+         
+      ELSE DO;        
+           LEVBEN_FAM_INCOME_L1 =  D115_R3.S02007;        
+           LEVBEN_FAM_INCOME_L2 =  D115_R3.S02109;        
+           LEVBEN_ACC_DEATH_L1  =  0;        
+           LEVBEN_ACC_DEATH_L2  =  0;        
+      END;        
+         
+      LEVBEN_PREM_WAIV_L1       =  D115_R3.TICK_WAIVLA1;        
+      LEVBEN_CRIT_ILL_L2        =  D115_R3.S67109;        
+      LEVBEN_PERM_TOT_DIS_L2    =  D115_R3.S67309;        
+      LEVBEN_ELD_CARE_L2        =  '';        
+      LEVBEN_INCOME_PROT_L2     =  D115_R3.S14109;        
+      LEVBEN_INCOME_INC_L2      =  0;        
+      LEVBEN_SURG_CASH_L2       =  0;        
+      LEVBEN_DEATH_BENEFIT_L2   =  D115_R3.S05109;        
+      LEVBEN_CRIT_ILL_COV_L2    =  D115_R3.O98109;        
+      LEVBEN_CRIT_ILL_PERM_L2   =  D115_R3.S29309;        
+      LEVBEN_PREM_WAIV_L2       =  D115_R3.TICK_WAIVLA2;        
+      LEVBEN_JOINT_LIVES_IND    =  D115_R3.TICK_JL;        
+      LEVBEN_LIVES_HEADER1      =  D115_R3.TICK_JL_1;        
+      LEVBEN_LIVES_HEADER2      =  D115_R3.TICK_JL_2;        
+         
+ /* LEVINC*/        
+      LEVINC_PREM_NAE_INC_PCT   = 0;  /* INITIALISE TO 0 */        
+      LEVINC_PREM_RPI_INC_PCT   = 0;        
+      LEVINC_PREM_OTH_INC_PCT   = 0;        
+      LEVINC_PREM_INCREASE_AMT       = 0;        
+      LEVINC_PREM_CHANGE_AMT    = 0;        
+         
+         
+      LEVINC_REC_ID             =  'LEVINC';        
+      LEVINC_RPI_UPDATED        =  '';        
+         
+      SELECT;        
+          WHEN(LEVPOL_OLD_LETTER_ID = 'BACHITD2' & D115_R3.RPI >0)        
+              DO;        
+                   LEVINC_INCREASE_TYPE = 'N';        
+                   LEVINC_PREM_NAE_INC_PCT = D115_R3.RPI;        
+              END;        
+          WHEN(LEVPOL_OLD_LETTER_ID = 'BACHIDS4' & D115_R3.RPI >0)        
+              DO;        
+                   LEVINC_INCREASE_TYPE = 'R';        
+                   LEVINC_PREM_RPI_INC_PCT = D115_R3.RPI;        
+              END;        
+          WHEN(D115_R3.INC_PERC>0)        
+              DO;        
+                   LEVINC_INCREASE_TYPE = 'O';        
+                   LEVINC_PREM_OTH_INC_PCT = D115_R3.INC_PERC;        
+              END;        
+          WHEN(D115_R3.PREM_INC>0)        
+              DO;        
+                   LEVINC_INCREASE_TYPE = 'O';        
+                   IF LEVPOL_OLD_LETTER_ID = 'BACHITD2'        
+                   THEN LEVINC_PREM_OTH_INC_PCT = D115_R3.PREM_INC;        
+                   ELSE LEVINC_PREM_INCREASE_AMT = D115_R3.PREM_INC;        
+              END;        
+          WHEN(D115_R3.P02409>0)        
+              DO;        
+                   LEVINC_INCREASE_TYPE = 'O';        
+                   LEVINC_PREM_CHANGE_AMT    =  D115_R3.P02409;        
+              END;        
+          WHEN(LEVPOL_OLD_LETTER_ID = 'BACHITD2'             /*R03705*/        
+              & D115_R3.TICK_MIN = 'Y'                      /*R03705*/        
+              & D115_R3.RPI = 0 )                            /*R03705*/        
+              LEVINC_INCREASE_TYPE = 'R';                    /*R03705*/        
+          OTHER;        
+      END;        
+         
+      LEVINC_PREM_ARR_OVER      =  '';        
+      LEVINC_PREM_ARR_AMT       =  0;        
+         
+      SELECT;        
+          WHEN (D115_R3.TICK_DD = 'Y') LEVINC_PAYMENT_TYPE = 'DD';        
+          WHEN (D115_R3.TICK_SO = 'Y') LEVINC_PAYMENT_TYPE = 'SO';        
+          WHEN (D115_R3.TICK_CA = 'Y') LEVINC_PAYMENT_TYPE = 'CA';        
+          OTHER;        
+      END;        
+         
+      LEVINC_PREM_GROSS_AMT     =  D115_R3.NEW_PREM;        
+      LEVINC_PREM_NET_AMT       =  D115_R3.NEW_PREM;        
+      LEVINC_LAST_INCREASE      =  '';        
+      LEVINC_DECLINED_INCREASE  =  D115_R3.TICK_LEVEL;        
+      LEVINC_TICK_MIN           =  D115_R3.TICK_MIN;        
+      LEVINC_PREM_INCREASE_AMT  =  '';        
+      LEVINC_TICK_ANNUAL        =  D115_R3.TICK_ANN;        
+      LEVINC_TICK_MONTHLY       =  D115_R3.TICK_MON;        
+      LEVINC_TICK_NET           =  '';        
+         
+ /* LEVPCE */        
+      LEVPCE_REC_ID             =   'LEVPCE';        
+      LEVPCE_POLNO              =    D115_R3.POL_NO;        
+      LEVPCE_LETTER_DATE        =    LEVLET_LETTER_DATE;        
+      LEVPCE_LETTER_ID          =    'LEV\ANNINC';        
+      LEVPCE_LOGON_ID           =    '';        
+      LEVPCE_ADD_NAME           =    SUBSTR(D115_R3.NAME,1,30);        
+      LEVPCE_EMPLOYEE_NO        =    '';        
+      LEVPCE_LOCATION           =    D115_R3.LOCATION;        
+      LEVPCE_FILLER             =    '';        
+         
+   $END;  /* SETUP DESIGNERS ITD2 & IDS4 */        
+         
+END_PLC(D115R03)

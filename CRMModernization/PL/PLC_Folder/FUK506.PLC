@@ -1,0 +1,24 @@
+BEGIN_PLC(FUK506)
+ /*------------------------------------------------------------------*/        
+ /* WUK506 : Global Reinvestment Price Structure for UKUI.           */        
+ /*                                                                  */        
+ /* BS  10/08/98 Increased FUNDS from 31 to 36 for Lifestyles.       */        
+ /* JOG 05/10/99 Increased FUNDS from 36 to 62 for Older Products.   */        
+ /* BS  27/03/00 Increased FUNDS from 64 to 66 for MIP's/RA's.       */        
+ /* OLW 27/11/02 Increased dates from 660 to 840(covers to 2050)     */        
+ /* OLW 02/07/03 Add DSS Bid Price for ABS Projections               */        
+ /*------------------------------------------------------------------*/        
+ Dcl 1 WUK506_REC,        
+     3 Avail           Char      (1)    , /* Availability Code       */        
+     3 Funds (66)                       , /* Fund Array              */        
+     5 F_Name          Char      (3)    , /* Fund Name               */        
+     5  Dates (840)                     , /* Date Array              */        
+     7   Effdt         Pic      '(8)9'  , /* Effective Date          */        
+     7   In_Bid_Prc    Fixed Dec (9,6)  , /* Initial Bid Price       */        
+     7   Pr_Bid_Prc    Fixed Dec (9,6)  , /* Premium Bid Price       */        
+     7   In_Offer_Prc  Fixed Dec (9,6)  , /* Initial Offer Price     */        
+     7   Pr_Offer_Prc  Fixed Dec (9,6)  , /* Premium Offer Price     */        
+     7   Pr_Bid_Prc_DS Fixed Dec (9,6)  ; /* Premium Bid Price DSS   */        
+         
+ /*------------------------------------------------------------------*/        
+END_PLC(FUK506)

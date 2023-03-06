@@ -1,0 +1,20 @@
+BEGIN_PLC(FUK506I)
+ /*------------------------------------------------------------------*/        
+ /* WUK506 : Initialisations of Fund Names                           */        
+ /* BS  27/03/00 Added FUNDS EM1, EC1 for RA's.                      */        
+ /*------------------------------------------------------------------*/        
+ Dcl 1 WUK506I,        
+     3 Funds (66)                       , /* Fund Array              */        
+     5 F_Name          Char      (3)      /* Fund Name               */        
+         Init ('EI3','EK3','FU3','PU3','DP3','SE3','BA3','OP3',        
+               'EI4','EK4','FU4','PU4','DP4','SE4','BA4','OP4',        
+               'EI5','EK5','FU5','PU5','DP5','SE5','BA5','OP5',        
+               'GF3','GE3','GP3','GC3','GI3','PM1','P1M',        
+               'GF4','GE4','GP4','GC4','GI4','UJE','EU2','UEE',        
+               'BC1','UKE','BC3','UNA','CU2','FU2','UPE',        
+               'MF1','UIF','MF2','UP1','HI3','MF3','UC1','MU2',        
+               'PG1','PG2','PG3','PU2','US1','UB1','UO1','UG1','UIS',        
+               'EFP','EM1','EC1');        
+ WUK506 = WUK506I , By Name ;        
+ /*------------------------------------------------------------------*/        
+END_PLC(FUK506I)

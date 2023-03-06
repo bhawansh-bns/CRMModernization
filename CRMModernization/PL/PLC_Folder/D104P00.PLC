@@ -1,0 +1,69 @@
+BEGIN_PLC(D104P00)
+ /*******************************************************************/        
+ /* THIS MODULE SHOULD BE INCLUDED IN ALL PROGRAMS FOR DOC1 LETTERS */        
+ /* THESE RECORDS ARE COMMON TO ALL LETTERS                         */        
+ /*                                                                 */        
+ /*******************************************************************/        
+ /* COMMON DATA STRUCTURES FOR ALL LETTERS */        
+         
+ /* PRMASS */        
+     DCL 1 PRMASS                   BASED(ADDR(PRMASS_OUT)),        
+           3 REC_ID                 CHAR(6)  INIT('PRMASS'),        
+           3 ASSOC_NO               PIC '(7)9',        
+           3 ASSOC_NAME             CHAR(30),        
+           3 ASSOC_OFF              CHAR(30),        
+           3 ASSOC_ADD1             CHAR(30),        
+           3 ASSOC_ADD2             CHAR(30),        
+           3 ASSOC_ADD3             CHAR(30),        
+           3 ASSOC_ADD4             CHAR(30),        
+           3 ASSOC_ADD5             CHAR(8),        
+           3 ASSOC_TEL_NO           CHAR(14),        
+           3 ASSOC_SALES_ARM        CHAR(3);        
+      DCL PRMASS_OUT                CHAR(218);        
+ /* PRMCLI*/        
+     DCL 1 PRMCLI                 BASED(ADDR(PRMCLI_OUT)),        
+           3 REC_ID               CHAR(6)  INIT('PRMCLI'),        
+           3 SALUTATION           CHAR(50),        
+           3 ADD_NAME             CHAR(50),        
+           3 ADD_LIN1             CHAR(30),        
+           3 ADD_LIN2             CHAR(30),        
+           3 ADD_LIN3             CHAR(30),        
+           3 ADD_LIN4             CHAR(30),        
+           3 ADD_LIN5             CHAR(8),        
+           3 POL_NO               CHAR(11),        
+           3 MAILCODE             CHAR(2);        
+     DCL PRMCLI_OUT               CHAR(247);        
+         
+ /* COMMON VARIABLES FOR COMMON MODULES */        
+         
+     DCL COMMON_CLI_REF           CHAR(9);        
+     DCL COMMON_CLI_REF2          CHAR(9);        
+     DCL COMMON_LA1_CLI_REF       CHAR(9);        
+     DCL COMMON_LA2_CLI_REF       CHAR(9);        
+         
+     DCL WS_POL_NO                PIC '(11)9';        
+     DCL REASON                   CHAR(50);        
+     DCL ERROR                    PIC '(3)9' INIT(0);        
+     DCL ASSOC_ERROR              PIC '(3)9' INIT(0);        
+         
+     DCL WS_ASSOC_ADD(5)          CHAR(30);        
+     DCL WS_ADD_LIN(5)            CHAR (30);        
+     DCL LINE                     FIXED DEC(5,0) INIT(0);        
+         
+ /********************************************/        
+ /*  ERROR TABLE                             */        
+ /*  0 = NO ERROR                            */        
+ /*  1 = NO POLICY RECORD ERROR              */        
+ /*  2 = NO CLIENT OWNER RECORD              */        
+ /*  3 = NO CLIENT LIFE ASS RECORD           */        
+ /*  4 = NO CLIENT OWNER OR LIFE ASS RECORD  */        
+ /********************************************/        
+         
+ /********************************************/        
+ /*  ASSOC ERROR TABLE                       */        
+ /*  0 = NO ERROR                            */        
+ /*  1 = NO FILE444 ERROR                    */        
+ /*  2 = NO SALES ARM, OFFICE ERROR          */        
+ /********************************************/        
+         
+END_PLC(D104P00)

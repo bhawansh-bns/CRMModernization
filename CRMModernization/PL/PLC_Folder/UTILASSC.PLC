@@ -1,0 +1,8 @@
+BEGIN_PLC(UTILASSC)
+         
+ DCL  1 ASSOC_AREA,        
+        3 ASSOC_NUMBER     PIC'(7)9',        
+        3 AREA_CODE        PIC'(3)9',        
+        3 AREA_ABBREV      CHAR(6),        
+        3 AREA_DESCR       CHAR(25);        
+END_PLC(UTILASSC)

@@ -1,0 +1,163 @@
+BEGIN_PLC(BMQDOC1)
+ /********************************************************************/        
+ /** DATE: 05/02/2008  BY: S THARINI           PRJ:  CA CONVERSION   */        
+ /**            OUTPUT RECORD AREAS                     R01986       */        
+ /** NOTE, THIS INCLUDE MEMBER IS USED BY BOTH N812P00 AND N813P00   */        
+ /**                                                                 */        
+ /********************************************************************/        
+ /* OUTPUT RECORD */        
+      DCL 1 DD_OUTREC                   CHAR(300) VARYING;        
+         
+ /* BMQLET */        
+      DCL 1 BMQLET                      BASED(ADDR(BMQLET_OUT)),        
+            3 BMQLET_REC_ID             CHAR(6),        
+            3 BMQLET_ID                 CHAR(12),        
+            3 BMQLET_LETTER_DATE        PIC '(8)9',        
+            3 BMQLET_PROGRAM_REF        CHAR(4),        
+            3 BMQLET_ANN_FIN            CHAR(1),        
+            3 BMQLET_METH_CODE          PIC '99',        
+            3 BMQLET_FILLER             CHAR(367),        
+            3 BMQLET_COMPANY_CODE       PIC '99';        
+      DCL BMQLET_OUT                    CHAR(402);        
+         
+ /* BMQCLI*/        
+     DCL 1 BMQCLI                 BASED(ADDR(BMQCLI_OUT)),        
+           3 BMQCLI_REC_ID              CHAR(6)  INIT('BMQCLI'),        
+           3 BMQCLI_SALUTATION          CHAR(50),        
+           3 BMQCLI_ADD_NAME            CHAR(50),        
+           3 BMQCLI_ADD_LIN1            CHAR(30),        
+           3 BMQCLI_ADD_LIN2            CHAR(30),        
+           3 BMQCLI_ADD_LIN3            CHAR(30),        
+           3 BMQCLI_ADD_LIN4            CHAR(30),        
+           3 BMQCLI_ADD_LIN5            CHAR(8),        
+           3 BMQCLI_POL_NO              CHAR(11),        
+           3 BMQCLI_MAILCODE            CHAR(2);        
+     DCL BMQCLI_OUT               CHAR(247);        
+         
+ /* BMQPOL*/        
+      DCL 1 BMQPOL                      BASED(ADDR(BMQPOL_OUT)),        
+            3 BMQPOL_REC_ID             CHAR(6),        
+            3 BMQPOL_POL_NO             CHAR(11),        
+            3 BMQPOL_POLNO_DATE         PIC '(8)9',        
+            3 BMQPOL_PLAN_NAME          CHAR(30),        
+            3 BMQPOL_POL_ANNIV          CHAR(8),        
+            3 BMQPOL_ANNIV_IND          CHAR(1),        
+            3 BMQPOL_SUM_ASS_AMT        PIC '(6)Z9',        
+            3 BMQPOL_BON_ADDED          PIC '(9)Z9',        
+            3 BMQPOL_REV_BONUS_TOT      PIC '(8)Z9',        
+            3 BMQPOL_SPEC_BONUS         PIC '(8)Z9',        
+            3 BMQPOL_SPEC_BONUS_TOT     PIC '(8)Z9',        
+            3 BMQPOL_TERMINAL_BONUS     PIC '(8)Z9',        
+            3 BMQPOL_FIN_MAT_VAL        PIC '(10)Z9',        
+            3 BMQPOL_LESS_LOAN_INT_VAL  PIC '(6)Z9V.99',        
+            3 BMQPOL_TOT_AMT_PAYABLE    PIC '(10)Z9V.99',        
+            3 BMQPOL_BONUS_RATE_YR      PIC '(4)9',        
+            3 BMQPOL_RATE_REV           PIC '(9)Z9V.999',        
+            3 BMQPOL_RATE_TERM          PIC '(9)Z9V.999',        
+            3 BMQPOL_RET_DATE           PIC '(8)9',        
+            3 BMQPOL_PREMIUM            PIC '(6)Z9V.99',        
+            3 BMQPOL_TOT_CLI_PAID       PIC '(6)Z9V.99',        
+            3 BMQPOL_PREM_MODE          PIC '9',        
+            3 BMQPOL_INTERIM_BONUS      PIC '(8)Z9',        
+            3 BMQPOL_COMM_DATE          PIC '(8)Z9',        
+            3 BMQPOL_LIFE_ASS1          CHAR(60),        
+            3 BMQPOL_LIFE_ASS2          CHAR(60),        
+            3 BMQPOL_TOT_BONUS_PREV     PIC '(8)Z9',          
+            3 BMQPOL_TOT_BONUS_TO_DATE  PIC '(8)Z9',          
+            3 BMQPOL_EQUITY_PCENT       PIC '99',             
+            3 BMQPOL_FIXED_INT_PCENT    PIC '99',             
+            3 BMQPOL_OTHER_PCENT        PIC '99';             
+    DCL BMQPOL_OUT                    CHAR(375);                  
+         
+  /* BMQLOA*/        
+      DCL 1 BMQLOA                      BASED(ADDR(BMQLOA_OUT)),        
+            3 BMQLOA_REC_ID             CHAR(6),        
+            3 BMQLOA_LOAN_POL_NO        CHAR(11),        
+            3 BMQLOA_POL_LOAN_BAL       PIC '(6)Z9V.99',        
+            3 BMQLOA_LOAN_INTEREST      PIC '(6)Z9V.99',        
+            3 BMQLOA_LOAN_REF           CHAR(11),        
+            3 BMQLOA_LOAN_ATT_POL_NO    CHAR(11),        
+            3 BMQLOA_POL_HOLDER         CHAR(30),        
+            3 BMQLOA_LOAN_TOT_AMT_DUE   PIC '(6)Z9V.99',        
+            3 BMQLOA_PAYBY_DATE         CHAR(8),        
+            3 BMQLOA_DATE_IND           CHAR(1);        
+      DCL BMQLOA_OUT                    CHAR(108);        
+         
+ /* BMQASS */        
+     DCL 1 BMQASS                   BASED(ADDR(BMQASS_OUT)),        
+           3 BMQASS_REC_ID              CHAR(6)  INIT('BMQASS'),        
+           3 BMQASS_ASSOC_NO            PIC '(7)9',        
+           3 BMQASS_ASSOC_NAME          CHAR(30),        
+           3 BMQASS_ASSOC_OFF           CHAR(30),        
+           3 BMQASS_ASSOC_ADD1          CHAR(30),        
+           3 BMQASS_ASSOC_ADD2          CHAR(30),        
+           3 BMQASS_ASSOC_ADD3          CHAR(30),        
+           3 BMQASS_ASSOC_ADD4          CHAR(30),        
+           3 BMQASS_ASSOC_ADD5          CHAR(8),        
+           3 BMQASS_ASSOC_TEL_NO        CHAR(14),        
+           3 BMQASS_ASSOC_SALES_ARM     CHAR(3);        
+      DCL BMQASS_OUT                CHAR(218);        
+         
+ /* BMQASE */        
+      DCL 1 BMQASE                      BASED(ADDR(BMQASE_OUT)),        
+            3 BMQASE_REC_ID             CHAR(6),        
+            3 BMQASE_ASE_RECIPIENT      CHAR(30),        
+            3 BMQASE_ASE_ADD1           CHAR(30),        
+            3 BMQASE_ASE_ADD2           CHAR(30),        
+            3 BMQASE_ASE_ADD3           CHAR(30),        
+            3 BMQASE_ASE_ADD4           CHAR(30),        
+            3 BMQASE_ASE_ADD5           CHAR(8);        
+      DCL BMQASE_OUT                    CHAR(164);        
+         
+ /* BMQPCE */        
+      DCL 1 BMQPCE                      BASED(ADDR(BMQPCE_OUT)),        
+            3 BMQPCE_REC_ID             CHAR(6),        
+            3 BMQPCE_CLI_REF            CHAR(9),        
+            3 BMQPCE_CLI_REF2           CHAR(9),        
+            3 BMQPCE_POL_NO             CHAR(11),        
+            3 BMQPCE_LETTER_DATE        PIC '(8)9',        
+            3 BMQPCE_LET_ID             CHAR(12),        
+            3 BMQPCE_LOGON_ID           CHAR(7),        
+            3 BMQPCE_ADD_NAME           CHAR(30),        
+            3 BMQPCE_NOT_SENT           CHAR(1),        
+            3 BMQPCE_EMP_NO             PIC '(5)9',        
+            3 BMQPCE_LOCATION           CHAR(2),        
+            3 BMQPCE_MAILCODE           PIC '99',        
+            3 BMQPCE_DATE               PIC '(8)9',        
+            3 BMQPCE_TIME               PIC '(9)9',        
+            3 BMQPCE_ASSOC_NO           PIC '(7)9',        
+            3 BMQPCE_ASSOC_NAME         CHAR(30),        
+            3 BMQPCE_ASSOC_OFF          CHAR(30),        
+            3 BMQPCE_ASSOC_ADD1         CHAR(30),        
+            3 BMQPCE_ASSOC_ADD2         CHAR(30),        
+            3 BMQPCE_ASSOC_ADD3         CHAR(30),        
+            3 BMQPCE_ASSOC_ADD4         CHAR(30),        
+            3 BMQPCE_ASSOC_ADD5         CHAR(8),        
+            3 BMQPCE_OSEAS_IND          CHAR (1),        
+            3 BMQPCE_PLAN               CHAR (3),        
+            3 BMQPCE_POL_TYPE           CHAR (3),        
+            3 BMQPCE_NON_PROF           CHAR(1),        
+            3 BMQPCE_LETTER_SUBTYPE     CHAR(1),        
+            3 BMQPCE_ASSIGNEE_COPY      CHAR(1);        
+      DCL BMQPCE_OUT                    CHAR(324);        
+         
+ /*****************************************************************/        
+ /*          COMMON VARIABLES FOR COMMON MODULES                  */        
+ /*****************************************************************/        
+         
+     DCL COMMON_CLI_REF           CHAR(9);        
+     DCL COMMON_CLI_REF2          CHAR(9);        
+     DCL COMMON_CLI_ASS1          CHAR(9);        
+     DCL COMMON_CLI_ASS2          CHAR(9);        
+     DCL COMMON_LA1_CLI_REF       CHAR(9);        
+     DCL COMMON_LA2_CLI_REF       CHAR(9);        
+         
+     DCL WS_POL_NO                PIC '(11)9';        
+     DCL REASON                   CHAR(50);        
+     DCL ERROR                    PIC '(3)9' INIT(0);        
+     DCL ASSOC_ERROR              PIC '(3)9' INIT(0);        
+         
+     DCL WS_ASSOC_ADD(5)          CHAR(30);        
+     DCL WS_ADD_LIN(5)            CHAR (30);        
+     DCL LINE                     FIXED DEC(5,0) INIT(0);        
+END_PLC(BMQDOC1)

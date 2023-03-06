@@ -1,0 +1,28 @@
+BEGIN_PLC(N040DINC)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DINC                                       */        
+    /*   GENERATION  :                                                */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : NOVEMBER 1992                                  */        
+    /*                                                                */        
+    /*   DESCRIPTION :                                                */        
+    /*                                                                */        
+    /*                                                                */        
+    /*                                                                */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DINC BASED (COM_DATA.DATA_DINC_PTR),        
+                3 I_RUN_TIME_KEY  PIC'(6)9',        
+                3 I_OPERATOR_ID   CHAR(4),        
+                3 I_TRAN_KEY      CHAR(4),        
+                3 I_TRAN_KEY_A    CHAR(1),        
+                3 I_TRAN_KEY_C    CHAR(1),        
+                3 INC_CNT(25)     PIC'9',     /*COUNT, ANNUAL INCREASE*/        
+                3 EIN_CNT(25)     PIC'9',     /*COUNT, EXISTING CHANGE*/        
+                3 EIN_KEY(25)     CHAR(1);    /*COUNT, CHANGE TRAN KEY*/        
+END_PLC(N040DINC)

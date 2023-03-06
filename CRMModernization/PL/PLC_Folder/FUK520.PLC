@@ -1,0 +1,36 @@
+BEGIN_PLC(FUK520)
+ /*------------------------------------------------------------------*/        
+ /* Layout of Composite UI Quotations file                           */        
+ /*------------------------------------------------------------------*/        
+ /* AUDIT TRAIL :                                                    */        
+ /* PROGRAMMER : James Farrell                                       */        
+ /* DATE       : 7/7/1999                                            */        
+ /* CR0022 04/01/02 RMJ Add request Terminal Bonus.                  */        
+ /*                                                                  */        
+ /* Added version field functionality                                */        
+ /* ILD243  OLW  24/06/04  ADD IMAGE_FLAG AND OPERATOR ID            */        
+ /*------------------------------------------------------------------*/        
+ Dcl 1 WUK520 ,        
+     2 Polno          Pic    '(7)9'  ,   /* Policy number            */        
+     2 Vers           char    (1)    ,   /* version                  */        
+     2 X_Filler       Char    (8)    ,   /* for future expansion     */        
+     2 Pdtod          Pic    '(8)9'  ,   /* Paid to Date             */        
+     2 Invdt          Pic    '(8)9'  ,   /* Investment Date          */        
+     2 Rinvd          Pic    '(8)9'  ,   /* Reinvest To Date         */        
+     2 Prjvl          Char    (1)    ,   /* Projected Arrears Y/N    */        
+     2 Ltrep          Char    (1)    ,   /* Late Reply               */        
+     2 Prfpi          Char    (1)    ,   /* Print Future Illustration*/        
+     2 Prunt          Char    (1)    ,   /* Print Unit Position      */        
+     2 Dscrg          Char    (1)    ,   /* Discharge                */        
+     2 Quest          Char    (1)    ,   /* Questionaire             */        
+     2 Retir          Char    (1)    ,   /* Early Retirement         */        
+     2 Projto         Pic    '(8)9'  ,   /* Project To Date          */        
+     2 DOM            Pic    '(8)9'  ,   /* DOM (from ILBA)          */        
+     2 LastPrice      Pic    '(8)9'  ,   /* Latest Price             */        
+     2 Req_bdown      Char    (1)    ,   /* Req. Detailed Breakdown  */        
+     2 Req_TBonus     Char    (1)    ,   /* Req. addition of T. Bonus*/        
+     2 Image_Flag     Char    (1)    ,   /* Image Flag        ILD243 */        
+     2 Operator_Id    Char    (4)    ,   /* Operator Id       ILD243 */        
+     2 Fill           Char    (2)    ;   /* Filler            ILD243 */        
+ /*  2 Fill           Char    (7)           Filler            ILD243 */        
+END_PLC(FUK520)

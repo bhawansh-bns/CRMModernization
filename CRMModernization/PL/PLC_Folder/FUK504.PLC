@@ -1,0 +1,66 @@
+BEGIN_PLC(FUK504)
+ /*------------------------------------------------------------------*/        
+ /* Layout of Controls File                                          */        
+ /*------------------------------------------------------------------*/        
+ /* The Controls file is written to by every alteration to the       */        
+ /* Unit A/C and by those transactions which reflect cash movements  */        
+ /*                                                                  */        
+ /* See X:/MF_UK/MFUI/DESIGN/CONREQS.DOC for details of reason codes */        
+ /*                                                                  */        
+ /*                                                                  */        
+ /*------------------------------------------------------------------*/        
+ /*                                                                  */        
+ /* AC  9/10/96   Removed Bid Value fields to allow UK09005 to take  */        
+ /*               care of all Control record output thus minimising  */        
+ /*               error in the control log. Also no longer logging   */        
+ /*               any non-unit affecting events.                     */        
+ /*                                                                  */        
+ /* MH 11/12/96   Added Txn_Cash_Amt to allow UK09005 to record      */        
+ /*               non-unit affecting events.                         */        
+ /*                                                                  */        
+ /* RM 24/03/97   Added Code field to record the control record code */        
+ /*               'U' = Unit, 'C' = Cash Only, 'P' = Balancing       */        
+ /*                                                                  */        
+ /* RM 24/03/97   Added Table field tp control record to satisfy UK  */        
+ /*               financial controls requirements.                   */        
+ /*                                                                  */        
+ /* BS 12/12/00   Added Premium/Charges fields and increased XFiller */        
+ /*               field (LRECL now 800 bytes) for Capsil Migration.  */        
+ /*                                                                  */        
+ /*------------------------------------------------------------------*/        
+ Dcl 1 WUK504,        
+     3 POLNO          Pic       '(7)9'  , /* Policy Number            */        
+     3 Vers           Pic       '9'     , /* Version                  */        
+     3 Old_Funds(10)                    , /* Array of "Before" Funds  */        
+       5 F_Name       Char       (3)    , /* Fund Name                */        
+       5 In_Pur       Fixed Dec  (13,3) , /* Initial Units Purchased  */        
+       5 In_Sur       Fixed Dec  (13,3) , /* Init. Units Surrendered  */        
+       5 Pr_Pur       Fixed Dec  (13,3) , /* Premium Units Purchased  */        
+       5 Pr_Sur       Fixed Dec  (13,3) , /* Prem. Units Surrendered  */        
+     3 New_Funds(10)                    , /* Array of "After" Funds   */        
+       5 F_Name       Char       (3)    , /* Fund Name                */        
+       5 In_Pur       Fixed Dec  (13,3) , /* Initial Units Purchased  */        
+       5 In_Sur       Fixed Dec  (13,3) , /* Init. Units Surrendered  */        
+       5 Pr_Pur       Fixed Dec  (13,3) , /* Premium Units Purchased  */        
+       5 Pr_Sur       Fixed Dec  (13,3) , /* Prem. Units Surrendered  */        
+     3 Txn_Type       Char       (5)    , /* Transaction Type         */        
+     3 Count          Pic       '9999'  , /* Transaction Count        */        
+     3 Effdt          Pic       '(8)9'  , /* Effective Date           */        
+     3 Reason         Pic       '999'   , /* Reason Code              */        
+     3 Txn_Cash_Amt   Fixed Dec  (15,5) , /* Transaction Cash Amount  */        
+     3 Code           Char       (1)    , /* Control Record Code      */        
+     3 Table          PIC        '(3)9' , /* Table number             */        
+     3 Premium            Fixed Dec (15,5),        
+     3 WOP_Charge         Fixed Dec (15,5),        
+     3 Disability_Charge  Fixed Dec (15,5),        
+     3 Life_Charge        Fixed Dec (15,5),        
+     3 SI_Charge          Fixed Dec (15,5),        
+     3 CC_Charge          Fixed Dec (15,5),        
+     3 PTD_Charge         Fixed Dec (15,5),        
+     3 Contract_Charge    Fixed Dec (15,5),        
+     3 SU_Charge          Fixed Dec (15,5),        
+     3 Alt_Charge         Fixed Dec (15,5),        
+     3 Stamp_Duty         Fixed Dec (15,5),        
+     3 XFiller        Char       (52)  ;        
+         
+END_PLC(FUK504)

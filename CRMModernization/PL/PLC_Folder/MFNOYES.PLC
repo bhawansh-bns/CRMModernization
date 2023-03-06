@@ -1,0 +1,4 @@
+BEGIN_PLC(MFNOYES)
+     DCL YES                    BIT (1)          INIT ('1'B);                   
+     DCL NO                     BIT (1)          INIT ('0'B);                   
+END_PLC(MFNOYES)

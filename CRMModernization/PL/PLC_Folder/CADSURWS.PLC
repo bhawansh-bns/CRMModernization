@@ -1,0 +1,68 @@
+BEGIN_PLC(CADSURWS)
+  /******************************************************************/        
+  /* DSURRWS: VARIABLES FOR CALCULATION OF SURRENDER VALUES         */        
+  /*          USED BY UTILSNL COPYBOOKS.                            */        
+  /******************************************************************/        
+  /* AMENDED:                                                       */        
+  /*  REF.     DATE      WHO   DESCRIPTION                          */        
+  /*  ****     ****      ***   ***********                          */        
+  /******************************************************************/        
+  /*  OC   : OC       = OFFICE PREMIUM CHARGE FROM GTAB             */        
+  /*  PF   : PFEE     = ANNUAL PREMIUM FEE    FROM GTAB             */        
+  /*  Z    : Z_ADJ    = ZILLMER ADJUSTMENT    FROM GTAB             */        
+  /*       : F_ADJ    = FEMALE AGE ADJUSTMENT FROM GTAB             */        
+  /*       : M_ADJ    = MALE   AGE ADJUSTMENT FROM GTAB             */        
+  /*  I    : INT      = INTEREST RATE         FROM GTAB             */        
+  /*  S    : S_AGE    = SPECIFIED UPPER AGE   FROM GTAB             */        
+  /*  V    : V        = DISCOUNTED VALUE OF '1' (VARIES BY INT RATE)*/        
+  /*  SV   : SV       = SURRENDER_VALUE                             */        
+  /*  NP   : NPREM    = NET VALUATION PREMIUM                       */        
+  /*      : A_ANN    = ANNUITY FACTORING (ACTUARIAL FUNCTION)      */        
+  /*  A    : A_LIFE   = LIFE ASSURANCE FACTORING (ACTUARIAL FUNC)   */        
+  /*  X    : E_AGE    = ADJUSTED AGE NEXT BIRTHDAY AT ENTRY         */        
+  /*       : C_AGE    = ADJUSTED AGE NEXT BIRTHDAY AT CURRENT DATE  */        
+  /******************************************************************/        
+  DCL  01  WK_UTIL_WORK_AREA,        
+           03  WK_INT                  FIXED(7,4),        
+           03  WK_V                    FIXED(11,9),        
+           03  WK_ADJUST_AGE           FIXED(3),        
+           03  WK_S_AGE                FIXED(3),        
+           03  WK_RISKRATE             FIXED(9,7),        
+           03  WK_SV_PREV_ANNIV        FIXED(7,5),        
+           03  WK_SV_NEXT_ANNIV        FIXED(7,5),        
+           03  WK_VY                   FIXED(11,9),        
+           03  WK_W                    FIXED(4),        
+           03  WK_PREV_VY              FIXED(11,9),        
+           03  WK_TOTAL_Q              FIXED(11,9),        
+           03  WK_Q                    FIXED(11,9),        
+           03  TERM_TO_DATE            FIXED(3),        
+           03  TERM_TO_DATE1           FIXED(3),        
+           03  REMAIN_TERM_YRS         FIXED(3),        
+           03  COMP_YRS_IN_FCE         FIXED(3),        
+           03  REMAIN_TERM_YRS_ANN     FIXED(3),        
+           03  COMP_YRS_IN_FCE_ANN     FIXED(3),        
+           03  WK_IB_YRS               FIXED(7,5),        
+           03  WK_IB_MONS              FIXED(2),        
+           03  WK_SV                   FIXED(9,2),        
+           03  WK_SV_NOW               FIXED(7,5),        
+           03  WK_BSV                  FIXED(11,4),        
+           03  WK_BSV1                 FIXED(11,4),        
+           03  WK_BSV2                 FIXED(11,4),        
+           03  WK_SVPER1              FIXED(7,5),        
+           03  WK_TSV                  FIXED(9,2),        
+           03  WK_SVPUP                FIXED(9,2),        
+           03  WK_RB                   FIXED(9,2),        
+           03  WK_SB                   FIXED(9,2),        
+           03  WK_PUSA                 FIXED(9,2),        
+           03  WK_IB                   FIXED(9,2),        
+           03  WK_MONTHS               FIXED(2),        
+           03  WK_MONTHS_ANN           FIXED(2),        
+           03  WK_FACT1                FIXED(5),        
+           03  WK_FACT2                FIXED(5),        
+           03  WK_Y                    PIC '999',        
+           03  WK_BSF                  FIXED(7,4),        
+           03  WK_WORK                 FIXED(15,9),        
+           03  WK_NPREM                FIXED(11,5),        
+           03  WK_A_ANN                FIXED(15,9),        
+           03  WK_A_LIFE               FIXED(11,5);        
+END_PLC(CADSURWS)

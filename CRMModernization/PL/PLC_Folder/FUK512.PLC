@@ -1,0 +1,44 @@
+BEGIN_PLC(FUK512)
+ /*--------------------------------------------------------------+        
+               UK UI Run Parameters                                     
+               ====================                                     
+                                                                        
+     Single Record file                                                 
+                                                                        
+     Length   : 80                                                      
+                                                                        
+     *******************************************************            
+     *  WARNING : These layouts must be kept consistent    *            
+     *  with the Data Dictionary entries on X:/MF_UK/MFUI  *            
+     *******************************************************            
+                                                                        
+  This parameter card defines the type of the current run, and          
+  also the Product Groups (based on PRGRP on the UI Matrix)             
+  which are to be processed.                                            
+ +--------------------------------------------------------------*/        
+ /******************************************************/        
+ /* Blank Layout                                       */        
+ /******************************************************/        
+         
+         
+ DCL 1 WUK512_BLANK  CHAR (80) BASED(P_512)   ;        
+ /******************************************************/        
+         
+         
+ DCL 1 WUK512_REC ,        
+       2   RMODE       CHAR           (  1)           ,        
+ /* Run Mode: possible values are:                     */        
+ /*  'D': Dummy Reinvestment (no fund link update)     */        
+ /*  'R': Real Reinvestment (fund link to be updated)  */        
+ /*  'M': Monthly Reinvestment                         */        
+ /*  'I': Initialisation, ie to create NEWBZ on UKPH   */        
+       2   PRODS(8)    PIC            '99'            ,        
+ /* Product Groups to be selected:                     */        
+ /* Array values are equivalent to FUK503.PRGRP values */        
+ /* NB: only 8 groups expected - if this is exceeded   */        
+ /*     this array must be extended.                   */        
+       2   FILL        CHAR           ( 63)           ;        
+ /* Spare Space                                    */        
+         
+ /*---------------------------------------------------------*/        
+END_PLC(FUK512)

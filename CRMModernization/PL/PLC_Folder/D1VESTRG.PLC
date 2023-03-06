@@ -1,0 +1,24 @@
+BEGIN_PLC(D1VESTRG)
+     DCL VES_DATA                       CHAR(383) BASED (ADDR(VES));        
+     DCL 1 VES,        
+           3 POLICY_NUMBER (20)         CHAR (11),        
+           3 NET_VALUE                  PIC '(7)Z9V.99',        
+           3 LUMP_SUM_PYMT              PIC '(7)Z9V.99',        
+           3 GROSS_ANN_PYMT             PIC '(7)Z9V.99',        
+           3 INCR_PERCENTAGE            CHAR (04),        
+           3 REDUCED_PERCENTAGE         PIC 'ZZ9V.99',        
+           3 DUE_DATE                   CHAR (08),        
+           3 PAYMT_FREQ                 CHAR (01),        
+           3 NOM_DPNDNT                 CHAR (30),        
+           3 GUARANTEE_PERIOD           PIC '(2)9',        
+           3 GUARANTEE_EXP_DATE         CHAR (08),        
+           3 DATE_OF_ENDRSMT            CHAR (08),        
+           3 ANNU_PYMT                  PIC '(7)Z9V.99',        
+           3 TAX_FORM_IND               CHAR (04),        
+           3 TYPE_OF_PPS_SCHEME         CHAR (06),        
+           3 TAXABLE_PORTION            PIC '(6)Z9V.99',        
+           3 TAX_CODE                   CHAR (05),        
+           3 TAX_RATE                   PIC 'ZZ9V.99',        
+           3 TAX_DEDUCTED               PIC '(6)Z9V.99',        
+           3 GROSS_PAYMENT              PIC '(7)Z9V.99';        
+END_PLC(D1VESTRG)

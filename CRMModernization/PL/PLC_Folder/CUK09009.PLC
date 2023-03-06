@@ -1,0 +1,102 @@
+BEGIN_PLC(CUK09009)
+         
+ /*-------------------------------------------------------------------*/        
+ /* CUK09009 : Declarations needed to call module UK09009.            */        
+ /*                                                                   */        
+ /* UK09009 calculates the fund value for a policy. The value can     */        
+ /* be calculated for the entire policy ID, at fund type level, or    */        
+ /* at fund level.                                                    */        
+ /*                                                                   */        
+ /* Fill CUK09009 as follows:                                         */        
+ /* PolNo, Vers, : Policy Identifier                                 */        
+ /* Effdt         : Date at which value is to be calculated           */        
+ /* Val_Type      : 'B' for bid value, 'S' for Surrender Value        */        
+ /* Price_Type    : 'B' for bid price to be applied, 'O' for offer    */        
+ /*                 price to be applied.                              */        
+ /* Curr          : 'S' for sterling, 'P' for Punt.                   */        
+ /* Fund_Types    : One or more of the following:                     */        
+ /*                 'R' - Regular Premium                             */        
+ /*                 'S' - Single Premium                              */        
+ /*                 'P' - Other Protected Rights                      */        
+ /*                 'D' - DSS                                         */        
+ /*                 'O' - Old Regular premium (ie investment no       */        
+ /*                       longer applies.                             */        
+ /*                 'All' - All fund types                            */        
+ /*                 For example, if fund value for regular premium    */        
+ /*                 and old regular premium is required then          */        
+ /*                 Fund_Types = 'RO   '                              */        
+ /* Funds_Str     : String of all requires funds concatenated         */        
+ /*                 together and separated by asterisks. If all funds */        
+ /*                 are required, then Funds_Str = 'All '             */        
+ /*                 For example if funds OP4 and GF4 are to be        */        
+ /*                 valued then Funds_Str = 'OP4*GF4'                 */        
+ /*                                                                   */        
+ /* The following data is returned:                                   */        
+ /*                                                                   */        
+ /* Valued_F_Type : Array of 5 elements, returned in the order that   */        
+ /*                 the different fund types appeared in the          */        
+ /*                 Fund_Types variable.                              */        
+ /*                 Therefore if Fund_Types = 'RO   ' then            */        
+ /*                 Valued_F_Type(1).F_Type = 'R'                     */        
+ /*                 Valued_F_Type(2).F_Type = 'O'                     */        
+ /*                 All other elements in the array are blank or zero */        
+ /*                 If Fund_Types = 'All' then                        */        
+ /*                 Valued_F_Type(1:5).F_Type = R,S,P,D,O             */        
+ /*                 respectively.                                     */        
+ /*                                                                   */        
+ /* Valued_Funds  : Array of up to 10 elements, 1 per fund within     */        
+ /*                 fund type.                                        */        
+ /*                                                                   */        
+ /* In_Val        : Initial Value of funds before any fund factors    */        
+ /*                 have been applied.                                */        
+ /*                                                                   */        
+ /* Dis_In_Val    : Initial Value of fund after fund factors have     */        
+ /*                 been applied.                                     */        
+ /*                                                                   */        
+ /* F_Val         : Fund Value. This value is the requested value of  */        
+ /*                 the fund after taking into account: Bid/Offer     */        
+ /*                 price, Bid/Surrender value, Currency              */        
+ /*                                                                   */        
+ /* F_Type_Val    : Sum of F_Val for all funds within that fund type  */        
+ /*                                                                   */        
+ /* Policy_Val    : Sum of all F_Type_Vals for all requested fund     */        
+ /*                 types within the Policy                           */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK09009 Ptr ;        
+ Dcl 1 CUK09009_NAME_TYPE ,        
+     3 PolNo      Pic      '(7)9'  ,   /* Policy Number             */        
+     3 Vers        Pic       '9'    ,   /* Version                   */        
+     3 Effdt       Pic      '(8)9'  ,   /* Effective date            */        
+     3 Price_Date  Pic      '(8)9'  ,   /* Earliest Price Date       */        
+     3 Val_Type    Char      (1)    ,   /* Value Type                */        
+     3 Prc_Type    Char      (1)    ,   /* Price Type                */        
+     3 Curr        Char      (1)    ,   /* Currency                  */        
+     3 Fund_Types  Char      (5)    ,   /* Fund types to be valued   */        
+     3 Funds_Str   Char      (40)   ,   /* Funds to be valued        */        
+     3 Valued_F_Type (5)            ,   /* Returned Fund Type Values */        
+       5 F_Type    Char      (1)    ,   /* Fund Type                 */        
+       5 Valued_Funds  (10)         ,   /* Returned Fund Values      */        
+         7 F_Name  Char      (3)    ,   /* Fund Name                 */        
+         7 F_Per   Fixed Dec (3,2)  ,   /* Fund Percentage           */        
+         7 In_Pur  Fixed Dec (13,3) ,   /* Initial Units Purchased   */        
+         7 In_Sur  Fixed Dec (13,3) ,   /* Initial Units Surrendered */        
+         7 Pr_Pur  Fixed Dec (13,3) ,   /* Premium Units Purchased   */        
+         7 Pr_Sur  Fixed Dec (13,3) ,   /* Premium Units Surrendered */        
+         7 In_Bid_Prc      Fixed Dec (9,6)  , /* Init Bid Price      */        
+         7 Pr_Bid_Prc      Fixed Dec (9,6)  , /* Prem Bid Price      */        
+         7 In_Offer_Prc    Fixed Dec (9,6)  , /* Init Offer Price    */        
+         7 Pr_Offer_Prc    Fixed Dec (9,6)  , /* Prem Offer Price    */        
+         7 In_Bid_Val      Fixed Dec (15,3) , /* Init Bid Value      */        
+         7 Pr_Bid_Val      Fixed Dec (15,3) , /* Prem Bid Value      */        
+         7 In_Offer_Val    Fixed Dec (15,3) , /* Init Offer Value    */        
+         7 Pr_Offer_Val    Fixed Dec (15,3) , /* Prem Offer Value    */        
+         7 A_Factor        Fixed Dec (7,6)  , /* A Factor Used       */        
+         7 Dis_In_Bid_Val  Fixed Dec (15,3) , /* Discounted Init BV  */        
+         7 Dis_In_Offer_Val Fixed Dec (15,3), /* Discounted Init OV  */        
+         7 F_Val       Fixed Dec (15,3) ,    /* Fund Value           */        
+      5 F_Type_Val     Fixed Dec (15,3) ,    /* Fund Type Value      */        
+    3 Policy_Val       Fixed Dec (15,3) ;    /* Policy ID Value      */        
+         
+END_PLC(CUK09009)

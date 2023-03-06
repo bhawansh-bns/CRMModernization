@@ -1,0 +1,50 @@
+BEGIN_PLC(N040DALL)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DALL                                       */        
+    /*   GENERATION  : 033                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : OCTOBER 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+    /*                 PROCEDURES AND ACTIONS.                        */        
+    /*                 STORES DATA NEEDED BY ALL THE ACTIONS USED     */        
+    /*                 DURING DIARY PROCESSING.                       */        
+    /*                 SOME DATA IS LOADED IN THE INITIAL PROCEDURE,  */        
+    /*                 N040P01.                                       */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DALL BASED (COM_DATA.DATA_DALL_PTR),        
+                3 HIDATE          PIC'(8)9',  /* HIGH DATE            */        
+                3 LODATE          PIC'(8)9',  /* LOW DATE             */        
+                3 SYSDATE         PIC'(8)9',  /* SYSTEM DATE          */        
+                3 SYSTIME         PIC'(6)9',  /* SYSTEM TIME          */        
+                3 HIDATE_PLUS_1D  PIC'(8)9',  /* HIDATE PLUS 1 DAY    */        
+                3 HIDATE_PLUS_1Y  PIC'(8)9',  /* HIDATE PLUS 1 YEAR   */        
+                3 RUN_DATE        PIC'(8)9',  /* RUN DATE (LOW - 1 D) */        
+                3 TRANSACT_MTH    PIC'99',    /* TRANSACTION MONTH    */        
+                3 LOTRACE         CHAR(1),    /* LOGIC TRACE SWITCH   */        
+                3 DATRACE         CHAR(1),    /* DATA TRACE SWITCH    */        
+                3 TESTRUN         CHAR(1),    /* TEST RUN SWITCH      */        
+                3 POTRACE         PIC'(11)9', /* POLICY TRACE SWITCH  */        
+                3 POLYSTART       PIC'(11)9', /* POLICY START NUMBER  */        
+                3 POLYSTOP        PIC'(11)9', /* POLICY STOP NUMBER   */        
+                3 POLYSKIP        PIC'(11)9', /* POLICY SKIP NUMBER   */        
+                3 CURR_C77011     PIC'(11)9', /* CURRENT POLICY NO.   */        
+                3 PLAN_CODE       PIC'999',   /* DEFINITIVE PLAN CODE */        
+                3 POLY_TYPE       PIC'999',   /* DEFINITIVE POLY TYPE */        
+                3 ACTION_DEPN,                /* ACTION DEPENDENT VALS*/        
+                  5 ACTION_RES    CHAR(1),    /* RESULT OF ACTION     */        
+                  5 ERROR_CODE    CHAR(4),    /* ERROR CODE OF ACTION */        
+                  5 ERROR_MESS    CHAR(79),   /* ERROR DESCRIPTION    */        
+                  5 NEW_DATE      PIC'(8)9',  /* DATE CALC BY ACTION  */        
+                  5 P_ACT_TYPE    CHAR(1),    /* ACTION TYPE          */        
+                  5 P_ACT_CODE    CHAR(4),    /* ACTION CODE          */        
+                  5 P_ACT_DESC    CHAR(5),    /* ACTION SHORT DESC    */        
+                3 UPDATE_POL      CHAR(1),    /* TRIGGER END BROWSE   */        
+                3 P_HVTU_AR       FIXED(5,2); /* HVTU ALLOC RATE      */        
+END_PLC(N040DALL)

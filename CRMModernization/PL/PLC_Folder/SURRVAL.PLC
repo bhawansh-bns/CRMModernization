@@ -1,0 +1,80 @@
+BEGIN_PLC(SURRVAL)
+ /*********************************************************************/        
+ /*     <AL> ON: 24/09/2008  BY: Stephen Cooke         CCID : R03004  */        
+ /*                                                                   */        
+ /*  Defect 1877                                                      */        
+ /*                                                                   */        
+ /*   The policy types added below were simply copied from their      */        
+ /*   Lincoln equivalent products. For Chesnara, however, we can't    */        
+ /*   calculate the FILE020 Surrender Value as the requisite field    */        
+ /*   (A09413) is not set on any of the policies. Instead, simply     */        
+ /*   call UTILSUR for all these products, as per most other products.*/        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /*     <AL> ON: 01/11/2007  BY: Mark Dobson           CCID : R01680  */        
+ /*  Changes required for CA Conversion.                              */        
+ /*                                                                   */        
+ /*   Add new policy types for plan codes 041 & 056 as part of the    */        
+ /*   Countrywide Assured Conversion.                                 */        
+ /*   Plan 041 - 610, 620, 621, 622, 623, 624, 625, 720, 725          */        
+ /*              630, 631, 632, 633, 634, 635, 636, 637, 730          */        
+ /*              640, 641, 642, 643, 645, 646, 680, 681, 682          */        
+ /*              683, 740, 741, 742, 745, 650, 651, 652, 653          */        
+ /*              654, 655, 750, 751, 752, 753                         */        
+ /*              (as 041/010, 020, 030, 040, 050)                     */        
+ /*   Plan 056 - 300,320                                              */        
+ /*              (as 056/000)                                         */        
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*   PROGRAM        : SURRVAL                                        */        
+ /*   SYSTEM         : CPDF                                           */        
+ /*   PROGRAMMER     : PATRICK HALL                                   */        
+ /*   DATE           : 16/05/2003                                     */        
+ /*                                                                   */        
+ /*   DESCRIPTION    : This subroutine will be called by CIINVM  to   */        
+ /*                    populate a surrender value and charge using    */        
+ /*                    the specified route for PC/PT                  */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /**                        MAIN CODE STARTS                         **/        
+ /*********************************************************************/        
+ SELECT (PA_PLAN_CODE(IDX1));        
+    WHEN (041) DO;        
+ /*    SELECT(PA_POLICY_TYPE(IDX1))$                          *R03004*/        
+ /*       WHEN (610, 620, 621, 622, 623, 624, 625, 720, 725,  *R03004*/        
+ /*             630, 631, 632, 633, 634, 635, 636, 637, 730,  *R03004*/        
+ /*             640, 641, 642, 643, 645, 646, 680, 681, 682,  *R03004*/        
+ /*             683, 740, 741, 742, 745, 650, 651, 652, 653,  *R03004*/        
+ /*             654, 655, 750, 751, 752, 753)                 *R03004*/        
+ /*       CALL FILE020_SURRENDER_VALUE$                       *R03004*/        
+ /*       OTHER CALL UTILSUR_SURRENDER_VALUE$                 *R03004*/        
+ /*    END$                                                   *R03004*/        
+       CALL UTILSUR_SURRENDER_VALUE;                         /*R03004*/        
+    END;        
+    WHEN (056) DO;        
+       SELECT(PA_POLICY_TYPE(IDX1));        
+          WHEN (300, 320)        
+          PA_POLICY_CHARGES (IDX1) = 0;        
+          OTHER CALL UTILSUR_SURRENDER_VALUE;        
+       END;        
+    END;        
+    OTHER CALL UTILSUR_SURRENDER_VALUE;        
+ END;        
+ /*********************************************************************/        
+ /**                   UTILSUR_SURRENDER_VALUE                       **/        
+ /*********************************************************************/        
+ UTILSUR_SURRENDER_VALUE: PROC;        
+         
+ FUND_DATA_PTR = SYSNULL;        
+ APS_PROGRAM_ID = 'UTILSUR';        
+         
+ CALL LINK (APS,        
+        PA_POLICY_NUMBER (IDX1),PA_POLICY_CHARGES(IDX1),        
+        PA_POLICY_TRANSFER_VALUE (IDX1),        
+        FUND_DATA_PTR);        
+         
+ $END;        
+ /*************************************************************R03004**/        
+ /**  THE FILE020_SURRENDER_VALUE PROC HAS BEEN REMOVED       *R03004**/        
+ /*************************************************************R03004**/        
+END_PLC(SURRVAL)

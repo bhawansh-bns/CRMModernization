@@ -1,0 +1,488 @@
+BEGIN_PLC(FUK503)
+ /*-------------------------------------------------------------+        
+              UK UI Product Matrix                                     
+              ====================                                     
+                                                                       
+    *******************************************************            
+    *  WARNING : This layout must be kept consistent      *            
+    *  with the Data Dictionary entries on X:/MF_UK/MFUI  *            
+    *                                                     *            
+    *          DO NOT MANUALLY UPDATE THIS FILE           *            
+    *                                                     *            
+    *******************************************************            
+ +-------------------------------------------------------------*/        
+ DCL 1 WUK503_REC,        
+  2 TABLE PIC'999', /* Table No. */        
+  2 ACAPP CHAR(2), /* ALTERATION CHARGE APPLICABLE             */        
+  2 AIADJ CHAR(2), /* AUTOMATIC INCOME AGE ADJUSTMENT          */        
+  2 AIAPP CHAR(2), /* AUTOMATIC INCOME CHARGE APPLICABLE       */        
+  2 AIBAS CHAR(2), /* AUTOMATIC INCOME CHARGE BASIS            */        
+  2 AICHG CHAR(2), /* AUTOMATIC INCOME CHARGE FORMULA          */        
+  2 AIDAT CHAR(2), /* AUTOMATIC INCOME DUE DATE                */        
+  2 AIFCT CHAR(2), /* AUTO INCOME SAR ADJUSTMENT FACTOR        */        
+  2 AIMAL CHAR(2), /* AUTO INC MONEY CHANGE ALLOWABLE          */        
+  2 AIMAX CHAR(2), /* AUTOMATIC INCOME CHARGE MAXIMUM          */        
+  2 AIMIN CHAR(2), /* AUTOMATIC INCOME CHARGE MINIMUM          */        
+  2 AIMRA CHAR(2), /* AUTO INCOME MONEY CHANGE RANGE           */        
+  2 AIPER CHAR(2), /* AUTOMATIC INCOME PERCENTAGE              */        
+  2 AIRAT CHAR(2), /* AUTOMATIC INCOME CHARGE RATE             */        
+  2 AIRND CHAR(2), /* AUTOMATIC INCOME CHARGE ROUNDING         */        
+  2 AISAR CHAR(2), /* AUTOMATIC INCOME SUM AT RISK             */        
+  2 AIVAL CHAR(2), /* AUTOMATIC INCOME MINIMUM BALANCE         */        
+  2 BLFAL CHAR(2), /* BILL FREQ CHANGE ALLOWABLE               */        
+  2 BLFRA CHAR(2), /* BILL FREQ CHANGE RANGE                   */        
+  2 BSALL CHAR(2), /* BONUS ALLOCATION BASIS (WHERE ALL BONUSE */        
+  2 BSAPP CHAR(2), /* BONUS APPLICABLE                         */        
+  2 BSBAS CHAR(2), /* BONUS BASIS (WHERE ALL BONUSES ARE THE S */        
+  2 BSRND CHAR(2), /* BONUS ROUNDING BASIS (WHERE ALL BONUSES  */        
+  2 CALEX CHAR(2), /* EXCESS CALCULATION FOR REVIEWS           */        
+  2 CCAPP CHAR(2), /* CRISIS COVER APPLICABLE                  */        
+  2 CCEXT CHAR(2), /* CRISIS COVER EXTRA MODIFIER              */        
+  2 CCFOR CHAR(2), /* CRISIS COVER FORMULA                     */        
+  2 CCRAT CHAR(2), /* CRISIS COVER RATE                        */        
+  2 CC1AL CHAR(2), /* CRISIS COVER 1 CHANGE ALLOWABLE          */        
+  2 CC1RA CHAR(2), /* CRISIS COVER 1 RANGE                     */        
+  2 CC2AL CHAR(2), /* CRISIS COVER 2 CHANGE ALLOWABLE          */        
+  2 CC2RA CHAR(2), /* CRISIS COVER 2 RANGE                     */        
+  2 CHALL CHAR(2), /* SCHEDULED CHARGE ALLOTMENT METHOD        */        
+  2 CM1AL CHAR(2), /* CRISIS COVER MULTIPLIER1 CHANGE ALLOWABL */        
+  2 CM1RA CHAR(2), /* CRISIS COVER MULTIPLIER 1 RANGE          */        
+  2 CM2AL CHAR(2), /* CRISIS COVER MULTIPLIER 2 CHANGE ALLOWAB */        
+  2 CM2RA CHAR(2), /* CRISIS COVER MULTIPLIER 2 RANGE          */        
+  2 COEAL CHAR(2), /* COVER ESCALATING CHANGE ALLOWED          */        
+  2 COERA CHAR(2), /* COVER ESCALATING RANGE                   */        
+  2 CSFAL CHAR(2), /* AUTO INCOME MONEY CHANGE RANGE           */        
+  2 CSFRA CHAR(2), /* AUTO INCOME MONEY CHANGE RANGE           */        
+  2 CURUL CHAR(2), /* CURRENCY CHANGE RULE                     */        
+  2 CVAPP CHAR(2), /* CONVERSION APPLICABLE                    */        
+  2 CVBAS CHAR(2), /* CONVERSION BASIS                         */        
+  2 CVDAT CHAR(2), /* CONVERSION TIMING                        */        
+  2 CVSTT CHAR(2), /* CONVERSION STATUS                        */        
+  2 DAAPP CHAR(2), /* DAB CHARGE APPLICABLE                    */        
+  2 DAARR CHAR(2), /* DAB CHARGE ARREARS                       */        
+  2 DABAL CHAR(2), /* DAB CHANGE ALLOWABLE                     */        
+  2 DABRA CHAR(2), /* DAB CHANGE RANGE                         */        
+  2 DAEND CHAR(2), /* DAB CHARGE ENDING DATE                   */        
+  2 DAFOR CHAR(2), /* DAB CHARGE FORMULA                       */        
+  2 DAFRQ CHAR(2), /* DAB CHARGE FREQUENCY                     */        
+  2 DAMET CHAR(2), /* DAB CHARGE METHOD                        */        
+  2 DARAT CHAR(2), /* DAB RATE                                 */        
+  2 DARND CHAR(2), /* DAB CHARGE ROUNDING                      */        
+  2 DASTT CHAR(2), /* DAB CHARGE STATUS                        */        
+  2 DBRUL CHAR(2), /* DSS BONUS RULE                           */        
+  2 DB1AL CHAR(2), /* DATE OF BIRTH 1 CHANGE ALLOWABLE         */        
+  2 DB1RA CHAR(2), /* DATE OF BIRTH 1 CHANGE RANGE             */        
+  2 DB2AL CHAR(2), /* DATE OF BIRTH 2 CHANGE ALLOWABLE         */        
+  2 DB2RA CHAR(2), /* DATE OF BIRTH 2 CHANGE RANGE             */        
+  2 DCADJ CHAR(2), /* DISABILITY CHARGE ADJUSTMENT             */        
+  2 DCAPP CHAR(2), /* DISABILITY CHARGE APPLIES                */        
+  2 DCARR CHAR(2), /* DISABILITY CHARGE ARREARS                */        
+  2 DCDEF CHAR(2), /* DISABILITY DEFERMENT ADJUSTMENT          */        
+  2 DCEND CHAR(2), /* DISABILITY CHARGE ENDING DATE            */        
+  2 DCESC CHAR(2), /* DISABILITY CHARGE ESCALATION LOADING     */        
+  2 DCFAC CHAR(2), /* DISABILITY FACTOR                        */        
+  2 DCFOR CHAR(2), /* DISABILITY CHARGE FORMULA                */        
+  2 DCFRQ CHAR(2), /* DISABILITY CHARGE FREQUENCY              */        
+  2 DCJTL CHAR(2), /* DISABILITY CHARGE JOINT LIFE CALCULATION */        
+  2 DCMET CHAR(2), /* DISABILITY CHARGE METHOD                 */        
+  2 DCOCC CHAR(2), /* DISABILITY CHARGE OCCUPATION LOADING     */        
+  2 DCRED CHAR(2), /* DISABILITY CHARGE REDUCTION              */        
+  2 DCRND CHAR(2), /* DISABILITY CHARGE ROUNDING               */        
+  2 DCSAR CHAR(2), /* DISABILITY CHARGE SUM AT RISK            */        
+  2 DCSEX CHAR(2), /* DISABILITY CHARGE SEX LOADING            */        
+  2 DCSMK CHAR(2), /* DISABILITY SMOKER ADJUSTMENT             */        
+  2 DCSTT CHAR(2), /* DISABILITY CHARGE STATUS                 */        
+  2 DCSUS CHAR(2), /* DISABILITY CHARGE WHEN SUSPENDED         */        
+  2 DCTAB CHAR(2), /* DISABILITY CHARGE TABLE                  */        
+  2 DCTRM CHAR(2), /* DISABILITY TERM LOADING                  */        
+  2 DC1DF CHAR(2), /* DISABILITY COVER 1 EXISTS DEFINITION     */        
+  2 DC2DF CHAR(2), /* DISABILITY COVER 2 EXISTS DEFINITION     */        
+  2 DERAL CHAR(2), /* DISABILITY ESCALATION RATE CHANGE ALLOWA */        
+  2 DERRA CHAR(2), /* DISABILITY ESCALATION RATE CHANGE RANGE  */        
+  2 DFCAN CHAR(2), /* DEFINITION OF CONTRACT_ANNIVERSARY       */        
+  2 DFCON CHAR(2), /* DEFINITION OF DATE OF CONVERSION OF INIT */        
+  2 DFDBN CHAR(2), /* DEFINITION OF BONUS_DATE                 */        
+  2 DFDOE CHAR(2), /* DEFINITION OF DATE OF ENTRY              */        
+  2 DFDOM CHAR(2), /* DEFINITION OF DATE OF MATURITY           */        
+  2 DFIUD CHAR(2), /* DEFINITION OF DATE TO BE USED FOR CALCUL */        
+  2 DFMAT CHAR(2), /* DEFINITION OF MATURITY DATE              */        
+  2 DFSM2 CHAR(2), /* DEFINITION OF SMOKER CODE LIFE 2         */        
+  2 DFTRM CHAR(2), /* DEFINITION OF TERM                       */        
+  2 DF1PD CHAR(2), /* DEFINITION OF START DATE OF REGULAR PREM */        
+  2 DF1SP CHAR(2), /* DEFINITION OF START DATE OF SINGLE PREMI */        
+  2 DMRUL CHAR(2), /* DOM CHANGE RULE                          */        
+  2 DP1AL CHAR(2), /* DEFERRED PERIOD 1 CHANGE ALLOWABLE       */        
+  2 DP1RA CHAR(2), /* DEFERRED PERIOD 1 CHANGE RANGE           */        
+  2 DP2AL CHAR(2), /* DEFERRED PERIOD 2 CHANGE ALLOWABLE       */        
+  2 DP2RA CHAR(2), /* DEFERRED PERIOD 2 CHANGE RANGE           */        
+  2 DS1AL CHAR(2), /* DISABILITY_COVER 1 CHANGE ALLOWABLE      */        
+  2 DS1RA CHAR(2), /* DISABILITY_COVER 1 CHANGE RANGE          */        
+  2 DS2AL CHAR(2), /* DISABILITY_COVER 2 CHANGE ALLOWABLE      */        
+  2 DS2RA CHAR(2), /* DISABILITY_COVER 2 CHANGE RANGE          */        
+  2 DT1AL CHAR(2), /* SUM ASSURED DEATH 1 CHANGE ALLOWABLE     */        
+  2 DT1RA CHAR(2), /* SUM ASSURED DEATH 1 CHANGE RANGE         */        
+  2 DT2AL CHAR(2), /* SUM ASSURED DEATH 2 CHANGE ALLOWABLE     */        
+  2 DT2RA CHAR(2), /* SUM ASSURED DEATH 2 CHANGE RANGE         */        
+  2 DX1AL CHAR(2), /* DISABILITY EXPIRY AGE 1 CHANGE ALLOWABLE */        
+  2 DX1RA CHAR(2), /* DISABILITY EXPIRY AGE 1 CHANGE RANGE     */        
+  2 DX2AL CHAR(2), /* DISABILITY EXPIRY AGE 2 CHANGE ALLOWABLE */        
+  2 DX2RA CHAR(2), /* DISABILITY EXPIRY AGE 2 CHANGE RANGE     */        
+  2 ENCAL CHAR(2), /* ENCASHMENT CHANGE ALLOWABLE              */        
+  2 ENCRA CHAR(2), /* ENCASHMENT CHANGE RANGE                  */        
+  2 EP1AL CHAR(2), /* EXTRA PREMIUM FACTOR 1 CHANGE ALLOWABLE  */        
+  2 EP1RA CHAR(2), /* EXTRA PREMIUM FACTOR 1 CHANGE RANGE      */        
+  2 EP2AL CHAR(2), /* EXTRA PREMIUM FACTOR 2 CHANGE ALLOWABLE  */        
+  2 EP2RA CHAR(2), /* EXTRA PREMIUM FACTOR 2 CHANGE RANGE      */        
+  2 FIBAS CHAR(2), /* FINAL CLAIM BASIS                        */        
+  2 FPDAL CHAR(2), /* FUTURE PUP DATE CHANGE ALLOWABLE         */        
+  2 FPDRA CHAR(2), /* FUTURE PUP DATE CHANGE RANGE             */        
+  2 GRPAL CHAR(2), /* GROUPED CHANGE ALLOWABLE                 */        
+  2 GRPRA CHAR(2), /* GROUPED CHANGE RANGE                     */        
+  2 IAINC CHAR(2), /* AUTOMATIC INCOMES ALLOWED                */        
+  2 IBFRQ CHAR(2), /* PERMISSIBLE BILL FREQUENCIES             */        
+  2 IBINC CHAR(2), /* BENEFIT INCREASES ALLOWED                */        
+  2 IBRED CHAR(2), /* BENEFIT REDUCTIONS ALLOWED               */        
+  2 ICAPP CHAR(2), /* SERIOUS ILLNESS CHARGE APPLICABLE        */        
+  2 ICARR CHAR(2), /* SERIOUS ILLNESS CHARGE ARREARS           */        
+  2 ICEND CHAR(2), /* SERIOUS ILLNESS CHARGE ENDING DATE       */        
+  2 ICFNA CHAR(2), /* SERIOUS ILLNESS CHARGE FEMALE NON-SMOKER */        
+  2 ICFNT CHAR(2), /* SERIOUS ILLNESS CHARGE FEMALE NON-SMOKER */        
+  2 ICFOR CHAR(2), /* SERIOUS ILLNESS CHARGE FORMULA           */        
+  2 ICFRQ CHAR(2), /* SERIOUS ILLNESS CHARGE FREQUENCY         */        
+  2 ICFSA CHAR(2), /* SERIOUS ILLNESS CHARGE FEMALE SMOKER ADJ */        
+  2 ICFST CHAR(2), /* SERIOUS ILLNESS CHARGE FEMALE SMOKER TAB */        
+  2 ICINT CHAR(2), /* SERIOUS ILLNESS CHARGE INTERPOLATION     */        
+  2 ICJTA CHAR(2), /* SERIOUS ILLNESS CHARGE JOINT AGE CALCULA */        
+  2 ICJTL CHAR(2), /* SERIOUS ILLNESS CHARGE JOINT LIFE CALCUL */        
+  2 ICJTS CHAR(2), /* SERIOUS ILLNESS CHARGE JOINT SMOKER CALC */        
+  2 ICMET CHAR(2), /* SERIOUS ILLNESS CHARGE METHOD            */        
+  2 ICMNA CHAR(2), /* SERIOUS ILLNESS CHARGE MALE NON-SMOKER A */        
+  2 ICMNT CHAR(2), /* SERIOUS ILLNESS CHARGE MALE NON-SMOKER T */        
+  2 ICMRT CHAR(2), /* PERMISSIBLE COMMISSION RATES             */        
+  2 ICMSA CHAR(2), /* SERIOUS ILLNESS CHARGE MALE SMOKER ADJUS */        
+  2 ICMST CHAR(2), /* SERIOUS ILLNESS CHARGE MALE SMOKER TABLE */        
+  2 ICRIS CHAR(2), /* CRISIS COVER ALLOWED                     */        
+  2 ICRND CHAR(2), /* SERIOUS ILLNESS CHARGE ROUNDING          */        
+  2 ICSAR CHAR(2), /* SERIOUS ILLNESS CHARGE SUM AT RISK       */        
+  2 ICSTT CHAR(2), /* SERIOUS ILLNESS CHARGE STATUS            */        
+  2 IC1AL CHAR(2), /* SERIOUS ILLNESS COVER 1 CHANGE ALLOWABLE */        
+  2 IC1DF CHAR(2), /* SERIOUS ILLNESS COVER 1 EXISTS DEFINITIO */        
+  2 IC1RA CHAR(2), /* SERIOUS ILLNESS COVER 1 CHANGE RANGE     */        
+  2 IC2AL CHAR(2), /* SERIOUS ILLNESS COVER 2 CHANGE ALLOWABLE */        
+  2 IC2DF CHAR(2), /* SERIOUS ILLNESS COVER 1 EXISTS DEFINITIO */        
+  2 IC2RA CHAR(2), /* SERIOUS ILLNESS COVER 2 CHANGE RANGE     */        
+  2 IDISS CHAR(2), /* DISABILITY COVER ALLOWED                 */        
+  2 IFINC CHAR(2), /* FINAL CLAIMS ALLOWED                     */        
+  2 IFTYP CHAR(2), /* PERMISSIBLE FUND TYPES                   */        
+  2 IFUND CHAR(2), /* PERMISSIBLE FUNDS                        */        
+  2 IINDX CHAR(2), /* INDEXATION ALLOWED                       */        
+  2 ILIFE CHAR(2), /* LIFE COVER ALLOWED                       */        
+  2 ILPUP CHAR(2), /* LAPSES/PUPS ALLOWED                      */        
+  2 IPENC CHAR(2), /* PARTIAL ENCASHMENTS ALLOWED              */        
+  2 IPINC CHAR(2), /* REGULAR PREMIUM INCREASES ALLOWED        */        
+  2 IPRED CHAR(2), /* REGULAR PREMIUM REDUCTIONS ALLOWED       */        
+  2 IPTDA CHAR(2), /* PTD COVER ALLOWED                        */        
+  2 IREDR CHAR(2), /* REDIRECTIONS ALLOWED                     */        
+  2 IREVA CHAR(2), /* REVIVALS ALLOWED                         */        
+  2 ISILL CHAR(2), /* SERIOUS ILLNESS COVER ALLOWED            */        
+  2 ISJAL CHAR(2), /* SINGLE / JOINT LIFE CHANGE ALLOWED       */        
+  2 ISJRA CHAR(2), /* SINGLE / JOINT LIFE CHANGE RANGE         */        
+  2 ISORJ CHAR(2), /* SINGLE OR JOINT LIFE ALLOWED             */        
+  2 ISPTP CHAR(2), /* SP TOP-UPS ALLOWED                       */        
+  2 ISUSP CHAR(2), /* SUSPENSIONS ALLOWED                      */        
+  2 ISWCH CHAR(2), /* SWITCHES ALLOWED                         */        
+  2 IUEND CHAR(2), /* INITIAL UNIT PERIOD END DATE             */        
+  2 IUINT CHAR(2), /* INITIAL UNIT INTERPOLATION               */        
+  2 IUKEY CHAR(2), /* INITIAL UNIT TABLE KEY                   */        
+  2 IUMOD CHAR(2), /* INITIAL UNIT PERIOD MODIFIER             */        
+  2 IUPER CHAR(2), /* INITIAL UNIT PERIOD                      */        
+  2 IUPKY CHAR(2), /* INITIAL UNIT PERIOD KEY                  */        
+  2 IUPRP CHAR(2), /* INIITAL UNIT PROPORTION                  */        
+  2 IURND CHAR(2), /* INITIAL UNIT ROUNDING                    */        
+  2 IUTAB CHAR(2), /* INITIAL UNIT TABLE                       */        
+  2 IVERS CHAR(2), /* PERMISSIBLE VERSIONS                     */        
+  2 IWOPA CHAR(2), /* WOP COVER ALLOWED                        */        
+  2 LCAPP CHAR(2), /* LIFE COVER CHARGE APPLICABLE             */        
+  2 LCARR CHAR(2), /* LIFE COVER CHARGE ARREARS                */        
+  2 LCEND CHAR(2), /* LIFE COVER CHARGE ENDING DATE            */        
+  2 LCFNA CHAR(2), /* LIFE COVER CHARGE FEMALE NON-SMOKER ADJU */        
+  2 LCFNT CHAR(2), /* LIFE COVER CHARGE FEMALE NON-SMOKER TABL */        
+  2 LCFOR CHAR(2), /* LIFE COVER CHARGE FORMULA                */        
+  2 LCFRQ CHAR(2), /* LIFE COVER CHARGE FREQUENCY              */        
+  2 LCFSA CHAR(2), /* LIFE COVER CHARGE FEMALE SMOKER ADJUSTME */        
+  2 LCFST CHAR(2), /* LIFE COVER CHARGE FEMALE SMOKER TABLE    */        
+  2 LCINT CHAR(2), /* LIVE COVER CHARGE INTERPOLATION          */        
+  2 LCJTA CHAR(2), /* LIFE COVER CHARGE JOINT AGE CALCULATION  */        
+  2 LCJTL CHAR(2), /* LIFE COVER CHARGE JOINT LIFE CALCULATION */        
+  2 LCJTS CHAR(2), /* LIFE COVER CHARGE JOINT SMOKER CALCULATI */        
+  2 LCMET CHAR(2), /* LIFE COVER CHARGE METHOD                 */        
+  2 LCMNA CHAR(2), /* LIFE COVER CHARGE MALE NON-SMOKER ADJUST */        
+  2 LCMNT CHAR(2), /* LIFE COVER CHARGE MALE NON-SMOKER TABLE  */        
+  2 LCMR1 CHAR(2), /* LIFE COVER MORTALITY RATE 1 DEFINITION   */        
+  2 LCMR2 CHAR(2), /* LIFE COVER MORTALITY RATE 2 DEFINITION   */        
+  2 LCMSA CHAR(2), /* LIFE COVER CHARGE MALE SMOKER ADJUSTMENT */        
+  2 LCMST CHAR(2), /* LIFE COVER CHARGE MALE SMOKER TABLE      */        
+  2 LCRND CHAR(2), /* LIFE COVER CHARGE ROUNDING               */        
+  2 LCSAR CHAR(2), /* LIFE COVER CHARGE SUM AT RISK            */        
+  2 LCSTT CHAR(2), /* LIFE COVER CHARGE STATUS                 */        
+  2 LCSUS CHAR(2), /* LIFE COVER SUSPENSION                    */        
+  2 LC1DF CHAR(2), /* LIFE COVER 1 EXISTS DEFINITION           */        
+  2 LC2DF CHAR(2), /* LIFE COVER 2 EXISTS DEFINITION           */        
+  2 LF1DF CHAR(2), /* LIFE1 EXISTS DEFINITION                  */        
+  2 LF2DF CHAR(2), /* LIFE2 EXISTS DEFINITION                  */        
+  2 LI1AL CHAR(2), /* LIFE COVER INCLUSIVE 1 CHANGE ALLOWABLE  */        
+  2 LI1RA CHAR(2), /* LIFE COVER INCLUSIVE 1 CHANGE RANGE      */        
+  2 MIAMT CHAR(2), /* MONTHLY INVESTMENT AMOUNT                */        
+  2 ML1AL CHAR(2), /* MEDICAL LOADING 1 CHANGE ALLOWABLE       */        
+  2 ML1RA CHAR(2), /* MEDICAL LOADING 1 RANGE                  */        
+  2 ML2AL CHAR(2), /* MEDICAL LOADING 2 CHANGE ALLOWABLE       */        
+  2 ML2RA CHAR(2), /* MEDICAL LOADING 2 RANGE                  */        
+  2 MTDAL CHAR(2), /* MATURITY TARGET DATE CHANGE ALLOWED      */        
+  2 MTDRA CHAR(2), /* TARGET DATE RANGE                        */        
+  2 MTPAL CHAR(2), /* MATURITY TARGET PENSION CHANGE ALLOWED   */        
+  2 MTPRA CHAR(2), /* MATURITY TARGET PENSION RANGE            */        
+  2 MTVAL CHAR(2), /* MATURITY TARGET VALUE CHANGE ALLOWED     */        
+  2 MTVRA CHAR(2), /* TARGET VALUE RANGE                       */        
+  2 NAMAL CHAR(2), /* AMALGAMATION OF SUB-VERSIONS             */        
+  2 NAUSW CHAR(2), /* CALCULATION OF AUTO_SW                   */        
+  2 NBNPY CHAR(2), /* CALCULATION OF BEN_PAY                   */        
+  2 NFRSW CHAR(2), /* CALCULATION OF FREE_SW                   */        
+  2 NGRPD CHAR(2), /* CALCULATION OF GROUPED                   */        
+  2 NM1AL CHAR(2), /* LIFE 1 NAME CHANGE ALLOWABLE             */        
+  2 NM1RA CHAR(2), /* LIFE 1 NAME RANGE                        */        
+  2 NM2AL CHAR(2), /* LIFE 2 NAME CHANGE ALLOWABLE             */        
+  2 NM2RA CHAR(2), /* LIFE 2 NAME RANGE                        */        
+  2 NPFAP CHAR(2), /* CALCULATION OF POLFEE_APP                */        
+  2 NSPOF CHAR(2), /* SPECIAL OFFER IDENTIFICATION RULES       */        
+  2 NSPRT CHAR(2), /* CALCULATION OF CHG_PROP                  */        
+  2 NWPRT CHAR(2), /* CALCULATION OF WOP_PROP                  */        
+  2 OC1AL CHAR(2), /* OCCUPATIONAL CLASS 1CHANGE ALLOWABLE     */        
+  2 OC1RA CHAR(2), /* OCCUPATIONAL CLASS 1 CHANGE RANGE        */        
+  2 OC2AL CHAR(2), /* OCCUPATIONAL CLASS 2 CHANGE ALLOWABLE    */        
+  2 OC2RA CHAR(2), /* OCCUPATIONAL CLASS 2 CHANGE RANGE        */        
+  2 OL1AL CHAR(2), /* OCCUPATIONAL LOADING 1CHANGE ALLOWABLE   */        
+  2 OL1RA CHAR(2), /* OCCUPATIONAL LOADING 1 CHANGE RANGE      */        
+  2 OL2AL CHAR(2), /* OCCUPATIONAL LOADING 2 CHANGE ALLOWABLE  */        
+  2 OL2RA CHAR(2), /* OCCUPATIONAL LOADING 2 CHANGE RANGE      */        
+  2 PEALL CHAR(2), /* PARTIAL ENCASHMENT ALLOCATION            */        
+  2 PEAPP CHAR(2), /* PARTIAL ENCASHMENT CHARGE APPLICABLE     */        
+  2 PEBAS CHAR(2), /* PARTIAL ENCASHMENT BASIS                 */        
+  2 PELON CHAR(2), /* PARTIAL ENCASHMENT LOAN EFFECT           */        
+  2 PEMAX CHAR(2), /* PARTIAL ENCASHMENT CHARGE MAXIMUM        */        
+  2 PEMIN CHAR(2), /* PARTIAL ENCASHMENT CHARGE MINIMUM        */        
+  2 PERAT CHAR(2), /* PARTIAL ENCASHMENT CHARGE RATE           */        
+  2 PERND CHAR(2), /* PARTIAL ENCASHMENT CHARGE ROUNDING       */        
+  2 PFAPP CHAR(2), /* POLICY FEE APPLICABLE                    */        
+  2 PFEND CHAR(2), /* POLICY FEE END DATE                      */        
+  2 PFFOR CHAR(2), /* POLICY FEE FORMULA                       */        
+  2 PFFRQ CHAR(2), /* POLICY FEE FREQUENCY                     */        
+  2 PFMET CHAR(2), /* POLICY FEE METHOD                        */        
+  2 PFPRI CHAR(2), /* POLICY FEE PRIORITY                      */        
+  2 PFRND CHAR(2), /* POLICY FEE ROUNDING                      */        
+  2 PFSTT CHAR(2), /* POLICY FEE STATUS                        */        
+  2 PJTAL CHAR(2), /* PROJECT TO DATE CHANGE ALLOWED           */        
+  2 PJTRA CHAR(2), /* PROJECT TO DATE RANGE                    */        
+  2 PRCAT CHAR(2), /* PRODUCT CATEGORY                         */        
+  2 PREAL CHAR(2), /* PREMIUM CHANGE ALLOWABLE                 */        
+  2 PRERA CHAR(2), /* PREMIUM CHANGE RANGE                     */        
+  2 PRGRP CHAR(2), /* PRODUCT GROUP                            */        
+  2 PRTYP CHAR(2), /* PRODUCT TYPE                             */        
+  2 PRVAL CHAR(2), /* PUP REVIVAL CHANGE ALLOWED               */        
+  2 PRVRA CHAR(2), /* PUP REVIVAL RANGE                        */        
+  2 PR2AL CHAR(2), /* PREMIUM 2 CHANGE ALLOWABLE               */        
+  2 PR2RA CHAR(2), /* PREMIUM 2 CHANGE RANGE                   */        
+  2 PSACT CHAR(2), /* PIS ACTIVE FUND                          */        
+  2 PSAPP CHAR(2), /* PIS  APPLIES                             */        
+  2 PSSEC CHAR(2), /* PIS SECURE FUND                          */        
+  2 PSTRM CHAR(2), /* PIS TERM                                 */        
+  2 PTDAL CHAR(2), /* PTD_CODE CHANGE ALLOWABLE                */        
+  2 PTDAP CHAR(2), /* PTD APPLIES                              */        
+  2 PTDFR CHAR(2), /* PTD FORMULA                              */        
+  2 PTDMT CHAR(2), /* PTD METHOD                               */        
+  2 PTDRA CHAR(2), /* PTD_CODE CHANGE RANGE                    */        
+  2 PTDRT CHAR(2), /* PTD RATE                                 */        
+  2 PURAL CHAR(2), /* PURCHASE CHANGE ALLOWABLE                */        
+  2 PURRA CHAR(2), /* PURCHASE CHANGE RANGE                    */        
+  2 P1EAL CHAR(2), /* PREMIUM 1 ESCALATING CHANGE ALLOWED      */        
+  2 P1ERA CHAR(2), /* PREMIUM 1 ESCALATING RANGE               */        
+  2 P2EAL CHAR(2), /* PREMIUM 2 ESCALATING CHANGE ALLOWED      */        
+  2 P2ERA CHAR(2), /* PREMIUM 2 ESCALATING RANGE               */        
+  2 RARUL CHAR(2), /* SELECTED RETIREMENT AGE CHANGE RULE      */        
+  2 RA1AL CHAR(2), /* RETIREMENT AGE 1 CHANGE ALLOWABLE        */        
+  2 RA1RA CHAR(2), /* RETIREMENT AGE 1 CHANGE RANGE            */        
+  2 RBALL CHAR(2), /* REGULAR BONUS ALLOCATION BASIS           */        
+  2 RBAPP CHAR(2), /* REGULAR BONUS APPLICABLE                 */        
+  2 RBARR CHAR(2), /* REGULAR BONUS ARREARS                    */        
+  2 RBBAS CHAR(2), /* REGULAR BONUS BASIS                      */        
+  2 RBDAT CHAR(2), /* REGULAR BONUS TIMING                     */        
+  2 RBEND CHAR(2), /* REGULAR BONUS ENDING DATE                */        
+  2 RBRAT CHAR(2), /* REGULAR BONUS RATE                       */        
+  2 RBRND CHAR(2), /* REGULAR BONUS ROUNDING                   */        
+  2 RBSTE CHAR(2), /* REGULAR BONUS STATUS ELIGIBLE            */        
+  2 RBSUS CHAR(2), /* REGULAR BONUS SUSPENSION                 */        
+  2 RBUNE CHAR(2), /* REGULAR BONUS UNITS ELIGIBLE             */        
+  2 RIAPP CHAR(2), /* RP INVESTMENT APPLICABLE                 */        
+  2 RICXA CHAR(2), /* RP INVESTMENT COMMISSION EXTRA APPLIES   */        
+  2 RICXH CHAR(2), /* RP INVESTMENT COMMISSION RATE H RULE     */        
+  2 RICXQ CHAR(2), /* RP INVESTMENT COMMISSION RATE Q RULE     */        
+  2 RICXT CHAR(2), /* RP INVESTMENT COMMISSION RATE T RULE     */        
+  2 RICXZ CHAR(2), /* RP INVESTMENT COMMISSION RATE Z RULE     */        
+  2 RIEND CHAR(2), /* RP INVESTMENT ENDING DATE                */        
+  2 RIFRQ CHAR(2), /* RP INVESTMENT FREQUENCY                  */        
+  2 RIGXR CHAR(2), /* RP INVESTMENT GROUPED EXTRA INVESTMENT R */        
+  2 RILAP CHAR(2), /* RP INVESTMENT EXTRA INVESTMENT LEVEL APP */        
+  2 RILBS CHAR(2), /* RP INVESTMENT EXTRA INVESTMENT LEVEL BAS */        
+  2 RIL1L CHAR(2), /* RP INVESTMENT 1ST EXTRA INVESTMENT LEVEL */        
+  2 RIL1R CHAR(2), /* RP INVESTMENT 1ST EXTRA INVESTMENT RATE  */        
+  2 RIL2L CHAR(2), /* RP INVESTMENT 2ND EXTRA INVESTMENT LEVEL */        
+  2 RIL2R CHAR(2), /* RP INVESTMENT 2ND EXTRA INVESTMENT RATE  */        
+  2 RIL3L CHAR(2), /* RP INVESTMENT 3RD EXTRA INVESTMENT LEVEL */        
+  2 RIL3R CHAR(2), /* RP INVESTMENT 3RD EXTRA INVESTMENT RATE  */        
+  2 RIPER CHAR(2), /* RP INVESTMENT SLICE PERSISTENCY          */        
+  2 RIPRM CHAR(2), /* RP INVESTMENT PREMIUM                    */        
+  2 RIP1E CHAR(2), /* RP INVESTMENT 1ST PERIOD END DATE        */        
+  2 RIP1F CHAR(2), /* RP INVESTMENT 1ST PERIOD FUND TYPE       */        
+  2 RIP1R CHAR(2), /* RP INVESTMENT 1ST PERIOD ALLOCATION RATE */        
+  2 RIP2A CHAR(2), /* RP INVESTMENT 2ND PERIOD APPLICABLE      */        
+  2 RIP2E CHAR(2), /* RP INVESTMENT 2ND PERIOD END DATE        */        
+  2 RIP2F CHAR(2), /* RP INVESTMENT 2ND PERIOD FUND TYPE       */        
+  2 RIP2R CHAR(2), /* RP INVESTMENT 2ND PERIOD ALLOCATION RATE */        
+  2 RIP3A CHAR(2), /* RP INVESTMENT 3RD PERIOD APPLICABLE      */        
+  2 RIP3E CHAR(2), /* RP INVESTMENT 3RD PERIOD END DATE        */        
+  2 RIP3F CHAR(2), /* RP INVESTMENT 3RD PERIOD FUND TYPE       */        
+  2 RIP3R CHAR(2), /* RP INVESTMENT 3RD PERIOD ALLOCATION RATE */        
+  2 RIRND CHAR(2), /* RP INVESTMENT ROUNDING                   */        
+  2 RISOR CHAR(2), /* RP INVESTMENT SPECIAL OFFER INVESTMENT R */        
+  2 RISTT CHAR(2), /* RP INVESTMENT STATUS                     */        
+  2 RPALL CHAR(2), /* RP CHARGE ALLOTMENT METHOD               */        
+  2 RPAMT CHAR(2), /* RP CHARGE AMOUNT                         */        
+  2 RPAPP CHAR(2), /* RP CHARGE APPLICABLE                     */        
+  2 RPBAS CHAR(2), /* RP CHARGE BASIS                          */        
+  2 RPDAT CHAR(2), /* RP CHARGE APPLICATION DATE               */        
+  2 RPFOR CHAR(2), /* RP CHARGE FORMULA                        */        
+  2 RPMOD CHAR(2), /* RP CHARGE MODIFIER                       */        
+  2 RPRAT CHAR(2), /* RP CHARGE RATE                           */        
+  2 RPRED CHAR(2), /* RP CHARGE REDUCTION IN PREMIUM           */        
+  2 RPRND CHAR(2), /* RP CHARGE ROUNDING                       */        
+  2 RPTRM CHAR(2), /* DEFINITION OF TERM FOR RP CHARGE ONLY    */        
+  2 RSAAL CHAR(2), /* RECURRING SP AMOUNT CHANGE ALLOWED       */        
+  2 RSARA CHAR(2), /* RECURRING SP AMOUNT RANGE                */        
+  2 RSEAL CHAR(2), /* RECURRING SP END DATE CHANGE ALLOWED     */        
+  2 RSERA CHAR(2), /* RECURRING SP END DATE RANGE              */        
+  2 RSIAL CHAR(2), /* RECURRING SP INTERVAL CHANGE ALLOWED     */        
+  2 RSIRA CHAR(2), /* RECURRING SP INTERVAL RANGE              */        
+  2 RSSAL CHAR(2), /* RECURRING SP START DATE CHANGE ALLOWED   */        
+  2 RSSRA CHAR(2), /* RECURRING SP START DATE RANGE            */        
+  2 RT1DF CHAR(2), /* DEFINITION OF RATING LIFE 1              */        
+  2 RT2DF CHAR(2), /* DEFINITION OF RATING LIFE 2              */        
+  2 SBRUL CHAR(2), /* SPECIAL OFFER BONUS RULE                 */        
+  2 SDALL CHAR(2), /* STAMP DUTY ALLOTMENT METHOD              */        
+  2 SDAPP CHAR(2), /* STAMP DUTY APPLICABLE                    */        
+  2 SDBAS CHAR(2), /* STAMP DUTY BASIS                         */        
+  2 SDDAT CHAR(2), /* STAMP DUTY TIMING                        */        
+  2 SDFOR CHAR(2), /* STAMP DUTY FORMULA                       */        
+  2 SDMAX CHAR(2), /* STAMP DUTY MAXIMUM                       */        
+  2 SDMIN CHAR(2), /* STAMP DUTY MINIMUM                       */        
+  2 SDRAT CHAR(2), /* STAMP DUTY RATE                          */        
+  2 SDRND CHAR(2), /* STAMP DUTY ROUNDING                      */        
+  2 SE1AL CHAR(2), /* SUSPENSION END DATE 1 CHANGE ALLOWABLE   */        
+  2 SE1RA CHAR(2), /* SUSPENSION END DATE 1 CHANGE RANGE       */        
+  2 SE2AL CHAR(2), /* SUSPENSION END DATE 2 CHANGE ALLOWABLE   */        
+  2 SE2RA CHAR(2), /* SUSPENSION END DATE 2 CHANGE RANGE       */        
+  2 SIAPP CHAR(2), /* SP INVESTMENT APPLICABLE                 */        
+  2 SICXA CHAR(2), /* SP INVESTMENT COMMISSION EXTRA APPLIES   */        
+  2 SICXH CHAR(2), /* SP INVESTMENT COMMISSION RATE H RULE     */        
+  2 SICXQ CHAR(2), /* SP INVESTMENT COMMISSION RATE Q RULE     */        
+  2 SICXT CHAR(2), /* SP INVESTMENT COMMISSION RATE T RULE     */        
+  2 SICXZ CHAR(2), /* SP INVESTMENT COMMISSION RATE Z RULE     */        
+  2 SIFTP CHAR(2), /* SP INVESTMENT FUND TYPE                  */        
+  2 SIRAT CHAR(2), /* SP INVESTMENT BASIC ALLOCATION RATE      */        
+  2 SIRND CHAR(2), /* SP INVESTMENT ROUNDING                   */        
+  2 SISOR CHAR(2), /* SP INVESTMENT SPECIAL OFFER INVESTMENT R */        
+  2 SM1AL CHAR(2), /* SMOKER 1 CHANGE ALLOWABLE                */        
+  2 SM1RA CHAR(2), /* SMOKER 1 CHANGE RANGE                    */        
+  2 SM2AL CHAR(2), /* SMOKER 2 CHANGE ALLOWABLE                */        
+  2 SM2RA CHAR(2), /* SMOKER 2 CHANGE RANGE                    */        
+  2 SPALL CHAR(2), /* SP CHARGE ALLOTMENT METHOD               */        
+  2 SPAMT CHAR(2), /* SP CHARGE AMOUNT                         */        
+  2 SPAPP CHAR(2), /* SP CHARGE APPLICABLE                     */        
+  2 SPBAS CHAR(2), /* SP CHARGE BASIS                          */        
+  2 SPCDF CHAR(2), /* SINGLE PREMIUM CONTRACT EXISTS DEFINITIO */        
+  2 SPRAT CHAR(2), /* SP CHARGE RATE                           */        
+  2 SPRED CHAR(2), /* SP CHARGE REDUCTION IN PREMIUM           */        
+  2 SPRND CHAR(2), /* SP CHARGE ROUNDING                       */        
+  2 SS1AL CHAR(2), /* SUSPENSION START DATE CHANGE ALLOWABLE   */        
+  2 SS1RA CHAR(2), /* SUSPENSION START DATE CHANGE RANGE       */        
+  2 SS2AL CHAR(2), /* SUSPENSION START DATE CHANGE ALLOWABLE   */        
+  2 SS2RA CHAR(2), /* SUSPENSION START DATE CHANGE RANGE       */        
+  2 STAAL CHAR(2), /* STATUS CHANGE ALLOWABLE                  */        
+  2 STAPP CHAR(2), /* TOP-UP INVESTMENT APPLICABLE             */        
+  2 STARA CHAR(2), /* STATUS CHANGE RANGE                      */        
+  2 STCXA CHAR(2), /* TOP-UP INVESTMENT COMMISSION EXTRA APPLI */        
+  2 STCXH CHAR(2), /* TOP-UP INVESTMENT COMMISSION RATE H RULE */        
+  2 STCXQ CHAR(2), /* TOP-UP INVESTMENT COMMISSION RATE Q RULE */        
+  2 STCXT CHAR(2), /* TOP-UP INVESTMENT COMMISSION RATE T RULE */        
+  2 STCXZ CHAR(2), /* TOP-UP INVESTMENT COMMISSION RATE Z RULE */        
+  2 STFTP CHAR(2), /* TOP-UP INVESTMENT FUND TYPE              */        
+  2 STLON CHAR(2), /* TOP-UP LOAN EFFECT                       */        
+  2 STLRT CHAR(2), /* TOP-UP LOAN EXTRA ALLOCATION RATE        */        
+  2 STRAT CHAR(2), /* TOP-UP INVESTMENT BASIC ALLOCATION RATE  */        
+  2 STRND CHAR(2), /* TOP-UP INVESTMENT ROUNDING               */        
+  2 STSOR CHAR(2), /* TOP-INVESTMENT SPECIAL OFFER INVESTMENT  */        
+  2 SUALL CHAR(2), /* SETUP CHARGE ALLOTMENT METHOD            */        
+  2 SUAPP CHAR(2), /* SETUP CHARGE APPLICABLE                  */        
+  2 SUDAT CHAR(2), /* SETUP CHARGE TIMING                      */        
+  2 SUFOR CHAR(2), /* SETUP CHARGE FORMULA                     */        
+  2 SUMET CHAR(2), /* SETUP CHARGE METHOD                      */        
+  2 SURND CHAR(2), /* SETUP CHARGE ROUNDING                    */        
+  2 SUSDF CHAR(2), /* SUSPENDED DEFINITION                     */        
+  2 SWALL CHAR(2), /* SWITCH CHARGE ALLOCATION                 */        
+  2 SWAPP CHAR(2), /* SWITCH CHARGE APPLICABLE                 */        
+  2 SWBAS CHAR(2), /* SWITCH CHARGE BASIS                      */        
+  2 SWMAX CHAR(2), /* SWITCH CHARGE MAXIMUM                    */        
+  2 SWMIN CHAR(2), /* SWITCH CHARGE MINIMUM                    */        
+  2 SWRAT CHAR(2), /* SWITCH CHARGE RATE                       */        
+  2 SWRND CHAR(2), /* SWITCH CHARGE ROUNDING                   */        
+  2 SX1AL CHAR(2), /* SEX 1 CHANGE ALLOWABLE                   */        
+  2 SX1RA CHAR(2), /* SEX 1 CHANGE RANGE                       */        
+  2 SX2AL CHAR(2), /* SEX 2 CHANGE ALLOWABLE                   */        
+  2 SX2RA CHAR(2), /* SEX 2 CHANGE RANGE                       */        
+  2 TABAL CHAR(2), /* TABLE CHANGE ALLOWABLE                   */        
+  2 TABRA CHAR(2), /* TABLE CHANGE RANGE                       */        
+  2 TBALL CHAR(2), /* TERMINAL BONUS ALLOCATION BASIS          */        
+  2 TBAPP CHAR(2), /* TERMINAL BONUS APPLICABLE                */        
+  2 TBARR CHAR(2), /* TERMINAL BONUS ARREARS                   */        
+  2 TBBAS CHAR(2), /* TERMINAL BONUS BASIS                     */        
+  2 TBDAT CHAR(2), /* TERMINAL BONUS TIMING                    */        
+  2 TBEND CHAR(2), /* TERMINAL BONUS ENDING DATE               */        
+  2 TBRAT CHAR(2), /* TERMINAL BONUS RATE                      */        
+  2 TBRND CHAR(2), /* TERMINAL BONUS ROUNDING                  */        
+  2 TBRUL CHAR(2), /* TABLE CHANGE RULE                        */        
+  2 TBSTE CHAR(2), /* TERMINAL BONUS STATUS ELIGIBLE           */        
+  2 TBUNE CHAR(2), /* TERMINAL BONUS UNITS ELIGIBLE            */        
+  2 TODAL CHAR(2), /* TOPUP DATE CHANGE ALLOWABLE              */        
+  2 TODRA CHAR(2), /* TOPUP DATE CHANGE RANGE                  */        
+  2 TOPAL CHAR(2), /* TOPUP CHANGE ALLOWABLE                   */        
+  2 TOPRA CHAR(2), /* TOPUP CHANGE RANGE                       */        
+  2 TRMAL CHAR(2), /* TERM CHANGE ALLOWABLE                    */        
+  2 TRMRA CHAR(2), /* TERM CHANGE RANGE                        */        
+  2 UIEND CHAR(2), /* UI PROCESSING CEASING DATE               */        
+  2 ULTYP CHAR(2), /* UNIT-LINKED TYPE                         */        
+  2 WOPAL CHAR(2), /* WOP CHANGE ALLOWABLE                     */        
+  2 WOPRA CHAR(2), /* WOP CHANGE RANGE                         */        
+  2 WO2AL CHAR(2), /* WOP VERSION 2 CHANGE ALLOWABLE           */        
+  2 WO2RA CHAR(2), /* WOP VERSION 2 CHANGE RANGE               */        
+  2 WPAPP CHAR(2), /* WOP CHARGE APPLICABLE                    */        
+  2 WPARR CHAR(2), /* WOP CHARGE ARREARS                       */        
+  2 WPEND CHAR(2), /* WOP CHARGE ENDING DATE                   */        
+  2 WPESC CHAR(2), /* WOP CHARGE ESCALATION LOADING            */        
+  2 WPFOR CHAR(2), /* WOP CHARGE FORMULA                       */        
+  2 WPFRQ CHAR(2), /* WOP CHARGE FREQUENCY                     */        
+  2 WPMET CHAR(2), /* WOP CHARGE METHOD                        */        
+  2 WPOCC CHAR(2), /* WOP CHARGE OCCUPATION LOADING            */        
+  2 WPRND CHAR(2), /* WOP CHARGE ROUNDING                      */        
+  2 WPSEX CHAR(2), /* WOP CHARGE SEX LOADING                   */        
+  2 WPSTT CHAR(2), /* WOP CHARGE STATUS                        */        
+  2 WPTAB CHAR(2), /* WOP CHARGE TABLE                         */        
+  2 FILLER CHAR(170);        
+END_PLC(FUK503)

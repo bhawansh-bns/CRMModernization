@@ -1,0 +1,25 @@
+BEGIN_PLC(CUK08992)
+ /*-------------------------------------------------------------------*/        
+ /* CUK08992 : Declarations needed to call module UK08992.            */        
+ /*                                                                   */        
+ /* UK08992 is called by UK08990 AND UK08980 to apply DAB rules       */        
+ /* and calculate DAB charge.                                         */        
+ /*                                                                   */        
+ /* Fill Cuk08992 as follows:                                         */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK08992 Ptr ;        
+ Dcl 1 CUK08992_NAME_TYPE ,        
+       2 Status        Char(3),        
+       2 Bill_Frq      Pic '(2)9',        
+       2 New_Pr        Fixed Dec(11,2),        
+       2 LCover_1      Fixed Dec(11,2),        
+       2 LCover_2      Fixed Dec(11,2),        
+       2 DAB_Charge    Fixed Dec(11,2),        
+       2 DAB_End_Dt    PIC '(8)9',        
+       2 DAB_Cd        Char(1);        
+         
+         
+END_PLC(CUK08992)

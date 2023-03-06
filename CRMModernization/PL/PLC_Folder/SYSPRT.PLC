@@ -1,0 +1,28 @@
+BEGIN_PLC(SYSPRT)
+ /*-----------------------------*/        
+ /* Stream I/O Related Declares */        
+ /*-----------------------------*/        
+         
+ DCL    SYSPRINT   PRINT ;        
+         
+ DCL 1 PLITABS  STATIC EXT ,        
+     2 (OFFSET INIT(14),        
+       PAGESIZE INIT(60),        
+       LINESIZE INIT(80),        
+       PAGELENGTH INIT(0),        
+       FILL1 INIT(0),        
+       FILL2 INIT(0),        
+       FILL3 INIT(0),        
+       NO_OF_TABS INIT(7),        
+       TAB1 INIT(10),        
+       TAB2 INIT(20),        
+       TAB3 INIT(30),        
+       TAB4 INIT(40),        
+       TAB5 INIT(50),        
+       TAB6 INIT(60),        
+       TAB7 INIT(70)) FIXED BIN(15,0) ;        
+         
+ OPEN FILE(SYSPRINT) LINESIZE(80) ;        
+         
+         
+END_PLC(SYSPRT)

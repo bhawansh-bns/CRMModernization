@@ -1,0 +1,22 @@
+BEGIN_PLC(N040DCOV)
+ /******************************************************************/        
+ /*                                                                */        
+ /*   MODULE      : N040DCOV                                       */        
+ /*   GENERATION  : 054                                            */        
+ /*   VERSION     : ORIGINAL                                       */        
+ /*   SYSTEM      : DIARY                                          */        
+ /*   PROGRAMMER  : NEIL HUNTER                                    */        
+ /*   DATE        : OCTOBER 2000                                   */        
+ /*                                                                */        
+ /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+ /*                 ACTIONS CREATING COVERAGE FILE RECORDS.        */        
+ /*                 STORES COMMON DATA NEEDED DURING THE CREATION  */        
+ /*                 OF COVERAGE FILE RECORDS.                      */        
+ /*                 DATA IS LOADED IN THE INITIAL PROCEDURE,       */        
+ /*                 N040P01.                                       */        
+ /*                                                                */        
+ /******************************************************************/        
+         
+       DCL 1 DATA_DCOV BASED (COM_DATA.DATA_DCOV_PTR),        
+             3 COV_CNT         PIC'999';   /* COUNT OF COVRGE RECS */        
+END_PLC(N040DCOV)

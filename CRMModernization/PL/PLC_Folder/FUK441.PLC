@@ -1,0 +1,780 @@
+BEGIN_PLC(FUK441)
+ /*--------------------------------------------------------------+        
+ |              UK Unit Audit Alteration file.                   |        
+ |              ==============================                   |        
+ |                                                               |        
+ |    Key      : POLNO, VERS, CKDGT, EFFDT, SOURC, ALTNO         |        
+ |    Length   : 1500                                            |        
+ |                                                               |        
+ |    *******************************************************    |        
+ |    *  WARNING : If new fields are added to this layout   *    |        
+ |    *  or existing ones are changed there is a structure  *    |        
+ |    *  called STORE_FUK441 in OB08171 which should be     *    |        
+ |    *                  changed also.                      *    |        
+ |    *******************************************************    |        
+ +--------------------------------------------------------------*/        
+         
+         
+ DCL 1 WUK441    UNALIGNED                                 ,        
+       2   POLNO    PIC            '(7)9'                  ,        
+ /* POLICY NUMBER                            */        
+       2   VERS     PIC            '(1)9'                  ,        
+ /* VERSION                                  */        
+       2   CKDGT    CHAR           (  1)                   ,        
+ /* CHECK DIGIT                              */        
+       2   EFFDT    PIC            '(8)9'                  ,        
+ /* EFFECTIVE DATE OF ALTERATION : YYYYMMDD  */        
+       2   SOURC    CHAR           (  1)                   ,        
+ /* SOURCE OF ALTERATION                       */        
+ /* O  - OBMF                                  */        
+ /* C  - OBCH                                  */        
+ /* S  - SWITCH                                */        
+ /* P  - PARTIAL                               */        
+ /* A  - AUTO INCOME                           */        
+       2   ALTNO    PIC            '999'                   ,        
+ /* ALTERATION NUMBER TO HELP BE UNIQUE      */        
+       2   ALTDT    PIC            '(8)9'                  ,        
+ /* DATE ALTERATION TOOK PLACE : YYYYMMDD    */        
+       2   ATYPE    CHAR           (  5)                   ,        
+ /* TYPE OF ALTERATION                       */        
+       2   ACODE    CHAR           (  1)                   ,        
+ /* AUDIT CODE  (TO BE ADDED IN FLAGGING )   */        
+       2   TAB      PIC            '(3)9'                  ,        
+ /* TABLE - USED FOR SELECTING ALTERATIONS   */        
+       2   PUSNO    CHAR           (  4)                   ,        
+ /* PROTECTION USER NO.                      */        
+ /* FOR RECORD PROTECTION                        */        
+ /* A RECORD CAN ONLY BE RETRIEVED FOR           */        
+ /* UPDATE IF THIS FIELD IS BLANK.               */        
+       2   STAT     CHAR           (  1)                   ,        
+ /* STATUS : 'V' - VALID - READY TO REINVEST     */        
+ /*          'D' - DORMANT - IGNORE FOR REINVEST.*/        
+ /*          'F' - FOR UPDATE - MORE INFO.NEEDED */        
+ /*          'R' - FOR REFERENCE ONLY            */        
+       2   ARESN    CHAR           ( 32)                   ,        
+ /* REASON FOR ALTERATION - ONLINE           */        
+       2   ORIGIN   CHAR          (  1)                    ,        
+ /* Origin of record : 'A' - Manual          */        
+ /*                    'D' - Download        */        
+ /*                    'M' - Maintenance     */        
+       2   DTADD     PIC           '(6)9'                  ,        
+ /* Original date of addition to this file   */        
+       2   DTALT     PIC           '(6)9'                  ,        
+ /* Date of last alteration.                 */        
+       2   USERID    CHAR          (  6)                   ,        
+ /* USERID of last alteration.               */        
+       2   ADDBY    CHAR           (  3)                   ,        
+ /* ADDED BY                                 */        
+       2   OBCH_SOURCE CHAR        (  1)                   ,        
+ /* Source from OBCH                        */        
+       2   OPTCD   CHAR            (  1)                   ,        
+ /* Option code from OBCH - to distinguish SP's      */        
+       2   DSS_TAX_YEAR PIC        '(4)9'                  ,        
+ /* Tax Year from OBCH (CBKYR field) - to distinguish SP's */        
+       2   FILL1    CHAR           ( 33)                   ,        
+ /* SPARE BYTES - 1                         */        
+ /* ********************************************* */        
+ /*  NEW VALUES OF ALTERED FIELDS FOLLOW          */        
+ /*  BLANK MEANS THAT THE FIELD WAS NOT ALTERED   */        
+ /* ********************************************* */        
+       2   STATI    CHAR           (  1)                   ,        
+ /* NEW STATUS 'I'- INFORCE                      */        
+ /* 'I'=YES,BLANK=NO                         */        
+       2   STATL    CHAR           (  1)                   ,        
+ /* NEW STATUS 'L'- LAPSED                       */        
+ /* 'L'=YES,BLANK=NO                         */        
+       2   STATP    CHAR           (  1)                   ,        
+ /* NEW STATUS 'P'- PAID UP                      */        
+ /* 'P'=YES,BLANK=NO                         */        
+       2   STATE    CHAR           (  1)                   ,        
+ /* NEW STATUS 'E'- PART PAID UP                 */        
+ /* 'E'=YES,BLANK=NO                         */        
+       2   STATR    CHAR           (  1)                   ,        
+ /* NEW STATUS 'R'- REMITTING                    */        
+ /* 'R'=YES,BLANK=NO                         */        
+       2   STATC    CHAR           (  1)                   ,        
+ /* NEW STATUS 'C'- CLAIM PENDING                */        
+ /* 'C'=YES,BLANK=NO                         */        
+       2   STATF    CHAR           (  1)                   ,        
+ /* NEW STATUS 'F'- FULL RECORD                  */        
+ /* 'F'=YES,BLANK=NO                         */        
+       2   STATS    CHAR           (  1)                   ,        
+ /* NEW STATUS 'S'- SPLIT                        */        
+ /* 'S'=YES,BLANK=NO                         */        
+       2   STATB    CHAR           (  1)                   ,        
+ /* NEW STATUS 'B'- BENEFIT PAYING               */        
+ /* 'B'=YES,BLANK=NO                         */        
+       2   STTPE    CHAR           (  1)                   ,        
+ /* NEW STATUS 'P'- BENEFIT PENDING              */        
+ /* 'P'=YES,BLANK=NO                         */        
+       2   STATT    CHAR           (  1)                   ,        
+ /* NEW STATUS 'T'- TERMINATED                   */        
+ /* 'T'=YES,BLANK=NO                         */        
+       2   STATW    CHAR           (  1)                   ,        
+ /* NEW STATUS 'W'- WRITTEN OFF                  */        
+ /* 'W'=YES,BLANK=NO                         */        
+       2   INHIB    CHAR           (  1)                   ,        
+ /* NEW INHIBIT CODE                             */        
+ /* 'Y'=YES,BLANK=NO                         */        
+       2   STAFF    CHAR           (  1)                   ,        
+ /* NEW STAFF RATES                              */        
+ /* 'Y'=YES,BLANK=NO                         */        
+       2   DOP      PIC            '(8)9'                  ,        
+ /* NEW DATE OF PROPOSAL                         */        
+       2   STL1     PIC            '(2)9'                  ,        
+ /* NEW SPECIAL TERMS LIFE 1                     */        
+       2   STL2     PIC            '(2)9'                  ,        
+ /* NEW SPECIAL TERMS LIFE 2                     */        
+       2   ENDR1    PIC            '(3)9'                  ,        
+ /* NEW 1ST INITIAL ENDORSEMENT                  */        
+       2   ENDR2    PIC            '(3)9'                  ,        
+ /* NEW 2ND INITIAL ENDORSEMENT                  */        
+       2   ENDR3    PIC            '(3)9'                  ,        
+ /* NEW 3RD INITIAL ENDORSEMENT                  */        
+       2   ENDR4    PIC            '(3)9'                  ,        
+ /* NEW 4TH INITIAL ENDORSEMENT                  */        
+       2   TRMCN    PIC            '(2)9'                  ,        
+ /* NEW TERM TO CONVERSION                       */        
+       2   TABLE    PIC            '(4)9'                  ,        
+ /* NEW TABLE                                    */        
+ /* NB LENGTH 4                              */        
+       2   TERM     PIC            '(2)9'                  ,        
+ /* NEW TERM                                     */        
+       2   DOE      PIC            '(8)9'                  ,        
+ /* NEW DATE OF ENTRY                            */        
+       2   DOM      PIC            '(8)9'                  ,        
+ /* NEW DATE OF MATURITY                         */        
+       2   AGE      PIC            '(3)9'                  ,        
+ /* NEW AGE (AT ENTRY)                           */        
+       2   DOB1     PIC            '(8)9'                  ,        
+ /* NEW DATE OF BIRTH 1                          */        
+       2   DOB2     PIC            '(8)9'                  ,        
+ /* NEW DATE OF BIRTH 2                          */        
+       2   SEX1     CHAR           (  1)                   ,        
+ /* NEW SEX CODE LIFE 1                          */        
+       2   SEX2     CHAR           (  1)                   ,        
+ /* NEW SEX CODE LIFE 2                          */        
+       2   NSMOK    CHAR           (  1)                   ,        
+ /* NEW NON SMOKER CODE                          */        
+ /*         'Y' - NON SMOKER RATES APPLY         */        
+ /*         BLANK - SMOKER OR NOT APPLICABLE     */        
+       2   SAM      FIXED DEC      ( 11,2)                 ,        
+ /* NEW MATURITY SUM ASSURED                     */        
+       2   SAD1     FIXED DEC      ( 11,2)                 ,        
+ /* NEW DEATH SUM ASSURED - LIFE 1               */        
+       2   SAD2     FIXED DEC      ( 11,2)                 ,        
+ /* NEW DEATH SUM ASSURED - LIFE 2               */        
+       2   ORGSA    FIXED DEC      ( 11,2)                 ,        
+ /* NEW ORIGINAL SUM ASSURED                     */        
+       2   DISSA    FIXED DEC      ( 11,2)                 ,        
+ /* NEW DISABILITY SUM ASSURED - LIFE 1          */        
+       2   LCFR     CHAR           (  1)                   ,        
+ /* NEW LIFE COVER FUND RELATIONSHIP             */        
+ /*          'I' - INCLUSIVE                     */        
+ /*          BLANK - NOT INCLUSIVE               */        
+       2   CNACC    CHAR           (  1)                   ,        
+ /* NEW COUNTRY OF ACCOUNTING                    */        
+ /*     'I','B','N'                              */        
+       2   CURR     CHAR           (  1)                   ,        
+ /* NEW CURRENCY                                 */        
+ /*     'S'=STERLING,'P'=IR                     */        
+       2   INV1     FIXED DEC      (  5,2)                 ,        
+ /* NEW FIRST YEAR INVESTMENT PERCENTAGE         */        
+ /*     50% HELD AS 50.00                        */        
+       2   DEFER    PIC            '(3)9'                  ,        
+ /* NEW DEFERMENT PERIOD - LIFE 1                */        
+       2   XPREM    FIXED DEC      ( 11,2)                 ,        
+ /* NEW EXTRA PREMIUM AMOUNT (YEARLY)            */        
+       2   SPREM    FIXED DEC      ( 11,2)                 ,        
+ /* NEW SINGLE PREMIUM AMOUNT             */        
+       2   XDOT     PIC            '(8)9'                  ,        
+ /* NEW EXTRA PREMIUM TERMINATION DATE           */        
+       2   DABCD    CHAR           (  1)                   ,        
+ /* NEW DAB CODE                                 */        
+       2   IMPR     CHAR           (  2)                   ,        
+ /* NEW IMPAIRMENT CODE                          */        
+       2   ESCAL    FIXED DEC      (  3,1)                 ,        
+ /* NEW ESCALATION RATE                          */        
+       2   CONCG    FIXED DEC      ( 11,2)                 ,        
+ /* NEW CONTRACT CHARGE                          */        
+       2   DOTX     PIC            '(8)9'                  ,        
+ /* NEW DATE OF TX                               */        
+       2   PUNDW    FIXED DEC      ( 11,2)                 ,        
+ /* NEW PAID-UP AMOUNT - ENDOWMENT               */        
+       2   PUDTH    FIXED DEC      ( 11,2)                 ,        
+ /* NEW PAID-UP AMOUNT - DEATH                   */        
+       2   REPNO    CHAR           (  4)                   ,        
+ /* NEW BROKER/EMPLOYEE CODE                     */        
+       2   INFEE    FIXED DEC      ( 11,2)                 ,        
+ /* NEW INTRODUCTORY FEES AMOUNT                 */        
+       2   WAIVR    CHAR           (  1)                   ,        
+ /* NEW WAIVER OF PREMIUM CODE                   */        
+ /*     'Y'=WAIVER OPTION APPLIES TO THIS POLICY */        
+ /*     ' '=WAIVER OPTION DOES NOT APPLY         */        
+       2   WVACT    CHAR           (  1)                   ,        
+ /* NEW WAIVER OF PREMIUM ACTIVE CODE            */        
+ /*     'Y'=WAIVER OPTION BEING EXERCISED        */        
+ /*     ' '=WAIVER OPTION NOT ACTIVE             */        
+       2   RNFEE    FIXED DEC      ( 11,2)                 ,        
+ /* NEW RENEWAL FEES AMOUNT                      */        
+       2   BLTYP    CHAR           (  1)                   ,        
+ /* NEW BILL TYPE                                */        
+       2   SCHEM    CHAR           (  1)                   ,        
+ /* NEW SCHEME / NON-SCHEME CODE                 */        
+ /*     '1' - SCHEME                             */        
+ /*     '0' - NON-SCHEME                         */        
+       2   WKMTH    CHAR           (  1)                   ,        
+ /* NEW SCHEME DEDUCTION CODE                    */        
+       2   BLFRQ    PIC            '(2)9'                  ,        
+ /* NEW BILL FREQUENCY                           */        
+       2   MTREN    PIC            '(2)9'                  ,        
+ /* NEW MONTH OF RENEWAL                         */        
+       2   SCHNO    PIC            '(4)9'                  ,        
+ /* NEW SCHEME NO.                               */        
+       2   GRPNO    PIC            '(6)9'                  ,        
+ /* NEW PENSIONS GROUP NO.                       */        
+       2   RSPRM    FIXED DEC      ( 11,2)                 ,        
+ /* NEW RENEWAL PREMIUM                  */        
+       2   ARRCR    FIXED DEC      ( 11,2)                 ,        
+ /* NEW ARREARS/CREDIT                           */        
+       2   PDTOD    PIC            '(8)9'                  ,        
+ /* NEW PAID-TO DATE                             */        
+       2   DABND    PIC            '(8)9'                  ,        
+ /* NEW DATE DAB COVER CEASING                   */        
+       2   PAIDO    FIXED DEC      ( 11,2)                 ,        
+ /* NEW AMOUNT PAID IN CLAIM                     */        
+       2   DOPAY    PIC            '(8)9'                  ,        
+ /* NEW DATE OF CLAIM PAYMENT                    */        
+       2   TERNO    PIC            '(7)9'                  ,        
+ /* NEW CLAIM NUMBER                             */        
+       2   OPINA    CHAR           (  1)                   ,        
+ /* NEW INCREASE OPTION APPLICABLE               */        
+       2   SPOLC    CHAR           (  1)                   ,        
+ /* NEW SPECIAL POLICY CODE                      */        
+       2   XPFC1    PIC            '(4)9'                  ,        
+ /* NEW EXTRA PREMIUM FACTOR 1                   */        
+       2   XPFC2    PIC            '(4)9'                  ,        
+ /* NEW EXTRA PREMIUM FACTOR 2                   */        
+       2   XPAL1    FIXED DEC      (  9,4)                 ,        
+ /* NEW EXTRA PREMIUM ADDITIVE LOADING 1         */        
+       2   XPAL2    FIXED DEC      (  9,4)                 ,        
+ /* NEW EXTRA PREMIUM ADDITIVE LOADING 2         */        
+       2   COMRT    CHAR           (  1)                   ,        
+ /* NEW COMMISSION RATE CODE                     */        
+       2   DEAGE    PIC            '(2)9'                  ,        
+ /* NEW DISABILITY COVER ENDING AGE - LIFE 1     */        
+       2   ORGPR    FIXED DEC      ( 11,2)                 ,        
+ /* NEW ORIGINAL PREMIUM                         */        
+       2   SKIPC    CHAR           (  1)                   ,        
+ /* NEW PREMIUM SKIP CODE                        */        
+ /*     'S'=POLICY HAS HAD A SKIP                */        
+ /*     BLANK=NO SKIP                            */        
+       2   XPMF1    PIC            '(4)9'                  ,        
+ /* NEW MEDICAL LOADING FACTOR - LIFE 1          */        
+       2   XPMF2    PIC            '(4)9'                  ,        
+ /* NEW MEDICAL LOADING FACTOR - LIFE 2          */        
+       2   OCCL1    CHAR           (  1)                   ,        
+ /* NEW OCCUPATION CLASS - LIFE 1                */        
+       2   OCCL2    CHAR           (  1)                   ,        
+ /* NEW OCCUPATION CLASS - LIFE 2                */        
+       2   DISS2    FIXED DEC      ( 11,2)                 ,        
+ /* NEW DISABILITY SUM ASSURED - LIFE 2          */        
+       2   DEFR2    PIC            '(3)9'                  ,        
+ /* NEW DEFERMENT PERIOD - LIFE 2                */        
+       2   DEAG2    PIC            '(2)9'                  ,        
+ /* NEW DISABILITY COVER ENDING AGE - LIFE 2     */        
+       2   ILSP1    CHAR           (  1)                   ,        
+ /* NEW ILLNESS LUMP SUM PAID - LIFE 1           */        
+ /*     'Y'=YES,BLANK=NO                         */        
+       2   ILSP2    CHAR           (  1)                   ,        
+ /* NEW ILLNESS LUMP SUM PAID - LIFE 2           */        
+ /*     'Y'=YES,BLANK=NO                         */        
+       2   SILL1    FIXED DEC      (  9,2)                 ,        
+ /* NEW SERIOUS ILLNESS 1                        */        
+       2   SILL2    FIXED DEC      (  9,2)                 ,        
+ /* NEW SERIOUS ILLNESS 2                        */        
+       2   XSIF1    PIC            '(3)9'                  ,        
+ /* NEW EXTRA SERIOUS ILLNESS FACT 1             */        
+       2   XSIF2    PIC            '(3)9'                  ,        
+ /* NEW EXTRA SERIOUS ILLNESS FACT 2             */        
+       2   NSMK2    CHAR           (  1)                   ,        
+ /* NEW NON-SMOKER CODE 2                        */        
+       2   HCAM1    FIXED DEC      (  5,2)                 ,        
+ /* NEW HOSPITAL CASH COVER AMOUNT 1             */        
+       2   HCAM2    FIXED DEC      (  5,2)                 ,        
+ /* NEW HOSPITAL CASH COVER AMOUNT 2             */        
+       2   HCCCD    CHAR           (  1)                   ,        
+ /* NEW CHILDRENS COVER CODE                     */        
+       2   SPCOV    CHAR           (  1)                   ,        
+ /* NEW SPOUSE COVER CODE                        */        
+       2   SPOFF    CHAR           (  4)                   ,        
+ /* NEW SPECIAL OFFER CODE                       */        
+       2   CRIS1    FIXED DEC      ( 11,2)                 ,        
+ /* NEW CRISIS COVER LUMP SUM - LIFE 1           */        
+       2   CRIS2    FIXED DEC      ( 11,2)                 ,        
+ /* NEW CRISIS COVER LUMP SUM - LIFE 2           */        
+       2   CMINT    PIC            '(8)9'                  ,        
+ /* NEW INVESTED TO DATE                         */        
+       2   CINTD    FIXED DEC      (11,2)                  ,        
+ /* NEW CUMULATIVE CAPITAL INVESTED              */        
+       2   CUPUR    FIXED DEC      (11,3)                  ,        
+ /* NEW CUMULATIVE UNITS PURCHASED               */        
+       2   CMUPR    FIXED DEC      (11,3)                  ,        
+ /* NEW CUMULATIVE DIVIDEND UNITS               */        
+       2   NUNSR    FIXED DEC      (11,3)                  ,        
+ /* NEW CUMULATIVE UNITS SURRENDERED             */        
+       2   RNPTO    CHAR           (   4)                  ,        
+ /* NEW RENEWAL FEES PAYABLE TO                  */        
+       2   DRPF     PIC            '(8)9'                  ,        
+ /* NEW RENEWAL PREMIUM FROM DATE                */        
+       2   CNTPR    FIXED DEC      (11,2)                 ,        
+ /* NEW CONTRIBUTION PROTECTION                      */        
+       2   SOFND(3)                                       ,        
+ /* NEW SPECIAL OFFERS                               */        
+         3   ASFND  CHAR(3)                               ,        
+ /* NEW SPECIAL OFFERS FUNDS                         */        
+         3   ASUNT FIXED DEC (9,3)                        ,        
+ /* NEW SPECIAL OFFERS                               */        
+       2   TXFC1   PIC'999'                               ,        
+ /* NEW TEMP EXTRA PERCENTAGE OCCUPATIONAL 1         */        
+       2   TXM1D   PIC'99999999'                          ,        
+ /* NEW TEMP EXTRA PERCENTAGE DATE MEDICAL 1         */        
+       2   TXF1D   PIC'99999999'                          ,        
+ /* NEW TEMP EXTRA PERCENTAGE DATE OCCUPATIONAL 1    */        
+       2   PMMD1   PIC'999'                               ,        
+ /* NEW PER MILE MEDICAL LOADING 1                   */        
+       2   TPMD1   PIC'999'                               ,        
+ /* NEW PER MILE OCCUPATIONAL LOADING 1              */        
+       2   TXMF2   PIC'999'                               ,        
+ /* NEW TEMP MEDICAL EXTRA PERCENTAGE 2              */        
+       2   TXFC2   PIC'999'                               ,        
+ /* NEW TEMP OCCUPATIONAL EXTRA PERCENTAGE 2         */        
+       2   PMMD2   PIC'999'                               ,        
+ /* NEW PER MILE MEDICAL LOADING 2                   */        
+       2   CCMT2   PIC'99'                                ,        
+ /* NEW                                              */        
+       2   TXM2D   PIC'99999999'                          ,        
+ /* NEW TEMP MEDICAL LOADING DATE 2                  */        
+       2   TXF2D   PIC'99999999'                          ,        
+ /* NEW TEMP OCCUPATIONAL LOADING DATE 2             */        
+       2   TPMD2   PIC'999'                               ,        
+ /* NEW PER MILE MEDICAL LOADING 2                   */        
+       2   CONCD   CHAR(1)                                ,        
+ /* NEW CONTRACT CODE                                */        
+       2   NDDCC   PIC            '(8)9'                  ,        
+ /* NEW DATE DISABILITY CLAIM COMMENCED              */        
+       2   TRCDE   CHAR           (  1)                   ,        
+ /* NEW GSE TRANSFER CODE                            */        
+       2   NSUSP   CHAR           (  1)                   ,        
+ /* NEW POLICY UNDER SUSPENSION CODE                 */        
+       2   CHOLD   CHAR           (  1)                   ,        
+ /* NEW CORRESPONDENCE HOLD CODE                     */        
+       2   LIFE1   CHAR           ( 21)                   ,        
+ /* NEW LIFE ASSURED 1                               */        
+       2   LIFE2   CHAR           ( 21)                   ,        
+ /* NEW LIFE ASSURED 2                               */        
+       2   VUNSR   FIXED DEC      ( 11,2)                 ,        
+ /* NEW VALUE OF UNITS SURRENDERED                   */        
+       2   SVCAG   CHAR           (  4)                   ,        
+ /* NEW SERVICING AGENT                              */        
+       2   ABCOD   CHAR           (  1)                   ,        
+ /* NEW ABANDONED CODE                               */        
+       2   STODT   PIC            '(8)9'                  ,        
+ /* NEW SKIP/SUSP TO DATE                            */        
+       2   LCONV   CHAR           (  1)                   ,        
+ /* NEW LIFE CONVERSION                              */        
+       2   SOXPG   FIXED DEC      (  5,2)                 ,        
+ /* NEW SPECIAL OFFERS - EXTRA %                     */        
+       2   AXPAT   FIXED DEC      (  9,2)                 ,        
+ /* NEW SPECIAL OFFERS - AMOUNT X% APPL TO           */        
+       2   SOXDT   PIC            '(8)9'                  ,        
+ /* NEW SPECIAL OFFERS - DATE X% TO                  */        
+       2   SOXMT   FIXED DEC      (  9,2)                 ,        
+ /* NEW SPECIAL OFFERS - EXTRA AMOUNT                */        
+       2   CCMT1   PIC'99'                                ,        
+ /* NEW                                              */        
+       2   TXMF1   PIC'999'                               ,        
+ /* NEW TEMP MEDICAL LOADING PERCENTAGE 1            */        
+       2   SODFR   PIC            '999'                   ,        
+ /* NEW SPECIAL OFFERS - SPL DEFR PERIOD             */        
+       2   TUDOP   PIC            '(8)9'                  ,        
+ /* NEW SPECIAL OFFERS - TU DATE OF PROP             */        
+       2   PUFDT   PIC            '(8)9'                  ,        
+ /* NEW PUP FACTOR DATE                              */        
+       2   PUCDT   PIC            '(8)9'                  ,        
+ /* NEW PUP CHARGES DATE                             */        
+       2   PUPDT   PIC            '(8)9'                  ,        
+ /* NEW PUP PRICE DATE                               */        
+       2   CMCLK   FIXED DEC      (  9,2)                 ,        
+ /* NEW COMM CLAWBACK                                */        
+       2   BRKNO   CHAR           (  4)                   ,        
+ /* NEW BORKER CODE                                  */        
+       2   HAWAY   CHAR(1)                                ,        
+ /* NEW HOME AND AWAY CODE                           */        
+       2   TBSA1   FIXED DEC      (11,2)                  ,        
+ /* TOTAL BENEFIT SUM ASSURED LIFE 1                 */        
+       2   TBSA2   FIXED DEC      (11,2)                  ,        
+ /* TOTAL BENEFIT SUM ASSURED LIFE 2                 */        
+       2   LF1R2   CHAR(1)                                ,        
+ /* NEW LIFE COVER 1 OR 2 FIELDS?                    */        
+       2   TPDCD   FIXED DEC      (3,2)                   ,        
+ /* TOTAL PERMANENT DISABILITY OPTION CODE           */        
+       2   EXPRM   CHAR           (1)                     ,        
+ /* EXTRA PREMIUM                                    */        
+       2   CMPN    PIC            '9999'                  ,        
+ /* CAMPAIGN CODE                                    */        
+       2   FILL2   CHAR           ( 36)                   ,        
+ /* SPARE BYTES - 2                                  */        
+ /* ********************************************* */        
+ /*  OLD VALUES OF ALTERED FIELDS FOLLOW          */        
+ /*  BLANK MEANS THAT THE FIELD WAS NOT ALTERED   */        
+ /* ********************************************* */        
+       2   OTATI    CHAR           (  1)                   ,        
+ /* OLD STATUS 'I'- INFORCE                      */        
+ /* 'I'=YES,BLANK=NO                         */        
+       2   OTATL    CHAR           (  1)                   ,        
+ /* OLD STATUS 'L'- LAPSED                       */        
+ /* 'L'=YES,BLANK=NO                         */        
+       2   OTATP    CHAR           (  1)                   ,        
+ /* OLD STATUS 'P'- PAID UP                      */        
+ /* 'P'=YES,BLANK=NO                         */        
+       2   OTATE    CHAR           (  1)                   ,        
+ /* OLD STATUS 'E'- PART PAID UP                 */        
+ /* 'E'=YES,BLANK=NO                         */        
+       2   OTATR    CHAR           (  1)                   ,        
+ /* OLD STATUS 'R'- REMITTING                    */        
+ /* 'R'=YES,BLANK=NO                         */        
+       2   OTATC    CHAR           (  1)                   ,        
+ /* OLD STATUS 'C'- CLAIM PENDING                */        
+ /* 'C'=YES,BLANK=NO                         */        
+       2   OTATF    CHAR           (  1)                   ,        
+ /* OLD STATUS 'F'- FULL RECORD                  */        
+ /* 'F'=YES,BLANK=NO                         */        
+       2   OTATS    CHAR           (  1)                   ,        
+ /* OLD STATUS 'S'- SPLIT                        */        
+ /* 'S'=YES,BLANK=NO                         */        
+       2   OTATB    CHAR           (  1)                   ,        
+ /* OLD STATUS 'B'- BENEFIT PAYING               */        
+ /* 'B'=YES,BLANK=NO                         */        
+       2   OTTPE    CHAR           (  1)                   ,        
+ /* OLD STATUS 'P'- BENEFIT PENDING              */        
+ /* 'P'=YES,BLANK=NO                         */        
+       2   OTATT    CHAR           (  1)                   ,        
+ /* OLD STATUS 'T'- TERMINATED                   */        
+ /* 'T'=YES,BLANK=NO                         */        
+       2   OTATW    CHAR           (  1)                   ,        
+ /* OLD STATUS 'W'- WRITTEN OFF                  */        
+ /* 'W'=YES,BLANK=NO                         */        
+       2   OINHI    CHAR           (  1)                   ,        
+ /* OLD INHIBIT CODE                             */        
+ /* 'Y'=YES,BLANK=NO                         */        
+       2   OSTFF    CHAR           (  1)                   ,        
+ /* OLD STAFF RATES                              */        
+ /* 'Y'=YES,BLANK=NO                         */        
+       2   ODOP     PIC            '(8)9'                  ,        
+ /* OLD DATE OF PROPOSAL                         */        
+       2   OSTL1    PIC            '(2)9'                  ,        
+ /* OLD SPECIAL TERMS LIFE 1                     */        
+       2   OSTL2    PIC            '(2)9'                  ,        
+ /* OLD SPECIAL TERMS LIFE 2                     */        
+       2   OEND1    PIC            '(3)9'                  ,        
+ /* OLD 1ST INITIAL ENDORSEMENT                  */        
+       2   OEND2    PIC            '(3)9'                  ,        
+ /* OLD 2ND INITIAL ENDORSEMENT                  */        
+       2   OEND3    PIC            '(3)9'                  ,        
+ /* OLD 3RD INITIAL ENDORSEMENT                  */        
+       2   OEND4    PIC            '(3)9'                  ,        
+ /* OLD 4TH INITIAL ENDORSEMENT                  */        
+       2   OTRMC    PIC            '(2)9'                  ,        
+ /* OLD TERM TO CONVERSION                       */        
+       2   OTABL    PIC            '(4)9'                  ,        
+ /* OLD TABLE                                    */        
+ /* NB LENGTH 4                              */        
+       2   OTERM    PIC            '(2)9'                  ,        
+ /* OLD TERM                                     */        
+       2   ODOE     PIC            '(8)9'                  ,        
+ /* OLD DATE OF ENTRY                            */        
+       2   ODOM     PIC            '(8)9'                  ,        
+ /* OLD DATE OF MATURITY                         */        
+       2   OAGE     PIC            '(3)9'                  ,        
+ /* OLD AGE (AT ENTRY)                           */        
+       2   ODOB1    PIC            '(8)9'                  ,        
+ /* OLD DATE OF BIRTH 1                          */        
+       2   ODOB2    PIC            '(8)9'                  ,        
+ /* OLD DATE OF BIRTH 2                          */        
+       2   OSEX1    CHAR           (  1)                   ,        
+ /* OLD SEX CODE LIFE 1                          */        
+       2   OSEX2    CHAR           (  1)                   ,        
+ /* OLD SEX CODE LIFE 2                          */        
+       2   ONSMO    CHAR           (  1)                   ,        
+ /* OLD NON SMOKER CODE                          */        
+ /*         'Y' - NON SMOKER RATES APPLY         */        
+ /*         BLANK - SMOKER OR NOT APPLICABLE     */        
+       2   OSAM     FIXED DEC      ( 11,2)                 ,        
+ /* OLD MATURITY SUM ASSURED                     */        
+       2   OSAD1    FIXED DEC      ( 11,2)                 ,        
+ /* OLD DEATH SUM ASSURED - LIFE 1               */        
+       2   OSAD2    FIXED DEC      ( 11,2)                 ,        
+ /* OLD DEATH SUM ASSURED - LIFE 2               */        
+       2   OORGS    FIXED DEC      ( 11,2)                 ,        
+ /* OLD ORIGINAL SUM ASSURED                     */        
+       2   ODISS    FIXED DEC      ( 11,2)                 ,        
+ /* OLD DISABILITY SUM ASSURED - LIFE 1          */        
+       2   OLCFR    CHAR           (  1)                   ,        
+ /* OLD LIFE COVER FUND RELATIONSHIP             */        
+ /*          'I' - INCLUSIVE                     */        
+ /*          BLANK - NOT INCLUSIVE               */        
+       2   OCNAC    CHAR           (  1)                   ,        
+ /* OLD COUNTRY OF ACCOUNTING                    */        
+ /*     'I','B','N'                              */        
+       2   OCURR    CHAR           (  1)                   ,        
+ /* OLD CURRENCY                                 */        
+ /*     'S'=STERLING,'P'=IR                     */        
+       2   OINV1    FIXED DEC      (  5,2)                 ,        
+ /* OLD FIRST YEAR INVESTMENT PERCENTAGE         */        
+ /*     50% HELD AS 50.00                        */        
+       2   ODEFR    PIC            '(3)9'                  ,        
+ /* OLD DEFERMENT PERIOD - LIFE 1                */        
+       2   OXPRE    FIXED DEC      ( 11,2)                 ,        
+ /* OLD EXTRA PREMIUM AMOUNT (YEARLY)            */        
+       2   OSPRE    FIXED DEC      ( 11,2)                 ,        
+ /* OLD SINGLE PREMIUM AMOUNT             */        
+       2   OXDOT    PIC            '(8)9'                  ,        
+ /* OLD EXTRA PREMIUM TERMINATION DATE           */        
+       2   ODABC    CHAR           (  1)                   ,        
+ /* OLD DAB CODE                                 */        
+       2   OIMPR    CHAR           (  2)                   ,        
+ /* OLD IMPAIRMENT CODE                          */        
+       2   OESCL    FIXED DEC      (  3,1)                 ,        
+ /* OLD ESCALATION RATE                          */        
+       2   OCONC    FIXED DEC      ( 11,2)                 ,        
+ /* OLD CONTRACT CHARGE                          */        
+       2   ODOTX    PIC            '(8)9'                  ,        
+ /* OLD DATE OF TX                               */        
+       2   OPUND    FIXED DEC      ( 11,2)                 ,        
+ /* OLD PAID-UP AMOUNT - ENDOWMENT               */        
+       2   OPUDT    FIXED DEC      ( 11,2)                 ,        
+ /* OLD PAID-UP AMOUNT - DEATH                   */        
+       2   OREPN    CHAR           (  4)                   ,        
+ /* OLD BROKER/EMPLOYEE CODE                     */        
+       2   OINFE    FIXED DEC      ( 11,2)                 ,        
+ /* OLD INTRODUCTORY FEES AMOUNT                 */        
+       2   OWAIV    CHAR           (  1)                   ,        
+ /* OLD WAIVER OF PREMIUM CODE                   */        
+ /*     'Y'=WAIVER OPTION APPLIES TO THIS POLICY */        
+ /*     ' '=WAIVER OPTION DOES NOT APPLY         */        
+       2   OWVAC    CHAR           (  1)                   ,        
+ /* OLD WAIVER OF PREMIUM ACTIVE CODE            */        
+ /*     'Y'=WAIVER OPTION BEING EXERCISED        */        
+ /*     ' '=WAIVER OPTION NOT ACTIVE             */        
+       2   ORNFE    FIXED DEC      ( 11,2)                 ,        
+ /* OLD RENEWAL FEES AMOUNT                      */        
+       2   OBLTP    CHAR           (  1)                   ,        
+ /* OLD BILL TYPE                                */        
+       2   OSCHM    CHAR           (  1)                   ,        
+ /* OLD SCHEME / NON-SCHEME CODE                 */        
+ /*     '1' - SCHEME                             */        
+ /*     '0' - NON-SCHEME                         */        
+       2   OWKMT    CHAR           (  1)                   ,        
+ /* OLD SCHEME DEDUCTION CODE                    */        
+       2   OBLFQ    PIC            '(2)9'                  ,        
+ /* OLD BILL FREQUENCY                           */        
+       2   OMTRN    PIC            '(2)9'                  ,        
+ /* OLD MONTH OF RENEWAL                         */        
+       2   OSCHN    PIC            '(4)9'                  ,        
+ /* OLD SCHEME NO.                               */        
+       2   OGRPN    PIC            '(6)9'                  ,        
+ /* OLD PENSIONS GROUP NO.                       */        
+       2   ORP      FIXED DEC      ( 11,2)                 ,        
+ /* OLD RENEWAL PREMIUM                  */        
+       2   OARCR    FIXED DEC      ( 11,2)                 ,        
+ /* OLD ARREARS/CREDIT                           */        
+       2   OPTD     PIC            '(8)9'                  ,        
+ /* OLD PAID-TO DATE                             */        
+       2   ODABD    PIC            '(8)9'                  ,        
+ /* OLD DATE DAB COVER CEASING                   */        
+       2   OPAID    FIXED DEC      ( 11,2)                 ,        
+ /* OLD AMOUNT PAID IN CLAIM                     */        
+       2   ODOPY    PIC            '(8)9'                  ,        
+ /* OLD DATE OF CLAIM PAYMENT                    */        
+       2   OTERN    PIC            '(7)9'                  ,        
+ /* OLD CLAIM NUMBER                             */        
+       2   OOPIN    CHAR           (  1)                   ,        
+ /* OLD INCREASE OPTION APPLICABLE               */        
+       2   OSPOL    CHAR           (  1)                   ,        
+ /* OLD SPECIAL POLICY CODE                      */        
+       2   OXPF1    PIC            '(4)9'                  ,        
+ /* OLD EXTRA PREMIUM FACTOR 1                   */        
+       2   OXPF2    PIC            '(4)9'                  ,        
+ /* OLD EXTRA PREMIUM FACTOR 2                   */        
+       2   OPAL1    FIXED DEC      (  9,4)                 ,        
+ /* OLD EXTRA PREMIUM ADDITIVE LOADING 1         */        
+       2   OPAL2    FIXED DEC      (  9,4)                 ,        
+ /* OLD EXTRA PREMIUM ADDITIVE LOADING 2         */        
+       2   OCOMR    CHAR           (  1)                   ,        
+ /* OLD COMMISSION RATE CODE                     */        
+       2   ODEAG    PIC            '(2)9'                  ,        
+ /* OLD DISABILITY COVER ENDING AGE - LIFE 1     */        
+       2   OORGP    FIXED DEC      ( 11,2)                 ,        
+ /* OLD ORIGINAL PREMIUM                         */        
+       2   OKIPC    CHAR           (  1)                   ,        
+ /* OLD PREMIUM SKIP CODE                        */        
+ /*     'S'=POLICY HAS HAD A SKIP                */        
+ /*     BLANK=NO SKIP                            */        
+       2   OPMF1    PIC            '(4)9'                  ,        
+ /* OLD MEDICAL LOADING FACTOR - LIFE 1          */        
+       2   OPMF2    PIC            '(4)9'                  ,        
+ /* OLD MEDICAL LOADING FACTOR - LIFE 2          */        
+       2   OOCL1    CHAR           (  1)                   ,        
+ /* OLD OCCUPATION CLASS - LIFE 1                */        
+       2   OOCL2    CHAR           (  1)                   ,        
+ /* OLD OCCUPATION CLASS - LIFE 2                */        
+       2   ODIS2    FIXED DEC      ( 11,2)                 ,        
+ /* OLD DISABILITY SUM ASSURED - LIFE 2          */        
+       2   ODEF2    PIC            '(3)9'                  ,        
+ /* OLD DEFERMENT PERIOD - LIFE 2                */        
+       2   ODAG2    PIC            '(2)9'                  ,        
+ /* OLD DISABILITY COVER ENDING AGE - LIFE 2     */        
+       2   OILS1    CHAR           (  1)                   ,        
+ /* OLD ILLNESS LUMP SUM PAID - LIFE 1           */        
+ /*     'Y'=YES,BLANK=NO                         */        
+       2   OILS2    CHAR           (  1)                   ,        
+ /* OLD ILLNESS LUMP SUM PAID - LIFE 2           */        
+ /*     'Y'=YES,BLANK=NO                         */        
+       2   OSIL1    FIXED DEC      (  9,2)                 ,        
+ /* OLD SERIOUS ILLNESS 1                        */        
+       2   OSIL2    FIXED DEC      (  9,2)                 ,        
+ /* OLD SERIOUS ILLNESS 2                        */        
+       2   OSIF1    PIC            '(3)9'                  ,        
+ /* OLD EXTRA SERIOUS ILLNESS FACT 1             */        
+       2   OSIF2    PIC            '(3)9'                  ,        
+ /* OLD EXTRA SERIOUS ILLNESS FACT 2             */        
+       2   ONSM2    CHAR           (  1)                   ,        
+ /* OLD NON-SMOKER CODE 2                        */        
+       2   OHCA1    FIXED DEC      (  5,2)                 ,        
+ /* OLD HOSPITAL CASH COVER AMOUNT 1             */        
+       2   OHCA2    FIXED DEC      (  5,2)                 ,        
+ /* OLD HOSPITAL CASH COVER AMOUNT 2             */        
+       2   OHCCC    CHAR           (  1)                   ,        
+ /* OLD CHILDRENS COVER CODE                     */        
+       2   OSPCO    CHAR           (  1)                   ,        
+ /* OLD SPOUSE COVER CODE                        */        
+       2   OSPOF    CHAR           (  4)                   ,        
+ /* OLD SPECIAL OFFER CODE                       */        
+       2   OCRI1    FIXED DEC      ( 11,2)                 ,        
+ /* OLD CRISIS COVER LUMP SUM - LIFE 1           */        
+       2   OCRI2    FIXED DEC      ( 11,2)                 ,        
+ /* OLD CRISIS COVER LUMP SUM - LIFE 2           */        
+       2   OMINT    PIC            '(8)9'                  ,        
+ /* OLD INVESTED TO DATE                         */        
+       2   OINTD    FIXED DEC      (11,2)                  ,        
+ /* OLD CUMULATIVE CAPITAL INVESTED              */        
+       2   OUPUR    FIXED DEC      (11,3)                  ,        
+ /* OLD CUMULATIVE UNITS PURCHASED               */        
+       2   OMUPR    FIXED DEC      (11,3)                  ,        
+ /* OLD CUMULATIVE DIVIDEND UNITS               */        
+       2   OUNSR    FIXED DEC      (11,3)                  ,        
+ /* OLD CUMULATIVE UNITS SURRENDERED             */        
+       2   ONPTO    CHAR           (   4)                  ,        
+ /* OLD RENEWAL FEES PAYABLE TO                  */        
+       2   ORPF     PIC            '(8)9'                  ,        
+ /* OLD RENEWAL PREMIUM FROM DATE                */        
+       2   ONTPR    FIXED DEC      (11,2)                  ,        
+ /* OLD CONTRIBUTION PROTECTION                   */        
+       2   OOFND(3)                                        ,        
+ /* OLD SPECIAL OFFERS  */        
+         3   OSFND  CHAR(3)                                ,        
+ /* OLD SPECIAL OFFERS FUNDS */        
+         3   OSUNT FIXED DEC (9,3)                         ,        
+ /* OLD SPECIAL OFFERS UNITS */        
+       2   OXFC1   PIC'999'                               ,        
+ /* OLD TEMP EXTRA PERCENTAGE OCCUPATIONAL 1         */        
+       2   OXM1D   PIC'99999999'                          ,        
+ /* OLD TEMP EXTRA PERCENTAGE MEDICAL 1              */        
+       2   OXF1D   PIC'99999999'                          ,        
+ /* OLD TEMP EXTRA PERCENTAGE DATE OCCUPATIONAL 1    */        
+       2   OMMD1   PIC'999'                               ,        
+ /* OLD PER MILE MEDICAL LOADING 1                   */        
+       2   OPMD1   PIC'999'                               ,        
+ /* OLD PER MILE OCCUPATIONAL LOADING 1              */        
+       2   OXMF2   PIC'999'                               ,        
+ /* OLD TEMP MEDICAL EXTRA PERCENTAGE 2              */        
+       2   OXFC2   PIC'999'                               ,        
+ /* OLD TEMP OCCUPATIONAL EXTRA PERCENTAGE 2         */        
+       2   OMMD2   PIC'999'                               ,        
+ /* OLD PER MILE MEDICAL LOADING 2                   */        
+       2   OCMT2   PIC'99'                                ,        
+ /* OLD                                              */        
+       2   OXM2D   PIC'99999999'                          ,        
+ /* OLD TEMP MEDICAL LOADING DATE 2                  */        
+       2   OXF2D   PIC'99999999'                          ,        
+ /* OLD TEMP OCCUPATIONAL LOADING DATE 2             */        
+       2   OPMD2   PIC'999'                               ,        
+ /* OLD PER MILE MEDICAL LOADING 2                   */        
+       2   OONCD    CHAR(1)                                ,        
+ /* OLD CONTRACT CODE  */        
+       2   ODDCC   PIC            '(8)9'                  ,        
+ /* OLD DATE DISABILITY CLAIM COMMENCED              */        
+       2   OTRCD   CHAR           (  1)                   ,        
+ /* OLD GSE TRANSFER CODE                            */        
+       2   OSUSP   CHAR           (  1)                   ,        
+ /* OLD POLICY UNDER SUSPENSION CODE                 */        
+       2   OCHLD   CHAR           (  1)                   ,        
+ /* OLD CORRESPONDENCE HOLD CODE                     */        
+       2   OIFE1   CHAR           ( 21)                   ,        
+ /* OLD LIFE ASSURED 1                               */        
+       2   OIFE2   CHAR           ( 21)                   ,        
+ /* OLD LIFE ASSURED 2                               */        
+       2   OVNSR   FIXED DEC      ( 11,2)                 ,        
+ /* OLD VALUE OF UNITS SURRENDERED                   */        
+       2   OVCAG   CHAR           (  4)                   ,        
+ /* OLD SERVICING AGENT                              */        
+       2   OBCOD   CHAR           (  1)                   ,        
+ /* OLD ABANDONED CODE                               */        
+       2   OTODT   PIC            '(8)9'                  ,        
+ /* OLD SKIP/SUSP TO DATE                            */        
+       2   OCONV   CHAR           (  1)                   ,        
+ /* OLD LIFE CONVERSION                              */        
+       2   OOXPG   FIXED DEC      (  5,2)                 ,        
+ /* OLD SPECIAL OFFERS - EXTRA %                     */        
+       2   OXPAT   FIXED DEC      (  9,2)                 ,        
+ /* OLD SPECIAL OFFERS - AMOUNT X% APPL TO           */        
+       2   OOXDT   PIC            '(8)9'                  ,        
+ /* OLD SPECIAL OFFERS - DATE X% TO                  */        
+       2   OOXMT   FIXED DEC      (  9,2)                 ,        
+ /* OLD SPECIAL OFFERS - EXTRA AMOUNT                */        
+       2   OCMT1   PIC'99'                                ,        
+ /* OLD                                              */        
+       2   OXMF1   PIC'999'                               ,        
+ /* OLD TEMP MEDICAL LOADING PERCENTAGE 1            */        
+       2   OODFR   PIC            '999'                   ,        
+ /* OLD SPECIAL OFFERS - SPL DEFR PERIOD             */        
+       2   OUDOP   PIC            '(8)9'                  ,        
+ /* OLD SPECIAL OFFERS - TU DATE OF PROP             */        
+       2   OUFDT   PIC            '(8)9'                  ,        
+ /* OLD PUP FACTOR DATE                              */        
+       2   OUCDT   PIC            '(8)9'                  ,        
+ /* OLD PUP CHARGES DATE                             */        
+       2   OUPDT   PIC            '(8)9'                  ,        
+ /* OLD PUP PRICE DATE                               */        
+       2   OMCLK   FIXED DEC      (  9,2)                 ,        
+ /* OLD COMM CLAWBACK                                */        
+       2   ORKNO   CHAR           (  4)                   ,        
+ /* OLD BROKER CODE                                  */        
+       2   OAWAY   CHAR(1)                                ,        
+ /* OLD HOME AND AWAY CODE                           */        
+       2   OBSA1   FIXED DEC      (11,2)                  ,        
+ /* OLD TOTAL BENEFIT SUM ASSURED LIFE 1             */        
+       2   OBSA2   FIXED DEC      (11,2)                  ,        
+ /* OLD TOTAL BENEFIT SUM ASSURED LIFE 2             */        
+       2   OF1R2   CHAR(1)                                ,        
+ /* OLD LIFE COVER 1 OR 2 FIELDS?                    */        
+       2   OPDCD   FIXED DEC      (3,2)                   ,        
+ /* OLD TOTAL PERMANENT DISABILITY OPTION CODE       */        
+       2   OXPRM   CHAR           (1)                     ,        
+ /* OLD EXTRA PREMIUM                                */        
+       2   OCMPN   PIC            '9999'                  ,        
+ /* OLD CAMPAIGN CODE                                */        
+       2   FILL3   CHAR           ( 36)                   ;        
+ /* SPARE BYTES - 3                                  */        
+END_PLC(FUK441)

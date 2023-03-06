@@ -1,0 +1,94 @@
+BEGIN_PLC(D105P00)
+ /*******************************************************************/        
+ /*  THIS MODULE SHOULD BE INCLUDED IN ALL PROGRAMS TO PRODUCE      */        
+ /* DOC1 LETTERS. THIS COMMON MODULE WILL PRODUCE ALL COMMON DATA   */        
+ /*******************************************************************/        
+ /* SET DATA TO NULL  */        
+     WS_ASSOC_ADD = '';        
+     WS_ADD_LIN = '';        
+     LINE = 2;        
+         
+ /* ASSOCIATE DATA    */        
+         
+     PRMASS.REC_ID = 'PRMASS';        
+     PRMASS.ASSOC_NO = F21_C12007;        
+         
+     IF ASSOC_ERROR =1            /* ASSOCIATE EXISTS */        
+     THEN DO;        
+          PRMASS.ASSOC_NAME = F442_N45130;        
+         
+          IF F442_N50130 =''        
+          THEN DO;        
+                  WS_ASSOC_ADD(LINE) = F442_N50130;        
+                  LINE = LINE+1;        
+          END;        
+         
+          IF F442_N51130 =''        
+          THEN DO;        
+                   WS_ASSOC_ADD(LINE) = F442_N51130;        
+                   LINE = LINE+1;        
+          END;        
+         
+          IF F442_N52130 =''        
+          THEN DO;        
+                   WS_ASSOC_ADD(LINE) = F442_N52130;        
+                   LINE = LINE+1;        
+          END;        
+         
+          IF F442_C82008 =''        
+          THEN WS_ASSOC_ADD(LINE) = F442_C82008;        
+         
+         
+          PRMASS.ASSOC_ADD1 = F442_N49130;        
+          PRMASS.ASSOC_ADD2 = WS_ASSOC_ADD(2);        
+          PRMASS.ASSOC_ADD3 = WS_ASSOC_ADD(3);        
+          PRMASS.ASSOC_ADD4 = WS_ASSOC_ADD(4);        
+          PRMASS.ASSOC_ADD5 = WS_ASSOC_ADD(5);        
+          PRMASS.ASSOC_TEL_NO = F442_N43014;        
+         
+          IF ASSOC_ERROR =2        
+          THEN DO;        
+               PRMASS.ASSOC_SALES_ARM = T001_C69903;        
+               PRMASS.ASSOC_OFF = T001_M08730;        
+          END;        
+     END;        
+         
+ /* CLIENT DATA    */        
+         
+     LINE = 2;               /* RESET FOR CLIENT ADDRESS */        
+         
+     PRMCLI.REC_ID = 'PRMCLI';        
+     PRMCLI.SALUTATION = F21_N03750;        
+     PRMCLI.ADD_NAME = F21_N03650;        
+         
+     IF F21_N84030 =''        
+     THEN DO;        
+              WS_ADD_LIN(LINE) = F21_N84030;        
+              LINE = LINE+1;        
+     END;        
+         
+     IF F21_N85030 =''        
+     THEN DO;        
+              WS_ADD_LIN(LINE) = F21_N85030;        
+              LINE = LINE+1;        
+     END;        
+         
+     IF F21_N86030 =''        
+     THEN DO;        
+              WS_ADD_LIN(LINE) = F21_N86030;        
+              LINE = LINE+1;        
+     END;        
+         
+     IF F21_C82008 =''        
+     THEN WS_ADD_LIN(LINE) = F21_C82008;        
+         
+     PRMCLI.ADD_LIN1 = F21_N83030;        
+     PRMCLI.ADD_LIN2 = WS_ADD_LIN(2);        
+     PRMCLI.ADD_LIN3 = WS_ADD_LIN(3);        
+     PRMCLI.ADD_LIN4 = WS_ADD_LIN(4);        
+     PRMCLI.ADD_LIN5 = WS_ADD_LIN(5);        
+     PRMCLI.POL_NO = F21_C77011;        
+     PRMCLI.MAILCODE = F21_C61002;        
+         
+         
+END_PLC(D105P00)

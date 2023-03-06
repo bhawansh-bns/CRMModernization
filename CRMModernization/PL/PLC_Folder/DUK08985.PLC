@@ -1,0 +1,25 @@
+BEGIN_PLC(DUK08985)
+ /*-------------------------------------------------------------------*/        
+ /* DUK08985 : Declarations needed to call module UK08985.            */        
+ /*                                                                   */        
+ /* This include is used by programs which call program UK08985.      */        
+ /*                                                                   */        
+ /* The following preprocessor code should be included in the         */        
+ /* calling program.                                                  */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /* %DCL CUK08985_NAME_TYPE CHAR                                      */        
+ /* %CUK08985_NAME_TYPE = 'CUK08985'                                  */        
+ /* %include CUK08985                                                 */        
+ /* %DEACT CUK08985_NAME_TYPE                                         */        
+ /* %include DUK8985                                                  */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ %DCL CALL_UK08985_RP_INVEST CHAR ;        
+ %CALL_UK08985_RP_INVEST = 'CALL UK08985 (UI_PTR,P_CUK08985)' ;        
+         
+ DCL UK08985 ENTRY (PTR,PTR) EXTERNAL ;        
+ P_CUK08985 = ADDR(CUK08985) ;        
+         
+END_PLC(DUK08985)

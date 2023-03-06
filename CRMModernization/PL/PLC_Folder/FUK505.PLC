@@ -1,0 +1,56 @@
+BEGIN_PLC(FUK505)
+ /****************************************************************        
+ *              UK UI Current Slices Array.                      *        
+ *                                                               *        
+ * WARNING : These layouts must be kept consistent the           *        
+ *           the Data Dictionary entries on X:/MF_UK/MFUI        *        
+ *                                                               *        
+ *****************************************************************        
+ *                                                               *        
+ * AC 22/7/96   Modified.                                        *        
+ *OLW 10/2/03   Add Txn_Type and Seq_No for Slice Source (ILD225)*        
+ *                                                               *        
+ ****************************************************************/        
+         
+ %DCL WUK505MAX FIXED;        
+ %    WUK505MAX = 500;        
+         
+ DCL 1 WUK505_REC,        
+ /***********************************************/        
+ /* Key Section - from slice transactions       */        
+ /***********************************************/        
+       2 POLNO        PIC '(7)9',        
+ /* Policy Number                             */        
+       2 Vers         PIC '(1)9',        
+ /* Version                                   */        
+       2 Ckdgt        CHAR(1),        
+ /* Check Digit                               */        
+       2 Table        PIC '(3)9',        
+ /* Table Number */        
+ /* End of KEY Section. */        
+       2 Slice_Dt     PIC'(8)9',        
+ /* Effective date. Slices & credits correct for this date. */        
+       2 Slice(WUK505MAX),        
+         3 Slice_St   CHAR(1),        
+ /* Slice Status. A=Active I=Inactive, Blank=End of list. */        
+         3 Slice_Cred FIXED DEC(4),        
+ /* Slice Credits. Months invested. */        
+         3 Slice_Cre_Dt PIC'(8)9',        
+ /* Slice Creation Date */        
+         3 Slice_AP   FIXED DEC(11,2),        
+ /* Annual Premium of Slice. BILL_FRQ x (NEW_PR - OLD_PR) */        
+         3 COMM_RT    CHAR(1),        
+ /* Commission Rate Code */        
+         3 DOP        PIC'(8)9',        
+ /* Date of proposal of premium increase. */        
+         3 CAMP_CD    PIC'9999',        
+ /* Campaign Code - from UKPH.CMPN              */        
+         3 CAMP_DT    PIC'(8)9',        
+ /* Campaign Date - from UKPH.CMPN              */        
+         3 Wop_Perc   Fixed Dec (5,4),        
+ /* Percentage reduction in slice due to WOP    */        
+         3 Seq_No     PIC'(3)9',        
+ /* Sequence Number of Slice source             */        
+         3 Txn_Type   CHAR(5) ;        
+ /* Transaction Type of Slice source            */        
+END_PLC(FUK505)

@@ -1,0 +1,65 @@
+BEGIN_PLC(DOC1CEC)
+ /*******************************************************************/        
+ /*     <AL> ON: 03/03/2003  BY: COLM CORMICAN      CCID: 19537     */        
+ /*          ADD SEGMENT DETAILS.                                   */        
+ /*******************************************************************/        
+ /*     <AL> ON: 07/08/2002  BY: PATRICK HALL       CCID: 8235      */        
+ /*          CHANGED CEC_OWNER1_TITLE & CEC_OWNER2_TITLE TO CHAR(10)*/        
+ /*******************************************************************/        
+ /* PLIINC - DOC1CEC.                                 HEAT: 176388  */        
+ /*                                                                 */        
+ /*     <AL> ON: 14/03/2002  BY: STEVE KELLAWAY     CCID: 176388    */        
+ /*          CHANGED CEC_POLICY_NO FROM PIC TO CHAR.                */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY THE CPDF / DOC1 INTERFACE PROGRAM       */        
+ /* DOC1P00 AND ANY OF ITS SUBROUTINES THAT REFER TO CHARGEABLE     */        
+ /* EVENT CERTIFICATE (CEC) DATA.                                   */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF CEC DATA TO BE WRITTEN TO THE FILE  */        
+ /* CREATED FOR DOC1.                                               */        
+ /*                                                                 */        
+ /* THE VARIABLES IN THIS STRUCTURE HAVE TO BE DECLARED AS EXTERNAL */        
+ /* AS THE DATA NEEDS TO BE ACCESSIBLE TO BOTH THE TOP-LEVEL        */        
+ /* INTERFACE DOC1P00 AND ANY SUBROUTINES.                          */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL   CEC_DTA                  CHAR(454) EXTERNAL;        
+         
+     DCL 1 CEC_STRUC                BASED(ADDR(CEC_DTA)),        
+           3 CEC_SORT_1             CHAR(15),        
+           3 CEC_SORT_2             CHAR(15),        
+           3 CEC_SORT_3             CHAR(15),        
+           3 CEC_SEQ_NUM            PIC '(3)9',        
+           3 CEC_TRIGGER_ID         CHAR(9),        
+           3 CEC_RECORD_ID          CHAR(3),        
+           3 CEC_RECORD_DATA_FLAG   CHAR(1),        
+           3 CEC_COMPANY_CODE       CHAR(2),        
+           3 CEC_POLICY_NO          CHAR(13),        
+           3 CEC_CURRENCY_CODE      CHAR(3),        
+           3 CEC_NO_OF_OWNERS       PIC'99',        
+           3 CEC_OWNER1_TITLE       CHAR(10),        
+           3 CEC_OWNER1_FORENAMES   CHAR(30),        
+           3 CEC_OWNER1_SURNAME     CHAR(30),        
+           3 CEC_OWNER1_ADD1        CHAR(30),        
+           3 CEC_OWNER1_ADD2        CHAR(30),        
+           3 CEC_OWNER1_ADD3        CHAR(30),        
+           3 CEC_OWNER1_ADD4        CHAR(30),        
+           3 CEC_OWNER1_POSTCODE    CHAR(8),        
+           3 CEC_OWNER2_TITLE       CHAR(10),        
+           3 CEC_OWNER2_FORENAMES   CHAR(30),        
+           3 CEC_OWNER2_SURNAME     CHAR(30),        
+           3 CEC_EVENT_TYPE         CHAR(2),        
+           3 CEC_DATE_OF_EVENT      CHAR(17),        
+           3 CEC_POL_YEAR_END       CHAR(17),        
+           3 CEC_NUMBER_OF_YEARS    CHAR(3),        
+           3 CEC_AMOUNT_GAIN        CHAR(8),        
+           3 CEC_TREAT_AS_PAID      CHAR(1),        
+           3 CEC_AMOUNT_OF_TAX      CHAR(8),        
+           3 CEC_TOTAL_PREV_GAINS   CHAR(8),        
+           3 CEC_PREMIUMS_PAID      CHAR(8),        
+           3 CEC_CAPITAL_PAYMENTS   CHAR(8),        
+           3 CEC_VALUE_PREV_ASS     CHAR(8),        
+           3 CEC_CAP_ELMNTS_PAID    CHAR(8),        
+           3 CEC_SEGMENTS           CHAR(9);        
+END_PLC(DOC1CEC)

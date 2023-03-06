@@ -1,0 +1,52 @@
+BEGIN_PLC(COMPDATA)
+ /*******************************************************************/        
+ /* PLIINC - COMPDATA                                               */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS A COPYBOOK OF TAB0415                           */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF MULTI COMPANY DATA THAT WILL BE     */        
+ /* PASSED BACK TO UTILITY UTILMCO                                  */        
+ /*                                                                 */        
+ /*******************************************************************/        
+ DCL MCO_RECORDS                   CHAR(999);        
+         
+ DCL 1 MCO_REC                     BASED (ADDR(MCO_RECORDS)),        
+      3 MCO_C52202                 PIC '99',        
+      3 MCO_M84950                 CHAR(50),        
+      3 MCO_M79030(2)              CHAR(30),        
+      3 MCO_C19006                 PIC '(6)9',        
+      3 MCO_N00508                 PIC '(8)9',        
+      3 MCO_M73206                 PIC '(6)9',        
+      3 MCO_I23006                 PIC '(6)9',        
+      3 MCO_I23105                 PIC '(5)9',        
+      3 MCO_I23203                 PIC '(3)9',        
+      3 MCO_N94240                 CHAR(40),        
+      3 MCO_N94336                 CHAR(36),        
+      3 MCO_N94460                 CHAR(60),        
+      3 MCO_N94512                 CHAR(12),        
+      3 MCO_N94607                 CHAR(07),        
+      3 MCO_N02430                 CHAR(30),        
+      3 MCO_N88030                 CHAR(30),        
+      3 MCO_N89030                 CHAR(30),        
+      3 MCO_N90030                 CHAR(30),        
+      3 MCO_N91030                 CHAR(30),        
+      3 MCO_N94706                 PIC'(6)9',        
+      3 MCO_N94808                 PIC'(8)9',        
+      3 MCO_N94930                 CHAR(30),        
+      3 MCO_I23405(10)             CHAR(05),        
+      3 MCO_I25605                 FIXED DEC (5,2),        
+      3 MCO_I25705                 FIXED DEC (5,2),        
+      3 MCO_I25805                 FIXED DEC (5,2),        
+      3 MCO_I25905                 FIXED DEC (5,2),        
+      3 MCO_I26005                 FIXED DEC (5,2),        
+      3 MCO_C91604                 CHAR (04),        
+      3 MCO_I74804                 CHAR (04),        
+      3 MCO_C01402                 CHAR (02),        
+      3 MCO_I74906                 CHAR (06),        
+      3 MCO_I75030                 CHAR (30),        
+      3 MCO_M68202                 PIC'(2)9',        
+      3 MCO_I75204                 CHAR (04),        
+      3 MCO_I75103                 PIC'(3)9',        
+      3 MCO_N96007                 CHAR (07),        
+      3 FILLER                     CHAR(377);        
+END_PLC(COMPDATA)

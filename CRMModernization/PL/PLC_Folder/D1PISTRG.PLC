@@ -1,0 +1,9 @@
+BEGIN_PLC(D1PISTRG)
+     DCL PIS_DATA               CHAR(80) BASED (ADDR(PIS));                     
+     DCL 1 PIS,                                                                 
+      3 POLICY_NO               CHAR(11),                                       
+      3 PRODUCT_TYPE            CHAR(7),                                        
+      3 RETIRE_MAT_DATE         CHAR(8),                                        
+      3 OLD_FUND                CHAR(27),                                       
+      3 NEW_FUND                CHAR(27);                                       
+END_PLC(D1PISTRG)

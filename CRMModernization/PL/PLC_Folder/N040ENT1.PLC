@@ -1,0 +1,172 @@
+BEGIN_PLC(N040ENT1)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040ENT1                                       */        
+    /*   GENERATION  : 001                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : DIARY                                          */        
+    /*   PROGRAMMER  : MARK DOBSON                                    */        
+    /*   DATE        : FEBRUARY 2009                                  */        
+    /*                                                                */        
+    /*   DESCRIPTION : CONTAINS THE ENTRY DECLARES FOR ALL DIARY      */        
+    /*                 SUB-MODULES FOR A PARTICULAR INSTANCE OF THE   */        
+    /*                 DIARY CONTROLLER N049P00.                      */        
+    /*                 I.E. THIS INCLUDE MEMBER WILL BE DIFFERENT FOR */        
+    /*                 LINCOLN AND COUNTRYWIDE.                       */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL N04FD01             ENTRY;        
+         
+          DCL N04LN01             ENTRY;        
+          DCL N04LN02             ENTRY;        
+         
+          DCL N04MPA9             ENTRY;        
+          DCL N04MPM9             ENTRY;        
+          DCL N04MP01             ENTRY;        
+          DCL N04MP10             ENTRY;        
+          DCL N04MP31             ENTRY;        
+          DCL N04MP32             ENTRY;        
+          DCL N04MP33             ENTRY;        
+          DCL N04MP34             ENTRY;        
+          DCL N04MP69             ENTRY;        
+          DCL N04MP84             ENTRY;        
+          DCL N04MP89             ENTRY;        
+         
+          DCL N04MR02             ENTRY;        
+          DCL N04MR03             ENTRY;        
+          DCL N04MR04             ENTRY;        
+          DCL N04MR35             ENTRY;        
+          DCL N04MR36             ENTRY;        
+         
+          DCL N04PCA4             ENTRY;        
+          DCL N04PCA5             ENTRY;        
+          DCL N04PCA6             ENTRY;        
+          DCL N04PCB5             ENTRY;        
+          DCL N04PCD3             ENTRY;        
+          DCL N04PCE4             ENTRY;        
+          DCL N04PCE5             ENTRY;        
+          DCL N04PCE6             ENTRY;        
+          DCL N04PCG4             ENTRY;        
+          DCL N04PCG5             ENTRY;        
+          DCL N04PCG6             ENTRY;        
+          DCL N04PCG9             ENTRY;        
+          DCL N04PCI8             ENTRY;        
+          DCL N04PCJ8             ENTRY;        
+          DCL N04PCM4             ENTRY;        
+          DCL N04PCM5             ENTRY;        
+          DCL N04PCM6             ENTRY;        
+          DCL N04PCM9             ENTRY;        
+          DCL N04PCO4             ENTRY;        
+          DCL N04PCO5             ENTRY;        
+          DCL N04PCO6             ENTRY;        
+          DCL N04PCR6             ENTRY;        
+          DCL N04PCT4             ENTRY;        
+          DCL N04PCT5             ENTRY;        
+          DCL N04PCT6             ENTRY;        
+          DCL N04PCT9             ENTRY;        
+          DCL N04PC06             ENTRY;        
+          DCL N04PC07             ENTRY;        
+          DCL N04PC10             ENTRY;        
+          DCL N04PC34             ENTRY;        
+          DCL N04PC35             ENTRY;        
+          DCL N04PC36             ENTRY;        
+          DCL N04PC37             ENTRY;        
+          DCL N04PC39             ENTRY;        
+          DCL N04PC67             ENTRY;        
+          DCL N04PC68             ENTRY;        
+          DCL N04PC80             ENTRY;        
+          DCL N04PC85             ENTRY;        
+          DCL N04PC86             ENTRY;        
+         
+          DCL N04PDB2             ENTRY;        
+          DCL N04PDF6             ENTRY;        
+         
+          DCL N04PFA1             ENTRY;        
+          DCL N04PFB1             ENTRY;        
+          DCL N04PFB2             ENTRY;        
+          DCL N04PFE1             ENTRY;        
+          DCL N04PFE2             ENTRY;        
+          DCL N04PFG1             ENTRY;        
+          DCL N04PFG2             ENTRY;        
+          DCL N04PFH3             ENTRY;        
+          DCL N04PFH4             ENTRY;        
+          DCL N04PFI1             ENTRY;        
+          DCL N04PFJ3             ENTRY;        
+          DCL N04PFJ4             ENTRY;        
+          DCL N04PFL3             ENTRY;        
+          DCL N04PFL4             ENTRY;        
+          DCL N04PFM1             ENTRY;        
+          DCL N04PFM8             ENTRY;        
+          DCL N04PFM9             ENTRY;        
+          DCL N04PFN1             ENTRY;        
+          DCL N04PFN2             ENTRY;        
+          DCL N04PFN3             ENTRY;        
+          DCL N04PFN4             ENTRY;        
+          DCL N04PFP3             ENTRY;        
+          DCL N04PFP4             ENTRY;        
+          DCL N04PFQ1             ENTRY;        
+          DCL N04PFR1             ENTRY;        
+          DCL N04PFR3             ENTRY;        
+          DCL N04PFR4             ENTRY;        
+          DCL N04PFT3             ENTRY;        
+          DCL N04PFT4             ENTRY;        
+          DCL N04PFU1             ENTRY;        
+          DCL N04PFU8             ENTRY;        
+          DCL N04PFU9             ENTRY;        
+          DCL N04PFV3             ENTRY;        
+          DCL N04PFV4             ENTRY;        
+          DCL N04PF17             ENTRY;        
+          DCL N04PF18             ENTRY;        
+          DCL N04PF40             ENTRY;        
+          DCL N04PF41             ENTRY;        
+         
+          DCL N04TMD2             ENTRY;        
+          DCL N04TMD6             ENTRY;        
+          DCL N04TMD7             ENTRY;        
+          DCL N04TMJ6             ENTRY;        
+          DCL N04TMJ7             ENTRY;        
+          DCL N04TMP2             ENTRY;        
+          DCL N04TMT2             ENTRY;        
+          DCL N04TMX6             ENTRY;        
+          DCL N04TMX7             ENTRY;        
+          DCL N04TM10             ENTRY;        
+          DCL N04TM11             ENTRY;        
+          DCL N04TM30             ENTRY;        
+          DCL N04TM31             ENTRY;        
+          DCL N04TM44             ENTRY;        
+          DCL N04TM45             ENTRY;        
+         
+          DCL N04TNB9             ENTRY;        
+         
+          DCL N04TPA2             ENTRY;        
+          DCL N04TPA3             ENTRY;        
+          DCL N04TPA4             ENTRY;        
+          DCL N04TPA5             ENTRY;        
+          DCL N04TPB2             ENTRY;        
+          DCL N04TPC3             ENTRY;        
+          DCL N04TPD2             ENTRY;        
+          DCL N04TPG2             ENTRY;        
+          DCL N04TPI1             ENTRY;        
+          DCL N04TPI2             ENTRY;        
+          DCL N04TPI4             ENTRY;        
+          DCL N04TPI5             ENTRY;        
+          DCL N04TPK2             ENTRY;        
+          DCL N04TPM1             ENTRY;        
+          DCL N04TPM2             ENTRY;        
+          DCL N04TPM4             ENTRY;        
+          DCL N04TPM5             ENTRY;        
+          DCL N04TPM8             ENTRY;        
+          DCL N04TPQ1             ENTRY;        
+          DCL N04TPQ2             ENTRY;        
+          DCL N04TPQ9             ENTRY;        
+          DCL N04TPU1             ENTRY;        
+          DCL N04TPU2             ENTRY;        
+          DCL N04TPU8             ENTRY;        
+          DCL N04PFM7             ENTRY;            
+          DCL N04PFU7             ENTRY;            
+         
+          DCL N04ZZ99             ENTRY;        
+         
+END_PLC(N040ENT1)

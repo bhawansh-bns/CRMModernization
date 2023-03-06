@@ -1,0 +1,74 @@
+BEGIN_PLC(UKUIEXT)
+ /*-------------------------------------------------------------------*/        
+ /* UK UI External Variable Declarations                              */        
+ /********************************************************************/        
+ /* Audit Trail                                                      */        
+ /* ***********                                                      */        
+ /* Changed By  Date      Description                                */        
+ /* ----------  ----      -----------                                */        
+ /* J.OGrady    24/05/00  Add in new structure for CAPSIL Migration. */        
+ /* OLW 10/06/04 ILD246   Increase Div_Price structure to 2500       */        
+ /*-------------------------------------------------------------------*/        
+         
+ /*-----------------*/        
+ /* Error Structure */        
+ /*-----------------*/        
+ Dcl 1 Err_Rec Based (P_Err_Rec) ,                   /* Error Record  */        
+     3 Err_Polno    Char    (7) , /* Policy number                    */        
+     3 Err_Vers     Char    (1) , /* Version                          */        
+     3 Err_Effdt    Char    (8) , /* Effective Date                   */        
+     3 Err_Pgm      Char    (8) , /* Program in which error occurred  */        
+     3 Err_Code     Char    (4) , /* Error code unique for progam     */        
+     3 Err_Msg      Char    (80); /* Error Message Text               */        
+         
+ Dcl 1 TQL_Fee      (1992:2042) Based (P_TQL_FEE) ,        
+     3 Pol_Fee      Fixed Dec (5,2);        
+         
+ Dcl 1 TQR_Fee      (1992:2042) Based (P_TQR_FEE) ,        
+     3 Pol_Fee      Fixed Dec (5,2);        
+         
+ Dcl 1 TQR_Fee_DSS  (1992:2042) Based (P_TQR_FEE_DSS) ,        
+     3 Pol_Fee      Fixed Dec (5,2);        
+         
+ Dcl 1 GBL_Fee      (1987:2042) Based (P_GBL_Fee) ,        
+     3 Pol_Fee      Fixed Dec (5,2);        
+         
+ Dcl 1 Div_Price  (2500) Based (P_Div_Price) , /* ILD246 */        
+ /*Dcl 1 Div_Price  (250) Based (P_Div_Price)     ILD246 */        
+     3 Fund         Char (3),        
+     3 Date        Pic '(8)9',        
+     3 DividS      Pic '(1)9V(6)9',        
+     3 DividP      Pic '(1)9V(6)9' ;        
+         
+ Dcl LstRiDt   Pic '(8)9'  Based (P_LSTRIDT) ;        
+                    /* date of last monthly investmt*/        
+         
+ Dcl PDtoDT    Pic '(8)9'  Based (P_PDTODT) ;        
+                    /* Paid to Date */        
+         
+ Dcl On_Bat      Char (1) Based (P_ON_BAT) ;        
+         
+ Dcl Retire      Char (1)   Based (P_RETIRE); /* Early Retirement */        
+ /* Actual Date of Retirement */        
+ Dcl ProjTo      Pic '(8)9' Based (P_ProjTo);        
+ Dcl Rinvd       Pic '(8)9' Based (P_Rinvd);     /* Reinvest To Date */        
+ Dcl UIPVMODE    Char (1)   Based (P_UIPVMODE) ;        
+ Dcl UIPV_GR     Fixed Dec (9,4) Based (P_UIPV_GR) ;        
+ Dcl UIPV_GR_DSS Fixed Dec (9,4) Based (P_UIPV_GR_DSS) ;        
+ Dcl PRM_Contract_Charge Fixed Dec (11,2) Based (P_Contract_Charge) ;        
+ Dcl PRM_PD_V1   Fixed Dec (11,2) Based (P_PRM_V1) ;        
+ Dcl PRM_PD_V2   Fixed Dec (11,2) Based (P_PRM_V2) ;        
+ Dcl PRM_PD_V3   Fixed Dec (11,2) Based (P_PRM_V3) ;        
+ Dcl BRMODE      Char (1)   Based (P_BRMODE) ;        
+ Dcl 1 UM_CHG Based (P_UM_CHG) ,        
+     3 WOP_Charge         Fixed Dec (15,5),        
+     3 Disability_Charge  Fixed Dec (15,5),        
+     3 Life_Charge        Fixed Dec (15,5),        
+     3 SI_Charge          Fixed Dec (15,5),        
+     3 CC_Charge          Fixed Dec (15,5),        
+     3 PTD_Charge         Fixed Dec (15,5),        
+     3 Contract_Charge    Fixed Dec (15,5),        
+     3 Set_Up             Fixed Dec (15,5),        
+     3 Alteration         Fixed Dec (15,5),        
+     3 Stamp_Duty         Fixed Dec (15,5);        
+END_PLC(UKUIEXT)

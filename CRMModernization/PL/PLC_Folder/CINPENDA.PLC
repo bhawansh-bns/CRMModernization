@@ -1,0 +1,5 @@
+BEGIN_PLC(CINPENDA)
+  DCL 1 PEND_CODE_ARRAY (120),        
+       3 PCODE_ACTION CHAR(1),        
+       3 PEND_CODE    CHAR(4);        
+END_PLC(CINPENDA)

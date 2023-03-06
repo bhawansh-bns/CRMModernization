@@ -1,0 +1,26 @@
+BEGIN_PLC(DUK09646)
+ /*-------------------------------------------------------------------*/        
+ /* DUK09646 : Declarations needed to call module UK09646.            */        
+ /*                                                                   */        
+ /* This include is used by programs which call program UK09646.      */        
+ /*                                                                   */        
+ /* The following preprocessor code should be included in the         */        
+ /* calling program.                                                  */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /* %DCL CUK09646_NAME_TYPE CHAR                                      */        
+ /* %CUK09646_NAME_TYPE = 'CUK09646'                                  */        
+ /* %include CUK09646                                                 */        
+ /* %DEACT CUK09646_NAME_TYPE                                         */        
+ /* %include DUK9646                                                  */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ %DCL CALL_UK09646_CALCULATE_PTD CHAR ;        
+ %CALL_UK09646_CALCULATE_PTD = 'CALL UK09646 (UI_PTR,P_CUK09646)' ;        
+         
+ DCL UK09646 ENTRY (PTR,PTR) EXTERNAL ;        
+ P_CUK09646 = ADDR(CUK09646) ;        
+         
+         
+END_PLC(DUK09646)

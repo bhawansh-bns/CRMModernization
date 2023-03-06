@@ -1,0 +1,49 @@
+BEGIN_PLC(N040HIST)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040HIST                                       */        
+    /*   GENERATION  : 020                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : JANUARY 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : 'HISA' DATA AREA FOR USE BY THE N040 DIARY     */        
+    /*                 PROCEDURES.                                    */        
+    /*                 AS EACH ACTION CREATES HISTORY RECORDS, EACH   */        
+    /*                 IS CHECKED FOR BALANCING IN PROCEDURE,         */        
+    /*                 N040P03.  HAVING CHECKED THE RECORD THE DATA   */        
+    /*                 IS THEN ACCUMULATED INTO THIS STRUCTURE.       */        
+    /*                 AFTER ALL DIARY PROCESSING IS COMPLETE FOR     */        
+    /*                 THE POLICY IT IS USED IN THE CROSS CHECKING    */        
+    /*                 PROCEDURE, N040P04.                            */        
+    /*                 USED IN CONJUNCTION WITH N040TWA.              */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 HISA BASED(TWA.HIS_DATA_PTR),        
+                3 C77011          PIC'(11)9',       /* POLICY NO.A0109*/        
+                3 A24003_ACC      FIXED DEC (3),    /* UNITS PD  L1103*/        
+                3 A27009_ACC      FIXED DEC (11,2), /* SUSPENSE  L0511*/        
+                3 A11009_ACC      FIXED DEC (11,2), /* LIQ PRO   L0611*/        
+                3 A08009_ACC      FIXED DEC (9,2),  /* REPL      L0711*/        
+                3 A14005_ACC      FIXED DEC (7,2),  /* ODD LOT   L0905*/        
+                3 A85011_ACC      FIXED DEC (11,2), /* CHRG.AMT  U0111*/        
+                3 A26009_ACC      FIXED DEC (11,2), /* PAID B.CL L0111*/        
+                3 A16009_ACC      FIXED DEC (11,2), /* PAID B.OT L0211*/        
+                3 A13009_ACC      FIXED DEC (11,2), /* LOAN INT  L0211*/        
+                3 A31009_ACC      FIXED DEC (11,2), /* SPECIALS  L0211*/        
+                3 A15009_ACC      FIXED DEC (11,2), /* APL AMT.  L0311*/        
+                3 A28009_ACC      FIXED DEC (11,2), /* IFL AMT.  L0311*/        
+                3 A12009_ACC      FIXED DEC (11,2), /* LOAN CPTL L0311*/        
+                3 A05009_ACC      FIXED DEC (11,2), /* BEN. AMT. L0311*/        
+                3 A19009_ACC      FIXED DEC (11,2), /* PAYMT. DT L0301*/        
+                3 A25009_ACC      FIXED DEC (9,2),  /* PRE. PAID L0409*/        
+                3 FDH(32),                          /* FUND DETAIL    */        
+                  5 C46003        PIC'999',         /* INVEST FUND CDE*/        
+                  5 A09009_ACC    FIXED DEC (15,3), /* INVEST UNITS   */        
+                  5 A09109_ACC    FIXED DEC (15,3), /* PROT. UNITS    */        
+                  5 A09209_ACC    FIXED DEC (15,3), /* EMPLOYEE UNITS */        
+                  5 A09413_ACC    FIXED DEC (15,3); /* RESERVE UNITS  */        
+END_PLC(N040HIST)

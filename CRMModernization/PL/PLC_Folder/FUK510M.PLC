@@ -1,0 +1,1092 @@
+BEGIN_PLC(FUK510M)
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* Test reporting record layout.                                     */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /* UK08970 - After processing all transaction for the month:         */        
+ /*           Assign from FUK502                                      */        
+ /*           Assign from FUK500                                      */        
+ /*           Call UK09009 to calculate fund values and assign.       */        
+ /*           Write out record.                                       */        
+ /* UK08985 - Assign initial and premium units amounts invested.      */        
+ /* UK08990 - Assign all charges.                                     */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+         
+         
+ DCL 1 WUK510B  UNALIGNED  ,        
+       2 POLNO   PIC '(7)9',        
+ /* Policy Number                            */        
+       2 Fill1   char (01) ,        
+       2 VERS     PIC '(1)9',        
+ /* Version                                  */        
+       2 Fill2   char (01) ,        
+       2 Effdt    PIC '(8)9',        
+ /* Date of record. Investment date. */        
+       2 Fill3   char (01) ,        
+       2 TABLE    PIC '(3)9',        
+ /* Table Number */        
+ /*****************************************************/        
+ /* RP investment.                                    */        
+ /*****************************************************/        
+       2 Fill4   char (01) ,        
+       2   IFnd_Amt   PIC'(12)9V999',        
+ /* Amount invested in initial funds */        
+       2 Fill5   char (01) ,        
+       2   PFnd_Amt   PIC'(12)9V999',        
+ /* Amount invested in premium funds */        
+ /*****************************************************/        
+ /* Fund value. Calculated by UK09009                 */        
+ /*****************************************************/        
+       2 Fill6   char (01) ,        
+       2   Bid_Value      PIC'(12)9V999',        
+       2 Fill7   char (01) ,        
+   /*  2   Afac           PIC'9V9999'  RMJ 15/08/07 */        
+       2   Afac           PIC'9V999999',        
+       2 Fill8   char (01) ,        
+       2   Surr_Value     PIC'(12)9V999',        
+       2 Fill9   char (01) ,        
+       2   SP_Value       PIC'(12)9V999',        
+       2 Fill10  char (01) ,        
+       2   IUVal          PIC'(12)9V999',        
+       2 Fill11  char (01) ,        
+       2   PUVal          PIC'(12)9V999',        
+ /*****************************************************/        
+ /* Charges.                                          */        
+ /*****************************************************/        
+       2 Fill12  char (01) ,        
+       2   WOP_Charge               PIC'(8)9V999',        
+       2 Fill13  char (01) ,        
+       2   DAB_Charge               PIC'(8)9V999',        
+       2 Fill14  char (01) ,        
+       2   Disability_Charge        PIC'(6)9V(5)9',        
+       2 Fill15  char (01) ,        
+       2   Life_Charge              PIC'(6)9V(5)9',        
+       2 Fill16  char (01) ,        
+       2   PTD_Charge               PIC'(8)9V999',        
+       2 Fill17  char (01) ,        
+       2   SI_Charge                PIC'(8)9V999',        
+       2 Fill18  char (01) ,        
+       2   CC_Charge                PIC'(8)9V999',        
+       2 Fill19  char (01) ,        
+       2   Contract_Charge          PIC'(8)9V999',        
+       2 Fill20  char (01) ,        
+       2   Slice_Charge             PIC'(8)9V999',        
+       2 Fill21  char (01) ,        
+ /*****************************************************/        
+ /* Policy contract section. From WUK502.             */        
+ /*****************************************************/        
+       2 STATUS     CHAR (3),        
+ /* Status */        
+       2 Fill22  char (01) ,        
+       2 INH_CD     CHAR (1),        
+ /* Inhibit Code */        
+       2 Fill23  char (01) ,        
+       2 BEN_PAY    CHAR (1),        
+ /* Benefit in Payment */        
+       2 Fill24  char (01) ,        
+       2 STAFF      CHAR (1),        
+ /* Staff Rate */        
+       2 Fill25  char (01) ,        
+       2 TERM_CON   PIC '(2)9',        
+ /* Term to Conversion */        
+       2 Fill26  char (01) ,        
+       2 TERM       PIC '(2)9',        
+ /* Term */        
+       2 Fill27  char (01) ,        
+       2 DOP        PIC            '(8)9'               ,        
+ /* Date of Proposal */        
+       2 Fill28  char (01) ,        
+       2 DOE        PIC            '(8)9'            ,        
+ /* Date of Entry */        
+       2 Fill29  char (01) ,        
+       2 DOM        PIC            '(8)9'            ,        
+ /* Date of Maturity */        
+       2 Fill30  char (01) ,        
+       2   CNACC       CHAR           (  1)             ,        
+ /* Country of Accounting */        
+       2 Fill31  char (01) ,        
+       2   CURR        CHAR           (  1)             ,        
+ /* Currency */        
+       2 Fill32  char (01) ,        
+       2   IMPAIR      CHAR           (  2)             ,        
+ /* Impairment Code */        
+       2 Fill33  char (01) ,        
+       2   BILL_TYPE   CHAR           (  1)             ,        
+ /* Bill Type */        
+       2 Fill34  char (01) ,        
+       2   GROUPED     CHAR           (  1)             ,        
+ /* Grouped Extra Investment Applies */        
+       2 Fill35  char (01) ,        
+       2   IX_OPT      CHAR           (  1)             ,        
+ /* Increase Option Code */        
+       2 Fill36  char (01) ,        
+       2   SPOL_CD     CHAR           (  1)             ,        
+ /* Special Policy Code */        
+       2 Fill37  char (01) ,        
+       2   POLFEE_APP  CHAR           (  1)             ,        
+ /* Policy Fee Applies Code */        
+ /***********************************************/        
+ /* CLIENT SECTION - from UKPH                  */        
+ /***********************************************/        
+       2 Fill38  char (01) ,        
+       2   AGE_ENT_1   PIC            '(3)9'            ,        
+ /* Age at Entry Life 1 */        
+       2 Fill39  char (01) ,        
+       2   DOB_1       PIC            '(8)9'            ,        
+ /* Date of Birth 1 */        
+       2 Fill40  char (01) ,        
+       2   DOB_2       PIC            '(8)9'            ,        
+ /* Date of Birth 2 */        
+       2 Fill41  char (01) ,        
+       2   SEX_1       CHAR           (  1)             ,        
+ /* Sex Code Life 1 */        
+       2 Fill42  char (01) ,        
+       2   SEX_2       CHAR           (  1)             ,        
+ /* Sex Code Life 2 */        
+       2 Fill43  char (01) ,        
+       2   SMOKER_1    CHAR           (  1)             ,        
+ /* Non Smoker Code 1 */        
+       2 Fill44  char (01) ,        
+       2   SMOKER_2    CHAR           (  1)             ,        
+ /* Non Smoker Code 2 */        
+       2 Fill45  char (01) ,        
+       2   MAT_SUM     PIC'(9)9V(2)9'                    ,        
+ /* MATURITY SUM ASSURED */        
+       2 Fill46  char (01) ,        
+       2   LCOVER_1    PIC'(9)9V(2)9'                    ,        
+ /* DEATH SUM ASSURED LIFE 1 */        
+       2 Fill47  char (01) ,        
+       2   LCOVER_2    PIC'(9)9V(2)9'                    ,        
+ /* DEATH SUM ASSURED LIFE 2 */        
+       2 Fill48  char (01) ,        
+       2   LCOVER_Fund CHAR           (  1)              ,        
+ /* LIFE COVER FUND RELATIONSHIP */        
+       2 Fill49  char (01) ,        
+       2   DCOVER_1    PIC'(9)9V(2)9'                    ,        
+ /* DISABILITY SUM ASSURED LIFE 1 */        
+       2 Fill50  char (01) ,        
+       2   DCOVER_2    PIC'(9)9V(2)9'                    ,        
+ /* DISABILITY SUM ASSURED LIFE 2 */        
+       2 Fill51  char (01) ,        
+       2   DEFER_1     PIC            '(3)9'             ,        
+ /* DEFERMENT PERIOD LIFE 1 */        
+       2 Fill52  char (01) ,        
+       2   DEFER_2     PIC            '(3)9'             ,        
+ /* DEFERMENT PERIOD LIFE 2 */        
+       2 Fill53  char (01) ,        
+       2   DEND_AGE_1  PIC            '(2)9'             ,        
+ /* DISABILITY COVER ENDING AGE LIFE 1 */        
+       2 Fill54  char (01) ,        
+       2   DEND_AGE_2  PIC            '(2)9'             ,        
+ /* DISABILITY COVER ENDING AGE LIFE 2 */        
+       2 Fill55  char (01) ,        
+       2   ESCAL       PIC'(2)9V(1)9'            ,        
+ /* ESCALATION RATE */        
+       2 Fill56  char (01) ,        
+       2   DAB_CD      CHAR           (  1)              ,        
+ /* DAB Code */        
+       2 Fill57  char (01) ,        
+       2   DAB_END     PIC            '(8)9'             ,        
+ /* Date DAB Cover Ceasing */        
+       2 Fill58  char (01) ,        
+       2   PUP_END     PIC'(9)9V(2)9'                    ,        
+ /* Paid-up Endowment Amount */        
+       2 Fill59  char (01) ,        
+       2   PUP_DTH     PIC'(9)9V(2)9'                    ,        
+ /* Paid-up Death Amount */        
+       2 Fill60  char (01) ,        
+       2   CON_CHG     PIC'(9)9V(2)9'                    ,        
+ /* Contract Charge */        
+       2 Fill61  char (01) ,        
+       2   WOP_APP     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code */        
+       2 Fill62  char (01) ,        
+       2   WOP_ACT     CHAR           (  1)              ,        
+ /* Waiver of Premium Active Code */        
+       2 Fill63  char (01) ,        
+       2   WOP_PROP    PIC'(1)9V(4)9'               ,        
+ /* Waiver of Premium Proportion  */        
+       2 Fill64  char (01) ,        
+       2   ILSP1       CHAR           (  1)              ,        
+ /* Illness Paid Life 1 */        
+       2 Fill65  char (01) ,        
+       2   ILSP2       CHAR           (  1)              ,        
+ /* Illness Paid Life 2 */        
+       2 Fill66  char (01) ,        
+       2   ICOVER_1    PIC'(7)9V(2)9'            ,        
+ /* Serious Illness Cover Life 1 */        
+       2 Fill67  char (01) ,        
+       2   ICOVER_2    PIC'(7)9V(2)9'            ,        
+ /* Serious Illness Cover Life 2 */        
+       2 Fill68  char (01) ,        
+       2   CONT_PROT   PIC'(9)9V(2)9'                    ,        
+ /* Contribution Protection Amount */        
+       2 Fill69  char (01) ,        
+       2   CCOVER_1    PIC'(9)9V(2)9'                    ,        
+ /* Crisis Cover Life 1 */        
+       2 Fill70  char (01) ,        
+       2   CCOVER_2    PIC'(9)9V(2)9'                    ,        
+ /* Crisis Cover Life 2 */        
+       2 Fill71  char (01) ,        
+       2   CC_MULT1    PIC'99'                           ,        
+ /* Crisis Cover Multiple 1 */        
+       2 Fill72  char (01) ,        
+       2   CC_MULT2    PIC'99'                           ,        
+ /* Crisis Cover Multiple 2 */        
+       2 Fill73  char (01) ,        
+       2   PCOVER_1    PIC'(9)9V(2)9'               ,        
+ /* Total Permanent Disability Cover Life 1 */        
+       2 Fill74  char (01) ,        
+       2   PCOVER_2    PIC'(9)9V(2)9'               ,        
+ /* Total Permanent Disability Cover Life 2 */        
+       2 Fill75  char (01) ,        
+       2   MED_FAC_1  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 */        
+       2 Fill76  char (01) ,        
+       2   MED_FAC_2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 */        
+       2 Fill77  char (01) ,        
+       2   PRM_FAC_1  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 */        
+       2 Fill78  char (01) ,        
+       2   PRM_FAC_2  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 */        
+       2 Fill79  char (01) ,        
+       2   PRM_FAC_DT PIC            '(8)9'               ,        
+ /* Extra Premium Factor Termination Date */        
+       2 Fill80  char (01) ,        
+       2   ADD_FAC_1  PIC'(5)9V(4)9'              ,        
+ /* Extra Additive Loading 1 */        
+       2 Fill81  char (01) ,        
+       2   ADD_FAC_2  PIC'(5)9V(4)9'              ,        
+ /* Extra Additive Loading 2 */        
+       2 Fill82  char (01) ,        
+       2   OCC_C_1    CHAR           (  1)                ,        
+ /* Occupation Class Life 1 */        
+       2 Fill83  char (01) ,        
+       2   OCC_C_2    CHAR           (  1)                ,        
+ /* Occupation Class Life 2 */        
+       2 Fill84  char (01) ,        
+       2   ILL_FAC_1  PIC            '(3)9'               ,        
+ /* Extra Serious Illness Factor 1 */        
+       2 Fill85  char (01) ,        
+       2   ILL_FAC_2  PIC            '(3)9'               ,        
+ /* Extra Serious Illness Factor 2 */        
+       2 Fill86  char (01) ,        
+       2   T_OCC_FC_1 PIC'999'                            ,        
+ /* Temporary Extra %age occupational loading 1 */        
+       2 Fill87  char (01) ,        
+       2   T_OCC_FC_2 PIC'999'                            ,        
+ /* Temporary Extra %age occupational loading 2 */        
+       2 Fill88  char (01) ,        
+       2   T_OCC_DT_1 PIC'99999999'                       ,        
+ /* Temporary Extra %age occupational loading end    */        
+ /* date 1 */        
+       2 Fill89  char (01) ,        
+       2   T_OCC_DT_2 PIC'99999999'                       ,        
+ /* Temporary Extra %age occupational loading end    */        
+ /* date 1 */        
+       2 Fill90  char (01) ,        
+       2   T_MED_FC_1 PIC'999'                            ,        
+ /* Temporary Extra %age medical loading 1 */        
+       2 Fill91  char (01) ,        
+       2   T_MED_FC_2 PIC'999'                            ,        
+ /* Temporary Extra %age medical loading 2 */        
+       2 Fill92  char (01) ,        
+       2   T_MED_DT_1 PIC'99999999'                       ,        
+ /* Temporary Extra %age medical loading end date 1  */        
+       2 Fill93  char (01) ,        
+       2   T_MED_DT_2 PIC'99999999'                       ,        
+ /* Temporary Extra %age medical loading end date 2  */        
+       2 Fill94  char (01) ,        
+       2   T_MIL_FC_1 PIC'999'                            ,        
+ /* Temporary per mille loading 1 */        
+       2 Fill95  char (01) ,        
+       2   T_MIL_FC_2 PIC'999'                            ,        
+ /* Temporary per mille loading 2 */        
+       2 Fill96  char (01) ,        
+       2   P_MIL_FC_1 PIC'999'                            ,        
+ /* Per mille loading 1 */        
+       2 Fill97  char (01) ,        
+       2   P_MIL_FC_2 PIC'999'                            ,        
+ /* Per mille loading 2 */        
+       2 Fill98  char (01) ,        
+       2   BILL_FRQ   PIC            '99'                ,        
+ /* Bill Frequency   */        
+       2 Fill99  char (01) ,        
+       2   NEW_PR    PIC'(9)9V(2)9'                     ,        
+ /* Current Regular Premium */        
+ /*------------------------------------------------------------------*/        
+ /* FUK500 : Unit Account                                            */        
+ /*-- ---------------------------------------------------------------*/        
+     2 F_Types     (5)              ,   /* Array of Fund Types       */        
+       3 Fill01  char (01) ,        
+       3 F_Type    Char      (1)    ,   /* Fund Type                 */        
+       3 Funds     (10)             ,   /* Array of Funds            */        
+         4 Fill02  char (01) ,        
+         4 F_Name  Char      (3)    ,   /* Fund Name                 */        
+         4 Fill03  char (01) ,        
+         4 F_Per   PIC'(1)9V(2)9'  ,   /* Fund Percentage           */        
+         4 Fill04  char (01) ,        
+         4 In_Pur  PIC'(12)9V(3)9' ,   /* Initial Units Purchased   */        
+         4 Fill05  char (01) ,        
+         4 In_Sur  PIC'(12)9V(3)9' ,   /* Initial Units Surrendered */        
+         4 Fill06  char (01) ,        
+         4 Pr_Pur  PIC'(12)9V(3)9' ,   /* Premium Units Purchased   */        
+         4 Fill07  char (01) ,        
+         4 Pr_Sur  PIC'(12)9V(3)9' ,   /* Premium Units Surrendered */        
+       3 Prices    (10)             ,   /* Array of Funds            */        
+         4 Fill01  char (01) ,        
+         4 IN_BID_PRC    PIC'(3)9V(6)9'          ,        
+         4 Fill02  char (01) ,        
+         4 IN_OFFER_PRC  PIC'(3)9V(6)9'          ,        
+         4 Fill03  char (01) ,        
+         4 PR_BID_PRC    PIC'(3)9V(6)9'          ,        
+         4 Fill04  char (01) ,        
+         4 PR_OFFER_PRC  PIC'(3)9V(6)9'          ,        
+     2 F_TypePr    (5)              ,   /* Premiums By Fund Type     */        
+       3 Fill01  char (01) ,        
+       3 F_TYPE_PR       PIC'(9)9V(2)9' ,        
+       2 Fill100 char (01) ,        
+       2   SRA         PIC            '(3)9'            ,        
+ /* Selected Retirement Age */        
+       2 Fill101 char (01) ,        
+       2   TOT_V5_PTD_PRE97  PIC'(9)9V(2)9'          ,        
+ /* Total V5 SP Paid To Date Pre 1997             */        
+       2 Fill102 char (01) ,        
+       2   AGE_AT_1   PIC            '(3)9'               ,        
+ /* Age Attained Life 1 */        
+       2 Fill103 char (01) ,        
+       2   AGE_AT_2   PIC            '(3)9'               ,        
+ /* Age Attained Life 2 */        
+       2 Fill104 char (01) ,        
+       2   ADJ_AGE_1  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 1 */        
+       2 Fill105 char (01) ,        
+       2   ADJ_AGE_2  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 2 */        
+       2 Fill106 char (01) ,        
+       2   ILL_AGE_1  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 1 - Serious Illness */        
+       2 Fill107 char (01) ,        
+       2   ILL_AGE_2  PIC            '(3)9'               ,        
+ /* Adjusted Age Life 2 - Serious Illness */        
+       2 Fill108 char (01) ,        
+       2   AGE_NX_1   PIC            '(3)9'               ,        
+ /* Age Next Birthday Life 1 */        
+       2 Fill109 char (01) ,        
+       2   AGE_NX_2   PIC            '(3)9'               ,        
+ /* Age Next Birthday Life 2 */        
+       2 Fill110 char (01) ,        
+       2   ANB_ATE_1  PIC            '(3)9'               ,        
+ /* Age Next Birthday at Entry - Life 1 */        
+       2 Fill111 char (01) ,        
+       2   ANB_ATE_2  PIC            '(3)9'               ,        
+ /* Age Next Birthday at Entry - Life 2 */        
+       2 Fill112 char (01) ,        
+       2   DT_1ST_RP  PIC            '(8)9'               ,        
+ /* Date of First RP Payment */        
+       2 Fill113 char (01) ,        
+       2   CURR_DUR   PIC'(3)9'                  ,        
+ /* Duration in Months     */        
+       2 Fill114 char (01) ,        
+       2   CURT_DUR   PIC'(3)9'                  ,        
+ /* Duration in Years      */        
+       2 Fill115 char (01) ,        
+       2   IX_BASE    CHAR           (  1)               ,        
+ /* Indexation Basis */        
+       2 Fill116 char (01) ,        
+       2   SU_CHARGE  PIC'(8)9V(3)9'                      ,        
+ /* Setup Charge calculated in UK08981, allocated in Uk08990 */        
+       2 Fill117 char (01) ,        
+       2   CAMP_CD    PIC            '(4)9'               ,        
+ /* Campaign Code */        
+       2 Fill118 char (01) ,        
+       2   DO1DSS     PIC            '(8)9'               ,        
+ /* Date of First DSS payment */        
+       2 Fill119 char (01) ,        
+       2   CONV_DATE  PIC            '(8)9'               ,        
+ /* Date of Initial Unit Conversion  */        
+       2 Fill120 char (01) ,        
+       2   AUTO_SW    CHAR           (  1)                ,        
+ /* PIS Indicator  - Derived by Normaliasation    */        
+       2 Fill121 char (01) ,        
+       2   SUS_DATE   PIC            '(8)9'               ,        
+ /* Date of Suspension */        
+       2 Fill122 char (01) ,        
+       2   DO1SP      PIC            '(8)9'               ,        
+ /* Date of First SP */        
+       2 Fill123 char (01) ,        
+       2   Wop_End_Dt PIC            '(8)9'               ,        
+ /* Date of WOP End */        
+       2 Fill124 char (01) ,        
+       2   Bonus_Date PIC            '(8)9'               ,        
+ /* Date of Last Bonus */        
+       2 Fill125 char (01) ,        
+       2   Loan_Amt   PIC'(9)9V(2)9'                      ,        
+ /* Outstanding Global Loan                       */        
+       2 Fill126 char (01) ,        
+       2   ALT_CHARGE PIC'(9)9V(2)9'                      ,        
+ /* Setup Charge calculated in UK08981, allocated in Uk08990 */        
+       2 Fill127 char (01) ,        
+       2   Stamp_duty PIC'(9)9V(2)9'                      ,        
+ /* Stamp Duty calculated in UK08981, allocated in Uk08990 */        
+       2 Fill128 char (01) ,        
+       2   STRA        PIC            '(3)9'              ,        
+ /* State Retirement Age */        
+       2 Fill129 char (01) ,        
+       2   PRDOM       PIC            '(8)9'              ,        
+ /* Protected Rights DOM */        
+       2 Fill130 char (01) ,        
+       2   Pol_Fee     PIC'(9)9V(2)9'                     ,        
+ /* Policy Fee                                    */        
+       2 Fill131 char (01) ,        
+       2   Cash_Factor PIC'(1)9V(6)9'               ,        
+ /* Cashing Factor                                */        
+       2 Fill132 char (01) ,        
+       2   SAD_Fee     PIC'(6)9V(5)9'               ,        
+ /* Sum Assured Death Fee                         */        
+       2 Fill133 char (01) ,        
+       2   TOT_Ptd     PIC'(9)9V(2)9'               ,        
+ /* Total Regular Premiums Paid To Date           */        
+       2 Fill134 char (01) ,        
+       2   Mths_Paid   PIC '(4)9'                        ,        
+ /* Number of Months Paid                         */        
+       2 Fill135 char (01) ,        
+       2   TOT_V5_PTD  PIC'(9)9V(2)9'               ,        
+ /* Total V5 SP Paid To Date                      */        
+       2 Fill136 char (01) ,        
+       2   TOT_SP_PTD  PIC'(9)9V(2)9'               ,        
+ /* Total SP Paid To Date                         */        
+       2 Fill137 char (01) ,        
+       2   CURTATE_PROB_1 PIC'(1)9V(6)9'                ,        
+ /* Cumulative Probability Life 1                 */        
+       2 Fill138 char (01) ,        
+       2   CURTATE_PROB_2 PIC'(1)9V(6)9'                ,        
+ /* Cumulative Probability Life 2                 */        
+       2 Fill139 char (01) ,        
+       2   PTD_CODE       PIC'(1)9V(2)9'                ,        
+ /* Permanent Total Disability  Code (0,1,2,3)    */        
+       2 Fill140 char (01) ,        
+       2 Occ_Load_1    Pic '999'   ,        
+ /* Occupational Loading 1     */        
+       2 Fill141 char (01) ,        
+       2 Occ_Load_2    Pic '999'   ,        
+ /* Occupational Loading 2     */        
+       2 Fill142 char (01) ,        
+       2   DIS_Fee     PIC'(9)9V(2)9'               ,        
+ /* Sum Assured Death Fee                         */        
+ /*---------------------------------------------------------------*/        
+ /* Fields specific to TQL and Older products                     */        
+ /*---------------------------------------------------------------*/        
+       2 Fill143 char (01) ,        
+       2   Pol_Fee_Vers  PIC '9'                         ,        
+ /* Policy Fee Version Applies (TQL)              */        
+       2 Fill144 char (01) ,        
+       2   Fund_Fact_V1  PIC'(9)9V(2)9'                 ,        
+ /* Fund Factor Version 1 (TQL)                   */        
+       2 Fill145 char (01) ,        
+       2   Fund_Fact_V2  PIC'(9)9V(2)9'                 ,        
+ /* Fund Factor Version 2 (TQL)                   */        
+       2 Fill146 char (01) ,        
+       2   Fund_Fact_V3  PIC'(9)9V(2)9'                 ,        
+ /* Fund Factor Version 3 (TQL)                   */        
+       2 Fill147 char (01) ,        
+       2   Tot_Ptd_V1  PIC'(9)9V(2)9'               ,        
+ /* Total Regular Premiums Paid To Date (TQL)     */        
+       2 Fill148 char (01) ,        
+       2   Tot_Ptd_V2  PIC'(9)9V(2)9'               ,        
+ /* Total Regular Premiums Paid To Date (TQL)     */        
+       2 Fill149 char (01) ,        
+       2   Tot_Ptd_V3  PIC'(9)9V(2)9'               ,        
+ /* Total Regular Premiums Paid To Date (TQL)     */        
+       2 Fill150 char (01) ,        
+       2   Life_1_or_2_V1          Char (1)                  ,        
+ /* Life 1 or 2 (TQL)                             */        
+       2 Fill151 char (01) ,        
+       2   Life_1_or_2_V2          Char (1)                  ,        
+ /* Life 1 or 2 (TQL)                             */        
+       2 Fill152 char (01) ,        
+       2   Life_1_or_2_V3          Char (1)                  ,        
+ /* Life 1 or 2 (TQL)                             */        
+       2 Fill153 char (01) ,        
+       2   MED_FAC_1_V1  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 (TQL) */        
+       2 Fill154 char (01) ,        
+       2   MED_FAC_1_V2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 (TQL) */        
+       2 Fill155 char (01) ,        
+       2   MED_FAC_1_V3  PIC            '(4)9'               ,        
+ /* Medical Loading Life 1 (TQL) */        
+       2 Fill156 char (01) ,        
+       2   MED_FAC_2_V1  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 (TQL) */        
+       2 Fill157 char (01) ,        
+       2   MED_FAC_2_V2  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 (TQL) */        
+       2 Fill158 char (01) ,        
+       2   MED_FAC_2_V3  PIC            '(4)9'               ,        
+ /* Medical Loading Life 2 (TQL) */        
+       2 Fill159 char (01) ,        
+       2   PRM_FAC_1_V1  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 (TQL) */        
+       2 Fill160 char (01) ,        
+       2   PRM_FAC_1_V2  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 (TQL) */        
+       2 Fill161 char (01) ,        
+       2   PRM_FAC_1_V3  PIC            '(4)9'              ,        
+ /* Extra Premium Factor 1 (TQL) */        
+       2 Fill162 char (01) ,        
+       2   PRM_FAC_2_V1  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 (TQL) */        
+       2 Fill163 char (01) ,        
+       2   PRM_FAC_2_V2  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 (TQL) */        
+       2 Fill164 char (01) ,        
+       2   PRM_FAC_2_V3  PIC            '(4)9'               ,        
+ /* Extra Premium Factor 2 (TQL) */        
+       2 Fill165 char (01) ,        
+       2   PTD_V1                     Pic  '9'               ,        
+ /* Permanent Total Disability Indicator (TQL)      */        
+       2 Fill166 char (01) ,        
+       2   PTD_V3                     Pic  '9'               ,        
+ /* Permanent Total Disability Indicator (TQL)      */        
+       2 Fill167 char (01) ,        
+       2   WOP_APP_V1     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code (TQL) */        
+       2 Fill168 char (01) ,        
+       2   WOP_APP_V3     CHAR           (  1)              ,        
+ /* Waiver of Premium Applies Code (TQL) */        
+       2 Fill169 char (01) ,        
+       2   Auto_Inc_Amt   PIC'(9)9V(2)9'           ,        
+ /* Automatic Income Amount */        
+       2 Fill170 char (01) ,        
+       2   Auto_Inc_Per   PIC'(3)9V(2)9'          ,        
+ /* Automatic Income Percentage */        
+       2 Fill171 char (01) ,        
+       2   Cash_Freq      Pic '99' ,        
+ /* Automatic Income Cashing Frequency */        
+       2 Fill172 char (01) ,        
+       2   Orig_Table     Pic '999' ,        
+ /* Original Table */        
+       2 Fill173 char (01) ,        
+       2   Life_1_or_2    Char (1)  ,        
+ /* Life 1 or 2 */        
+       2 Fill174 char (01) ,        
+       2   Claim_Pend     CHAR           (  1)              ,        
+ /* Claim Pending                        */        
+       2 Fill175 char (01) ,        
+       2   Highest_AP PIC'(11)9V(2)9'                    ,        
+ /* Highest Annual Premium */        
+       2 Fill176 char (01) ,        
+       2   STATUS_V1  CHAR           (  3)                ,        
+ /* Status TQL Version 1   */        
+       2 Fill177 char (01) ,        
+       2   STATUS_V2  CHAR           (  3)                ,        
+ /* Status TQL Version 2   */        
+       2 Fill178 char (01) ,        
+       2   STATUS_V3  CHAR           (  3)                ,        
+ /* Status TQL Version 3   */        
+       2 Fill179 char (01) ,        
+       2   Orig_SP_Amt PIC'(9)9V(2)9'               ,        
+ /* Total SP Paid To Date                         */        
+       2 Fill180 char (01) ,        
+       2   Extra_Prm   PIC'(9)9V(2)9'               ,        
+ /* Extra Premium                                 */        
+       2 Fill181 char (01) ,        
+       2   Prem_paid_V1   PIC'(9)9V(2)9'               ,        
+ /* Current Premium on Version 1                  */        
+       2 Fill182 char (01) ,        
+       2   Prem_paid_V2   PIC'(9)9V(2)9'               ,        
+ /* Current Premium on Version 2                  */        
+       2 Fill183 char (01) ,        
+       2   Prem_paid_V3   PIC'(9)9V(2)9'               ,        
+ /* Current Premium on Version 3                  */        
+       2 Fill184 char (01) ,        
+       2   SV_V1   PIC'(9)9V(2)9'               ,        
+ /* Surrender Value on Version 1                  */        
+       2 Fill185 char (01) ,        
+       2   SV_V2   PIC'(9)9V(2)9'               ,        
+ /* Surrender Value on Version 2                  */        
+       2 Fill186 char (01) ,        
+       2   SV_V3   PIC'(9)9V(2)9'               ,        
+ /* Surrender Value on Version 3                  */        
+       2 Fill187 char (01) ,        
+       2   CC_V1   PIC'(9)9V(2)9'               ,        
+ /* Life Charge on Version 1                      */        
+       2 Fill188 char (01) ,        
+       2   CC_V2   PIC'(9)9V(2)9'               ,        
+ /* PTD_Charge on Version 2                       */        
+       2 Fill189 char (01) ,        
+       2   CC_V3   PIC'(9)9V(2)9'               ,        
+ /* SI_Charge on Version 3                        */        
+       2 Fill190 char (01) ,        
+       2   SUS_FLAG    Char (1)                      ,        
+ /* Suspended Flag - Y if ever suspended          */        
+       2 Fill191 char (01) ,        
+       2   IX_OPT_0_TO_6       Char (1)              ,        
+ /* Y if Index Option changed from 0 to 6         */        
+       2 Fill192 char (01) ,        
+       2   TOT_P_ENC  PIC'(9)9V(2)9'               ,        
+ /* Total Amount of Partial Encashments           */        
+       2 Fill193 char (01) ,        
+       2   PREV_STATUS     CHAR  (3)                 ,        
+ /* Status of policy in previous month      K05563*/        
+       2 Fill194 char (01) ,        
+       2   PENSIM_EYE      CHAR  (6)                 ,        
+ /* 'PENSIM' store for UK08978 processing   K06504*/        
+       2 Fill195 char (01) ,        
+ /* fields in Uk08990 added by RMJ 30/07/2007...  */        
+       2 MORT_AGE_ADJ_RULE1  CHAR  (5)              ,        
+       2 Fill196 char (01) ,        
+       2 MORT_AGE_ADJ_RULE2  CHAR  (5)              ,        
+       2 Fill197 char (01) ,        
+       2 MORT_AGE_ADJ_VAL1   PIC'999-'              ,        
+       2 Fill198 char (01) ,        
+       2 MORT_AGE_ADJ_VAL2   PIC'999-'              ,        
+       2 Fill199 char (01) ,        
+       2 MORT_RATE_RULE1     CHAR  (5)              ,        
+       2 Fill200 char (01) ,        
+       2 MORT_RATE_RULE2     CHAR  (5)              ,        
+       2 Fill201 char (01) ,        
+       2 MORT_RATE_RULE_VAL1 CHAR (2)               ,        
+       2 Fill202 char (01) ,        
+       2 MORT_RATE_RULE_VAL2 CHAR (2)               ,        
+       2 Fill203 char (01) ,        
+       2 MORT_RATE_VAL1      PIC'9V(6)9'            ,        
+       2 Fill204 char (01) ,        
+       2 MORT_RATE_VAL2      PIC'9V(6)9'            ,        
+       2 Fill205 char (01) ,        
+       2 MORT_AGE_NEXT_BDAY1 PIC'999'               ,        
+       2 Fill206 char (01) ,        
+       2 MORT_AGE_NEXT_BDAY2 PIC'999'               ,        
+       2 Fill207 char (01) ,        
+       2 LC_SAR              PIC'(9)9V(4)9'         ,        
+       2 Fill208 char (01) ,        
+       2 MORTAB1             CHAR (8)               ,        
+       2 Fill209 char (01) ,        
+       2 MORTAB2             CHAR (8)               ,        
+       2 Fill210 char (01) ,        
+       2 UNINV_AMT           PIC'(9)9V(2)9-'        ,        
+       2 Fill211 char (01) ,        
+       2 POLVAL_TO_ZERO      CHAR  (1)              ,        
+       2 Fill212 char (01) ,        
+       2 REGVAL_TO_ZERO      CHAR  (1)              ,        
+       2 Fill213 char (01) ,        
+       2 EXPENSE_DEDUC       PIC'(8)9V(5)9-'        ,        
+       2 Fill214 char (01) ,        
+       2 ABAR_VAL            PIC'(6)9V(7)9-'        ,        
+ /* disability & crisis stuff from UK09645...     RMJ   */        
+       2   Fill215 char (01) ,        
+       2   DISAB_ADJ1            PIC'(8)9V(7)9-'        ,        
+       2   Fill216 char (01) ,        
+       2   DISAB_ADJ2            PIC'(8)9V(7)9-'        ,        
+       2   Fill217 char (01) ,        
+       2   DISAB_CHARGE          PIC'(8)9V(7)9-'        ,        
+       2   Fill218 char (01) ,        
+       2   DISAB_DCADJ           CHAR(2),        
+       2   Fill219 char (01) ,        
+       2   DISAB_DCDEF           CHAR(2),        
+       2   Fill220 char (01) ,        
+       2   DISAB_DCESC           CHAR(2),        
+       2   Fill221 char (01) ,        
+       2   DISAB_DCFAC           CHAR(2),        
+       2   Fill222 char (01) ,        
+       2   DISAB_DCFOR           CHAR(2),        
+       2   Fill223 char (01) ,        
+       2   DISAB_DCOCC           CHAR(2),        
+       2   Fill224 char (01) ,        
+       2   DISAB_DCRED           CHAR(2),        
+       2   Fill225 char (01) ,        
+       2   DISAB_DCSEX           CHAR(2),        
+       2   Fill226 char (01) ,        
+   /*  2   DISAB_DCSEX           CHAR(2), */        
+       2   Fill227 char (01) ,        
+       2   DISAB_DCSMK           CHAR(2),        
+       2   Fill228 char (01) ,        
+       2   DISAB_DCTAB           CHAR(2),        
+       2   Fill229 char (01) ,        
+       2   DISAB_DCTRM           CHAR(2),        
+       2   Fill230 char (01) ,        
+       2   DISAB_DEF_FAC1        PIC'(10)9V(5)9-'        ,        
+       2   Fill231 char (01) ,        
+       2   DISAB_DEF_FAC2        PIC'(10)9V(5)9-'        ,        
+       2   Fill232 char (01) ,        
+       2   DISAB_DEF_RATE1       PIC'(8)9V(7)9-'        ,        
+       2   Fill233 char (01) ,        
+       2   DISAB_DEF_RATE2       PIC'(8)9V(7)9-'        ,        
+       2   Fill234 char (01) ,        
+       2   DISAB_END_FAC1        PIC'(10)9V(5)9-'        ,        
+       2   Fill235 char (01) ,        
+       2   DISAB_END_FAC2        PIC'(10)9V(5)9-'        ,        
+       2   Fill236 char (01) ,        
+       2   DISAB_ESC_LOAD        PIC'(1)9V(6)9-'        ,        
+       2   Fill237 char (01) ,        
+       2   DISAB_ESC_LOAD1       PIC'(8)9V(7)9-'        ,        
+       2   Fill238 char (01) ,        
+       2   DISAB_ESC_LOAD2       PIC'(8)9V(7)9-'        ,        
+       2   Fill239 char (01) ,        
+       2   DISAB_ESC_740         PIC'(8)9V(7)9-'        ,        
+       2   Fill240 char (01) ,        
+       2   DISAB_ESCAL_FAC1      PIC'(10)9V(5)9-'        ,        
+       2   Fill241 char (01) ,        
+       2   DISAB_ESCAL_FAC2      PIC'(10)9V(5)9-'        ,        
+       2   Fill242 char (01) ,        
+       2   DISAB_FACTOR1         PIC'(8)9V(7)9-'        ,        
+       2   Fill243 char (01) ,        
+       2   DISAB_FACTOR2         PIC'(8)9V(7)9-'        ,        
+       2   Fill244 char (01) ,        
+       2   DISAB_INC1            PIC'(8)9V(7)9-'        ,        
+       2   Fill245 char (01) ,        
+       2   DISAB_INC2            PIC'(8)9V(7)9-'        ,        
+       2   Fill246 char (01) ,        
+       2   DISAB_L1_DEF653A      PIC'(8)9V(7)9-'        ,        
+       2   Fill247 char (01) ,        
+       2   DISAB_L1_DEF653B      PIC'(8)9V(7)9-'        ,        
+       2   Fill248 char (01) ,        
+       2   DISAB_L1_DEF653C      PIC'(8)9V(7)9-'        ,        
+       2   Fill249 char (01) ,        
+       2   DISAB_L1_DEF653D      PIC'(8)9V(7)9-'        ,        
+       2   Fill250 char (01) ,        
+       2   DISAB_L1_DEF653E      PIC'(8)9V(7)9-'        ,        
+       2   Fill251 char (01) ,        
+       2   DISAB_L1_DEF653F      PIC'(8)9V(7)9-'        ,        
+       2   Fill252 char (01) ,        
+       2   DISAB_L1_DEF653G      PIC'(8)9V(7)9-'        ,        
+       2   Fill253 char (01) ,        
+       2   DISAB_L1_DEF653H      PIC'(8)9V(7)9-'        ,        
+       2   Fill254 char (01) ,        
+       2   DISAB_L1_DEF653I      PIC'(8)9V(7)9-'        ,        
+       2   Fill255 char (01) ,        
+       2   DISAB_L1_DEF653J      PIC'(8)9V(7)9-'        ,        
+       2   Fill256 char (01) ,        
+       2   DISAB_L1_DEF653K      PIC'(8)9V(7)9-'        ,        
+       2   Fill257 char (01) ,        
+       2   DISAB_L1_DEF653L      PIC'(8)9V(7)9-'        ,        
+       2   Fill258 char (01) ,        
+       2   DISAB_L1_D11_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill259 char (01) ,        
+       2   DISAB_L1_D12_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill260 char (01) ,        
+       2   DISAB_L1_D13_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill261 char (01) ,        
+       2   DISAB_L1_D14_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill262 char (01) ,        
+       2   DISAB_L1_D19_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill263 char (01) ,        
+       2   DISAB_L1_D20_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill264 char (01) ,        
+       2   DISAB_L1_D4_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill265 char (01) ,        
+       2   DISAB_L1_D5_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill266 char (01) ,        
+       2   DISAB_L1_D7_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill267 char (01) ,        
+       2   DISAB_L1_RED653A      PIC'(8)9V(7)9-'        ,        
+       2   Fill268 char (01) ,        
+       2   DISAB_L1_RED653B      PIC'(8)9V(7)9-'        ,        
+       2   Fill269 char (01) ,        
+       2   DISAB_L1_RED653C      PIC'(8)9V(7)9-'        ,        
+       2   Fill270 char (01) ,        
+       2   DISAB_L1_S1_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill271 char (01) ,        
+       2   DISAB_L1_S2_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill272 char (01) ,        
+       2   DISAB_L1_S3_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill273 char (01) ,        
+       2   DISAB_L1_S3_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill274 char (01) ,        
+       2   DISAB_L1_S4_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill275 char (01) ,        
+       2   DISAB_L1_S4_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill276 char (01) ,        
+       2   DISAB_L1_S5_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill277 char (01) ,        
+       2   DISAB_L2_DEF653A      PIC'(8)9V(7)9-'        ,        
+       2   Fill278 char (01) ,        
+       2   DISAB_L2_DEF653B      PIC'(8)9V(7)9-'        ,        
+       2   Fill279 char (01) ,        
+       2   DISAB_L2_DEF653C      PIC'(8)9V(7)9-'        ,        
+       2   Fill280 char (01) ,        
+       2   DISAB_L2_DEF653D      PIC'(8)9V(7)9-'        ,        
+       2   Fill281 char (01) ,        
+       2   DISAB_L2_DEF653E      PIC'(8)9V(7)9-'        ,        
+       2   Fill282 char (01) ,        
+       2   DISAB_L2_DEF653F      PIC'(8)9V(7)9-'        ,        
+       2   Fill283 char (01) ,        
+       2   DISAB_L2_DEF653G      PIC'(8)9V(7)9-'        ,        
+       2   Fill284 char (01) ,        
+       2   DISAB_L2_DEF653H      PIC'(8)9V(7)9-'        ,        
+       2   Fill285 char (01) ,        
+       2   DISAB_L2_DEF653I      PIC'(8)9V(7)9-'        ,        
+       2   Fill286 char (01) ,        
+       2   DISAB_L2_DEF653J      PIC'(8)9V(7)9-'        ,        
+       2   Fill287 char (01) ,        
+       2   DISAB_L2_DEF653K      PIC'(8)9V(7)9-'        ,        
+       2   Fill288 char (01) ,        
+       2   DISAB_L2_DEF653L      PIC'(8)9V(7)9-'        ,        
+       2   Fill289 char (01) ,        
+       2   DISAB_L2_D11_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill290 char (01) ,        
+       2   DISAB_L2_D12_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill291 char (01) ,        
+       2   DISAB_L2_D14_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill292 char (01) ,        
+       2   DISAB_L2_D19_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill293 char (01) ,        
+       2   DISAB_L2_D20_RATE     PIC'(8)9V(7)9-'        ,        
+       2   Fill294 char (01) ,        
+       2   DISAB_L2_D4_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill295 char (01) ,        
+       2   DISAB_L2_D5_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill296 char (01) ,        
+       2   DISAB_L2_D7_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill297 char (01) ,        
+       2   DISAB_L2_RED653A      PIC'(8)9V(7)9-'        ,        
+       2   Fill298 char (01) ,        
+       2   DISAB_L2_RED653B      PIC'(8)9V(7)9-'        ,        
+       2   Fill299 char (01) ,        
+       2   DISAB_L2_RED653C      PIC'(8)9V(7)9-'        ,        
+       2   Fill300 char (01) ,        
+       2   DISAB_L2_S3_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill301 char (01) ,        
+       2   DISAB_L2_S3_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill302 char (01) ,        
+       2   DISAB_L2_S4_RATE      PIC'(8)9V(7)9-'        ,        
+       2   Fill303 char (01) ,        
+       2   DISAB_L2_S4_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill304 char (01) ,        
+       2   DISAB_L2_S5_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill305 char (01) ,        
+       2   DISAB_L2_S6_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill306 char (01) ,        
+       2   DISAB_L2_S7_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill307 char (01) ,        
+       2   DISAB_L2_S8_RSLT      PIC'(8)9V(7)9-'        ,        
+       2   Fill308 char (01) ,        
+       2   DISAB_OCC_LOAD        PIC'(1)9V(6)9-'        ,        
+       2   Fill309 char (01) ,        
+       2   DISAB_OCC_LOAD1       PIC'(8)9V(7)9-'        ,        
+       2   Fill310 char (01) ,        
+       2   DISAB_OCC_LOAD2       PIC'(8)9V(7)9-'        ,        
+       2   Fill311 char (01) ,        
+       2   DISAB_OCC_740         PIC'(8)9V(7)9-'        ,        
+       2   Fill312 char (01) ,        
+       2   DISAB_RATE            PIC'(8)9V(7)9-'        ,        
+       2   Fill313 char (01) ,        
+       2   DISAB_RATE_740        PIC'(8)9V(7)9-'        ,        
+       2   Fill314 char (01) ,        
+       2   DISAB_RATE1           PIC'(10)9V(5)9-'        ,        
+       2   Fill315 char (01) ,        
+       2   DISAB_RATE2           PIC'(10)9V(5)9-'        ,        
+       2   Fill316 char (01) ,        
+       2   DISAB_RED_LOAD1       PIC'(8)9V(7)9-'        ,        
+       2   Fill317 char (01) ,        
+       2   DISAB_RED_LOAD2       PIC'(8)9V(7)9-'        ,        
+       2   Fill318 char (01) ,        
+       2   DISAB_SEX_LOAD        PIC'(1)9V(6)9-'        ,        
+       2   Fill319 char (01) ,        
+       2   DISAB_SEX_LOAD1       PIC'(8)9V(7)9-'        ,        
+       2   Fill320 char (01) ,        
+       2   DISAB_SEX_LOAD2       PIC'(8)9V(7)9-'        ,        
+       2   Fill321 char (01) ,        
+       2   DISAB_SMK_FAC1        PIC'(8)9V(7)9-'        ,        
+       2   Fill322 char (01) ,        
+       2   DISAB_SMK_FAC2        PIC'(8)9V(7)9-'        ,        
+       2   Fill323 char (01) ,        
+       2   DISAB_S6_RSLT         PIC'(8)9V(7)9-'        ,        
+       2   Fill324 char (01) ,        
+       2   DISAB_TERM_LOAD1      PIC'(8)9V(7)9-'        ,        
+       2   Fill325 char (01) ,        
+       2   DISAB_TERM_LOAD2      PIC'(8)9V(7)9-'        ,        
+       2   Fill326 char (01) ,        
+       2   DISAB_DCSAR         CHAR(2),        
+       2   Fill327 char (01) ,        
+       2   DISAB_SAR1          pic '(9)9V(4)9-',        
+       2   Fill328 char (01) ,        
+       2   DISAB_SAR2          pic '(9)9V(4)9-',        
+       2   Fill329 char (01) ,        
+       2   CC_CCFOR         CHAR(2),        
+       2   Fill330 char (01) ,        
+       2   CC_CCEXT         CHAR(2),        
+       2   Fill331 char (01) ,        
+       2   CC_CCRAT         CHAR(2),        
+       2   Fill332 char (01) ,        
+       2   CC_S1_RATE      pic '(8)9V(7)9-',        
+       2   Fill333 char (01) ,        
+       2   CC_S2_RATE      pic '(8)9V(7)9-',        
+       2   Fill334 char (01) ,        
+       2   CC_S3_RATE      pic '(8)9V(7)9-',        
+       2   Fill335 char (01) ,        
+       2   CC_S4_RATE      pic '(8)9V(7)9-',        
+       2   Fill336 char (01) ,        
+       2   CC_S5_RATE      pic '(8)9V(7)9-',        
+       2   Fill337 char (01) ,        
+       2   CC_S6_RATE      pic '(8)9V(7)9-',        
+       2   Fill338 char (01) ,        
+       2   CC_S7_RATE      pic '(8)9V(7)9-',        
+       2   Fill339 char (01) ,        
+       2   CC_S8_RATE      pic '(8)9V(7)9-',        
+       2   Fill340 char (01) ,        
+  /*   2   CC_Charge       pic '(9)9V(6)9-', */        
+       2   Fill341 char (01) ,        
+       2   CC_EXTRA1       pic '(3)9-',        
+       2   Fill342 char (01) ,        
+       2   CC_EXTRA2       pic '(3)9-',        
+       2   Fill343 char (01) ,        
+       2   CC_RATE1        pic '(8)9V(7)9-',        
+       2   Fill344 char (01) ,        
+       2   CC_RATE2        pic '(8)9V(7)9-',        
+       2   Fill345 char (01) ,        
+       2   CC_ANB1         pic '(15)9-',        
+       2   Fill346 char (01) ,        
+       2   CC_sex1         pic '(15)9-',        
+       2   Fill347 char (01) ,        
+       2   CC_smk1         pic '(15)9-',        
+       2   Fill348 char (01) ,        
+       2   CC_ANB2         pic '(15)9-',        
+       2   Fill349 char (01) ,        
+       2   CC_sex2         pic '(15)9-',        
+       2   Fill350 char (01) ,        
+       2   CC_smk2         pic '(15)9-',        
+       2   Fill351 char (01) ,        
+ /* ...disability & crisis stuff from UK09645     RMJ   */        
+ /* JLSD stuff from UK08990...                 RMJ   */        
+       2   JLSD_dur_mths          pic '(15)9',        
+       2   Fill352 char (01) ,        
+       2   JLSD_LCMR1             CHAR(2),        
+       2   Fill353 char (01) ,        
+       2   JLSD_last_ann_dtx      Pic '(8)9',        
+       2   Fill354 char (01) ,        
+       2   JLSD_last_ann_pqx      pic '(1)9V(8)9',        
+       2   Fill355 char (01) ,        
+       2   JLSD_last_ann_facx     pic '(8)9V(7)9',        
+       2   Fill356 char (01) ,        
+       2   JLSD_LCMR2             CHAR(2),        
+       2   Fill357 char (01) ,        
+       2   JLSD_last_ann_dty      Pic '(8)9',        
+       2   Fill358 char (01) ,        
+       2   JLSD_last_ann_pqy      pic '(1)9V(8)9' ,        
+       2   Fill359 char (01) ,        
+       2   JLSD_last_ann_facy     pic '(8)9V(7)9' ,        
+       2   Fill360 char (01) ,        
+       2   JLSD_this_ann_dtx      Pic '(8)9',        
+       2   Fill361 char (01) ,        
+       2   JLSD_this_ann_qx       pic '(1)9V(8)9' ,        
+       2   Fill362 char (01) ,        
+       2   JLSD_this_ann_facx     pic '(8)9V(7)9' ,        
+       2   Fill363 char (01) ,        
+       2   JLSD_this_ann_dty      Pic '(8)9',        
+       2   Fill364 char (01) ,        
+       2   JLSD_this_ann_qy       pic '(1)9V(8)9' ,        
+       2   Fill365 char (01) ,        
+       2   JLSD_this_ann_facy     pic '(8)9V(7)9' ,        
+       2   Fill366 char (01) ,        
+       2   JLSD_nmths             pic '(3)9',        
+       2   Fill367 char (01) ,        
+       2   JLSD_prev_anb_dtx      Pic '(8)9',        
+       2   Fill368 char (01) ,        
+       2   JLSD_prev_anb_aqx      pic '(7)9V(8)9' ,        
+       2   Fill369 char (01) ,        
+       2   JLSD_prev_anb_facx     pic '(8)9V(7)9' ,        
+       2   Fill370 char (01) ,        
+       2   JLSD_prev_anb_dty      Pic '(8)9',        
+       2   Fill371 char (01) ,        
+       2   JLSD_prev_anb_aqy      pic '(7)9V(8)9' ,        
+       2   Fill372 char (01) ,        
+       2   JLSD_prev_anb_facy     pic '(8)9V(7)9',        
+       2   Fill373 char (01) ,        
+       2   JLSD_prev_anb_a1a      pic '(7)9V(8)9' ,        
+       2   Fill374 char (01) ,        
+       2   JLSD_prev_anb_fac1a    pic '(8)9V(7)9' ,        
+       2   Fill375 char (01) ,        
+       2   JLSD_prev_anb_a2a      pic '(7)9V(8)9' ,        
+       2   Fill376 char (01) ,        
+       2   JLSD_prev_anb_fac2a    pic '(8)9V(7)9' ,        
+       2   Fill377 char (01) ,        
+       2   JLSD_prev_anb_a1b      pic '(7)9V(8)9' ,        
+       2   Fill378 char (01) ,        
+       2   JLSD_prev_anb_fac1b    pic '(8)9V(7)9' ,        
+       2   Fill379 char (01) ,        
+       2   JLSD_prev_anb_a2b      pic '(7)9V(8)9' ,        
+       2   Fill380 char (01) ,        
+       2   JLSD_prev_anb_fac2b    pic '(8)9V(7)9' ,        
+       2   Fill381 char (01) ,        
+       2   JLSD_prev_anb_a1c      pic '(7)9V(8)9' ,        
+       2   Fill382 char (01) ,        
+       2   JLSD_prev_anb_fac1c    pic '(8)9V(7)9' ,        
+       2   Fill383 char (01) ,        
+       2   JLSD_prev_anb_a2c      pic '(7)9V(8)9' ,        
+       2   Fill384 char (01) ,        
+       2   JLSD_prev_anb_fac2c    pic '(8)9V(7)9' ,        
+       2   Fill385 char (01) ,        
+       2   JLSD_Curt_Prob_1a      pic '(2)9V(7)9',        
+       2   Fill386 char (01) ,        
+       2   JLSD_Curt_Prob_2a      pic '(2)9V(7)9',        
+       2   Fill387 char (01) ,        
+       2   JLSD_Ann_Rate1         pic '(1)9V(6)9',        
+       2   Fill388 char (01) ,        
+       2   JLSD_Ann_Rate2         pic '(1)9V(6)9',        
+       2   Fill389 char (01) ,        
+       2   JLSD_Curt_Prob_1b      pic '(2)9V(7)9',        
+       2   Fill390 char (01) ,        
+       2   JLSD_Curt_Prob_2b      pic '(2)9V(7)9',        
+       2   Fill391 char (01) ,        
+       2   JLSD_Curt_tpx          pic '(1)9V(8)9',        
+       2   Fill392 char (01) ,        
+       2   JLSD_Curt_tpy          pic '(1)9V(8)9',        
+       2   Fill393 char (01) ,        
+       2   JLSD_s1r3              pic '(4)9V(11)9',        
+       2   Fill394 char (01) ,        
+       2   JLSD_s1r4              pic '(4)9V(11)9',        
+       2   Fill395 char (01) ,        
+       2   JLSD_charge_rate       pic '(7)9V(8)9',        
+       2   Fill396 char (01) ,        
+       2   JLSD_life_charge       pic '(10)9V(5)9',        
+       2   Fill397 char (01) ,        
+       2   JLSD_curt_mort_pqx1g   pic '(1)9V(8)9' ,        
+       2   Fill398 char (01) ,        
+       2   JLSD_curt_mort_fac1g   pic '(8)9V(7)9' ,        
+       2   Fill399 char (01) ,        
+       2   JLSD_curt_mort_pqy2g   pic '(1)9V(8)9' ,        
+       2   Fill400 char (01) ,        
+       2   JLSD_curt_mort_fac2g   pic '(8)9V(7)9' ,        
+       2   Fill401 char (01) ,        
+       2   JLSD_curt_mort_qx1j    pic '(1)9V(8)9' ,        
+       2   Fill402 char (01) ,        
+       2   JLSD_curt_mort_fac1j   pic '(8)9V(7)9' ,        
+       2   Fill403 char (01) ,        
+       2   JLSD_curt_mort_qy2j    pic '(1)9V(8)9' ,        
+       2   Fill404 char (01) ,        
+       2   JLSD_curt_mort_fac2j   pic '(8)9V(7)9' ,        
+       2   Fill405 char (01) ,        
+       2   JLSD_curt_mort_pqx1h   pic '(1)9V(8)9' ,        
+       2   Fill406 char (01) ,        
+       2   JLSD_curt_mort_fac1h   pic '(8)9V(7)9' ,        
+       2   Fill407 char (01) ,        
+       2   JLSD_curt_mort_pqy2h   pic '(1)9V(8)9' ,        
+       2   Fill408 char (01) ,        
+       2   JLSD_curt_mort_fac2h   pic '(8)9V(7)9',        
+       2   Fill409 char (01) ,        
+       2   JLSD_curt_mort_qx1k    pic '(1)9V(8)9',        
+       2   Fill410 char (01) ,        
+       2   JLSD_curt_mort_fac1k   pic '(8)9V(7)9',        
+       2   Fill411 char (01) ,        
+       2   JLSD_curt_mort_qy2k    pic '(1)9V(8)9',        
+       2   Fill412 char (01) ,        
+       2   JLSD_curt_mort_fac2k   pic '(8)9V(7)9',        
+       2   Fill413 char (01) ,        
+ /* ...JLSD stuff from UK08990                 RMJ   */        
+         
+ %SKIP510:;        
+     2 Filler  char (997) ;        
+   /*2 Filler  char (785) */        
+   /*2 Filler  char (804)  */        
+   /*2 Filler  char (850)   */        
+   /*2 Filler  char (852)   */        
+   /*2 Filler  char (3578)   */        
+         
+END_PLC(FUK510M)

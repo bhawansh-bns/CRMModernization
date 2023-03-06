@@ -1,0 +1,159 @@
+BEGIN_PLC(WKFLNOTP)
+ /********************************************************************/        
+ /*  DECLARATIONS FOR NOTEPAD/WORKFLOW AREA - WKFLNOTP.              */        
+ /*  THIS LAYOUT IS GENERIC, WAS BASED ON THE 'MAT' RECORD AND HAS   */        
+ /*  BEEN DEFINED AS PART OF PROJECT LP000061 (AUTO CON) FOR THE     */        
+ /*  'SWT' WORKFLOW ITEM.                                            */        
+ /*  COMMA00 IS USED TO SEPERATE THE KEY FROM THE RECORD BODY.       */        
+ /********************************************************************/        
+         
+     DCL 1 NOTEPAD_REC,        
+           5 COMMA00                    CHAR (01),        
+           5 NP_CLIENT_NO               CHAR (09),        
+           5 COMMA01                    CHAR (01),        
+           5 NP_DOCTYPE                 CHAR (03),        
+           5 COMMA02                    CHAR (01),        
+           5 NP_SITE                    CHAR (08),        
+           5 COMMA03                    CHAR (01),        
+           5 NP_PRIORITY                CHAR (01),        
+           5 COMMA04                    CHAR (01),        
+           5 NP_POL_NO                  CHAR (11),        
+           5 COMMA05                    CHAR (01),        
+           5 NP_CLUSTER_COUNT           CHAR (01),        
+           5 COMMA06                    CHAR (01),        
+           5 NP_TITLE                   CHAR (06),        
+           5 COMMA07                    CHAR (01),        
+           5 NP_FORENAME                CHAR (30),        
+           5 COMMA08                    CHAR (01),        
+           5 NP_SURNAME                 CHAR (30),        
+           5 COMMA09                    CHAR (01),        
+           5 NP_DOCORIGIN               CHAR (07),        
+           5 COMMA10                    CHAR (01),        
+           5 NP_SCANDATE                CHAR (10),        
+           5 COMMA11                    CHAR (01),        
+           5 NP_SCANTIME                CHAR (08),        
+           5 COMMA12                    CHAR (01),        
+           5 NP_USERID                  CHAR (07),        
+           5 COMMA13                    CHAR (01),        
+           5 NP_MESSAGETYPE             CHAR (01),        
+           5 COMMA14                    CHAR (01),        
+           5 NP_USERIDINDEX             CHAR (07),        
+           5 COMMA15                    CHAR (01),        
+           5 NP_NOTEWORKGROUP           CHAR (09),        
+           5 COMMA16                    CHAR (01),        
+           5 NP_NOTESITE                CHAR (09),        
+           5 COMMA17                    CHAR (01),        
+           5 NP_MESSAGE                 CHAR (175),        
+           5 COMMA18                    CHAR (01),        
+           5 NP_CALLBACK                CHAR (02),        
+           5 COMMA19                    CHAR (01),        
+         /*5 NP_RESPONSEDATE            CHAR (10), */        
+           5 COMMA20                    CHAR (01),        
+         /*5 NP_RESPONSETIME            CHAR (20), */        
+           5 COMMA21                    CHAR (01),        
+         /*5 NP_CALLERNAME              CHAR (50), */        
+           5 COMMA22                    CHAR (01),        
+         /*5 NP_CALLERTYPE              CHAR (20), */        
+           5 COMMA23                    CHAR (01),        
+           5 NP_HOME_TEL_NO             CHAR (14),        
+           5 COMMA24                    CHAR (01),        
+         /*5 NP_OFFICE                  CHAR (20), */        
+           5 COMMA25                    CHAR (01),        
+         /*5 NP_DPDOB                   PIC '9',   */        
+           5 COMMA26                    CHAR (01),        
+         /*5 NP_DPDOBDATE               CHAR (08), */        
+           5 COMMA27                    CHAR (01),        
+         /*5 NP_DPPOSTCODE              PIC '9',   */        
+           5 COMMA28                    CHAR (01),        
+         /*5 NP_DPNAMEADDRESS           PIC '9',   */        
+           5 COMMA29                    CHAR (01),        
+         /*5 NP_DPAUTHORITY             PIC '9',   */        
+           5 COMMA30                    CHAR (01),        
+           5 NP_ADHOC                   CHAR (01),        
+           5 COMMA31                    CHAR (01),        
+           5 NP_AUTHORISE               CHAR (01),        
+           5 COMMA32                    CHAR (01),        
+         /*5 NP_LASTWORKGROUP           CHAR (40), */        
+           5 COMMA33                    CHAR (01),        
+         /*5 NP_LASTSITE                CHAR (15), */        
+           5 COMMA34                    CHAR (01),        
+           5 NP_MULTIITEM               CHAR (01),        
+           5 COMMA35                    CHAR (01),        
+         /*5 NP_MULTIPLEDOCTYPES        CHAR (255), */        
+           5 COMMA36                    CHAR (01),        
+         /*5 NP_MULTIPLEPOLICYNOS       CHAR (255), */        
+           5 COMMA37                    CHAR (01),        
+         /*5 NP_ORIGINALREQUESTOR       CHAR (10),  */        
+           5 COMMA38                    CHAR (01),        
+           5 NP_PEND                    CHAR (01),        
+           5 COMMA39                    CHAR (01),        
+           5 NP_PENDDATE                CHAR (10),        
+           5 COMMA40                    CHAR (01),        
+           5 NP_PENDDATEOUT             CHAR (10),        
+           5 COMMA41                    CHAR (01),        
+           5 NP_PENDCODE                CHAR (01),        
+           5 COMMA42                    CHAR (01),        
+           5 NP_PENDREASON              CHAR (16),        
+           5 COMMA43                    CHAR (01),        
+         /*5 NP_PENDDETAILS1            CHAR (50),  */        
+           5 COMMA44                    CHAR (01),        
+         /*5 NP_PENDDETAILS2            CHAR (50),  */        
+           5 COMMA45                    CHAR (01),        
+         /*5 NP_PENDDETAILS3            CHAR (50),  */        
+           5 COMMA46                    CHAR (01),        
+           5 NP_QORIGIN                 CHAR (12),        
+           5 COMMA47                    CHAR (01),        
+           5 NP_RECLASSIFY              CHAR (01),        
+           5 COMMA48                    CHAR (01),        
+           5 NP_ROLE                    CHAR (13),        
+           5 COMMA49                    CHAR (01),        
+           5 NP_ROUTEDATE               CHAR (10),        
+           5 COMMA50                    CHAR (01),        
+           5 NP_ROUTEDBY                CHAR (07),        
+           5 COMMA51                    CHAR (01),        
+           5 NP_ROUTETIME               CHAR (08),        
+           5 COMMA52                    CHAR (01),        
+         /*5 NP_ROUTECODE               CHAR (03),  */        
+           5 COMMA52A                   CHAR (01),        
+         /*5 NP_ROUTINGDETAILS1         CHAR (50),  */        
+           5 COMMA53                    CHAR (01),        
+         /*5 NP_ROUTINGDETAILS2         CHAR (50),  */        
+           5 COMMA54                    CHAR (01),        
+         /*5 NP_ROUTINGDETAILS3         CHAR (50),  */        
+           5 COMMA55                    CHAR (01),        
+         /*5 NP_ROUTINGREASON           CHAR (50),  */        
+           5 COMMA56                    CHAR (01),        
+           5 NP_TRAINING                CHAR (01),        
+           5 COMMA57                    CHAR (01),        
+           5 NP_WIP                     CHAR (01),        
+           5 COMMA58                    CHAR (01),        
+           5 NP_RETENTION               CHAR (10),        
+           5 COMMA59                    CHAR (01),        
+           5 NP_SENDTOCLIENT            CHAR (01),        
+           5 COMMA60                    CHAR (01),        
+           5 NP_SENDTOADVISER           CHAR (01),        
+           5 COMMA61                    CHAR (01),        
+           5 NP_SENDTO3RDPARTY          CHAR (01),        
+           5 COMMA62                    CHAR (01),        
+           5 NP_SENDTOSOLICITOR         CHAR (01),        
+           5 COMMA63                    CHAR (01),        
+           5 NP_SENDTOBANK              CHAR (01),        
+           5 COMMA64                    CHAR (01),        
+         /*5 NP_THIRDPARTYADDRESS       CHAR (255), */        
+           5 COMMA65                    CHAR (01),        
+         /*5 NP_FAXNO                   CHAR (20),  */        
+           5 COMMA66                    CHAR (01),        
+         /*5 NP_INFOTOBESENT            CHAR (255), */        
+           5 COMMA67                    CHAR (01),        
+         /*5 NP_NOTEPADID               BIN  (08),  */        
+           5 COMMA68                    CHAR (01),        
+         /*5 NP_DATEEXPECTED            CHAR (10),  */        
+           5 SPARE_FILL                 CHAR (24);        
+         
+     DCL 1 NOTEPAD_RECORD               DEF (NOTEPAD_REC),        
+           5 NP_I27350 (11)             CHAR (50);        
+         
+ /********************************************************************/        
+ /*                    END OF INCLUDE WKFLNOTP                       */        
+ /********************************************************************/        
+END_PLC(WKFLNOTP)

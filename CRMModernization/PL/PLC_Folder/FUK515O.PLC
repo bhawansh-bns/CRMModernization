@@ -1,0 +1,26 @@
+BEGIN_PLC(FUK515O)
+ /* Slice Transaction */        
+         
+         
+ DCL 1 WUK515O,        
+       2 Polno       PIC        '(7)9' ,  /*            Policy Number */        
+       2 FILL1       CHAR (01) ,        
+       2 Vers        PIC        '9' ,     /*            Version       */        
+       2 FILL2       CHAR (01) ,        
+       2 Effdt       PIC        '(8)9' ,  /*  Effective Date of Slice */        
+       2 FILL3       CHAR (01) ,        
+       2 Bill_Frq    PIC        '(2)9' ,  /*           Bill Frequency */        
+       2 FILL4       CHAR (01) ,        
+       2 New_Pr      PIC'(09)9V99',       /*      New Renewal Premium */        
+       2 FILL5       CHAR (01) ,        
+       2 Wop_Prop    PIC'9V999999',       /*           Wop Proportion */        
+       2 FILL6       CHAR (01) ,        
+       2 LCover_1    PIC'(09)9V99',       /* Death Sum Assured Life 1 */        
+       2 FILL7       CHAR (01) ,        
+       2 LCover_2    PIC'(09)9V99',       /* Death Sum Assured Life 2 */        
+       2 FILL8       CHAR (01) ,        
+       2 DAB_Cd      CHAR       (  1)  ,  /*                 DAB Code */        
+       2 FILL9       CHAR (01) ,        
+       2 Fill10      char (02) ;        
+         
+END_PLC(FUK515O)

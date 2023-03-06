@@ -1,0 +1,28 @@
+BEGIN_PLC(INVREC)
+         
+    /*****************************************************************/        
+    /* INVESTMENT RECORD(S) USE FOR UPDATE                           */        
+    /*****************************************************************/        
+         
+          DCL 1 INVU BASED(TWA.INV_UPD_PTR),        
+                3 C77011          PIC '(11)9',     /* POLICY NUMBER   */        
+                3 C36002          CHAR(2),         /* CURRENCY CODE   */        
+                3 FDU(32),                         /* FUND DETAILS    */        
+                  5 C46003        PIC '999',       /* INVEST FUND CODE*/        
+                  5 UPD_SW        CHAR (1),        /* 0 - NO UPDATE   */        
+                                                   /* 1 - REC UPDATED */        
+                                                   /* 2 - NEW RECORD  */        
+                  5 A09009        FIXED DEC (9,3), /* INVEST UNITS    */        
+                  5 R12005        FIXED DEC (5,2), /* INVEST SPREAD % */        
+                  5 O03709        FIXED DEC (9,3), /* SYST. WTHD. UNTS*/        
+                  5 O03603        FIXED DEC (3),   /* SYST. WTHD. %   */        
+                  5 O03509        FIXED DEC (9,2), /* SYST. WTHD. AMT */        
+                  5 C76101        CHAR (1),        /* POLICY TYPE IND.*/        
+                  5 A09109        FIXED DEC (9,3), /* PROT/HVTU  UNITS*/        
+                  5 A09209        FIXED DEC (9,3), /* EMPLOYEE UNITS  */        
+                  5 A09413        FIXED DEC (13,3),/* RESERVE UNITS   */        
+                  5 U02007C       FIXED DEC (7,3), /* CURRENT BID PRCE*/        
+                  5 U02007R       FIXED DEC (7,3), /* RETRO BID PRICE */        
+                  5 U03007C       FIXED DEC (7,3), /* CURR OFFER PRICE*/        
+                  5 U03007R       FIXED DEC (7,3); /* RETRO OFFER PRCE*/        
+END_PLC(INVREC)

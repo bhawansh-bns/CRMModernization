@@ -1,0 +1,42 @@
+BEGIN_PLC(CUK09008)
+         
+ /*-------------------------------------------------------------------*/        
+ /* CUK09008 : Declarations needed to call module UK09008.            */        
+ /*                                                                   */        
+ /* UK09008 returns the price of a fund at a specified effective date */        
+ /*                                                                   */        
+ /* Fill Cuk09008 as follows:                                         */        
+ /* F_Name        : Fund Name                                         */        
+ /* Curr          : Currency                                          */        
+ /* Effdt         : Date at which value is to be calculated           */        
+ /*                                                                   */        
+ /* The following data is returned:                                   */        
+ /*                                                                   */        
+ /* In_Bid_Prc    : Bid Price Of Initial Units                        */        
+ /* Pr_Bid_Prc    : Bid Price Of Premium Units                        */        
+ /* In_Offer_Prc  : Offer Price Of Initial Units                      */        
+ /* Pr_Offer_Prc  : Offer Price Of Premium Units                      */        
+ /*                                                                   */        
+ /* Note:                                                             */        
+ /* If an error situation occurs, UK09008 blanks the Err_Polno and    */        
+ /* Err_Vers fields. If an error is returned from this program, the   */        
+ /* calling program must fill these fields itself.                    */        
+ /*                                                                   */        
+ /* OLW 02/07/03 Add DSS Bid Price for ABS Projections                */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK09008 Ptr ;        
+ Dcl 1 CUK09008_NAME_TYPE ,        
+     3 F_Name           Char        (3)     , /* Fund Name            */        
+     3 Curr             Char        (1)     , /* Currency             */        
+     3 Effdt            Pic        '(8)9'   , /* Effective Date       */        
+     3 In_Bid_Prc       Fixed Dec   (9,6)   , /* Initial Bid Price    */        
+     3 Pr_Bid_Prc       Fixed Dec   (9,6)   , /* Premium Bid Price    */        
+     3 In_Offer_Prc     Fixed Dec   (9,6)   , /* Initial Offer Price  */        
+     3 Pr_Offer_Prc     Fixed Dec   (9,6)   , /* Premium Offer Price  */        
+     3 Price_Date       Pic        '(8)9'   , /* Date of Price        */        
+     3 Pr_Bid_Prc_DS    Fixed Dec   (9,6)   ; /* Premium Bid Price DSS*/        
+ /*-------------------------------------------------------------------*/        
+         
+         
+END_PLC(CUK09008)

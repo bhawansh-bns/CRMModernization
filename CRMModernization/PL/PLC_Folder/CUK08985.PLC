@@ -1,0 +1,18 @@
+BEGIN_PLC(CUK08985)
+ /*-------------------------------------------------------------------*/        
+ /* CUK08985 : Declarations needed to call module UK08985.            */        
+ /*                                                                   */        
+ /* UK08985 is called to apply Regular Premium Investment.            */        
+ /*                                                                   */        
+ /* Fill Cuk08985 as follows:                                         */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK08985 Ptr ;        
+ Dcl 1 CUK08985_NAME_TYPE ,        
+       3 In_Amt       Fixed Dec(15,4),        
+       3 Slice_Cred   Fixed Dec(4,0),        
+       3 Bill_Frq     Pic'99';        
+         
+END_PLC(CUK08985)

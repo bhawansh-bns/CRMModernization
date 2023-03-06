@@ -1,0 +1,15 @@
+BEGIN_PLC(D1OPRTRG)
+     DCL OPR_DATA              CHAR(856) BASED (ADDR(OPR));        
+     DCL 1 OPR,        
+       3 NI_NUMBER          CHAR(9),        
+       3 POLICY_NO          CHAR(11),        
+       3 RETIREMENT_DATE    CHAR(8),        
+       3 START_DATE         CHAR(8),        
+       3 CONTRIBUTION_SOURCE CHAR(2),        
+       3 FROM_DATE          CHAR(8),        
+       3 TO_DATE            CHAR(8),        
+       3 NUM_OF_PAYMENTS    PIC'99',        
+       3 PAYMENTS(40),        
+         5 PAYMENT_DATE     CHAR(8),        
+         5 PAYMENT_AMOUNT   PIC '(8)-9V.99';        
+END_PLC(D1OPRTRG)

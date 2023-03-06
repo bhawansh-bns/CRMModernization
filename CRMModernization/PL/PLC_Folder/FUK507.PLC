@@ -1,0 +1,146 @@
+BEGIN_PLC(FUK507)
+ /*-------------------------------------------------------------------*/        
+ /* FUK507 - Mortality rates storage.                                 */        
+ /* Rates will be read in from a file.                                */        
+ /* The keys required should be defined in the structure below.       */        
+ /*                                                                   */        
+ /* BS 15/09/98  Added in A8989LS1, A8989LS2, A8989LS3 for Lifestyles.*/        
+ /*OLW 18/03/04  ILD241 New Mortality Tables excluding AIDS           */        
+ /*-------------------------------------------------------------------*/        
+ DCL 1 WUK507_REC,        
+       2 A8888UKM(0:119),        
+         3 QX    FIXED DEC(7,6)   ,        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A6770UKF(0:119)          ,        
+         3 QX    FIXED DEC(7,6)   ,        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A6793UKM(0:75)           ,   /* UK PPP/EPP male life rates */        
+         3 QX    FIXED DEC(7,6)   ,        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A6793UKF(0:75)           ,   /* UK PPP/EPP female life rates */        
+         3 QX    FIXED DEC(7,6)   ,        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A9090GL4(0:119)          ,    /* Global a/c mark    */        
+         3 QX    FIXED DEC(7,6)   ,    /* 4 new rates from   */        
+         3 OCADJ FIXED DEC(3,0)   ,    /* 1/9/90             */        
+       2 PP93RULT(0:119)          ,        
+         3 QX    FIXED DEC(7,6)   ,        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 G93FNDDE(0:119)          ,    /* TQL Dread Disease,    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Rates exclusive of TPD*/        
+         3 OCADJ FIXED DEC(3,0)   ,    /* Female Non-Smoker.    */        
+       2 G93FNDDI(0:119)          ,    /* TQL Dread Disease,    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Rates Inclusive of TPD*/        
+         3 OCADJ FIXED DEC(3,0)   ,    /* Female Non-Smoker.    */        
+       2 G93FNULT(0:119)          ,    /* TQL Lifecover rates,  */        
+         3 QX    FIXED DEC(7,6)   ,    /* Female Non-Smoker.    */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 G93FSDDI(0:119)          ,    /* TQL Dread Disease,    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Rates Inclusive of TPD*/        
+         3 OCADJ FIXED DEC(3,0)   ,    /* Female Smoker.        */        
+       2 G93FSDDE(0:119)          ,    /* TQL Dread Disease,    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Rates exclusive of TPD*/        
+         3 OCADJ FIXED DEC(3,0)   ,    /* Female Smoker.        */        
+       2 G93FSULT(0:119)          ,    /* TQL Lifecover rates,  */        
+         3 QX    FIXED DEC(7,6)   ,    /* Female Smoker.        */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 G93LFTPD(0:119)          ,    /* TQL Lifecover,        */        
+         3 QX    FIXED DEC(7,6)   ,    /* Additive rates for TPD*/        
+         3 OCADJ FIXED DEC(3,0)   ,    /* Both sexes.           */        
+       2 G93MSULT(0:119)          ,    /* TQL Lifecover rates,  */        
+         3 QX    FIXED DEC(7,6)   ,    /* Male Smoker.          */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 G93MNULT(0:119)          ,    /* TQL Lifecover rates,  */        
+         3 QX    FIXED DEC(7,6)   ,    /* Male Non-Smoker.      */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 G93MSDDE(0:119)          ,    /* TQL Dread Disease,    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Rates exclusive of TPD*/        
+         3 OCADJ FIXED DEC(3,0)   ,    /* Male Smoker.          */        
+       2 G93MNDDE(0:119)          ,    /* TQL Dread Disease,    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Rates exclusive of TPD*/        
+         3 OCADJ FIXED DEC(3,0)   ,    /* Male Non-Smoker.      */        
+       2 G93MSDDI(0:119)          ,    /* TQL Dread Disease,    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Rates Inclusive of TPD*/        
+         3 OCADJ FIXED DEC(3,0)   ,    /* Male Smoker.          */        
+       2 G93MNDDI(0:119)          ,    /* TQL Dread Disease,    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Rates Inclusive of TPD*/        
+         3 OCADJ FIXED DEC(3,0)   ,    /* Male Non-Smoker.      */        
+       2 G95MSULT(0:119)          ,        
+         3 QX    FIXED DEC(7,6)   ,        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 G95MNULT(0:119)          ,        
+         3 QX    FIXED DEC(7,6)   ,        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 G95FSULT(0:119)          ,        
+         3 QX    FIXED DEC(7,6)   ,        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 G95FNULT(0:119)          ,        
+         3 QX    FIXED DEC(7,6)   ,        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A9090GL1(0:119)          ,    /* Mortality Rates    */        
+         3 QX    FIXED DEC(7,6)   ,    /* for Globals        */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A9090GL5(0:119)          ,    /* Mortality Rates    */        
+         3 QX    FIXED DEC(7,6)   ,    /* for GL5            */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A9090GL6(0:119)          ,    /* Mortality Rates    */        
+         3 QX    FIXED DEC(7,6)   ,    /* for GL6            */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A9090GL7(0:119)          ,    /* Mortality Rates    */        
+         3 QX    FIXED DEC(7,6)   ,    /* for GL7            */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A9090GL8(0:119)          ,    /* Mortality Rates    */        
+         3 QX    FIXED DEC(7,6)   ,    /* for GL8            */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A9090GL9(0:119)          ,    /* Mortality Rates    */        
+         3 QX    FIXED DEC(7,6)   ,    /* for GL9            */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A8989LS1(0:119)          ,    /* Mortality Rates    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Lifestyle Rate1    */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A8989LS2(0:119)          ,    /* Mortality Rates    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Lifestyle Rate2    */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A8989LS3(0:119)          ,    /* Mortality Rates    */        
+         3 QX    FIXED DEC(7,6)   ,    /* Lifestyle Rate3    */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A6795PPF(0:75)           , /* UK PPP/EPP female life rates */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A6795PPM(0:75)           , /* UK PPP/EPP   male life rates */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A6790TQR(0:119)          , /* TQR 1/2                      */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A6795GLO(0:119)          ,    /* Global A/c         */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 A6790GLS(0:119)          ,    /* Global Lifestyles  */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 AF80NTQL(0:119)          ,    /* TQL1 Female Non-Smoker */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 AF80STQL(0:119)          ,    /* TQL1 Female Smoker */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 AM80NTQL(0:119)          ,    /* TQL1 Male   Non-Smoker */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 AM80STQL(0:119)          ,    /* TQL1 Male   Smoker */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 AF80NTQ2(0:119)          ,    /* TQL2 Female Non-Smoker */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 AF80STQ2(0:119)          ,    /* TQL2 Female Smoker */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 AM80NTQ2(0:119)          ,    /* TQL2 Male   Non-Smoker */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ,        
+       2 AM80STQ2(0:119)          ,    /* TQL2 Male   Smoker */        
+         3 QX    FIXED DEC(7,6)   ,    /* ILD241             */        
+         3 OCADJ FIXED DEC(3,0)   ;        
+END_PLC(FUK507)

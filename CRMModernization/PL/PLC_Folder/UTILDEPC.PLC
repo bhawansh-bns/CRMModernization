@@ -1,0 +1,10 @@
+BEGIN_PLC(UTILDEPC)
+         
+ DCL  1 UTILDEP_AREA,        
+        3 I00708           CHAR(8),        
+        3 N95015           CHAR(15),        
+        3 N95115           CHAR(15),        
+        3 N95230           CHAR(30),        
+        3 N95330           CHAR(30),        
+        3 M26201           PIC '9';        
+END_PLC(UTILDEPC)

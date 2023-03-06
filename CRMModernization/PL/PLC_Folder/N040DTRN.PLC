@@ -1,0 +1,30 @@
+BEGIN_PLC(N040DTRN)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DTRN                                       */        
+    /*   GENERATION  : 033                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : OCTOBER 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+    /*                 ACTIONS CREATING TRANSACTION RECORDS.          */        
+    /*                 STORES COMMON DATA NEEDED FOR DURING THE       */        
+    /*                 CREATION OF TRANSACTION RECORDS.               */        
+    /*                 MOST DATA IS LOADED IN THE INITIAL PROCEDURE,  */        
+    /*                 N040P01.                                       */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DTRN BASED (COM_DATA.DATA_DTRN_PTR),        
+                3 T_RUN_TIME_KEY  PIC'(6)9',  /* FIXED TRANSACT DATA  */        
+                3 T_EMPLOYEE_NUM  PIC'99999', /* FIXED TRANSACT DATA */        
+                3 T_COMPANY_CODE  PIC'99',    /* FIXED TRANSACT DATA */        
+                3 T_AREA_CODE     PIC'99',    /* FIXED TRANSACT DATA */        
+                3 T_DEPT_NUM      PIC'99',    /* FIXED TRANSACT DATA */        
+                3 T_WORKING_GRP   PIC'99',    /* FIXED TRANSACT DATA */        
+                3 T_SECTION_NUM   PIC'99',    /* FIXED TRANSACT DATA */        
+                3 TRN_CNT(25)     PIC'999';   /* COUNT OF TRANS RECS  */        
+END_PLC(N040DTRN)

@@ -1,0 +1,18 @@
+BEGIN_PLC(I075C02)
+     DCL P60_DATA                    CHAR(449) BASED(ADDR(P60));        
+     DCL 01 P60,        
+            03 START_TAX_YEAR        CHAR(04),        
+            03 END_TAX_YEAR          CHAR(04),        
+            03 NI_NUMBER             CHAR(09),        
+            03 TAX_CODE              CHAR(05),        
+            03 FILLERA               CHAR(07),        
+            03 SURNAME               CHAR(30),        
+            03 FORNAMES              CHAR(30),        
+            03 PREV_EMPY_GROSS       CHAR(10),  /* ZZZZZZ9.99  */        
+            03 PREV_EMPY_TAX         CHAR(10),  /* ZZZZZZ9.99  */        
+            03 ANNUITY_GROSS         CHAR(10),  /* ZZZZZZZ.99  */        
+            03 ANNUITY_TAX           CHAR(10),  /* ZZZZZZZ.99  */        
+            03 PAYE_REF              CHAR(11),        
+            03 FILLER                CHAR(89),        
+            03 POLICY_NUM(20)        CHAR(11);        
+END_PLC(I075C02)

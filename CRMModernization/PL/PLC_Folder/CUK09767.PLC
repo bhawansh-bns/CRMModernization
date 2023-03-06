@@ -1,0 +1,16 @@
+BEGIN_PLC(CUK09767)
+ /*-------------------------------------------------------------------*/        
+ /* CUK09767 : Declarations needed to call module UK09767.            */        
+ /*                                                                   */        
+ /* UK09767 is called by UK08990 to apply Serious Illness Charge.     */        
+ /*                                                                   */        
+ /* Fill Cuk09767 as follows:                                         */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK09767 Ptr ;        
+ Dcl 1 CUK09767_NAME_TYPE ,        
+       2 SI_Charge     Fixed Dec(15,5);        
+         
+END_PLC(CUK09767)

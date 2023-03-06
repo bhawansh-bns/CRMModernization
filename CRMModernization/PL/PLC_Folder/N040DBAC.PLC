@@ -1,0 +1,23 @@
+BEGIN_PLC(N040DBAC)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DBAC                                       */        
+    /*   GENERATION  : 033                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : OCTOBER 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+    /*                 ACTIONS CREATING BACS FILE RECORDS.            */        
+    /*                 STORES COMMON DATA NEEDED FOR DURING THE       */        
+    /*                 CREATION OF BACS FILE RECORDS.                 */        
+    /*                 MOST DATA IS LOADED IN THE INITIAL PROCEDURE,  */        
+    /*                 N040P01.                                       */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DBAC BASED (COM_DATA.DATA_DBAC_PTR),        
+                3 BAC_CNT(25)     PIC'999';   /* COUNT OF BACS RECS   */        
+END_PLC(N040DBAC)

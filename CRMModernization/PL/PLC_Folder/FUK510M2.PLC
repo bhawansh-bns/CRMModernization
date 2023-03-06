@@ -1,0 +1,54 @@
+BEGIN_PLC(FUK510M2)
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* Test reporting record layout MIGRATION ONLY SHEET1                */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+         
+         
+ DCL 1 WUK510C  UNALIGNED  ,        
+       2 POLNO   PIC '(7)9',        
+ /* Policy Number                            */        
+       2 Fill1   char (01) ,        
+       2 VERS     PIC '(1)9',        
+ /* Version                                  */        
+       2 Fill2   char (01) ,        
+       2 Effdt    PIC '(8)9',        
+ /* Date of record. Investment date. */        
+       2 Fill2a   char (01) ,        
+       2 Sheet   char (01) ,        
+ /* Sheet Number for actuaries */        
+ /*------------------------------------------------------------------*/        
+ /* FUK500 : Unit Account                                            */        
+ /*-- ---------------------------------------------------------------*/        
+     2 F_Types     (2)              ,   /* Array of Fund Types       */        
+       3 Fill01  char (01) ,        
+       3 F_Type    Char      (1)    ,   /* Fund Type                 */        
+       3 Funds     (10)             ,   /* Array of Funds            */        
+         4 Fill02  char (01) ,        
+         4 F_Name  Char      (3)    ,   /* Fund Name                 */        
+         4 Fill03  char (01) ,        
+         4 F_Per   PIC'(1)9V(2)9'  ,   /* Fund Percentage           */        
+         4 Fill04  char (01) ,        
+         4 In_Pur  PIC'(12)9V(3)9' ,   /* Initial Units Purchased   */        
+         4 Fill05  char (01) ,        
+         4 In_Sur  PIC'(12)9V(3)9' ,   /* Initial Units Surrendered */        
+         4 Fill06  char (01) ,        
+         4 Pr_Pur  PIC'(12)9V(3)9' ,   /* Premium Units Purchased   */        
+         4 Fill07  char (01) ,        
+         4 Pr_Sur  PIC'(12)9V(3)9' ,   /* Premium Units Surrendered */        
+       3 Prices    (10)             ,   /* Array of Funds            */        
+         4 Fill01  char (01) ,        
+         4 IN_BID_PRC    PIC'(3)9V(6)9'          ,        
+         4 Fill02  char (01) ,        
+         4 IN_OFFER_PRC  PIC'(3)9V(6)9'          ,        
+         4 Fill03  char (01) ,        
+         4 PR_BID_PRC    PIC'(3)9V(6)9'          ,        
+         4 Fill04  char (01) ,        
+         4 PR_OFFER_PRC  PIC'(3)9V(6)9'          ,        
+       2 Fill195 char (01) ,        
+     2 Filler  char (135) ;        
+         
+END_PLC(FUK510M2)

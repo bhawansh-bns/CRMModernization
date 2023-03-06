@@ -1,0 +1,18 @@
+BEGIN_PLC(TRANKEY)
+ DCL  TRAN_KEY                      CHAR (29);        
+ DCL 1 TRAN_DEF                     DEF TRAN_KEY,        
+       3 POLICY                     PIC '(11)9',        
+       3 DATE_CREATED               PIC '(8)9',        
+       3 TIME_CREATED               PIC '(6)9',        
+       3 TRANSACTION                CHAR (4);        
+         
+ DCL 1 DATES,        
+       3 REC_CREATE_DATE            PIC '(8)9',        
+       3 REC_CREATE_TIME            PIC '(6)9',        
+       3 SEQ_NO                     PIC '(3)9',        
+       3 TRANSACTION_DATE           PIC '(8)9',        
+       3 COMMISSION_DATE            PIC '(8)9',        
+       3 CURRENT_PRICE_DATE         PIC '(8)9',        
+       3 ON_LINE_BATCH              PIC '(1)9',        
+       3 EMPLOYEE_NO                PIC '(5)9';        
+END_PLC(TRANKEY)

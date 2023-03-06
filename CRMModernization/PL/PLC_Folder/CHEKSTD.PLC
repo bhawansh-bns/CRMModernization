@@ -1,0 +1,27 @@
+BEGIN_PLC(CHEKSTD)
+          DECLARE 1 STD_CLOSE_PARA1,                                            
+                    3 CLOSE0 CHAR (07) INIT (''),                               
+                    3 CLOSE1 CHAR (23) INIT ('If you have any questio'),        
+                    3 CLOSE2 CHAR (23) INIT ('ns about this letter or'),        
+                    3 CLOSE3 CHAR (27) INIT (' you would like further');        
+          DECLARE 1 STD_CLOSE_PARA2,                                            
+                    3 CLOSE4 CHAR (07) INIT (''),                               
+                    3 CLOSE5 CHAR (23) INIT ('information, please cal'),        
+                    3 CLOSE6 CHAR (23) INIT ('l our Customer Helpline'),        
+                    3 CLOSE7 CHAR (27) INIT (' free on 0800 085 2385 ');        
+          DECLARE 1 STD_CLOSE_PARA3,                                            
+                    3 CLOSE8 CHAR (07) INIT (''),                               
+                    3 CLOSE9 CHAR (23) INIT ('if calling from the UK,'),        
+                    3 CLOSEA CHAR (23) INIT (' or +44 1242 663500 if '),        
+                    3 CLOSEB CHAR (27) INIT ('outside the UK, Monday ');        
+          DECLARE 1 STD_CLOSE_PARA4,                                            
+                    3 CLOSEC CHAR (07) INIT (''),                               
+                    3 CLOSED CHAR (23) INIT ('to Friday, between 9.00'),        
+                    3 CLOSEE CHAR (23) INIT (' a.m. and 5.00 p.m. A m'),        
+                    3 CLOSEF CHAR (27) INIT ('ember of the team will ');        
+          DECLARE 1 STD_CLOSE_PARA5,                                            
+                    3 CLOSEG CHAR (07) INIT (''),                               
+                    3 CLOSEH char (23) INIT ('be happy to help you.  '),        
+                    3 CLOSEI CHAR (23) INIT (''),                               
+                    3 CLOSEJ CHAR (27) INIT ('');                               
+END_PLC(CHEKSTD)

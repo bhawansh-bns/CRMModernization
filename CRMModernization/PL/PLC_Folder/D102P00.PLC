@@ -1,0 +1,28 @@
+BEGIN_PLC(D102P00)
+ /*******************************************************************/        
+ /* THIS MODULE CAN BE INCLUDED FOR ALL DOC1 LETTERS AS COMMON CODE */        
+ /* ALL THESE FILES ARE REQUIRED FOR ALL LETTERS.                   */        
+ /*******************************************************************/        
+         
+     F21_DBH.ACTION = DBH_OPEN;        
+     F21_DBH.FILE_ID = FILE021;        
+     CALL APSDBH (APS, F21_DBH);        
+         
+     F441_DBH.ACTION = DBH_OPEN;        
+     F441_DBH.FILE_ID = F444001;        
+     CALL APSDBH (APS, F441_DBH);        
+         
+     F442_DBH.ACTION = DBH_OPEN;        
+     F442_DBH.FILE_ID = F444002;        
+     CALL APSDBH (APS, F442_DBH);        
+         
+     CLIP_DBH.ACTION = DBH_OPEN;        
+     CLIP_DBH.FILE_ID = CLIPTR0;        
+     CALL APSDBH (APS, CLIP_DBH);        
+         
+     T001_DBH.ACTION = DBH_OPEN;        
+     T001_DBH.FILE_ID = TAB0001;        
+     CALL APSDBH (APS, T001_DBH);        
+         
+         
+END_PLC(D102P00)

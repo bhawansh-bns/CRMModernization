@@ -1,0 +1,30 @@
+BEGIN_PLC(UTILPCT)
+ /*******************************************************************/        
+ /* PLIINC - UTILPCT.                                               */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY UTILPCT TO PASS THE VARIABLES FOR THE   */        
+ /* SELECTION OF PREMIUMS PAID FROM FILE300 HISTORY.                */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL   PCT_DATA                 CHAR(1382);        
+         
+     DCL 1 PCT_STRUCT               BASED(ADDR(PCT_DATA)),        
+           3 PCT_POLICY_NO          PIC '(11)9',        
+           3 PCT_START_DATE         PIC '(8)9',        
+           3 PCT_END_DATE           PIC '(8)9',        
+           3 PCT_CLUSTER_IND        CHAR(1),        
+           3 PCT_NUM_ELEMENTS       FIXED DEC (5),        
+           3 PCT_LAST_CLUST_POL     PIC '(11)9',        
+           3 PCT_CONTRIB_SOURCE     CHAR(2),        
+           3 PCT_POL_TYPE_IND       CHAR(1),        
+           3 PCT_UL_MIRAS_IND       CHAR(1),        
+           3 PCT_LINE_COUNT         FIXED DEC (2),        
+           3 PCT_PAYMENTS(40),        
+             5 DATE                 PIC '(8)9',        
+             5 AMOUNT               PIC '(8)-9V.99',        
+             5 NET_AMOUNT           PIC '(8)-9V.99',        
+           3 PCT_PROG               CHAR(4),        
+           3 PCT_TOT_SPREMS         FIXED DEC (9,2),        
+           3 PCT_FILLER             CHAR (45);        
+END_PLC(UTILPCT)

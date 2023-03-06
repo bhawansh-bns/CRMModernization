@@ -1,0 +1,35 @@
+BEGIN_PLC(APSTWA)
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*     C P G  T W A  ( T R A N S A C T I O N  W O R K  A R E A )     */        
+ /*     C P G  T W A  ( T R A N S A C T I O N  W O R K  A R E A )     */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*  NOTE - THE TWA SHOULD ONLY BE USED TO PASS DATA VALUES BETWEEN   */        
+ /*         CPG AND PL/I.                                             */        
+ /*                                                                   */        
+ /*         THE DEFINITION OF DATA IN THIS AREA MUST EXACTLY MATCH    */        
+ /*         THE CPG DEFINITION.                                       */        
+ /*                                                                   */        
+ /*         THE CPG INDICATORS MAY BE TESTED AND SET EG :-            */        
+ /*                                                                   */        
+ /*         TWA.INDICATOR (10) = LOW (1);     SETS INDICATOR 10 ON    */        
+ /*         TWA.INDICATOR (10) = HIGH (1);    SETS INDICATOR 10 ON    */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+     DCL  1 TWA                        UNAL BASED (APS_TWA_PTR),        
+         
+            2 CPG_RESERVED_1           CHAR (64),        
+         
+            2 INDICATOR (0 : 99)       CHAR (1),        
+         
+            2 CPG_RESERVED_2           CHAR (18),        
+         
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*       U S E R  D E F I N E D  T W A  S T A R T S  H E R E         */        
+ /*                                                                   */        
+ /*********************************************************************/        
+END_PLC(APSTWA)

@@ -1,0 +1,165 @@
+BEGIN_PLC(D103P00)
+ /*******************************************************************/        
+ /* THIS MODULE CAN BE INCLUDED FOR ALL DOC1 LETTERS. THIS CODE     */        
+ /* READS ALL THE COMMON FILES FOR DOC1 LETTERS AND PULLS OFF THE   */        
+ /* CLIENT REFERENCE FOR THE OWNERS AND LIVES ASSURED.              */        
+ /*******************************************************************/        
+ /* SET DATA TO NULL  */        
+      PRMASS = '';        
+      PRMCLI = '';        
+      REASON = '';        
+      ERROR = 0;        
+      ASSOC_ERROR = 0;        
+         
+ /***************************/        
+ /* READS FOR COMMON FILES  */        
+ /*                         */        
+ /***************************/        
+         
+     CALL FIND_POLICY;        
+     IF ERROR =1                     /* POLICY ERROR  */        
+     THEN DO;        
+             CALL FIND_CLIPTR0;        
+             CALL FIND_F444002;        
+             IF ASSOC_ERROR =1       /*  ASSOCIATE ERROR */        
+             THEN CALL FIND_TAB0001;        
+     END;        
+         
+ /*********************************************************************/        
+ /* FIND POLICY RECORD                                                */        
+ /*                                                                   */        
+ /*********************************************************************/        
+     FIND_POLICY: PROC;        
+         
+     F21_DBH.ACTION    = DBH_READ_DIRECT;        
+     F21_DBH.FILE_ID   = FILE021;        
+     F21_DBH.KEY       = WS_POL_NO;        
+     F21_DBH.GROUP_PTR = ADDR(F21);        
+     CALL APSDBH (APS, F21_DBH);        
+         
+     SELECT (F21_DBH.POST_OP);        
+         WHEN ('000');        
+         WHEN ('NOF')        
+              ERROR       =1;        
+         OTHER CALL BADPOST(APS);        
+         
+     END;        
+         
+     $END;        
+ /*********************************************************************/        
+ /* FIND CLIPTR0 RECORDS FOR OWNERS AND LIVES ASSURED                 */        
+ /* READS THROUGH CLIPTR0 ASSIGNS CLIREF FOR EACH APPROPRIATE         */        
+ /* ASSOCIATION TYPE                                                  */        
+ /*********************************************************************/        
+     FIND_CLIPTR0: PROC;        
+         
+     COMMON_CLI_REF = '';        
+     COMMON_CLI_REF2 = '';        
+     COMMON_LA1_CLI_REF = '';        
+     COMMON_LA2_CLI_REF = '';        
+         
+     CLIP_DBH.ACTION = DBH_START_BROWSE;        
+     CLIP_DBH.FILE_ID = CLIPTR0;        
+     CLIP_DBH.KEY = WS_POL_NO;        
+     CLIP_DBH.KEY_LENGTH = 11;        
+     CALL APSDBH (APS, CLIP_DBH);        
+         
+     IF (CLIP_DBH.POST_OP = '000') &        
+        (CLIP_DBH.POST_OP = 'EOF')        
+     THEN CALL BADPOST (APS);        
+         
+     CLIP_DBH.ACTION = DBH_READ_NEXT;        
+     CLIP_DBH.FILE_ID = CLIPTR0;        
+     CLIP_DBH.GROUP_PTR = ADDR(CLIP);        
+     CALL APSDBH (APS, CLIP_DBH);        
+         
+     IF (CLIP_DBH.POST_OP = '000') &        
+        (CLIP_DBH.POST_OP = 'EOF')        
+     THEN CALL BADPOST (APS);        
+         
+     DO WHILE (CLIP_DBH.POST_OP = '000'        
+          & WS_POL_NO = CLIP_C77011);        
+         
+          SELECT (CLIP_C45702);        
+              WHEN ('10') COMMON_CLI_REF = CLIP_M19009;        
+              WHEN ('11') COMMON_CLI_REF2 = CLIP_M19009;        
+              WHEN ('20') COMMON_LA1_CLI_REF = CLIP_M19009;        
+              WHEN ('80') COMMON_LA1_CLI_REF = CLIP_M19009;        
+              WHEN ('90') COMMON_LA2_CLI_REF = CLIP_M19009;        
+              OTHER;        
+          END;        
+          CALL APSDBH (APS, CLIP_DBH);        
+     END;        
+         
+     SELECT;        
+     WHEN (COMMON_CLI_REF= '' & COMMON_LA1_CLI_REF = '')        
+         ERROR = 4;        
+     WHEN (COMMON_CLI_REF = '')        
+         ERROR = 2;        
+     WHEN (COMMON_LA1_CLI_REF = '')        
+         ERROR = 3;        
+     OTHER;        
+     END;        
+         
+     $END;        
+         
+ /*********************************************************************/        
+ /* FIND F444002 RECORD                                               */        
+ /*                                                                   */        
+ /*********************************************************************/        
+     FIND_F444002: PROC;        
+         
+     F442_DBH.ACTION    = DBH_READ_DIRECT;        
+     F442_DBH.FILE_ID   = F444002;        
+     F442_DBH.KEY       = F21_C12007;        
+     F442_DBH.GROUP_PTR = ADDR(F442);        
+     CALL APSDBH (APS, F442_DBH);        
+         
+     SELECT (F442_DBH.POST_OP);        
+         WHEN ('000');        
+         WHEN ('NOF')            /* CURRENTLY MAY NOT BE ASSOCIATE  */        
+              ASSOC_ERROR = 1;   /* DETAILS SO WON'T CREATE ERROR   */        
+                                 /* REPORT                          */        
+         OTHER CALL BADPOST(APS);        
+         
+     END;        
+         
+     $END;        
+         
+ /*********************************************************************/        
+ /* FIND TAB0001 RECORD                                               */        
+ /* READ DIRECT ON F444001 TO FIND AREA, THEN READ DIRECT ON TAB0001  */        
+ /*********************************************************************/        
+     FIND_TAB0001: PROC;        
+         
+     F441_DBH.ACTION    = DBH_READ_DIRECT;        
+     F441_DBH.FILE_ID   = F444001;        
+     F441_DBH.KEY       = F21_C12007;        
+     F441_DBH.GROUP_PTR = ADDR(F441);        
+     CALL APSDBH (APS, F441_DBH);        
+         
+     SELECT (F441_DBH.POST_OP);        
+         WHEN ('000')        
+              DO;        
+              T001_DBH.ACTION    = DBH_READ_DIRECT;        
+              T001_DBH.FILE_ID   = TAB0001;        
+              T001_DBH.KEY       = F441_C99403;        
+              T001_DBH.GROUP_PTR = ADDR(T001);        
+              CALL APSDBH (APS, T001_DBH);        
+         
+              SELECT (T001_DBH.POST_OP);        
+                  WHEN ('000');        
+                  WHEN ('NOF')       /* NO ERROR REPORT REQUESTED*/        
+                       ASSOC_ERROR = 2;        
+                  OTHER CALL BADPOST(APS);        
+         
+             END;        
+             END;        
+         WHEN ('NOF')                /* NO ERROR REPORT REQUESTED*/        
+              ASSOC_ERROR = 2;        
+         OTHER CALL BADPOST(APS);        
+         
+     END;        
+         
+     $END;        
+END_PLC(D103P00)

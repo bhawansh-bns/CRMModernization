@@ -1,0 +1,30 @@
+BEGIN_PLC(FUKPCF)
+ /********************************************************************/        
+ /* PROCESS CONTROL FILE LAYOUT                           120  BYTES */        
+ /* 000056 DH   28/05/02    ADD VERSION NUMBER TO FILE AND KEY.      */        
+ /* PR0003 RMJ  23/09/02    ADD LAST FULL REINVESTMENT DATE.         */        
+ /********************************************************************/        
+  DCL 1 WUKPCF ALIGNED,        
+  2 POLNO                     PIC '(7)9',        
+    /* POLICY NUMBER                          POS   1 -   7      KEY */        
+  2 VERS                      CHAR (1)  ,        
+    /* VERSION NUMBER                         POS   8 -  8       KEY */        
+  2 REINVESTMENT_DT           PIC '(8)9',        
+    /* REINVESTMENT DATE                      POS   9 -  16          */        
+  2 IN_ERROR_CD               CHAR (1)  ,        
+    /* ERROR STATUS OF POLICY (Y/N)           POS  17 -  17          */        
+  2 UNDER_REVIEW_CD           CHAR (1)  ,        
+    /* REVIEW STATUS OF POLICY (Y/N)          POS  18 -  18          */        
+  2 CODE                      PIC '(2)9',        
+    /* STATUS CODE (0/10/20/30)               POS  19 -  20          */        
+  2 ERROR_CD                  CHAR (4)  ,        
+    /* ERROR CODE                             POS  21 -  24          */        
+  2 ERROR_PGM_NM              CHAR (8)  ,        
+    /* PROGRAM NAME WHERE ERROR OCCURS        POS  25 -  32          */        
+  2 ERROR_MSG_TXT             CHAR (80),        
+    /* ERROR MESSAGE                          POS  33 - 112          */        
+    /*000056  2 FILLER                    CHAR ( 9)                  */        
+  2 LAST_FULL_REINV_DATE      CHAR ( 8) ;        
+    /* 2 FILLER                    CHAR ( 8)                         */        
+    /* FILLER                                 POS 113 - 120          */        
+END_PLC(FUKPCF)

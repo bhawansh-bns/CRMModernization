@@ -1,0 +1,38 @@
+BEGIN_PLC(SNLPARM)
+  /******************************************************************/        
+  /* SNLPARM: VARIABLES FOR CALCULATION UTILITY UTILSNL             */        
+  /******************************************************************/        
+  /* AMENDED:                                                       */        
+  /*  REF.     DATE      WHO   DESCRIPTION                          */        
+  /*  ****     ****      ***   ***********                          */        
+  /* R01822   16/11/07   TNS   LP601 - CA MIGRATION                 */        
+  /******************************************************************/        
+     DCL 1 SNL_PARM,        
+           3 POLICY_NO                  PIC '(11)9',        
+           3 SNL_TRANS                  CHAR(1),        
+           3 BASIC_CASH_VALUE           DEC FIXED(9),        
+           3 CASH_VALUE_BONUS           DEC FIXED(9),        
+           3 TOTAL_VALUE                DEC FIXED(10),        
+           3 SNL_ACCT_TERM_BON          DEC FIXED(9,2),        
+           3 SNL_ACCT_OTHER_BON         DEC FIXED(9,2),        
+           3 SNL_PUP_SA                 DEC FIXED(13,2),        
+           3 SNL_S04009                 DEC FIXED(9),        
+           3 SNL_S05007                 DEC FIXED(7),        
+           3 SNL_D76008                 PIC '(8)9',        
+           3 SNL_S00509                 DEC FIXED(9),        
+           3 SNL_S00609                 DEC FIXED(9),        
+           3 SNL_S00809                 DEC FIXED(9),        
+           3 SNL_R14405                 DEC FIXED(5,2),        
+           3 SNL_R04405                 DEC FIXED(5,2),        
+           3 SNL_A24003                 DEC FIXED(3),        
+           3 SNL_A23103                 DEC FIXED(3),        
+           3 SNL_UNITS_DUE              DEC FIXED(3),        
+           3 SNL_R03405                 DEC FIXED(5,2),        
+           3 SNL_C68001                 PIC '9',        
+           3 SNL_C90502                 PIC '99',        
+           3 SNL_D15008                 PIC '(8)9',        
+           3 SNL_D39008                 PIC '(8)9',        
+           3 SNL_M31003                 PIC '999',        
+           3 SNL_BCSV_DATE              PIC '(8)9',        
+           3 SNL_HIDATE                 PIC '(8)9';        
+END_PLC(SNLPARM)

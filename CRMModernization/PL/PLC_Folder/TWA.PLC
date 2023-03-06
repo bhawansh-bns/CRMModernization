@@ -1,0 +1,14 @@
+BEGIN_PLC(TWA)
+         
+    /*****************************************************************/        
+    /* STRUCTURE DECLARATIONS FOR PASSED DOWN PARAMETERS             */        
+    /*****************************************************************/        
+         
+          DCL 1 TWA BASED(APS_TWA_PTR),        
+                3 POL_BEFORE_PTR     PTR, /* POLICY CTL BEFORE UPDATE */        
+                3 POL_AFTER_PTR      PTR, /* POLICY CTL AFTER  UPDATE */        
+                3 INV_BEFORE_PTR     PTR, /* INV. CTL BEFORE UPDATE   */        
+                3 INV_UPD_PTR        PTR, /* INV. RECS FOR UPDATING   */        
+                3 HIS_DATA_PTR       PTR, /* HIST. DATA STORAGE AREA  */        
+                3 OTHERS_PTR         PTR; /* OTHER COMMON DATA NEEDED */        
+END_PLC(TWA)

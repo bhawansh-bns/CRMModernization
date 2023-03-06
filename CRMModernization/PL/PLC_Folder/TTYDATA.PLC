@@ -1,0 +1,20 @@
+BEGIN_PLC(TTYDATA)
+ /*******************************************************************/        
+ /* PLIINC - TTYDATA                                                */        
+ /*                                                                 */        
+ /* THIS INCLUDE CONTAINS PARAMETERS TO BE PASSED TO UTILTTY        */        
+ /*                                                                 */        
+ /* UTILTTY WILL DETERMINE THE REINSURANCE TREATY TYPE AND WILL BE  */        
+ /* CALLED WITHIN CREM AND STAN                                     */        
+ /*                                                                 */        
+ /*******************************************************************/        
+ DCL TREATY_DATA                   CHAR(34);        
+         
+ DCL 1 TREATY_RECORD               BASED (ADDR(TREATY_DATA)),        
+      3 TTY_C77011                 PIC '(11)9',        
+      3 TTY_REINS_COMP             PIC '99',        
+      3 TTY_NUMBER(6)              CHAR (3),        
+      3 TTY_C87501                 PIC '9',        
+      3 TTY_C87601                 PIC '9',        
+      3 TTY_TYPE                   PIC '9';        
+END_PLC(TTYDATA)

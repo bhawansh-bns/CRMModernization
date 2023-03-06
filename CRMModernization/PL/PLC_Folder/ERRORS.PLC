@@ -1,0 +1,6 @@
+BEGIN_PLC(ERRORS)
+          /* Error array returned by PIHVAL */        
+   DCL 1 ERRORS (113),        
+         3 FUND_CODE      PIC '999',        
+         3 ERROR_FIELD    CHAR (6)  ;        
+END_PLC(ERRORS)

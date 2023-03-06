@@ -1,0 +1,49 @@
+BEGIN_PLC(UKDBGSET)
+ /********************************************************************/        
+ /* UKDBGSET - Setup code for UKDEBUG macro. Must be included in     */        
+ /*            calling module AFTER including UKDEBUG and BEFORE     */        
+ /*            any #DEBUG calls.                                     */        
+ /*                                                                  */        
+ /* TESTNO is a preprocessor variable which is set in the UKDEBUG    */        
+ /* include.                                                         */        
+ /*                                                                  */        
+ /* DBGLIST is used to activate debug statements. A list of          */        
+ /* program numbers is read in from the file UKDEBUG. Only one line  */        
+ /* is read and should include all the program numbers as required.  */        
+ /* E.g.  8970*8971*                                                 */        
+ /*                                                                  */        
+ /********************************************************************/        
+ /*                                                                  */        
+ /* AC  28/6/96  Created.                                            */        
+ /*                                                                  */        
+ /*                                                                  */        
+ /********************************************************************/        
+         
+  %IF TESTNO=0 %THEN %GOTO ENDDEBUGSETUP;        
+         
+   /* List of program numbers. One line only */        
+   DCL UKDEBUG FILE INPUT RECORD SEQL;        
+   DCL UKDBG_UNDEF  BIT(1) INIT('0'B);        
+   DCL UKDBG_ENDF   BIT(1) INIT('0'B);        
+         
+   ON  UNDEFINEDFILE(UKDEBUG) BEGIN ;        
+       UKDBG_UNDEF = '1'B;        
+       END ;        
+         
+   ON  ENDFILE(UKDEBUG) BEGIN ;        
+       UKDBG_ENDF = '1'B;        
+       END ;        
+         
+   DBGLIST = '';        
+   OPEN  FILE(UKDEBUG);        
+   IF UKDBG_UNDEF THEN        
+      DO;        
+      READ  FILE(UKDEBUG) INTO (DBGLIST);        
+      IF UKDBG_ENDF THEN DBGLIST = '';        
+      END;        
+   IF UKDBG_UNDEF THEN        
+      CLOSE FILE(UKDEBUG);        
+         
+  %ENDDEBUGSETUP:; /* Skiped Macro if TESTNO = 0 */        
+         
+END_PLC(UKDBGSET)

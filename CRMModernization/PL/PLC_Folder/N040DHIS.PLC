@@ -1,0 +1,33 @@
+BEGIN_PLC(N040DHIS)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DHIS                                       */        
+    /*   GENERATION  : 033                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : OCTOBER 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+    /*                 ACTIONS CREATING HISTORY RECORDS.              */        
+    /*                 STORES COMMON DATA NEEDED FOR DURING THE       */        
+    /*                 CREATION OF HISTORY RECORDS.                   */        
+    /*                 MOST DATA IS LOADED IN THE INITIAL PROCEDURE,  */        
+    /*                 N040P01.                                       */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DHIS BASED (COM_DATA.DATA_DHIS_PTR),        
+                3 H_RUN_TIME_KEY  PIC'(9)9',  /* FIXED HISTORY DATA   */        
+                3 H_OPERATOR_ID   CHAR(4),    /* FIXED HISTORY DATA   */        
+                3 H_SECTION_NAME  CHAR(5),    /* FIXED HISTORY DATA   */        
+                3 H_ONLINE_BATCH  PIC'9',     /* FIXED HISTORY DATA   */        
+                3 H_EMPLOYEE_NUM  PIC'99999', /* FIXED HISTORY DATA   */        
+                3 H_COMPANY_CODE  PIC'99',    /* FIXED HISTORY DATA   */        
+                3 H_AREA_CODE     PIC'99',    /* FIXED HISTORY DATA   */        
+                3 H_DEPT_NUM      PIC'99',    /* FIXED HISTORY DATA   */        
+                3 H_WORKING_GRP   PIC'99',    /* FIXED HISTORY DATA   */        
+                3 H_SECTION_NUM   PIC'99',    /* FIXED HISTORY DATA   */        
+                3 HISTCNT         PIC'999';   /* COUNT OF HISTORY RECS*/        
+END_PLC(N040DHIS)

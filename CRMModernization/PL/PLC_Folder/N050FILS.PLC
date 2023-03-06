@@ -1,0 +1,80 @@
+BEGIN_PLC(N050FILS)
+ /* BELOW IS A LIST OF ALL FILES USED IN N050, IN ALPHABETICAL       */        
+ /* SEQUENCE, THE FILE CODE ASSIGNED TO IT AND MODULES WHERE THEY    */        
+ /* ARE USED.  PLEASE ENSURE THAT THIS MODULE (N050FILES) IS UPDATED */        
+ /* EACH TIME A FILE IS ADDED, SO THAT NO DUPLICATE CODES ARE USED.  */        
+ /* TO INITIALLY GENERATE THE CODES, THE EBCDIC CHARACTERS           */        
+ /* AVAILABLE ON THE KEYBOARD, IN HEXADECIMAL SEQUENCE, HAVE BEEN    */        
+ /* USED.                                                            */        
+         
+ /* FILE NAME   CODE   MODULES WHERE USED                            */        
+ /*                                   */        
+         
+ /* F444001     'T'    N050P08                                       */        
+ /* F444001     'Q'             N050P13                              */        
+         
+ /* FILE021     '<'    N050P08  N050P13                              */        
+         
+ /* N009RP0     '('    N050P20  N050P21                              */        
+ /* N009RP1     '+'    N050P20                                       */        
+ /* N009RP2     '|'    N050P21                                       */        
+         
+ /* N015RP0     '!'    N050P14  N050P15  N015P16  N015P17            */        
+ /* N015RP1     '$'    N050P14                                       */        
+ /* N015RP2     '*'    N050P15                                       */        
+ /* N015RP3     ')'    N050P16                                       */        
+ /* N015RP4     ';'    N050P17                                       */        
+         
+ /* N020RP0     '_'    N050P01  N050P02  N050P03  N050P04  N050P13   */        
+ /* N020RP1     '>'    N050P01                                       */        
+ /* N020RP2     '?'    N050P02                                       */        
+ /* N020RP3     ':'    N050P03                                       */        
+ /* N020RP4     '#'    N050P04                                       */        
+ /* N020RP5     '@'    N050P13                                       */        
+         
+ /* N040RP0     '='    N050P05  N050P06  N050P08  N050P09  N050P10   */        
+ /*                    N050P11  N050P12                              */        
+ /* N040RP1     'a'    N050P05                                       */        
+ /* N040RP2     'b'    N050P06                                       */        
+ /* N040RP5     'c'    N050P08  N050P11                              */        
+ /* N040RP6     'd'    N050P09                                       */        
+ /* N040RP7     'e'    N050P12                                       */        
+ /* N040RP8     'f'    N050P10                                       */        
+         
+ /* TAB0001     'j'    N050P08  N050P13                              */        
+ /* TAB0003     'k'    N050P08  N050P13                              */        
+ /* TAB0012     'l'    N050P01  N050P03  N050P14  N050P16            */        
+ /* TAB0108     'm'    N050P01  N050P02  N050P03  N050P04  N050P05   */        
+ /*                    N050P06  N050P08  N050P09  N050P10  N050P11   */        
+ /*                    N050P12  N050P13  N050P14  N050P15  N050P16   */        
+ /*                    N050P17  N050P18  N050P19  N050P20  N050P21   */        
+ /*                    N050P26  N050P27                              */        
+ /* TAB0109     'n'    N050P01  N050P02  N050P03  N050P04  N050P05   */        
+ /*                    N050P06  N050P08  N050P09  N050P10  N050P11   */        
+ /*                    N050P12  N050P13  N050P14  N050P15  N050P16   */        
+ /*                    N050P17  N050P18  N050P19  N050P20  N050P21   */        
+ /*                    N050P26  N050P27                              */        
+ /* TAB0115     'o'    N050P00  N050P01  N050P02  N050P03  N050P04   */        
+ /*                    N050P05  N050P06  N050P08  N050P09  N050P10   */        
+ /*                    N050P11  N050P12  N050P13  N050P14  N050P15   */        
+ /*                    N050P16  N050P17  N050P18  N050P19  N050P20   */        
+ /*                    N050P21  N050P26  N050P27                     */        
+ /* TAB0123     'p'    N050P01  N050P02  N050P03  N050P04  N050P05   */        
+ /*                    N050P06  N050P08  N050P09  N050P10  N050P11   */        
+ /*                    N050P12  N050P13  N050P14  N050P15  N050P16   */        
+ /*                    N050P17  N050P18  N050P19  N050P20  N050P21   */        
+ /*                    N050P26  N050P27                              */        
+ /* TAB0124     'q'    N050P01  N050P14  N050P19  N050P26  N050P27   */        
+ /* TAB0125     'r'    N050P02  N050P15                              */        
+ /* TAB0126     '}'    N050P03  N050P16                              */        
+ /* TAB0127     's'    N050P04  N050P17                              */        
+ /* TAB0129     't'    N050P05                                       */        
+ /* TAB0130     'u'    N050P06                                       */        
+ /* TAB0133     'v'    N050P08  N050P11                              */        
+ /* TAB0134     'w'    N050P09                                       */        
+ /* TAB0136     'x'    N050P10                                       */        
+ /* TAB0137     'y'    N050P12                                       */        
+ /* TAB0140     'z'    N050P13                                       */        
+ /* TAB0182     'A'    N050P18                                       */        
+ /* TAB0211     'B'    N050P20  N050P21                              */        
+END_PLC(N050FILS)

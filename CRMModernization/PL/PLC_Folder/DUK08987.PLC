@@ -1,0 +1,20 @@
+BEGIN_PLC(DUK08987)
+         
+ /*-------------------------------------------------------------------*/        
+ /* DUK08987 : Declarations needed to call module UK08987.            */        
+ /*                                                                   */        
+ /* This include is used by programs which call program UK08987.      */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ %DCL CALL_UK08987_REINVEST CHAR ;        
+ %CALL_UK08987_REINVEST = 'CALL UK08987 (UI_PTR,''RINV'')' ;        
+         
+ %DCL CALL_UK08987_INVEST CHAR ;        
+ %CALL_UK08987_INVEST = 'CALL UK08987 (UI_PTR,''MINV'')' ;        
+         
+ Dcl UK08987 Entry (Ptr,Char(4)) External ;        
+         
+         
+END_PLC(DUK08987)

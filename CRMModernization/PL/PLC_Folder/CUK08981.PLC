@@ -1,0 +1,17 @@
+BEGIN_PLC(CUK08981)
+ /*-------------------------------------------------------------------*/        
+ /* CUK08981 : Declarations needed to call module UK08981.            */        
+ /*                                                                   */        
+ /* UK08981 is called by UK08980 to apply Setup/RP Charge rules.      */        
+ /*                                                                   */        
+ /* Fill Cuk08981 as follows:                                         */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK08981 Ptr ;        
+ Dcl 1 CUK08981_NAME_TYPE ,        
+       2 Ix_Opt       Char(1),        
+       2 Bill_Frq     Pic'99';        
+         
+END_PLC(CUK08981)

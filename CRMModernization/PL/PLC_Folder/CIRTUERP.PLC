@@ -1,0 +1,31 @@
+BEGIN_PLC(CIRTUERP)
+ /********************************************************************/        
+ /* MODULE GENERATION  - @##                                         */        
+ /* COMPILED ON        - @###DATE                                    */        
+ /* AT                 - @###TIME                                    */        
+ /* FROM TERMINAL      - @##T                                        */        
+ /* BY                 - @#USERID                                    */        
+ /*                    - @#ID                                        */        
+ /*                    - @#NAME                                      */        
+ /* PURPOSE :-   THIS STRUCTURE IS INCLUDED IN RTU TRANSACTIONS      */        
+ /*              AND USED AS A PARAMETER TO COMMON DBH ERROR ROUTINE,*/        
+ /*              CIRTUER.                                            */        
+ /*              THE INFO PASSED VIA THE STRUCTURE USED IN DISPLAYING*/        
+ /*              FATAL DBH ERRORS (I.E. TRANSACTION ABENDS)          */        
+ /*                                                                  */        
+ /********************************************************************/        
+         
+  DCL PARAM_AREA       CHAR(190) INIT('');        
+         
+  DCL PARAM_PTR        POINTER;        
+         
+  DCL  1 PARAM         BASED(PARAM_PTR) UNAL,        
+         3 FILEID            CHAR(7),        
+         3 TRAN              CHAR(4),        
+         3 PROGNAME          CHAR(8),        
+         3 ERROR_ID          CHAR(1),        
+         3 ERROR_MESS        CHAR(50),        
+         3 DBH_BLOCK         LIKE DBH;        
+         
+  PARAM_PTR = ADDR(PARAM_AREA);        
+END_PLC(CIRTUERP)

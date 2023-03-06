@@ -1,0 +1,17 @@
+BEGIN_PLC(FLAGDTA)
+ /********************************************************************/        
+ /* THIS STRUCTURE IS BASED ON A POINTER WHICH IS BASED ON TUA_END.  */        
+ /* IT CONTAINS DATA THAT IS PASSED BETWEEN THE POLA/FLAG TRANS      */        
+ /********************************************************************/        
+            3 M82605 (2)                          PIC '(5)9',        
+            3 D60808 (2)                          PIC '(8)9',        
+            3 C99001 (2)                          CHAR (1)  ,        
+            3 D10408                              PIC '(8)9',        
+            3 T80005                              PIC '(5)9',        
+            3 N00430                              CHAR (30) ,        
+            3 N00604                              CHAR (4)  ,        
+            3 STATUS_CHANGED_TO_36            BIT(1) ALIGNED,        
+            3 STATUS_CHANGED_FROM_36          BIT(1) ALIGNED,        
+            3 CURRENT_OWNER                   BIT(1) ALIGNED,        
+            3 CALLED_BY_POLY                  BIT(1) ALIGNED;        
+END_PLC(FLAGDTA)

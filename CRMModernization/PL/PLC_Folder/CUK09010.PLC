@@ -1,0 +1,23 @@
+BEGIN_PLC(CUK09010)
+         
+ /*-------------------------------------------------------------------*/        
+ /* CUK09010 : Declarations needed to call module UK09010.            */        
+ /*                                                                   */        
+ /* UK09010 calculates A factor for a policy.                         */        
+ /*         Initial Unit Cashing Factor (IUCF)                        */        
+ /*                                                                   */        
+ /* RM 7/4/97 - extended the A_Factor field as a result of the        */        
+ /*             rounding rules for globals.                           */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+         
+ Dcl P_CUK09010 Ptr ;        
+ Dcl 1 CUK09010_NAME_TYPE ,        
+     3 PolNo       Pic      '(7)9'  ,   /* Policy Number             */        
+     3 Vers        Pic       '9'    ,   /* Version                   */        
+     3 Effdt       Pic      '(8)9'  ,   /* Effective date            */        
+     3 A_Factor    Fixed Dec (7,6)  ;   /* Value Type  - RuthM       */        
+         
+         
+END_PLC(CUK09010)

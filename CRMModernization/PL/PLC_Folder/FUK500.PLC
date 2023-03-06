@@ -1,0 +1,35 @@
+BEGIN_PLC(FUK500)
+ /*------------------------------------------------------------------*/        
+ /* FUK500 : Unit Account                                            */        
+ /*                                                                  */        
+ /* The 5 fund types are (see F_Type):                               */        
+ /*                                                                  */        
+ /*  R - Regular Premium funds.                                      */        
+ /*  S - Single Premium funds.                                       */        
+ /*  P - Protected Rights single premium funds (Non DSS).            */        
+ /*  D - DSS rebates single premiums.                                */        
+ /*  O - Old redirected regular premium funds.                       */        
+ /*                                                                  */        
+ /*  These funds are maintained in positions 1,2,3,4 & 5 of the      */        
+ /*  F_Types array respectively.                                     */        
+ /*                                                                  */        
+ /*------------------------------------------------------------------*/        
+ Dcl 1 WUK500_REC,        
+     3 PolNo       Pic      '(7)9'  ,   /* Policy Number         KEY */        
+     3 Vers        Pic       '9'    ,   /* Version               KEY */        
+     3 F_Types     (5)              ,   /* Array of Fund Types       */        
+       5 F_Type    Char      (1)    ,   /* Fund Type                 */        
+       5 In_Inv    Fixed Dec (11,2) ,   /* Total Investment in Init. */        
+       5 Pr_Inv    Fixed Dec (11,2) ,   /* Total Investment in Prem. */        
+       5 Funds     (10)             ,   /* Array of Funds            */        
+         7 F_Name  Char      (3)    ,   /* Fund Name                 */        
+         7 F_Per   Fixed Dec (3,2)  ,   /* Fund Percentage           */        
+         7 In_Pur  Fixed Dec (15,3) ,   /* Initial Units Purchased   */        
+         7 In_Sur  Fixed Dec (15,3) ,   /* Initial Units Surrendered */        
+         7 Pr_Pur  Fixed Dec (15,3) ,   /* Premium Units Purchased   */        
+         7 Pr_Sur  Fixed Dec (15,3) ,   /* Premium Units Surrendered */        
+     3 First_UIRun Char      (1)    ,        
+     3 Bonus_Date  Pic      '(8)9'  ,   /* Date of latest Bonus YMD  */        
+     3 XFiller     Char      (28)   ;        
+ /*------------------------------------------------------------------*/        
+END_PLC(FUK500)

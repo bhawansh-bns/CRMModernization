@@ -1,0 +1,15 @@
+BEGIN_PLC(INVCTLB)
+         
+    /*****************************************************************/        
+    /* INVESTMENT RECORD BEFORE THE UPDATE                           */        
+    /*****************************************************************/        
+         
+          DCL 1 INVB BASED(TWA.INV_BEFORE_PTR),        
+                3 C77011          PIC'(11)9',       /* POLICY NUMBER  */        
+                3 FDB(32),                          /* FUND DETAIL    */        
+                  5 C46003        PIC'999',         /* INVESTMENT FUND*/        
+                  5 A09009        FIXED DEC (9,3),  /* INV.UNITS      */        
+                  5 A09109        FIXED DEC (9,3),  /* PROT UNITS     */        
+                  5 A09209        FIXED DEC (9,3),  /* EMPLOYEE UNITS */        
+                  5 A09413        FIXED DEC (13,3); /* RESV.UNITS     */        
+END_PLC(INVCTLB)

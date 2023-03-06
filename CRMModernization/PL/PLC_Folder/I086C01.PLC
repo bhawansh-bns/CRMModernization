@@ -1,0 +1,13 @@
+BEGIN_PLC(I086C01)
+     DCL P14DATA_RECORD                 CHAR(77)        
+                                        BASED(ADDR(P14DATA_REC));        
+     DCL 01 P14DATA_REC                 STATIC,        
+            03 CLIREFNO                 CHAR(9),        
+            03 SURNAME                  CHAR(30),        
+            03 NINO                     CHAR(9),        
+            03 TAX_CODE                 CHAR(5),        
+            03 SYMBOL_ADJ_PAY           CHAR(1),        
+            03 AMOUNT_ADJ_PAY           CHAR(11),        
+            03 SYMBOL_ADJ_TAX           CHAR(1),        
+            03 AMOUNT_ADJ_TAX           CHAR(11);        
+END_PLC(I086C01)

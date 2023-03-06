@@ -1,0 +1,18 @@
+BEGIN_PLC(PREMREC)
+ /********************************************************************/        
+ /*   PREMREC - INPUT TO CIPCONT                                     */        
+ /********************************************************************/        
+ /*  THIS COPY MODULE CONTAINS THE RECORD LAYOUT FOR PREMIUM DETAILS */        
+ /*  REQUIRED BY CIPCONT.                                            */        
+ /********************************************************************/        
+         
+      DCL 1 PREM,        
+            3 PLAN_CODE                  CHAR (3),        
+            3 POL_TYPE                   CHAR (3),        
+            3 DATE_OF_BIRTH              PIC '(8)9',        
+            3 SALARY                     FIXED DEC (7,0),        
+            3 POL_PREM                   FIXED DEC (9,2),        
+            3 NON_CANNON_PREM            FIXED DEC (9,2),        
+            3 OTHER_POL_PRMS             FIXED DEC (9,2),        
+            3 CONT_LIMIT_EXCEEDED        CHAR (1);        
+END_PLC(PREMREC)

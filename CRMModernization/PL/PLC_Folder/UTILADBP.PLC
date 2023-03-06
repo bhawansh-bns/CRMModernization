@@ -1,0 +1,20 @@
+BEGIN_PLC(UTILADBP)
+ /*********************************************************************/        
+ /*  UTILADBPM: Fields for associate etc. - Parameters for UTILADB    */        
+ /*             Used to lock/unlock associate on ADB.                 */        
+ /*********************************************************************/        
+ DCL        
+   1 UTILADBA,        
+    2 ASSOCIATE_NUMBER     PIC'(7)9',        
+    2 REC_CREATE_DATE      PIC'(8)9',        
+    2 REC_CREATE_TIME      PIC'(6)9',        
+    2 TRANSACTION_CODE     CHAR(4),        
+    2 ACTION_CODE          CHAR(1),    /* L - LOCK / F - FREE         */        
+    2 RETURN_CODE          CHAR(1);    /* 0 - ACTION COMPLETE         */        
+                                       /* 1 - NOT LOCKED              */        
+                                       /* 2 - ALREADY LOCKED          */        
+                                       /* 3 - INCORRECT UNLOCK        */        
+                                       /* 5 - INVALID REQUEST         */        
+                                       /* 6 - EMPTY FIELDS            */        
+ /*             End of declares in UTILADBPM                          */        
+END_PLC(UTILADBP)

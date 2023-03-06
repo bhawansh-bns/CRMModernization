@@ -1,0 +1,39 @@
+BEGIN_PLC(N040DFND)
+         
+    /*****************************************************************/        
+    /*  <AL> ON: 16/10/2002  BY: KAY LANCETT        PRJ/INC/UQ: 11922*/        
+    /*   Add two new elements to the end of the data area. These     */        
+    /*   elements will be used for correctly calculating interest on */        
+    /*   Imperial loan policies.                                     */        
+    /*   The new elements weill hold the loan policy number          */        
+    /*   LOAN_C77011 & LOAN_DATE.                                    */        
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DFND                                       */        
+    /*   GENERATION  : 033                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : OCTOBER 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+    /*                 ACTIONS CONNECTED WITH FUNDING OF POLICIES.    */        
+    /*                 ALSO FOR IMPERIAL TYPE LOAN POLICIES.          */        
+    /*                 STORES COMMON DATA NEEDED DURING THE FUNDING   */        
+    /*                 OF POLICIES OR PROCESSING OF IMPERIAL LOANS.   */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DFND BASED (COM_DATA.DATA_DFND_PTR),        
+                3 FUNDCNT         PIC'999',   /* COUNT OF FUNDING POLS*/        
+                3 FUNDING_LIST(100),          /* ARRAY FOR DETAILS    */        
+                  5 FUND_C77011     PIC'(11)9',      /* POLICY NUMBER */        
+                  5 FUND_AMOUNT     FIXED DEC(11,2), /* FUNDED AMOUNT */        
+                  5 FUND_LOAN_I     CHAR(1),         /* FUND/LOAN IND */        
+                3 FHISCNT         PIC'999',   /* COUNT OF HISTORY DUPS*/        
+                3 FHISING_LIST(100),          /* ARRAY FOR DETAILS    */        
+                  5 FHIS_C77011     PIC'(11)9',      /* POLICY NUMBER */        
+                  5 FHIS_SEQNUM     PIC'999',        /* LAST SEQ NUM  */        
+                3 LOAN_C77011     PIC'(11)9', /* LOAN POLICY NUMBER   */        
+                3 LOAN_DATE       PIC'(8)9';  /* ORIG POL ANN DATE    */        
+END_PLC(N040DFND)

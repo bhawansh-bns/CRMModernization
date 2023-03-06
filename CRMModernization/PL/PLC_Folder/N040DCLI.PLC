@@ -1,0 +1,22 @@
+BEGIN_PLC(N040DCLI)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DCLI                                       */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : PATRICK HALL                                   */        
+    /*   DATE        : JANUARY 2003                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040       */        
+    /*                 ANNUTITY PAYMENT DIARY MODULES.                */        
+    /*                 STORES COMMON DATA NEEDED TO INFORM N049P00    */        
+    /*                 OF THE NEED TO REWRITE A CLIFIL0 RECORD WITH   */        
+    /*                 THE PAYE THRESHOLD INDICATOR SET               */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DCLI BASED (COM_DATA.DATA_DCLI_PTR),        
+                3 CLI_CLIENT_NUM          PIC'(9)9',        
+                3 CLI_PAYE_THRESHOLD_IND  CHAR(1);        
+END_PLC(N040DCLI)

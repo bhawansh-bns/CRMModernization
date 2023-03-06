@@ -1,0 +1,37 @@
+BEGIN_PLC(D1QOTTRG)
+ /*******************************************************************/        
+ /* PLIINC - DOC1QOT    AUTHOR: BEN CHAPMAN           HEAT: 8376    */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY THE DIARY (N049) TO POPULATE DOC1       */        
+ /* TRIGGER RECORDS FOR THE BLACKBOX TO PROCESS                     */        
+ /*                                                                 */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF QUOTATION DATA TO BE WRITTEN TO THE */        
+ /* FILE CREATED FOR DOC1.                                          */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL   QOT_DTA                  CHAR(114);        
+         
+     DCL 1 QOT_STRUC                BASED(ADDR(QOT_DTA)),        
+           3 QOT_MAN_QUOTE_NEEDED   CHAR(1),        
+           3 QOT_GUAR_ANNUITY_RATE  CHAR(1),        
+           3 QOT_GUAR_MIN_PENSION   CHAR(1),        
+           3 QOT_EPP_INDICATOR      CHAR(1),        
+           3 QOT_FACT_SHEETS(20)    CHAR(1),        
+           3 QOT_ANNUITY_AMOUNT     PIC'(6)Z9V.99',        
+           3 QOT_LPI_ANNUITY_AMOUNT PIC'(6)Z9V.99',/* PROTECT. RTS. */        
+           3 QOT_ANNUITY_FREQ       CHAR(1),        
+           3 QOT_TRANSFER_VALUE     PIC'(8)Z9V.99',        
+           3 QOT_FUND_VALUE         PIC'(8)Z9V.99',        
+           3 QOT_DRD                CHAR(8),        
+           3 QOT_DES_RET_AGE        CHAR(2),        
+           3 QOT_TFC_AMOUNT         PIC'(6)Z9V.99',        
+           3 QOT_ANNUITY_AMOUNT_TFC PIC'(6)Z9V.99',        
+           3 QOT_ESCALATION         PIC'99',        
+           3 QOT_SINGLE_OR_JOINT    CHAR(1),        
+           3 QOT_GUARANTEE          PIC'99',        
+           3 QOT_ARR_OR_ADV         CHAR(3),        
+           3 QOT_LTA_PERCENTAGE     PIC'999.99',        
+           3 QOT_TENPERCENT_FLAG    CHAR(1);        
+END_PLC(D1QOTTRG)

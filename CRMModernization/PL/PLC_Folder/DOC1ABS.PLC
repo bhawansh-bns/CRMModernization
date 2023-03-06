@@ -1,0 +1,183 @@
+BEGIN_PLC(DOC1ABS)
+ /*******************************************************************/        
+ /* PLIINC - DOC1ABS.                               PROJ  : LP000601*/        
+ /*     <AL> ON: 08/01/2010  BY: RICHARD JOBBINS    ASSYST: R05558  */        
+ /*          ADD 3 NEW FIELDS TO THE POL LAYOUT                     */        
+ /*                                                                 */        
+ /*     <AL> ON: 10/03/2008  BY: LOUISE CHANDLER    ASSYST: R01796  */        
+ /*          NEW COPYBOOK FOR CA ANNUAL BENEFIT STATEMENTS          */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY M781 TO PRODUCE ANNUAL BENEFIT          */        
+ /* STATEMENTS FOR COUNTRYWIDE ASSURED.                             */        
+ /* IT HOLDS DATA FOR LIFE STATEMENTS, PRE AND POST 1988 PENSION    */        
+ /* BENEFIT STATEMENTS                                              */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+ /********************************************************************/        
+ /**          OUTPUT   RECORD AREAS                                  */        
+ /********************************************************************/        
+ /* OUTPUT RECORD */        
+     DCL 1 DOC1_REC                    CHAR(2430) VARYING;        
+         
+ /* LET - 1ST RECORD IN EACH POLICY BATCH */        
+     DCL 1 LET                         BASED(ADDR(LET_OUT)),        
+           3 REC_ID                    CHAR(3)  INIT('LET'),        
+           3 VERSION                   CHAR(1),        
+           3 COMPANY                   CHAR(2),        
+           3 STATEMENT_DATE            PIC '(8)9',        
+           3 PREV_STATEMENT_DATE       PIC '(8)9',        
+           3 RETIRE_WITHIN_2YEARS      CHAR(1),        
+           3 PROJECTION_DATE           PIC '(8)9',        
+           3 RETIREMENT_DATE           PIC '(8)9',        
+           3 LIFE_LOAN_IND             CHAR(1),        
+           3 SMPIRPI_RATE              CHAR(15),        
+           3 NPR_DEATH_BEN             CHAR(15),        
+           3 PRP_DEATH_BEN             CHAR(15),        
+           3 OVERSEAS_IND              PIC '9',        
+           3 MAIL_CODE                 PIC '99';        
+     DCL LET_OUT                       CHAR(88);        
+         
+ /* CLI - CLIENT DETAILS */        
+     DCL 1 CLI                         BASED(ADDR(CLI_OUT)),        
+           3 REC_ID                    CHAR(3)  INIT('ADR'),        
+           3 REFERENCE                 CHAR(10),        
+           3 NAME                      CHAR(60),        
+           3 ADD_LIN1                  CHAR(30),        
+           3 ADD_LIN2                  CHAR(30),        
+           3 ADD_LIN3                  CHAR(30),        
+           3 ADD_LIN4                  CHAR(30),        
+           3 POSTCODE                  CHAR(8),        
+           3 SALUTATION                CHAR(60);        
+     DCL CLI_OUT                       CHAR(261);        
+         
+ /* POP - PENSION POLICY DETAILS */        
+     DCL 1 POP                         BASED(ADDR(POP_OUT)),        
+           3 REC_ID                    CHAR(3)  INIT('POP'),        
+           3 POLICY                    PIC '(11)9',        
+           3 STATUS                    PIC '(2)9',        
+           3 HOLDER                    CHAR(60),        
+           3 PRODUCT_DESC              CHAR(30),        
+           3 ISSUE_DATE                PIC '(8)9',        
+           3 DOB                       PIC '(8)9',        
+           3 RETIREMENT_AGE            PIC '(2)9',        
+           3 PAYMENT_FREQUENCY         CHAR(1),        
+           3 CONTRIBUTION_SOURCE       CHAR(2),        
+           3 PENSION_TRANSFER          CHAR(1),        
+           3 EPP                       CHAR(1),        
+           3 DWP                       CHAR(1),        
+           3 PROTECTED_RIGHTS          CHAR(1),        
+           3 INDEXED                   CHAR(1),        
+           3 WAIVER                    CHAR(1),        
+           3 CONTRIBUTION_PROT         CHAR(1),        
+           3 DISAB_BENEFIT             CHAR(15),        
+           3 DISAB_AGE_CEASES          PIC '(2)9',        
+           3 DISAB_PAID_AFTER          CHAR(15),        
+           3 DISAB_INC_RATE            CHAR(15),        
+           3 CUT_OFF_DATE              PIC '(8)9',        
+           3 PREMIUM_NET               CHAR(15),        
+           3 PREMIUM_GROSS             CHAR(15),        
+           3 TOTAL_NET                 CHAR(15),        
+           3 TOTAL_GROSS               CHAR(15),        
+           3 DWP_INCENTIVE             CHAR(15),        
+           3 DWP_REBATE                CHAR(15),        
+           3 DWP_TAX                   CHAR(15),        
+           3 DWP_TOTAL                 CHAR(15),        
+           3 AUG_IND                   CHAR(01),        
+           3 PIS_APPLIES_IND           CHAR(01),        
+           3 NON_STD_GR_RATE_IND       CHAR(01),        
+           3 PROPHET_GROWTH_RATE       CHAR(15);        
+     DCL POP_OUT                       CHAR(327);        
+         
+ /* POL - LIFE POLICY DETAILS */        
+     DCL 1 POL                         BASED(ADDR(POL_OUT)),        
+           3 REC_ID                    CHAR(3)  INIT('POL'),        
+           3 POLICY                    PIC '(11)9',        
+           3 STATUS                    PIC '(2)9',        
+           3 LIFE1_NAME                CHAR(60),        
+           3 LIFE1_DOB                 PIC '(8)9',        
+           3 LIFE2_NAME                CHAR(60),        
+           3 LIFE2_DOB                 PIC '(8)9',        
+           3 PRODUCT_DESC              CHAR(30),        
+           3 ISSUE_DATE                PIC '(8)9',        
+           3 MATURITY_DATE             PIC '(8)9',        
+           3 LIFE1_INDEXED             CHAR(1),        
+           3 LIFE1_WAIVER              CHAR(1),        
+           3 LIFE1_SUM_ASS             CHAR(15),        
+           3 LIFE1_PTD                 CHAR(15),        
+           3 LIFE1_HOSP                CHAR(15),        
+           3 LIFE1_TERM_ILLNESS        CHAR(15),        
+           3 LIFE1_ADB                 CHAR(15),        
+           3 LIFE1_CRITICAL_ILLNESS    CHAR(15),        
+           3 LIFE1_DISAB_BENEFIT       CHAR(15),        
+           3 LIFE1_DISAB_AGE_CEASES    PIC '(2)9',        
+           3 LIFE1_DISAB_PAID_AFTER    CHAR(15),        
+           3 LIFE1_DISAB_INC_RATE      CHAR(15),        
+           3 LIFE2_INDEXED             CHAR(1),        
+           3 LIFE2_WAIVER              CHAR(1),        
+           3 LIFE2_SUM_ASS             CHAR(15),        
+           3 LIFE2_PTD                 CHAR(15),        
+           3 LIFE2_HOSP                CHAR(15),        
+           3 LIFE2_TERM_ILLNESS        CHAR(15),        
+           3 LIFE2_ADB                 CHAR(15),        
+           3 LIFE2_CRITICAL_ILLNESS    CHAR(15),        
+           3 LIFE2_DISAB_BENEFIT       CHAR(15),        
+           3 LIFE2_DISAB_AGE_CEASES    PIC '(2)9',        
+           3 LIFE2_DISAB_PAID_AFTER    CHAR(15),        
+           3 LIFE2_DISAB_INC_RATE      CHAR(15),        
+           3 CUT_OFF_DATE              PIC '(8)9',        
+           3 PREMIUM_NET               CHAR(15),        
+           3 PREMIUM_GROSS             CHAR(15),        
+           3 TOTAL_NET                 CHAR(15),        
+           3 TOTAL_GROSS               CHAR(15),        
+           3 PAYMENT_FREQUENCY         CHAR(1),        
+           3 LAPR_CHANGED              CHAR(1),        
+           3 AD_HOC_LUMPSUM            CHAR(15),        
+           3 WHOLE_OF_LIFE_IND         CHAR (1),               
+           3 LIMITED_PREM_TERM_IND     CHAR (1),               
+           3 INVEST_EXPIRY_DATE        PIC '(8)9';             
+     DCL POL_OUT                       CHAR(571);        
+         
+ /* INV  - INVESTMENT DETAILS */        
+     DCL 1 INV                         BASED(ADDR(INV_OUT)),        
+           3 REC_ID                    CHAR(3)  INIT('INV'),        
+           3 PRODUCT_TYPE              CHAR(1),        
+           3 PREV_STATEMENT_VALUE      CHAR(15),        
+           3 CURRENT_VALUE             CHAR(15),        
+           3 POLICY_VALUE              CHAR(15),        
+           3 CAPITAL_UNIT_VALUE        CHAR(15),        
+           3 ACCUM_UNIT_VALUE          CHAR(15),        
+           3 FUND_COUNT                PIC '99',        
+           3 FUND (30),        
+             5 NAME                    CHAR(32),        
+             5 TYPE                    CHAR(1),        
+             5 UNIT                    CHAR(15),        
+             5 PRICE                   CHAR(15),        
+             5 VALUE                   CHAR(15);        
+     DCL INV_OUT                       CHAR(2421);        
+         
+ /* NPP - PENSION NON PROTECTED RIGHTS ILLUSTRATION */        
+     DCL 1 NPP                         BASED(ADDR(NPP_OUT)),        
+           3 REC_ID                    CHAR(3)  INIT('NPP'),        
+           3 RETIREMENT_FUND           CHAR(15),        
+           3 PENSION                   CHAR(15),        
+           3 PENSION_SPOUSE            CHAR(15),        
+           3 TAX_FREE_LUMPSUM          CHAR(15),        
+           3 REDUCED_PENSION           CHAR(15),        
+           3 REDUCED_SPOUSE_PENSION    CHAR(15),        
+           3 CONTRIBUTION_FLAG         CHAR(1);        
+     DCL NPP_OUT                       CHAR(94);        
+         
+ /* PRP - PENSION PROCTED RIGHTS ILLUSTRATION */        
+     DCL 1 PRP                         BASED(ADDR(PRP_OUT)),        
+           3 REC_ID                    CHAR(3)  INIT('PRP'),        
+           3 RETIREMENT_FUND           CHAR(15),        
+           3 PENSION                   CHAR(15),        
+           3 PENSION_SPOUSE            CHAR(15),        
+           3 TAX_FREE_LUMPSUM          CHAR(15),        
+           3 REDUCED_PENSION           CHAR(15),        
+           3 REDUCED_SPOUSE_PENSION    CHAR(15),        
+           3 DWP_CONTRACTED_OUT        CHAR(1);        
+     DCL PRP_OUT                       CHAR(94);        
+         
+END_PLC(DOC1ABS)

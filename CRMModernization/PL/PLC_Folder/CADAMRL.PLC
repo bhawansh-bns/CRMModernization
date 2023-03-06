@@ -1,0 +1,62 @@
+BEGIN_PLC(CADAMRL)
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*   PROGRAM     : CADAMRL - ACCUMULATED MOVEMENTS HISTORY LAYOUT    */        
+ /*   PROJECT     : CA CONVERSION                                     */        
+ /*   PROGRAMMER  : GEOFF TYLER                                       */        
+ /*   DATE        : 16/07/2007                                        */        
+ /*                                                                   */        
+ /*********************************************************************/        
+   DCL 01  AM_DATA_REC       BASED(ADDR(ORDUAM_REC)),        
+           03  AM_CODE,        
+               05  AM_POLICY,        
+                   07  AM_PLAN                  CHAR(7),        
+                   07  AM_CODE_DATE             FIXED(7),        
+                   07  AM_CODE_TIME             FIXED(7),        
+                   07  AM_CODE_COUNT            FIXED(3),        
+                   07  AM_SEGMENT               PIC'999',        
+                   07  AM_INCREMENT             PIC'999',        
+                   07  AM_BENEFIT               PIC'99',        
+           03  AM_REMAINDER,        
+               05  AM_TRANS_CODE                PIC '99',        
+               05  AM_TRANS_TYPE                CHAR (1),        
+               05  AM_PAIDTO_DATE               PIC '(7)9',        
+               05  AM_UNIT_PRICE_DATE           PIC '(7)9',        
+               05  AM_LAST_UNIT_MOVE_DATE       PIC '(7)9',        
+               05  AM_MODE_PREMIUM              FIXED(11,2),        
+               05  AM_SWITCH_FEE                FIXED(11,2),        
+               05  AM_POLICIES_IN_SEGMENT       FIXED(3),        
+               05  AM_PLAN_CODE,        
+                   07 AM_PROD                   CHAR (3),        
+                   07 AM_FILLER_1               CHAR (8),        
+               05  AM_METHOD                    CHAR (1),        
+               05  AM_LOB                       CHAR (1),        
+               05  AM_ALLOC_PREMIUM             FIXED(11,2),        
+               05  AM_ALLOC_PERCENT             FIXED(5,2),        
+               05  AM_FUND                      CHAR (5),        
+               05  AM_FUND_INIT_UNITS           FIXED(11,3),        
+               05  AM_FUND_ACTL_UNITS           FIXED(11,3),        
+               05  AM_PERCENT                   FIXED(5,2),        
+               05  AM_MOVE_INIT_UNITS           FIXED(11,3),        
+               05  AM_MOVE_ACTL_UNITS           FIXED(11,3),        
+               05  AM_MOVE_INIT_PRICE           FIXED(7,2),        
+               05  AM_MOVE_ACTL_PRICE           FIXED(7,2),        
+               05  AM_MOVE_PRICE_TYPE           CHAR (1),        
+               05  AM_MOVE_INIT_VALUE           FIXED(11,2),        
+               05  AM_MOVE_ACTL_VALUE           FIXED(11,2),        
+               05  AM_FUND_FACTOR_INIT          FIXED(9,8),        
+               05  AM_FUND_FACTOR_ACCUM         FIXED(9,8),        
+               05  AM_EMPLOYER_REF              CHAR (10),        
+               05  AM_RSP_COUNT                 FIXED(5),        
+               05  AM_COMPANY_CODE              CHAR (2),        
+               05  AM_FILLER_2                  CHAR (2),        
+           03  AM_CODE_ALT,        
+               05  AM_POLICY_ALT,        
+                   07  AM_PLAN_ALT              CHAR (7),        
+                   07  AM_SEGMENT_ALT           PIC '999',        
+                   07  AM_INCREMENT_ALT         PIC '999',        
+                   07  AM_BENEFIT_ALT           PIC '99',        
+               05  AM_CODE_DATE_ALT             FIXED(7),        
+               05  AM_CODE_TIME_ALT             FIXED(7),        
+               05  AM_CODE_COUNT_ALT            FIXED(3);        
+END_PLC(CADAMRL)

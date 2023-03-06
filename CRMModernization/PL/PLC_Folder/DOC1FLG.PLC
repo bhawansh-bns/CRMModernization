@@ -1,0 +1,58 @@
+BEGIN_PLC(DOC1FLG)
+ /*******************************************************************/        
+ /* PLIINC - DOC1FLG.                                               */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY THE CWA / DOC1 INTERFACE PROGRAM        */        
+ /* DOC1P00 AND ITS SUBROUTINES.                                    */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF ERROR CODE AND ERROR MESSAGE TO BE  */        
+ /* SET IN DOC1 SUBROUTINES AND RETURNED TO DOC1P00. THE FIELD      */        
+ /* ERR_CODE MAY CONTAIN:                                           */        
+ /*                                                                 */        
+ /*  * "W" FOR WARNING (A WARNING IS WRITTEN TO THE ERROR FILE AND  */        
+ /*                     LETTER PRODUCTION CONTINUES)                */        
+ /*  * "E" FOR ERROR (AN ERROR MESSAGE IS WRITTEN TO THE ERROR FILE */        
+ /*                   AND THE LETTER IS ABANDONED)                  */        
+ /*  * "A" FOR ABEND (A SERIOUS ERROR HAS OCCURRED EG: NON-STANDARD */        
+ /*                   DBHF POST-OP - A MESSAGE IS WRITTEN TO THE    */        
+ /*                   ERROR FILE AND DOC1P00 ABENDS GRACEFULLY)     */        
+ /*                                                                 */        
+ /* IT ALSO HOLDS THE DECLARATION OF FLAGS USED TO SHOW WHICH       */        
+ /* RECORD TYPES MUST BE WRITTEN TO THE OUTPUT FILE FOR THE CURRENT */        
+ /* LETTER TRIGGER.                                                 */        
+ /*                                                                 */        
+ /* THE VARIABLES IN THIS STRUCTURE HAVE TO BE DECLARED AS EXTERNAL */        
+ /* AS THE DATA NEEDS TO BE ACCESSIBLE TO BOTH THE TOP-LEVEL        */        
+ /* INTERFACE DOC1P00 AND ANY SUBROUTINES.                          */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL   ERR_DTA                  CHAR(73) EXTERNAL;        
+         
+     DCL 1 ERR_STRUC                BASED(ADDR(ERR_DTA)),        
+           3 ERR_CODE               CHAR(1),        
+           3 ERR_MESSAGE            CHAR(72);        
+         
+         
+     DCL   FLG_DTA                  CHAR(20) EXTERNAL;        
+         
+     DCL 1 FLG_STRUC                BASED(ADDR(FLG_DTA)),        
+           3 FLG_LET                CHAR(1),        
+           3 FLG_ADR                CHAR(1),        
+           3 FLG_OWN                CHAR(1),        
+           3 FLG_ADV                CHAR(1),        
+           3 FLG_POL                CHAR(1),        
+           3 FLG_ASE                CHAR(1),        
+           3 FLG_QOT                CHAR(1),        
+           3 FLG_CEC                CHAR(1),        
+           3 FLG_OPR                CHAR(1),        
+           3 FLG_PCT                CHAR(1),        
+           3 FLG_TRF                CHAR(1),        
+           3 FLG_VES                CHAR(1),        
+           3 FLG_TOT                CHAR(1),        
+           3 FLG_ENC                CHAR(1),        
+           3 FLG_PNL                CHAR(1),        
+           3 FLG_CUS                CHAR(1),        
+           3 FLG_PCE                CHAR(1),        
+           3 FILLER                 CHAR(3);        
+END_PLC(DOC1FLG)

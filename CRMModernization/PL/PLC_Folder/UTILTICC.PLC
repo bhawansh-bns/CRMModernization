@@ -1,0 +1,17 @@
+BEGIN_PLC(UTILTICC)
+ /*********************************************************************/        
+ /*     <AL> ON: 26/04/2007  BY: Karen Bingle            PROJ: LP00601*/        
+ /* COPIED FROM CPDF FOR CHESNARA CONVERSION                          */        
+ /*********************************************************************/        
+         
+ DCL  1 UTILTIC_AREA,        
+        3 N95015           CHAR(15),        
+        3 N95401           CHAR(1),        
+        3 TICKS            CHAR(50);        
+         
+         
+  DCL UTILTIC_TICKS           CHAR (50);        
+  DCL 1 UTILTIC_TICK_RED   BASED (ADDR (UTILTIC_TICKS)),        
+      3 UTILTIC_TICK          (50) CHAR (1);        
+         
+END_PLC(UTILTICC)

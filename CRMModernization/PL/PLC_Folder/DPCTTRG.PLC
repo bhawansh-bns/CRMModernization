@@ -1,0 +1,53 @@
+BEGIN_PLC(DPCTTRG)
+ /*******************************************************************/        
+ /* PLIINC - DOC1TRG.                                               */        
+ /*                                                                 */        
+ /* THIS INCLUDE IS USED BY THE CWA / DOC1 INTERFACE PROGRAM        */        
+ /* DOC1P00 AND ANY PROGRAMS THAT TRIGGER DOC1 LETTERS.             */        
+ /*                                                                 */        
+ /* IT HOLDS THE DECLARATION OF COMMON TRIGGER FILE DATA ELEMENTS.  */        
+ /*                                                                 */        
+ /*******************************************************************/        
+         
+     DCL   TRG_PCT                  CHAR(1423) EXTERNAL;        
+         
+     DCL 1 PCT_TRG_STRUC                BASED(ADDR(TRG_PCT)),        
+           3 P_TRG_ID                 CHAR(9),        
+           3 P_TRG_LETTER_REF         CHAR(20),        
+           3 P_TRG_SUBTYPES           CHAR(5),        
+           3 P_TRG_DATE               CHAR(8),        
+           3 P_TRG_SOURCE_PROG        CHAR(8),        
+           3 P_TRG_LOGON_ID           CHAR(8),        
+           3 P_TRG_EMPLOYEE_NUM       CHAR(8),        
+           3 P_TRG_LOCATION           CHAR(2),        
+           3 P_TRG_NUM_COPIES         CHAR(2),        
+           3 P_TRG_POLICY_NO          CHAR(11),        
+           3 P_TRG_CLIENT_NO         CHAR(9),/* ADDRESSEE (not owner)*/        
+           3 P_TRG_PAYREF_NO          CHAR(18),        
+           3 P_TRG_ADR_ASSOC_CODE     CHAR(2),        
+           3 P_TRG_OWNER_CLIENT_NO    CHAR(9),        
+           3 P_TRG_FILLER             CHAR(48),        
+           3 P_TRG_LETTER_SPECIFIC    CHAR(1256);        
+         
+     DCL   PCT_TRG_TMP                  CHAR(1423);        
+         
+     /* Internal temp structure for multiple policy read-ahead */        
+         
+     DCL 1 PCT_TRG_TMP_STRUC            BASED(ADDR(PCT_TRG_TMP)),        
+           3 P_TRG_TMP_ID             CHAR(9),        
+           3 P_TRG_TMP_LETTER_REF     CHAR(20),        
+           3 P_TRG_TMP_SUBTYPES       CHAR(5),        
+           3 P_TRG_TMP_DATE           CHAR(8),        
+           3 P_TRG_TMP_SOURCE_PROG    CHAR(8),        
+           3 P_TRG_TMP_LOGON_ID       CHAR(8),        
+           3 P_TRG_TMP_EMPLOYEE_NUM   CHAR(8),        
+           3 P_TRG_TMP_LOCATION       CHAR(2),        
+           3 P_TRG_TMP_NUM_COPIES     CHAR(2),        
+           3 P_TRG_TMP_POLICY_NO      CHAR(11),        
+           3 P_TRG_TMP_CLIENT_NO     CHAR(9),/* ADDRESSEE (not owner)*/        
+           3 P_TRG_TMP_PAYREF_NO      CHAR(18),        
+           3 P_TRG_TMP_ADR_ASSOC_CODE CHAR(2),        
+           3 P_TRG_TMP_OWNER_CLIENT_NO CHAR(9),        
+           3 P_TRG_TMP_FILLER         CHAR(48),        
+           3 P_TRG_TMP_LETTER_SPECIFIC CHAR(1256);        
+END_PLC(DPCTTRG)

@@ -1,0 +1,11 @@
+BEGIN_PLC(D1LTATRG)
+  DCL  D1LTA_DATA BASED (ADDR(D1LTA_ITEMS)) CHAR(543);        
+         
+  DCL 1 D1LTA_ITEMS,        
+         3 NUM_POLICIES            PIC '999',        
+         3 DETAILS (20),        
+           5 POLICY_NO                 PIC '(11)9',        
+           5 LTA_PCENT                 PIC '999V.99',        
+           5 PLUS_OTHER                CHAR (1),        
+           5 TAX_YEAR                  CHAR (9);        
+END_PLC(D1LTATRG)

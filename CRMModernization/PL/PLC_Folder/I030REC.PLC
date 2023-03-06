@@ -1,0 +1,89 @@
+BEGIN_PLC(I030REC)
+     DCL I030OUT                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030OU1                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030OU2                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030OU3                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030OU4                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030OU5                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030OU6                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030OU7                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030OU8                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030OU9                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030O10                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030O11                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030O12                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030O13                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+     DCL I030O14                     FILE RECORD OUTPUT        
+                                     ENV(FB RECSIZE(200) BLKSIZE(4000));        
+                                     /* PH_ = POLICY HOLDER */        
+     DCL TYPE1                       CHAR(200)  BASED(ADDR(T1));        
+     DCL 01 T1                       STATIC,        
+            03 REC_IDENT             PIC'9'     INIT(1),        
+            03 REC_TYPE              CHAR(2)    INIT('CE'),        
+            03 INS_NAME              CHAR(50)   INIT(''),        
+            03 INS_REF               CHAR(8)    INIT(''),        
+            03 BATCH_NO              CHAR(3)    INIT(''),        
+            03 PH_TITLE_LENGTH       CHAR(2)    INIT('06'),        
+            03 PH_FORENAME_LENGTH    CHAR(2)    INIT('30'),        
+            03 PH_NAME_LENGTH        CHAR(3)    INIT('030'),        
+            03 PH_ADDR_LINE_LENGTH   CHAR(3)    INIT('030'),        
+            03 PH_ADDR_LINE_COUNT    CHAR(2)    INIT('04'),        
+            03 PH_POSTCODE_SUPP      CHAR(1)    INIT('Y'),        
+            03 THE_REST              CHAR(123)  INIT(' '); /* 200-77 */        
+         
+     DCL TYPE2                       CHAR(200)  BASED(ADDR(T2));        
+     DCL 01 T2                       STATIC,        
+            03 REC_IDENT             PIC'9'     INIT(2),        
+            03 POLICY_NO             CHAR(24),        
+            03 CURRENCY_CODE         CHAR(3),        
+            03 EVENT_TYPE            CHAR(2),        
+            03 DATE_OF_EVENT         CHAR(08),        
+            03 POL_YEAR_END          CHAR(08),        
+            03 NUMBER_OF_YEARS       PIC'999'   INIT(0),        
+            03 AMOUNT_OF_GAIN        CHAR(08),        
+            03 TAX_TREAT_AS_PAID     CHAR(1)    INIT('Y'),        
+            03 AMT_TAX_TA_PAID       CHAR(08),        
+            03 TOTAL_PREV_GAINS      CHAR(08),        
+            03 PREM_CONS_PAID        CHAR(08),        
+            03 CAPITAL_PAYMNTS       CHAR(08),        
+            03 PARTS_PREV_ASS        CHAR(08),        
+            03 CAP_ELEMENTS_PAID     CHAR(08),        
+            03 NO_OF_POLICY_HOLDERS  PIC'999'   INIT(0),        
+            03 TYPE_3_REC_COUNT      CHAR(3),        
+            03 THE_REST              CHAR(88)   INIT(' '); /* 200-112 */        
+         
+     DCL TYPE3                       CHAR(200)  BASED(ADDR(T3));        
+     DCL 01 T3                       STATIC,        
+            03 REC_IDENT             PIC'9'     INIT(3),        
+            03 STRUCTURED_NAME       CHAR(01)   INIT('Y'),        
+            03 NAME_CONVTN           CHAR(02)   INIT('00'),        
+            03 PH_TITLE              CHAR(06),        
+            03 PH_FORENAME           CHAR(30),        
+            03 PH_SURNAME            CHAR(30),        
+            03 PH_ADDR_1             CHAR(30),        
+            03 PH_ADDR_2             CHAR(30),        
+            03 PH_ADDR_3             CHAR(30),        
+            03 PH_ADDR_4             CHAR(30),        
+            03 PH_POSTCODE           CHAR(08),        
+            03 THE_REST              CHAR(3)    INIT(' '); /* 200-197 */        
+         
+     DCL TYPE4(15)                   CHAR(200)  BASED(ADDR(T4));        
+     DCL 01 T4(15)                   STATIC,        
+            03 REC_IDENT             PIC'9'     INIT((15)(4)),        
+            03 COUNT_OF_T2           PIC'(11)9' INIT(0),        
+            03 THE_REST              CHAR(188)  INIT(' '); /* 200-12 */        
+END_PLC(I030REC)

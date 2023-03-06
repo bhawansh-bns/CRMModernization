@@ -1,0 +1,24 @@
+BEGIN_PLC(N040DREP)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DREP                                       */        
+    /*   GENERATION  : 033                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : OCTOBER 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : COMMON DATA AREA FOR USE BY ALL THE N040 DIARY */        
+    /*                 ACTIONS CREATING REPORT RECORDS.               */        
+    /*                 STORES COMMON DATA NEEDED FOR DURING THE       */        
+    /*                 CREATION OF REPORT RECORDS.                    */        
+    /*                 MOST DATA IS LOADED IN THE INITIAL PROCEDURE,  */        
+    /*                 N040P01.                                       */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 DATA_DREP BASED (COM_DATA.DATA_DREP_PTR),        
+                3 P_LIFE_PEN      CHAR(1),    /* LIFE / PENSION IND.  */        
+                3 REP_CNT(100)    PIC'999';   /* COUNT OF REPORT RECS */        
+END_PLC(N040DREP)

@@ -1,0 +1,71 @@
+BEGIN_PLC(FUK509)
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* Transaction codes and sequence                                    */        
+ /*                                                                   */        
+ /* For both UKUI Normalisation & Reinvestment                        */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ %Dcl MaxUKUITxn Fixed;        
+ %MaxUKUITxn = 30;        
+         
+ Dcl 1 UKUI_Txn(MaxUKUITxn),        
+       2 Seq_No    Pic'999',        
+       2 f1        Char(1),        
+       2 Txn_Type  Char(5),        
+       2 f2        Char(1),        
+       2 Sched_Txn Char(1);        
+         
+ /* NB: This sequence is not yet correct. Lynelle's sequence has        
+    not yet been applied.        
+    1. Status changes (ALTER) should occur after BONUS */        
+         
+ /* Master Alterations */        
+ String(UKUI_Txn(  1 )) = '011 ALTER U';        
+ String(UKUI_Txn(  2 )) = '010 NEWPC U';        
+         
+ /* Fund Switches */        
+ String(UKUI_Txn(  3 )) = '020 NEWRP U';        
+ String(UKUI_Txn(  4 )) = '021 SWH   U';        
+ String(UKUI_Txn(  5 )) = '022 REDIR U';        
+ String(UKUI_Txn(  6 )) = '023 PIS   S';        
+         
+ /* Scheduled Bonus */        
+ String(UKUI_Txn(  7 )) = '030 BONUS S';        
+         
+ /* Slice Alterations */        
+  String(UKUI_Txn(  8 )) = '040 SUSOF U';        
+  String(UKUI_Txn(  9 )) = '041 STSLC U';        
+  String(UKUI_Txn( 10 )) = '042 INDEX U';        
+  String(UKUI_Txn( 11 )) = '043 NEWBU U';        
+  String(UKUI_Txn( 12 )) = '044 OPINC U';        
+  String(UKUI_Txn( 13 )) = '045 OLINC U';        
+  String(UKUI_Txn( 14 )) = '046 OPRED U';        
+  String(UKUI_Txn( 15 )) = '046 OLRED U';        
+  String(UKUI_Txn( 16 )) = '047 WOPON U';        
+  String(UKUI_Txn( 17 )) = '048 WOPOF U';        
+  String(UKUI_Txn( 18 )) = '049 WPOFF S';        
+  String(UKUI_Txn( 19 )) = '050 DABON U';        
+  String(UKUI_Txn( 20 )) = '051 DABOF U';        
+  String(UKUI_Txn( 21 )) = '050 SUSON U';        
+         
+ /* SP purchases */        
+ String(UKUI_Txn( 22 )) = '053 NEWSP U';        
+ String(UKUI_Txn( 23 )) = '054 TOPUP U';        
+ String(UKUI_Txn( 24 )) = '055 RECOV U';        
+         
+ /* Scheduled RP Investment */        
+ String(UKUI_Txn( 25 )) = '060 MTINV S';        
+         
+ /* Scheduled fund conversion at maturity */        
+ String(UKUI_Txn( 26 )) = '070 CONV  S';        
+         
+ /* Scheduled Charging */        
+ String(UKUI_Txn( 27 )) = '080 CHARG S';        
+         
+ /* Encashments */        
+ String(UKUI_Txn( 28 )) = '090 PENC  U';        
+ String(UKUI_Txn( 29 )) = '091 FENC  U';        
+ String(UKUI_Txn( 30 )) = '092 AINC  U';        
+         
+END_PLC(FUK509)

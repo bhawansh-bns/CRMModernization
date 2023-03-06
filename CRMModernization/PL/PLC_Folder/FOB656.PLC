@@ -1,0 +1,41 @@
+BEGIN_PLC(FOB656)
+ /*  CPI RPI RATE FILE        */        
+         
+         
+ DCL 1 WOB656_1  UNALIGNED BASED (POB656)                  ,        
+ /* RECORD CONTROL SECTION                                       */        
+       2   TITLE    CHAR           (  3)                   ,        
+ /* TITLE  -  CPI OR RPI                     */        
+       2   DATE     PIC            '(8)9'                  ,        
+ /* DATE  - YYYYMMDD                         */        
+       2   INDEX    PIC            '(4)9V(1)9'             ,        
+ /* INDEX                                    */        
+       2   USENO    CHAR           (  4)                   ,        
+ /* USER NUMBER                              */        
+       2   TODAY    CHAR           (  6)                   ,        
+ /* TODAY'S DATE                             */        
+       2   NOW      CHAR           (  4)                   ,        
+ /* TIME AT PRESENT                          */        
+       2   LOCK     CHAR           (  4)                   ,        
+ /* USER NUMBER LOCK FOR UPDATE              */        
+       2   SPARE    CHAR           ( 46)                   ;        
+ /* SPARE                                    */        
+         
+         
+      /*-------------------------------------*/        
+      /*                                     */        
+      /*                                     */        
+      /*    THESE  EXTRA  LINES  WILL PERMIT */        
+      /*         A  CHOICE  BETWEEN          */        
+      /*                                     */        
+      /*          R E A D   S E T            */        
+      /*                   &                 */        
+      /*         R E A D   I N T O           */        
+      /*                                     */        
+      /*-------------------------------------*/        
+         
+         
+           DCL  WOB656  CHAR (080) ;        
+           POB656 = ADDR ( WOB656 ) ;        
+         
+END_PLC(FOB656)

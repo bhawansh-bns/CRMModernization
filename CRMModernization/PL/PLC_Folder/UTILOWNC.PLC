@@ -1,0 +1,11 @@
+BEGIN_PLC(UTILOWNC)
+         
+ /**********************************************************/        
+ /* AREA FOR LINKING TO UTILOWN - GET FIRST OWNER DETAILS  */        
+ /**********************************************************/        
+ DCL  1 UTILOWN_AREA,        
+        3 C77011           PIC '(11)9',        
+        3 C45702           CHAR (2),        
+        3 M19009           PIC '(9)9',        
+        3 C44501           PIC '9';        
+END_PLC(UTILOWNC)

@@ -1,0 +1,23 @@
+BEGIN_PLC(DUK09005)
+         
+ /*-------------------------------------------------------------------*/        
+ /* DUK09005 : Declarations needed to call module UK09005.            */        
+ /*                                                                   */        
+ /* This include is used by programs which call program UK09005.      */        
+ /*                                                                   */        
+ /* AC  9/10/96 Removed Prem_Red_Amt from control log.                */        
+ /* RM 12/12/96 Add Cashamt for recording controls for non-unit txns  */        
+ /* MH 18/12/96 Removed Fund_Name and Fund_Type indices, as we now    */        
+ /*             call controls for all funds                           */        
+ /* RM 12/02/97 Change cash amt to 15,5 due to rounding rules.        */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl UK09005 Entry (PTR,        
+                    Char(1),           /* Action B,A or R */        
+                    PIC '999',         /* Reason Code */        
+                    Fixed Dec(15,5)    /* Cash amt of txn   */        
+                   ) External ;        
+         
+         
+END_PLC(DUK09005)

@@ -1,0 +1,34 @@
+BEGIN_PLC(N040DTWA)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040DTWA                                       */        
+    /*   GENERATION  : 018                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : NEW DIARY                                      */        
+    /*   PROGRAMMER  : JOHN YANDELL                                   */        
+    /*   DATE        : OCTOBER 1992                                   */        
+    /*                                                                */        
+    /*   DESCRIPTION : TWA AREA FOR COMMON DATA USED BY THE N040      */        
+    /*                 DIARY PROCEDURES AND ACTIONS AS REQUIRED.      */        
+    /*                 IT ALLOWS DATA TO BE PASED BETWEEN ACTIONS     */        
+    /*                 AND FROM ONE PROCEDURE TO ANOTHER WITHOUT THE  */        
+    /*                 NEED FOR EXTERNAL STORAGE OR PARAMETERS.       */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+          DCL 1 COM_DATA,        
+                3 DATA_DALL_PTR      PTR, /* DATA FOR ALL ACTIONS     */        
+                3 DATA_DREP_PTR      PTR, /* DATA FOR REPORT RECORDS  */        
+                3 DATA_DHIS_PTR      PTR, /* DATA FOR HISTORY RECORDS */        
+                3 DATA_DTRN_PTR      PTR, /* DATA FOR TRANSACTION RECS*/        
+                3 DATA_DBAC_PTR      PTR, /* DATA FOR BACS RECORDS    */        
+                3 DATA_DINC_PTR      PTR, /* DATA FOR INCREASE RECORDS*/        
+                3 DATA_DFND_PTR      PTR, /* DATA FOR FUNDING ACTIONS */        
+                3 DATA_DCOV_PTR      PTR, /* DATA FOR COVERAGE RECORDS*/        
+                3 DATA_DOC1_PTR      PTR, /* DATA FOR DOC1 TRIGGERS   */        
+                3 DATA_DCLI_PTR      PTR, /* DATA FOR MULTIPLE ANNUITY*/        
+                3 DATA_PARM_PTR      PTR, /* DATA FOR SELECTION CRITER*/        
+                3 DATA_NOTE_PTR      PTR, /* DATA FOR SELECTION CRITER*/        
+                3 DATA_CLOG_PTR      PTR; /* DATA FOR CONTACT LOG     */        
+END_PLC(N040DTWA)

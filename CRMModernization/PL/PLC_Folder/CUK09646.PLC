@@ -1,0 +1,25 @@
+BEGIN_PLC(CUK09646)
+ /*-------------------------------------------------------------------*/        
+ /* CUK09646 : Declarations needed to call module UK09646.            */        
+ /*                                                                   */        
+ /* UK09646 is called by UK08990 to apply PTD rules                   */        
+ /* and calculate PTD charge.                                         */        
+ /*                                                                   */        
+ /* Fill Cuk09646 as follows:                                         */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK09646 Ptr ;        
+ Dcl 1 CUK09646_NAME_TYPE ,        
+       2 PTD_Code      Fixed Dec(3,2),        
+       2 PTD_Charge    Fixed Dec(11,6),        
+       2 PTD_Rate_1    Fixed Dec(15,5),        
+       2 PTD_Rate_2    Fixed Dec(15,5),        
+       2 PTD_Method    Char(1),        
+       2 Prm_Fac_1     Pic '(4)9',        
+       2 Med_Fac_1     Pic '(4)9',        
+       2 Prm_Fac_2     Pic '(4)9',        
+       2 Med_Fac_2     Pic '(4)9';        
+         
+END_PLC(CUK09646)

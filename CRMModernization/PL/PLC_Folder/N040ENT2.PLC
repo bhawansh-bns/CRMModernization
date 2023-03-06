@@ -1,0 +1,301 @@
+BEGIN_PLC(N040ENT2)
+         
+    /******************************************************************/        
+    /*                                                                */        
+    /*   MODULE      : N040ENT2                                       */        
+    /*   GENERATION  : 001                                            */        
+    /*   VERSION     : ORIGINAL                                       */        
+    /*   SYSTEM      : DIARY                                          */        
+    /*   PROGRAMMER  : MARK DOBSON                                    */        
+    /*   DATE        : FEBRUARY 2009                                  */        
+    /*                                                                */        
+    /*   DESCRIPTION : CONTAINS THE ENTRY ASSIGNMENTS FR ALL DIARY    */        
+    /*                 SUB-MODULES FOR A PARTICULAR INSTANCE OF THE   */        
+    /*                 DIARY CONTROLLER N049P00.                      */        
+    /*                 I.E. THIS INCLUDE MEMBER WILL BE DIFFERENT FOR */        
+    /*                 LINCOLN AND COUNTRYWIDE.                       */        
+    /*                                                                */        
+    /******************************************************************/        
+         
+            ACTION_NAMES = ' ';        
+         
+            ACTION_NAMES(004) =   'MPA9';        
+            ACTION_PROCS(004) = N04MPA9;        
+            ACTION_NAMES(006) =   'MPM9';        
+            ACTION_PROCS(006) = N04MPM9;        
+            ACTION_NAMES(007) =   'MP01';        
+            ACTION_PROCS(007) = N04MP01;        
+            ACTION_NAMES(012) =   'MP10';        
+            ACTION_PROCS(012) = N04MP10;        
+            ACTION_NAMES(013) =   'MP31';        
+            ACTION_PROCS(013) = N04MP31;        
+            ACTION_NAMES(014) =   'MP32';        
+            ACTION_PROCS(014) = N04MP32;        
+            ACTION_NAMES(015) =   'MP33';        
+            ACTION_PROCS(015) = N04MP33;        
+            ACTION_NAMES(016) =   'MP34';        
+            ACTION_PROCS(016) = N04MP34;        
+            ACTION_NAMES(020) =   'MP69';        
+            ACTION_PROCS(020) = N04MP69;        
+            ACTION_NAMES(021) =   'MP84';        
+            ACTION_PROCS(021) = N04MP84;        
+            ACTION_NAMES(023) =   'MP89';        
+            ACTION_PROCS(023) = N04MP89;        
+         
+            ACTION_NAMES(050) =   'MR02';        
+            ACTION_PROCS(050) = N04MR02;        
+            ACTION_NAMES(051) =   'MR03';        
+            ACTION_PROCS(051) = N04MR03;        
+            ACTION_NAMES(052) =   'MR04';        
+            ACTION_PROCS(052) = N04MR04;        
+            ACTION_NAMES(053) =   'MR35';        
+            ACTION_PROCS(053) = N04MR35;        
+            ACTION_NAMES(054) =   'MR36';        
+            ACTION_PROCS(054) = N04MR36;        
+         
+            ACTION_NAMES(103) =   'PCA4';        
+            ACTION_PROCS(103) = N04PCA4;        
+            ACTION_NAMES(104) =   'PCA5';        
+            ACTION_PROCS(104) = N04PCA5;        
+            ACTION_NAMES(105) =   'PCA6';        
+            ACTION_PROCS(105) = N04PCA6;        
+            ACTION_NAMES(109) =   'PCB5';        
+            ACTION_PROCS(109) = N04PCB5;        
+            ACTION_NAMES(115) =   'PCD3';        
+            ACTION_PROCS(115) = N04PCD3;        
+            ACTION_NAMES(120) =   'PCE4';        
+            ACTION_PROCS(120) = N04PCE4;        
+            ACTION_NAMES(121) =   'PCE5';        
+            ACTION_PROCS(121) = N04PCE5;        
+            ACTION_NAMES(122) =   'PCE6';        
+            ACTION_PROCS(122) = N04PCE6;        
+            ACTION_NAMES(125) =   'PCG4';        
+            ACTION_PROCS(125) = N04PCG4;        
+            ACTION_NAMES(126) =   'PCG5';        
+            ACTION_PROCS(126) = N04PCG5;        
+            ACTION_NAMES(127) =   'PCG6';        
+            ACTION_PROCS(127) = N04PCG6;        
+            ACTION_NAMES(128) =   'PCG9';        
+            ACTION_PROCS(128) = N04PCG9;        
+            ACTION_NAMES(133) =   'PCI8';        
+            ACTION_PROCS(133) = N04PCI8;        
+            ACTION_NAMES(138) =   'PCJ8';        
+            ACTION_PROCS(138) = N04PCJ8;        
+            ACTION_NAMES(146) =   'PCM4';        
+            ACTION_PROCS(146) = N04PCM4;        
+            ACTION_NAMES(147) =   'PCM5';        
+            ACTION_PROCS(147) = N04PCM5;        
+            ACTION_NAMES(148) =   'PCM6';        
+            ACTION_PROCS(148) = N04PCM6;        
+            ACTION_NAMES(149) =   'PCM9';        
+            ACTION_PROCS(149) = N04PCM9;        
+            ACTION_NAMES(150) =   'PCO4';        
+            ACTION_PROCS(150) = N04PCO4;        
+            ACTION_NAMES(151) =   'PCO5';        
+            ACTION_PROCS(151) = N04PCO5;        
+            ACTION_NAMES(152) =   'PCO6';        
+            ACTION_PROCS(152) = N04PCO6;        
+            ACTION_NAMES(157) =   'PCR6';        
+            ACTION_PROCS(157) = N04PCR6;        
+            ACTION_NAMES(162) =   'PCT4';        
+            ACTION_PROCS(162) = N04PCT4;        
+            ACTION_NAMES(163) =   'PCT5';        
+            ACTION_PROCS(163) = N04PCT5;        
+            ACTION_NAMES(164) =   'PCT6';        
+            ACTION_PROCS(164) = N04PCT6;        
+            ACTION_NAMES(165) =   'PCT9';        
+            ACTION_PROCS(165) = N04PCT9;        
+            ACTION_NAMES(192) =   'PC06';        
+            ACTION_PROCS(192) = N04PC06;        
+            ACTION_NAMES(193) =   'PC07';        
+            ACTION_PROCS(193) = N04PC07;        
+            ACTION_NAMES(196) =   'PC10';        
+            ACTION_PROCS(196) = N04PC10;        
+            ACTION_NAMES(200) =   'PC34';        
+            ACTION_PROCS(200) = N04PC34;        
+            ACTION_NAMES(201) =   'PC35';        
+            ACTION_PROCS(201) = N04PC35;        
+            ACTION_NAMES(202) =   'PC36';        
+            ACTION_PROCS(202) = N04PC36;        
+            ACTION_NAMES(203) =   'PC37';        
+            ACTION_PROCS(203) = N04PC37;        
+            ACTION_NAMES(204) =   'PC39';        
+            ACTION_PROCS(204) = N04PC39;        
+            ACTION_NAMES(224) =   'PC67';        
+            ACTION_PROCS(224) = N04PC67;        
+            ACTION_NAMES(225) =   'PC68';        
+            ACTION_PROCS(225) = N04PC68;        
+            ACTION_NAMES(229) =   'PC80';        
+            ACTION_PROCS(229) = N04PC80;        
+            ACTION_NAMES(232) =   'PC85';        
+            ACTION_PROCS(232) = N04PC85;        
+            ACTION_NAMES(233) =   'PC86';        
+            ACTION_PROCS(233) = N04PC86;        
+         
+            ACTION_NAMES(303) =   'PDB2';        
+            ACTION_PROCS(303) = N04PDB2;        
+            ACTION_NAMES(315) =   'PDF6';        
+            ACTION_PROCS(315) = N04PDF6;        
+         
+            ACTION_NAMES(350) =   'PFA1';        
+            ACTION_PROCS(350) = N04PFA1;        
+            ACTION_NAMES(351) =   'PFB1';        
+            ACTION_PROCS(351) = N04PFB1;        
+            ACTION_NAMES(352) =   'PFB2';        
+            ACTION_PROCS(352) = N04PFB2;        
+            ACTION_NAMES(353) =   'PFE1';        
+            ACTION_PROCS(353) = N04PFE1;        
+            ACTION_NAMES(354) =   'PFE2';        
+            ACTION_PROCS(354) = N04PFE2;        
+            ACTION_NAMES(355) =   'PFG1';        
+            ACTION_PROCS(355) = N04PFG1;        
+            ACTION_NAMES(356) =   'PFG2';        
+            ACTION_PROCS(356) = N04PFG2;        
+            ACTION_NAMES(357) =   'PFH3';        
+            ACTION_PROCS(357) = N04PFH3;        
+            ACTION_NAMES(358) =   'PFH4';        
+            ACTION_PROCS(358) = N04PFH4;        
+            ACTION_NAMES(359) =   'PFI1';        
+            ACTION_PROCS(359) = N04PFI1;        
+            ACTION_NAMES(360) =   'PFJ3';        
+            ACTION_PROCS(360) = N04PFJ3;        
+            ACTION_NAMES(361) =   'PFJ4';        
+            ACTION_PROCS(361) = N04PFJ4;        
+            ACTION_NAMES(362) =   'PFL3';        
+            ACTION_PROCS(362) = N04PFL3;        
+            ACTION_NAMES(363) =   'PFL4';        
+            ACTION_PROCS(363) = N04PFL4;        
+            ACTION_NAMES(364) =   'PFM1';        
+            ACTION_PROCS(364) = N04PFM1;        
+            ACTION_NAMES(365) =   'PFM8';        
+            ACTION_PROCS(365) = N04PFM8;        
+            ACTION_NAMES(366) =   'PFM9';        
+            ACTION_PROCS(366) = N04PFM9;        
+            ACTION_NAMES(367) =   'PFN1';        
+            ACTION_PROCS(367) = N04PFN1;        
+            ACTION_NAMES(368) =   'PFN2';        
+            ACTION_PROCS(368) = N04PFN2;        
+            ACTION_NAMES(369) =   'PFN3';        
+            ACTION_PROCS(369) = N04PFN3;        
+            ACTION_NAMES(370) =   'PFN4';        
+            ACTION_PROCS(370) = N04PFN4;        
+            ACTION_NAMES(371) =   'PFP3';        
+            ACTION_PROCS(371) = N04PFP3;        
+            ACTION_NAMES(372) =   'PFP4';        
+            ACTION_PROCS(372) = N04PFP4;        
+            ACTION_NAMES(373) =   'PFQ1';        
+            ACTION_PROCS(373) = N04PFQ1;        
+            ACTION_NAMES(374) =   'PFR1';        
+            ACTION_PROCS(374) = N04PFR1;        
+            ACTION_NAMES(375) =   'PFR3';        
+            ACTION_PROCS(375) = N04PFR3;        
+            ACTION_NAMES(376) =   'PFR4';        
+            ACTION_PROCS(376) = N04PFR4;        
+            ACTION_NAMES(377) =   'PFT3';        
+            ACTION_PROCS(377) = N04PFT3;        
+            ACTION_NAMES(378) =   'PFT4';        
+            ACTION_PROCS(378) = N04PFT4;        
+            ACTION_NAMES(379) =   'PFU1';        
+            ACTION_PROCS(379) = N04PFU1;        
+            ACTION_NAMES(380) =   'PFU8';        
+            ACTION_PROCS(380) = N04PFU8;        
+            ACTION_NAMES(381) =   'PFU9';        
+            ACTION_PROCS(381) = N04PFU9;        
+            ACTION_NAMES(382) =   'PFV3';        
+            ACTION_PROCS(382) = N04PFV3;        
+            ACTION_NAMES(383) =   'PFV4';        
+            ACTION_PROCS(383) = N04PFV4;        
+            ACTION_NAMES(384) =   'PF40';        
+            ACTION_PROCS(384) = N04PF40;        
+            ACTION_NAMES(385) =   'PF41';        
+            ACTION_PROCS(385) = N04PF41;        
+         
+            ACTION_NAMES(410) =   'TMD2';        
+            ACTION_PROCS(410) = N04TMD2;        
+            ACTION_NAMES(414) =   'TMD6';        
+            ACTION_PROCS(414) = N04TMD6;        
+            ACTION_NAMES(415) =   'TMD7';        
+            ACTION_PROCS(415) = N04TMD7;        
+            ACTION_NAMES(422) =   'TMJ6';        
+            ACTION_PROCS(422) = N04TMJ6;        
+            ACTION_NAMES(423) =   'TMJ7';        
+            ACTION_PROCS(423) = N04TMJ7;        
+            ACTION_NAMES(432) =   'TMP2';        
+            ACTION_PROCS(432) = N04TMP2;        
+            ACTION_NAMES(443) =   'TMT2';        
+            ACTION_PROCS(443) = N04TMT2;        
+            ACTION_NAMES(444) =   'TMX6';        
+            ACTION_PROCS(444) = N04TMX6;        
+            ACTION_NAMES(445) =   'TMX7';        
+            ACTION_PROCS(445) = N04TMX7;        
+            ACTION_NAMES(468) =   'TM10';        
+            ACTION_PROCS(468) = N04TM10;        
+            ACTION_NAMES(469) =   'TM11';        
+            ACTION_PROCS(469) = N04TM11;        
+            ACTION_NAMES(482) =   'TM30';        
+            ACTION_PROCS(482) = N04TM30;        
+            ACTION_NAMES(483) =   'TM31';        
+            ACTION_PROCS(483) = N04TM31;        
+            ACTION_NAMES(489) =   'TM44';        
+            ACTION_PROCS(489) = N04TM44;        
+            ACTION_NAMES(490) =   'TM45';        
+            ACTION_PROCS(490) = N04TM45;        
+         
+            ACTION_NAMES(554) =   'TNB9';        
+            ACTION_PROCS(554) = N04TNB9;        
+         
+            ACTION_NAMES(600) =   'TPA2';        
+            ACTION_PROCS(600) = N04TPA2;        
+            ACTION_NAMES(601) =   'TPA3';        
+            ACTION_PROCS(601) = N04TPA3;        
+            ACTION_NAMES(602) =   'TPA4';        
+            ACTION_PROCS(602) = N04TPA4;        
+            ACTION_NAMES(603) =   'TPA5';        
+            ACTION_PROCS(603) = N04TPA5;        
+            ACTION_NAMES(604) =   'TPB2';        
+            ACTION_PROCS(604) = N04TPB2;        
+            ACTION_NAMES(605) =   'TPC3';        
+            ACTION_PROCS(605) = N04TPC3;        
+            ACTION_NAMES(606) =   'TPG2';        
+            ACTION_PROCS(606) = N04TPG2;        
+            ACTION_NAMES(607) =   'TPI1';        
+            ACTION_PROCS(607) = N04TPI1;        
+            ACTION_NAMES(608) =   'TPI2';        
+            ACTION_PROCS(608) = N04TPI2;        
+            ACTION_NAMES(609) =   'TPI4';        
+            ACTION_PROCS(609) = N04TPI4;        
+            ACTION_NAMES(610) =   'TPI5';        
+            ACTION_PROCS(610) = N04TPI5;        
+            ACTION_NAMES(611) =   'TPK2';        
+            ACTION_PROCS(611) = N04TPK2;        
+            ACTION_NAMES(612) =   'TPM1';        
+            ACTION_PROCS(612) = N04TPM1;        
+            ACTION_NAMES(613) =   'TPM2';        
+            ACTION_PROCS(613) = N04TPM2;        
+            ACTION_NAMES(614) =   'TPM4';        
+            ACTION_PROCS(614) = N04TPM4;        
+            ACTION_NAMES(615) =   'TPM5';        
+            ACTION_PROCS(615) = N04TPM5;        
+            ACTION_NAMES(616) =   'TPM8';        
+            ACTION_PROCS(616) = N04TPM8;        
+            ACTION_NAMES(617) =   'TPQ1';        
+            ACTION_PROCS(617) = N04TPQ1;        
+            ACTION_NAMES(618) =   'TPQ2';        
+            ACTION_PROCS(618) = N04TPQ2;        
+            ACTION_NAMES(619) =   'TPQ9';        
+            ACTION_PROCS(619) = N04TPQ9;        
+            ACTION_NAMES(620) =   'TPU1';        
+            ACTION_PROCS(620) = N04TPU1;        
+            ACTION_NAMES(621) =   'TPU2';        
+            ACTION_PROCS(621) = N04TPU2;        
+            ACTION_NAMES(622) =   'TPU8';        
+            ACTION_PROCS(622) = N04TPU8;        
+            ACTION_NAMES(623) =   'PFM7';         
+            ACTION_PROCS(623) = N04PFM7;          
+            ACTION_NAMES(624) =   'PFU7';         
+            ACTION_PROCS(624) = N04PFU7;          
+         
+            ACTION_NAMES(999) = 'ZZ99';        
+            ACTION_PROCS(999) = N04ZZ99;        
+         
+END_PLC(N040ENT2)

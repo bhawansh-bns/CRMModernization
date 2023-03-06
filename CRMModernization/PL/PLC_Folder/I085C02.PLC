@@ -1,0 +1,202 @@
+BEGIN_PLC(I085C02)
+     DCL 01 HDR_RECORD,        
+            03 HDR_IDENT             CHAR(4)   INIT('****'),        
+            03 HDR_VERSION           CHAR(4)   INIT('001A'),        
+            03 DATA_TYPE             CHAR(8)   INIT('P??05'),        
+            03 DATA_TYPE_VER         CHAR(4)   INIT('1.0 '),        
+            03 DATA_TYPE_REL         CHAR(1)   INIT(' '),        
+            03 SENDER_ID             CHAR(35)  INIT(' '),        
+            03 RECIPIENT_ID          CHAR(35)  INIT('INLAND REVENUE'),        
+            03 TEST_IND              CHAR(1)   INIT(' '),        
+            03 URGENT_MARKR          CHAR(1)   INIT(' '),        
+            03 TRANS_DATE            PIC'(8)9' INIT(00000000),        
+            03 TRANS_TIME            PIC'(6)9' INIT(000000),        
+            03 ICR                   PIC'(14)9' INIT(00000000000000),        
+            03 SENDER_SUBADDR        CHAR(14)  INIT(' '),        
+            03 RECIPIENT_SUBADDR     CHAR(14)  INIT(' ');        
+         
+     DCL 01 BGM1_RECORD,        
+            03 BGM1_IDENT            CHAR(5)   INIT('BGM1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 FORM_TYPE             CHAR(3)   INIT(' ');        
+         
+     DCL 01 NAD1A_RECORD,        
+            03 NAD1A_IDENT           CHAR(5)   INIT('NAD1A'),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 PARTY_QUAL            CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_1           CHAR(35)  INIT(' '),        
+            03 SPARE_3               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_2           CHAR(35)  INIT(' '),        
+            03 SPARE_4               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_3           CHAR(35)  INIT(' '),        
+            03 SPARE_5               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_4           CHAR(35)  INIT(' '),        
+            03 SPARE_6               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_5           CHAR(35)  INIT(' ');        
+         
+     DCL 01 NAD1B_RECORD,        
+            03 NAD1B_IDENT           CHAR(5)   INIT('NAD1B'),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 PARTY_NAME            CHAR(35)  INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 POST_CODE             CHAR(9)   INIT(' ');        
+         
+     DCL 01 ATT1_RECORD,        
+            03 ATT1_IDENT            CHAR(5)   INIT('ATT1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 ATTR_QUAL             CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 ATTR_VALUE            CHAR(35)  INIT(' ');        
+         
+     DCL 01 DTM1_RECORD_T1,        
+            03 DTM1_IDENT            CHAR(5)   INIT('DTM1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 DATE_QUAL             CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 DATE_VALUE_T1,        
+               05 DATE_VALUE         PIC'(8)9' INIT(00000000),        
+               05 SPARE_3            CHAR(27)  INIT(' '),        
+            03 SPARE_4               CHAR(1)   INIT(' '),        
+            03 DATE_FMT_QUAL         CHAR(3)   INIT(' ');        
+         
+     DCL 01 DTM1_RECORD_T2,        
+            03 DTM1_IDENT            CHAR(5)   INIT('DTM1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 DATE_QUAL             CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 DATE_VALUE_T2,        
+               05 DATE_VALUE         PIC'(4)9' INIT(0000),        
+               05 SPARE_3            CHAR(31)  INIT(' '),        
+            03 SPARE_3               CHAR(1)   INIT(' '),        
+            03 DATE_FMT_QUAL         CHAR(3)   INIT(' ');        
+         
+     DCL 01 UNS1_RECORD,        
+            03 UNS1_IDENT            CHAR(5)   INIT('UNS1 ');        
+         
+     DCL 01 LIN1_RECORD,        
+            03 LIN1_IDENT            CHAR(5)   INIT('LIN1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 EMPNO_WITHIN_MSG      PIC'(6)9' INIT(000000);        
+         
+     DCL 01 NAD2A_RECORD,        
+            03 NAD2A_IDENT           CHAR(5)   INIT('NAD2A'),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 PARTY_QUAL            CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_1           CHAR(35)  INIT(' '),        
+            03 SPARE_3               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_2           CHAR(35)  INIT(' '),        
+            03 SPARE_4               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_3           CHAR(35)  INIT(' '),        
+            03 SPARE_5               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_4           CHAR(35)  INIT(' '),        
+            03 SPARE_6               CHAR(1)   INIT(' '),        
+            03 ADDR_LINE_5           CHAR(35)  INIT(' ');        
+         
+     DCL 01 NAD2B_RECORD,        
+            03 NAD2B_IDENT           CHAR(5)   INIT('NAD2B'),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 SURNAME               CHAR(35)  INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 FORENAME_1            CHAR(35)  INIT(' '),        
+            03 SPARE_3               CHAR(1)   INIT(' '),        
+            03 FORENAME_2            CHAR(35)  INIT(' '),        
+            03 SPARE_4               CHAR(1)   INIT(' '),        
+            03 TITLE                 CHAR(35)  INIT(' '),        
+            03 SPARE_5               CHAR(1)   INIT(' '),        
+            03 HONOURS               CHAR(35)  INIT(' '),        
+            03 SPARE_6               CHAR(1)   INIT(' '),        
+            03 POST_CODE             CHAR(9)   INIT(' ');        
+         
+     DCL 01 ATT2_RECORD,        
+            03 ATT2_IDENT            CHAR(5)   INIT('ATT2 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 ATTR_QUAL             CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 ATTR_VALUE            CHAR(35)  INIT(' ');        
+         
+     DCL 01 EMP1_RECORD,        
+            03 EMP1_IDENT            CHAR(5)   INIT('EMP1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 CONTRIB_QUAL          CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 SCON_BLANK            CHAR(35)  INIT(' '),        
+            03 SPARE_3               CHAR(1)   INIT(' '),        
+            03 SCON_OPTIONAL         CHAR(35)  INIT(' ');        
+         
+     DCL 01 TAX1_RECORD,        
+            03 TAX1_IDENT            CHAR(5)   INIT('TAX1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 TAX_QUAL              CHAR(3)   INIT(' ');        
+         
+     DCL 01 MOA1_RECORD,        
+            03 MOA1_IDENT            CHAR(5)   INIT('MOA1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 MOA1_AMOUNT,        
+               05 MOA1_POS01         CHAR(1)   INIT('0'),        
+               05 MOA1_POS02_10      CHAR(9)   INIT('000000000'),        
+               05 MOA1_POS11_20      CHAR(10)  INIT('0000000000'),        
+               05 MONETARY_AMOUNT    PIC'(15)9'        
+                                               INIT(000000000000000),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 CURRENCY              CHAR(3)   INIT(' ');        
+         
+     DCL 01 DTM2_RECORD_T1,        
+            03 DTM2_IDENT            CHAR(5)   INIT('DTM2 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 DATE_QUAL             CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 DATE_VALUE_T1,        
+               05 DATE_VALUE         CHAR(8)   INIT('00000000'),        
+               05 SPARE_3            CHAR(27)  INIT(' '),        
+            03 SPARE_4               CHAR(1)   INIT(' '),        
+            03 DATE_FMT_QUAL         CHAR(3)   INIT(' ');        
+         
+     DCL 01 ALC1_RECORD,        
+            03 ALC1_IDENT            CHAR(5)   INIT('ALC1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 ALLOW_QUAL            CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 ALLOW_VALUE           CHAR(35)  INIT(' ');        
+         
+     DCL 01 ATT3_RECORD,        
+            03 ATT3_IDENT            CHAR(5)   INIT('ATT3 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 ATTR_QUAL             CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 ATTR_VALUE            CHAR(35)  INIT(' ');        
+         
+     DCL 01 UNS2_RECORD,        
+            03 UNS2_IDENT            CHAR(5)   INIT('UNS2 ');        
+         
+     DCL 01 TAX2_RECORD,        
+            03 TAX2_IDENT            CHAR(5)   INIT('TAX2 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 TAX_QUAL              CHAR(3)   INIT(' ');        
+         
+     DCL 01 MOA2_RECORD,        
+            03 MOA2_IDENT            CHAR(5)   INIT('MOA2 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 MOA2_AMOUNT,        
+               05 MOA2_POS01         CHAR(1)   INIT('0'),        
+               05 MOA2_POS02_10      CHAR(9)   INIT('000000000'),        
+               05 MOA2_POS11_20      CHAR(10)  INIT('0000000000'),        
+               05 MONETARY_AMOUNT    PIC'(15)9'        
+                                               INIT(000000000000000),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 CURRENCY              CHAR(3)   INIT(' ');        
+         
+     DCL 01 QTY1_RECORD,        
+            03 QTY1_IDENT            CHAR(5)   INIT('QTY1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 QTY_QUAL              CHAR(3)   INIT(' '),        
+            03 SPARE_2               CHAR(1)   INIT(' '),        
+            03 QTY_AMOUNT            PIC'(15)9' INIT(000000000000000);        
+         
+     DCL 01 CNT1_RECORD,        
+            03 CNT1_IDENT            CHAR(5)   INIT('CNT1 '),        
+            03 SPARE_1               CHAR(1)   INIT(' '),        
+            03 TOTAL_POS01_03        PIC'999'  INIT(000),        
+            03 TOTAL_NO_DTLS         PIC'(15)9' INIT(000000000000000);        
+END_PLC(I085C02)

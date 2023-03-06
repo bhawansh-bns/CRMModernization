@@ -1,0 +1,971 @@
+         
+ $$FWK10: PROC OPTIONS(MAIN)(IEU001, JWB001, KFW10J)        
+           OPTIONS(FETCHABLE) REORDER;        
+         
+ /********************************************************************/        
+ /*                                                                  */        
+ /* $$FWK10                                                          */        
+ /*                                                                  */        
+ /*   OBJET : VERIFIER L'ACCES A TSS                                 */        
+ /*   ===== - COMMANDE                                               */        
+ /*         - SOUS COMMANDE                                          */        
+ /*         - REGLE                                                  */        
+ /*                                                                  */        
+ /********************************************************************/        
+ /*                                                                  */        
+ /* AUTHOR      = TDMNAP                                             */        
+ /* TEAM LEADER = TDMPEC                                             */        
+ /*                                                                  */        
+ /********************************************************************/        
+ /*                                                                  */        
+ /* MESSAGE D'ERREUR (JWB001.CDRTPGM = $LTNMPRJ !! '13')             */        
+ /*     01 : LA METHODE N'EXISTE PAS                                 */        
+ /*     02 : CODE SOCIETE OBLIGATOIRE (CDE)                          */        
+ /*     03 : CODE KERNEL OBLIGATOIRE (CDE)                           */        
+ /*     04 : CODE TRANSACTION OBLIGATOIRE (CDE)                      */        
+ /*     05 : CODE COMMANDE OBLIGATOIRE (CDE)                         */        
+ /*     06 : CODE SOCIETE OBLIGATOIRE (SDE)                          */        
+ /*     07 : CODE KERNEL OBLIGATOIRE (SDE)                           */        
+ /*     08 : CODE TRANSACTION OBLIGATOIRE (SDE)                      */        
+ /*     09 : CODE COMMANDE OBLIGATOIRE (SDE)                         */        
+ /*     10 : CODE SOUS COMMANDE OBLIGATOIRE (SDE)                    */        
+ /*     11 : CODE SOCIETE OBLIGATOIRE (RGL)                          */        
+ /*     12 : CODE KERNEL OBLIGATOIRE (RGL)                           */        
+ /*     13 : CODE REGLE OBLIGATOIRE (RGL)                            */        
+ /*                                                                  */        
+ /********************************************************************/        
+ /*                                                                  */        
+ /*  NOTES :                                                         */        
+ /*  -----                                                           */        
+ /*                                                                  */        
+ /********************************************************************/        
+ /*                                                                  */        
+ /*  -------------------------------                                 */        
+ /*  -  M O D I F I C A T I O N S  -                                 */        
+ /*------------------------------------------------------------------*/        
+ /* TDMNAP ! 02/12/08 ! #001 : CREATION                              */        
+ /*                                                                  */        
+ /********************************************************************/        
+         
+ /********************************************************************/        
+ /*  DECLARATION DES PARAMETRES DE LA ROUTINE                        */        
+ /********************************************************************/        
+ /*********************************************************************/        
+ /*                                                                   */        
+ /*         INTERFACE DE COMMUNICATION AVEC BEU001                    */        
+ /*         ======================================                    */        
+ /*                                                                   */        
+ /* USAGE :                                                           */        
+ /* CALL BEU001(IEU001,COUNT,FUNCT,DATAPCB,IOAREA,                    */        
+ /*             SSA1, SSA2, SSA3, SSA4, SSA5, SSA6, SSA7);            */        
+ /*********************************************************************/        
+ /* MODE CONVERSION :                                                 */        
+ /*                                                                   */        
+ /* CALL BEU001(IEU001,THREE,'GCV',DATAPCB,IOAREA);                   */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* PROCEDURE DE COMPILATION : TDMFOG.LIB.CNTL(FETCH)                 */        
+ /* MODULE A TRANSFERER PAR L'EQUIPE SYSTEME : FEUT.T.LOAD(BEU001)    */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /* DESCRIPTION DES MESSAGES D'ERREURS : CDRTPGM                      */        
+ /* -----------------------------------                               */        
+ /* DB : PROBLEME BASE DE DONNEES : VOIR LE PCB DATA                  */        
+ /* 01 : COEFFICIENT DE CONVERSION EURO --> FB ERRONE                 */        
+ /* 02 : PARAM. CODE DEVISE DIFFERENT DE 'F' ET 'E'                   */        
+ /* 03 : PARAM. CODE PAGE DIFFERENT DE '500' ET '274'                 */        
+ /* 04 : PARAM. CODE USAGE APPLICATION DIFF. DE : 3 = 3270            */        
+ /*                                        P = HOST PRINTER           */        
+ /*                                        L = LOCAL PRINTER          */        
+ /*                                        Q = MQSERIES               */        
+ /* 05 : CODE DEVISE MAL INSTALLE DANS LE DICTIONNAIRE                */        
+ /* 06 : CODE PAGE MAL INSTALLE DANS LE DICTIONNAIRE                  */        
+ /* 07 : CODE VERSION DE LA DB MAL INSTALLE DANS LE DICTIONNAIRE      */        
+ /* 08 : DESCRIPTION FORME EXTERNE DU SEGMENT ABSENTE DU DICTIONNAIRE */        
+ /* 09 : ERREUR BASE DE DONNEE SUR LA DB DICTIONNAIE                  */        
+ /* 10 : LONGUEUR D'ATTRIBUT MODIFIEE POUR FORMAT TYPE : BF/BE/DE     */        
+ /* 11 : LE FORMAT DE MONTANT DEVISE OU DATE  <> DZ/DF/BF             */        
+ /* 12 : EN ISRT, REPL, LA DATE DOIT OBLIG. ETRE EXPRIMEE EN SAAMMJJ  */        
+ /* 13 : FORMAT DE DONNEE NON RECONNU                                 */        
+ /* 14 : LONGUEUR EN BYTE INADEQUATE POUR UN TYPE BF                  */        
+ /* 15 : LONGUEUR TYPE BF <> 2/4                                      */        
+ /* 16 : LONGUEUR TYPE DE/BE <> 4/8                                   */        
+ /* 17 : EN ISRT, REPL, LA D. COMPLEM. DOIT ETRE EXPRIMEE EN SAAMMJJ  */        
+ /* 18 : MONTANT AU FORMAT ZONED DECIMAL NON NUMERIQUE EN LECTURE     */        
+ /* 19 : MONTANT AU FORMAT PACKED DECIMAL NON NUMERIQUE EN LECTURE    */        
+ /* 20 : MONTANT AU FORMAT ZONED DECIMAL NON NUMERIQUE EN M A J       */        
+ /* 21 : MONTANT AU FORMAT PACKED DECIMAL NON NUMERIQUE EN M A J      */        
+ /* 22 : COUNT < 2 OU > 10                                            */        
+ /* 23 : FONCTION NON IMPLEMENTEE CAR NON SPECIFIQUE A DL1            */        
+ /* 24 : FONCTION INCONNUE                                            */        
+ /* 25 : NOMBRE D'ATTRIBUTS DU SEGMENT DEPASSANT LE MAXIMUM AUTORISE  */        
+ /* 26 : LONGUEUR DE RUBRIQUE MAL DEFINIE AU DICTIONNAIRE             */        
+ /* 27 : COUNT PARAMETER > 7                                          */        
+ /* 28 : PROTOCOLE EURO POSTPOSE JUSQU'A LA CONVERSION DE LA CAISSE   */        
+ /* 29 : PARAMETRE SOCIETE NON RECONNU                                */        
+ /* 30 : PROTOCOLE EURO INTERDIT CAR DB NON CONVERTIE A L'EURO        */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+ DCL 1     IEU001,        
+ /*------------------------- I N P U T -------------------------------*/        
+      2    PTR,                        #################################################################        
+       3   METAPCB      PTR,           ####################################################        
+       3   ALTPCB       PTR,           ####################################################        
+      2    INPUT,                      ###############################################################        
+       3   LTSCTRN      CHAR (4),      ###############################################        
+       3   CDDVTRN      CHAR (3),      ###############################################        
+       3   CDPGTRN      CHAR (3),      ###############################################        
+       3   CDTYUSR      CHAR (1),      ###############################################        
+       3   CDPGMID      CHAR (8),      ###############################################        
+       3   CDDFSEG      CHAR (8),      ###############################################        
+       3   LASTCALL     CHAR (30),     ##############################################        
+       3   TBEGCOD(32)  BIT(1),        #################################################        
+                                       /*--!  BIT 1: MAJ EURO         */        
+                                       /*--!    AUTORISEE AVANT PIVOT */        
+                                       /*--!  BIT 2: NE PAS CONVERTIR */        
+                                       /*--!  BIT 3: MAJ BEF          */        
+                                       /*--!    AUTORISEE APRES PIVOT */        
+       3   TBDISPO(128),        
+        4  DBDNAME      CHAR(8),       ################################################        
+        4  DBSTATE      CHAR(1),       ################################################        
+                                       /*--! 0 : UPDATABLE            */        
+                                       /*--! 1 : READ ONLY (NU)       */        
+                                       /*--! 2 : NO ACCESS (NA)       */        
+       3   FILLER       CHAR(200),     ##############################################        
+         
+ /*------------------------ O U T P U T ------------------------------*/        
+      2    OUTPUT,                     ##############################################################        
+       3   CDRTPGM      CHAR (6),      ###############################################        
+       3   LTRTPGM      CHAR (60),     ##############################################        
+       3   DBPTR        PTR,           ####################################################        
+       3   LASTDLI      CHAR (10);     ##############################################        
+         
+ /*------------------- REDEFINITIONS DE IEU001 -----------------------*/        
+ DCL 1     IEU001_R     BASED(ADDR(IEU001.INPUT.FILLER)),        
+       2   CDEVTRN      CHAR(001),     ##############################################        
+                                       /*--!  P : VALEUR PAR DEFAUT   */        
+       2   CDDEVDB      CHAR(003),     ##############################################        
+                                       /*--!  BEF / EUR               */        
+       2   TBDFDBD_PTR  PTR,        
+       2   TBDFATT_PTR  PTR,        
+       2   TBDFSEG_PTR  PTR,        
+       2   SYSTIME      BIN FIXED(31),        
+       2   DATEORD      PIC '(7)9',        
+       2   NBMXCOP_C    FIXED BIN(15),        
+       2   FILLER       CHAR(170);     ##############################################        
+ /*********************************************************************/        
+ /*******************************************************************/        
+ /* INTERFACE GENERAL POUR TOUS LES SERVICES                        */        
+ /*******************************************************************/        
+         
+ DCL 1  JWB001,        
+      2   CDEVCLI    CHAR(01),      ########################################        
+      2   RETOUR     BIT (1),       #########################################        
+      2   LEVEL      PIC '9',       #########################################        
+      2   ATTRIB     CHAR(02),      ########################################        
+      2   LTNMSER    CHAR(08),      ########################################        
+      2   ENTREE,        
+       3  DBSCRAT,        
+        4 METAPCB    PTR,           ##############################################        
+        4 DBSCRPCB   PTR,           ##############################################        
+        4 LTSGSCR    CHAR(08),      #########################################        
+       3  DBTABLE,        
+        4 METAPCB    PTR,           ##############################################        
+        4 DBTABPCB   PTR,           ##############################################        
+        4 LTSGTAB    CHAR(08),      #########################################        
+        4 CDDFTAB    CHAR(08),      #########################################        
+       3  DBCOMDE,        
+        4 METAPCB    PTR,           ##############################################        
+        4 DBCDEPCB   PTR,           ##############################################        
+        4 LTSGCDE    CHAR(08),      #########################################        
+        4 CDDFCDE    CHAR(08),      #########################################        
+       3  CDTRACE    PIC '9',       ##########################################        
+       3  TBTRACE_I  FIXED (5),     ########################################        
+       3  BOTBDB2    BIT (1),       ##########################################        
+       3  LTNMBUS    CHAR(20),      #########################################        
+       3  LTNMOBJ    CHAR(20),      #########################################        
+       3  LTNMMTH    CHAR(20),      #########################################        
+      2   SORTIE,        
+       3  CDRTPGM    CHAR(09),      #########################################        
+       3  CDRTDB2    BIN FIXED(31), ####################################        
+       3  SQLERRM    CHAR (70) VAR, ####################################        
+       3  CDROLLB    BIT(1),        ###########################################        
+       3  LSTCALL    CHAR(12),      #########################################        
+       3  LSTSERV    CHAR(12),      #########################################        
+       3  TBTRACE (100),            ###############################################        
+        4 FLAG_TRACE CHAR(01),        
+        4 MSGE_TRACE CHAR(40),        
+      2   GXXXXXJ_P  PTR;           ##############################################        
+         
+ /* EXPLICATIONS:                                                    */        
+ /*                                                                  */        
+ /* APPEL DU BUS 'LTNMBUS' POUR EXECUTION DE LA FONCTION 'LTNMFCT'   */        
+ /* DE L'OBJET 'LTNMOBJ'                                             */        
+ /*                                                                  */        
+ /* LES TRACES SONT AFFICHEES EN FCT DE CDTRACE (0->9)               */        
+ /* ->  0 PAS DE TRACE, 9 TRACE COMPLETES                            */        
+         
+         
+ /********************************************************************/        
+ /* INTERFACE : KFW10J                                               */        
+ /*                                                                  */        
+ /* <1>                                                               */        
+ /* SERVICE DE VERIFICATION ACCES TSS AU SEIN D'UNE TRANSACTION      */        
+ /* </1>                                                              */        
+ /********************************************************************/        
+ /*                                                                   */        
+ /* TABLES :                                                          */        
+ /* ------                                                            */        
+ /* <2>                                                               */        
+ /* </2>                                                              */        
+ /*-------------------------------------------------------------------*/        
+ /*                                                                   */        
+ /* METHODES :                                                        */        
+ /* --------                                                          */        
+ /* <3>                                                               */        
+ /*    EXIST_CDE         : 01 : VALIDATION OPERATION PAT TSS          */        
+ /*    EXIST_SDE         : 02 : VALIDATION SOUS-COMMANDE PAR TSS      */        
+ /*    EXIST_RGL         : 03 : VALIDATION DES REGLES PAR TSS         */        
+ /* </3>                                                              */        
+ /*-------------------------------------------------------------------*/        
+ /*                                                                   */        
+ /* MESSAGE D'ERREUR (JWB001.CDRTPGM = $LTNMPRJ !! 'XXX')             */        
+ /*                                                                   */        
+ /* <4>                                                               */        
+ /*                                                                   */        
+ /*     01 : LA METHODE N'EXISTE PAS                                  */        
+ /*     02 : CODE SOCIETE OBLIGATOIRE (CDE)                           */        
+ /*     03 : CODE KERNEL OBLIGATOIRE (CDE)                            */        
+ /*     04 : CODE TRANSACTION OBLIGATOIRE (CDE)                       */        
+ /*     05 : CODE COMMANDE OBLIGATOIRE (CDE)                          */        
+ /*     06 : CODE SOCIETE OBLIGATOIRE (SDE)                           */        
+ /*     07 : CODE KERNEL OBLIGATOIRE (SDE)                            */        
+ /*     08 : CODE TRANSACTION OBLIGATOIRE (SDE)                       */        
+ /*     09 : CODE COMMANDE OBLIGATOIRE (SDE)                          */        
+ /*     10 : CODE SOUS COMMANDE OBLIGATOIRE (SDE)                     */        
+ /*     11 : CODE SOCIETE OBLIGATOIRE (RGL)                           */        
+ /*     12 : CODE KERNEL OBLIGATOIRE (RGL)                            */        
+ /*     13 : CODE REGLE OBLIGATOIRE (RGL)                             */        
+ /*                                                                   */        
+ /*********************************************************************/        
+ /* </4>                                                              */        
+ /*-------------------------------------------------------------------*/        
+ /*                                                                   */        
+ /* <5>                                                               */        
+ /* </5>                                                              */        
+ /*********************************************************************/        
+ DCL 1 KFW10J,        
+      2 INPUT        CHAR(1000),   ##############################################        
+      2 OUTPUT       CHAR(100);    ###############################################        
+         
+ /********************************************************************/        
+ /*         REDEFINITIONS PAR CLASSE DE METHODES                     */        
+ /********************************************************************/        
+         
+         
+ /*********************************************************************/        
+ /* METHODE : EXIST_CDE                                              */        
+ /*********************************************************************/        
+ /* <6>                                                               */        
+ /* -------------------- INPUT -------------------------------------- */        
+ DCL 1   KFW10J_I1                   BASED(ADDR(KFW10J.INPUT)),        
+      2  CDIDSOC       CHAR (8),        ###############################################        
+      2  CDIDPDT       CHAR (8),        ###############################################        
+      2  CDIDTRA       CHAR (8),        ###############################################        
+      2  CDIDCDE       CHAR (8),        ###############################################        
+      2  FILLER        CHAR (68);       ##############################################        
+ /* -------------------- OUTPUT ------------------------------------ */        
+ DCL 1   KFW10J_O1                   BASED(ADDR(KFW10J.OUTPUT)),        
+      2  FILLER        CHAR (100);      #############################################        
+ /* </6>                                                              */        
+         
+ /********************************************************************/        
+ /* METHODE : EXIST_SDE                                              */        
+ /********************************************************************/        
+ /* <6>                                                               */        
+ /* -------------------- INPUT -------------------------------------- */        
+ DCL 1   KFW10J_I2                   BASED(ADDR(KFW10J.INPUT)),        
+      2  CDIDSOC       CHAR (8),        ###############################################        
+      2  CDIDPDT       CHAR (8),        ###############################################        
+      2  CDIDTRA       CHAR (8),        ###############################################        
+      2  CDIDCDE       CHAR (8),        ###############################################        
+      2  CDIDSDE       CHAR (8),        ###############################################        
+      2  FILLER        CHAR (60);       ##############################################        
+ /* -------------------- OUTPUT ------------------------------------ */        
+ DCL 1   KFW10J_O2                   BASED(ADDR(KFW10J.OUTPUT)),        
+      2  FILLER        CHAR (100);     ############################################        
+ /* </6>                                                              */        
+         
+ /********************************************************************/        
+ /* METHODE : EXIST_RGL                                              */        
+ /********************************************************************/        
+ /* <6>                                                               */        
+ /* -------------------- INPUT ------------------------------------- */        
+ DCL 1   KFW10J_I3                   BASED(ADDR(KFW10J.INPUT)),        
+      2  CDIDSOC       CHAR (8),        ###############################################        
+      2  CDIDPDT       CHAR (8),        ###############################################        
+      2  TBIDRGL(100),        
+       3 CDIDRGL       CHAR (8);        ###############################################        
+ /* -------------------- OUTPUT ------------------------------------ */        
+ DCL 1   KFW10J_O3                   BASED(ADDR(KFW10J.OUTPUT)),        
+      2  FILLER        CHAR (100);     ############################################        
+ /* </6>                                                              */        
+         
+ /*********************************************************************/        
+ /*                                                                   */        
+ /* LISTE DES METHODES UTILISEES :                                    */        
+ /*                                                                   */        
+ /* <7>                                                               */        
+ /*  EXIST_CDE: VERIFIE L'ACCES D'UNE COMMANDE DANS TSS               */        
+ /*                   INPUT  : KFW10J_I1                              */        
+ /*                   OUTPUT : KFW10J_O1                              */        
+ /*                                                                   */        
+ /*  EXIST_SDE: VERIFIE L'ACCES D'UNE SOUS COMMANDE DANS TSS          */        
+ /*                   INPUT  : KFW10J_I2                              */        
+ /*                   OUTPUT : KFW10J_O2                              */        
+ /*                                                                   */        
+ /*  EXIST_RGL: VERIFIE L'ACCES D'UNE REGLE DANS TSS                  */        
+ /*                   INPUT  : KFW10J_I3                              */        
+ /*                   OUTPUT : KFW10J_O3                              */        
+ /* </7>                                                              */        
+ /*                                                                   */        
+ /*********************************************************************/        
+         
+         
+ /********************************************************************/        
+ /*  BUILTINS & DECLARATIONS STANDARDS                               */        
+ /********************************************************************/        
+         
+ DCL ABS       BUILTIN;        
+ DCL ADDR      BUILTIN;        
+ DCL CEIL      BUILTIN;        
+ DCL DATE      BUILTIN;        
+ DCL DATETIME  BUILTIN;        
+ DCL DIM       BUILTIN;        
+ DCL FLOOR     BUILTIN;        
+ DCL INDEX     BUILTIN;        
+ DCL LENGTH    BUILTIN;        
+ DCL LOW       BUILTIN;        
+ DCL MAX       BUILTIN;        
+ DCL MIN       BUILTIN;        
+ DCL MOD       BUILTIN;        
+ DCL NULL      BUILTIN;        
+ DCL ONCODE    BUILTIN;        
+ DCL ONLOC     BUILTIN;        
+ DCL REPEAT    BUILTIN;        
+ DCL STG       BUILTIN;        
+ DCL SUBSTR    BUILTIN;        
+ DCL TIME      BUILTIN;        
+ DCL TRANSLATE BUILTIN;        
+ DCL UNSPEC    BUILTIN;        
+ DCL VERIFY    BUILTIN;        
+ /* TDMOHL 03/05/2005 AJOUT DE ONSOURCE, PLIRETC ET PLIRETV */        
+ DCL ONSOURCE  BUILTIN;        
+ DCL PLIRETC   BUILTIN;        
+ DCL PLIRETV   BUILTIN;        
+         
+ /* TDMSLE : 041103 */        
+ DCL CENTER    BUILTIN;        
+ DCL LEFT      BUILTIN;        
+ DCL RIGHT     BUILTIN;        
+ DCL TRIM      BUILTIN;        
+ DCL UPPERCASE BUILTIN;        
+ DCL PTRADD    BUILTIN;        
+ /* TDMSLE FIN : 041103 */        
+         
+ /* TDMSLE : 041103 -                                         */        
+ /*  MISE EN COMMENTAIRE CAR IL FAUT UTILISER 'TRIM' DE VAPLI */        
+ /* DCL TRIM      EXT ENTRY RETURNS(CHAR(133) VAR BYVALUE);   */        
+ /* DCL LTRIM     EXT ENTRY RETURNS(CHAR(133) VAR BYVALUE);   */        
+ /* DCL RTRIM     EXT ENTRY RETURNS(CHAR(133) VAR BYVALUE);   */        
+ /* TDMSLE FIN : 041103                                       */        
+         
+    /* BUILTINS STANDARDS                          */        
+         
+ /********************************************************************/        
+ /* FICHIERS                                                         */        
+ /********************************************************************/        
+ DCL     SYSPRINT FILE  STREAM OUTPUT PRINT;  ###################################        
+         
+ /********************************************************************/        
+ /*  SEGMENTS DE DB                                                  */        
+ /********************************************************************/        
+         
+ /********************************************************************/        
+ /*  INTERFACE ET ENTRIES POUR DLI                                   */        
+ /********************************************************************/        
+         
+ /********************************************************************/        
+ /*  INTERFACE ET ENTRIES NON DLI                                    */        
+ /********************************************************************/        
+         
+ /********************************************************************/        
+ /* REDEFINITIONS DES STRUCTURES BASEES                              */        
+ /********************************************************************/        
+ DCL KFW10J_I1_LIKE LIKE KFW10J_I1;        
+ DCL KFW10J_I2_LIKE LIKE KFW10J_I2;        
+ DCL KFW10J_I3_LIKE LIKE KFW10J_I3;        
+         
+ DCL KFW10J_O1_LIKE LIKE KFW10J_O1;        
+ DCL KFW10J_O2_LIKE LIKE KFW10J_O2;        
+ DCL KFW10J_O3_LIKE LIKE KFW10J_O3;        
+         
+ /********************************************************************/        
+ /* VARIABLES CONSTANTES                                             */        
+ /********************************************************************/        
+ DCL     ON           BIT (1)        VALUE('1'B);        
+ DCL     OFF          BIT (1)        VALUE('0'B);        
+ DCL     POINT        CHAR(1)        VALUE('.');        
+         
+ /********************************************************************/        
+ /* TABLEAUX                                                         */        
+ /********************************************************************/        
+         
+ /********************************************************************/        
+ /* INDICES                                                          */        
+ /********************************************************************/        
+         
+ /********************************************************************/        
+ /* ZONES D'EDITION                                                  */        
+ /********************************************************************/        
+         
+ /********************************************************************/        
+ /* DECLARATIONS PROPRES A TSS                                       */        
+ /********************************************************************/        
+         
+ DCL PLITDLI ENTRY;        
+         
+ DCL TSS           CHAR(04);        
+ DCL PCOUNT        FIXED BIN(31);        
+         
+ /*------------------------------------------------------------------*/        
+ /*  TOP SECRET SECURITY                                            */        
+ /*------------------------------------------------------------------*/        
+ /*  STRUCTURE TSSRTN_CTL CONTROLS THE ALLOCATE LENGTH OF TSSRTN     */        
+ /*       TSSRTN_CTL = 1024                                          */        
+ /*  IS THE DEFAULT LENGTH FOR TSSRTN. TSSRTN_CTL   SET M/B SET B4   */        
+ /*  STRUCTURE IS ALLOCATED IN ORDER TO GENERATE A NON-DEFAULT LENGTH*/        
+ /*------------------------------------------------------------------*/        
+  DCL 1 TSSCPL,        
+       2  TSSHEAD     CHARACTER (08),         ######################################        
+       2  TSSCLASS    CHARACTER (08),         ######################################        
+       2  TSSRNAME    CHARACTER (44),         ######################################        
+       2  TSSPPGM     CHARACTER (08),         ######################################        
+       2  TSSACC      CHARACTER (08),         ######################################        
+       2  TSSRC       FIXED BIN (15),         ######################################        
+       2  TSSSTAT     FIXED BIN (15),         ######################################        
+       2  TSSCRC      CHARACTER (02),         ######################################        
+       2  TSSCSTAT    CHARACTER (02),         ######################################        
+       2  TSSACEE     FIXED BIN (31),         ######################################        
+       2  TSSVOL      CHARACTER (6),          #######################################        
+       2  TSSLOG      CHARACTER (1),          #######################################        
+       2  TSSRSVD     CHARACTER (2),          #######################################        
+       2  TSSDRC            BIT (1),          #######################################        
+       2  TSSLRTN     FIXED BIN (31),         ######################################        
+       2  TSSRSVD2    CHARACTER (12),         ######################################        
+       2  TSSRTN      CHARACTER (    1024);   ################################        
+         
+         
+ /********************************************************************/        
+ /* DECLARATIONS PROPRES AU PROGRAMME                                */        
+ /********************************************************************/        
+ DCL LTCBRSA_W CHAR(44);        
+         
+ /********************************************************************/        
+ /* CONTROLE FLUX DU PROGRAMME                                       */        
+ /********************************************************************/        
+         
+ /********************************************************************/        
+ /* MESSAGE D'ERREUR - TRACE POUR DEBUGGING - REPRISE D'ERREUR       */        
+ /********************************************************************/        
+ DCL 1   MESS_TRACE  STATIC,                ################################################        
+      2  LL_TR              BIN FIXED(15)   INIT(44),        
+      2  ZZ_TR              BIN FIXED(15)   INIT(0),        
+      2  TRACE              CHAR(40);        
+ DCL 1   TB_TRACE(100) STATIC,        
+      2  FLAG_TRACE         CHAR(01),        
+      2  MSGE_TRACE         CHAR(40);        
+ DCL     ITRACE             BIN FIXED (31)  STATIC;        
+ DCL     ERR_MSG     STATIC CHAR(79);        
+ DCL     PTRMSG             PTR;        
+ DCL 1   ERR_DBA            BASED(PTRMSG),        
+      2  FILL1              CHAR(12),        
+      2  FILL2              CHAR(04),        
+      2  DBD_DBA            CHAR(08),        
+      2  FILL3              CHAR(08),        
+      2  CALL_DBA           CHAR(10),        
+      2  FILL4              CHAR(05),        
+      2  KEY_DBA            CHAR(24),        
+      2  FILL5              CHAR(05),        
+      2  ST_DBA             CHAR(02),        
+      2  FILL6              CHAR(01);        
+ TB_TRACE(*)='';        
+ ITRACE=0;        
+ PTRMSG=ADDR(ERR_MSG);        
+         
+         
+ /* VARIABLE PERMETTANT D'AFFICHER LA DATE ET L'HEURE DE COMPILATION */        
+         
+ /* VARIABLE MAX CHECK POINT : NBR MAX. DE LOTS AUTORISE AVANT CHKPT */        
+ /*------------------------------------------------------------ DEBUG */        
+ PT: PROC;        
+ /******************************/        
+ /*       MEMO TRACE           */        
+ /******************************/        
+ JWB001.TBTRACE_I = JWB001.TBTRACE_I+1;        
+ IF JWB001.TBTRACE_I > 100        
+    THEN DO;        
+         JWB001.TBTRACE_I = 1;        
+         JWB001.FLAG_TRACE(*) = '';        
+         END;        
+ JWB001.FLAG_TRACE(JWB001.TBTRACE_I) = '*';        
+ JWB001.MSGE_TRACE(JWB001.TBTRACE_I) = TRACE;        
+                               IF JWB001.CDTRACE > 0 THEN        
+      PUT SKIP EDIT(TRACE)(A);        
+ $END PT;        
+         
+ DEBUG: PROC;        
+ /**************************************/        
+ /*       PRINTING   TRACE             */        
+ /**************************************/        
+ DCL KT BIN FIXED(31);        
+ PUT FILE(SYSPRINT) EDIT('- PROGRAM TRACE: -')        
+                        (SKIP(3),A)        
+                        ('------------------')        
+                        (SKIP,A);        
+ DO KT=1 TO 100;        
+    IF JWB001.MSGE_TRACE(KT)^=''        
+       THEN PUT FILE(SYSPRINT)        
+            EDIT(JWB001.FLAG_TRACE(KT),        
+                 JWB001.MSGE_TRACE(KT))        
+                                   (SKIP,A,A);        
+ END;        
+ PUT FILE(SYSPRINT) EDIT('------------------')        
+                        (SKIP,A);        
+ $END DEBUG;        
+ /*-------------------------------------------------------- END DEBUG */        
+ ON ERROR SNAP        
+    BEGIN ;        
+          ON ERROR SYSTEM;        
+          PUT PAGE EDIT('$$FWK10', ' - VERSION DU : * 19.AUG.10 11.17.37        
+  * - ',        
+          ' ON ERROR CONDITION',        
+          'ONCODE    = ',ONCODE,        
+          'ONLOC     = ',ONLOC,        
+          'ONSOURCE  = ',ONSOURCE)        
+          (SKIP,A,A,        
+           SKIP,A,        
+           SKIP,A,F(5),        
+           SKIP,A,A(10),        
+           SKIP,A,A);        
+         
+           PUT SKIP EDIT('LAST SERV CALL = ',JWB001.LSTCALL,        
+                         'LAST DB2  CALL = ',JWB001.LSTSERV)        
+              (SKIP,A,A);        
+         
+         
+          CALL DEBUG;        
+          SIGNAL ERROR;        
+    END;        
+ /*-------------------------------------------------------------------*/        
+         
+ /*********************************************************************/        
+ /*  RACINE                                                           */        
+ /*********************************************************************/        
+ IF JWB001.CDRTPGM ^= '' THEN RETURN;        
+         
+ IF JWB001.CDTRACE >= 3 THEN        
+      DO;        
+      PUT SKIP EDIT('===> $$FWK10 / LTNMMTH = ',JWB001.LTNMMTH)        
+                   (SKIP,A,A);        
+      END;        
+         
+ /*INITIALISATION*/        
+ CALL F0;        
+ IF JWB001.CDRTPGM ^= '' THEN RETURN;        
+         
+ SELECT(JWB001.LTNMMTH);        
+   WHEN('EXIST_CDE')        
+     DO;        
+       CALL F10; ##########################################        
+       IF JWB001.CDRTPGM = '' THEN        
+         CALL F11; ######################        
+     END;        
+   WHEN('EXIST_SDE')        
+     DO;        
+       CALL F20; ##########################################        
+       IF JWB001.CDRTPGM = '' THEN        
+         CALL F21; ######################        
+     END;        
+   WHEN('EXIST_RGL')        
+     DO;        
+       CALL F30; ##########################################        
+       IF JWB001.CDRTPGM = '' THEN        
+         CALL F31; ######################        
+     END;        
+   OTHER DO;        
+         /* COMMANDE INCONNUE */        
+         JWB001.CDRTPGM = '$$FWK10' !! '01';        
+         
+         RETURN;        
+         END;        
+ END;        
+         
+ IF JWB001.CDTRACE >= 3 THEN        
+      DO;        
+      PUT SKIP EDIT('===> $$FWK10 END') (SKIP,A);        
+      END;        
+ /*-------------------------------------------------------------------*/        
+         
+ F0: PROC REORDER ;        
+ TRACE = '$$FWK10 ===> ' !! 'F0';        
+         
+ CALL PT;        
+ /*********************************************************************/        
+ /* INITIALISATION                                                    */        
+ /*********************************************************************/        
+ /* INIT OUTPUT */        
+ KFW10J.OUTPUT = '';        
+         
+ TSS     = 'TSS ';        
+ PCOUNT  = 2;        
+         
+ TSSCPL.TSSHEAD  = 'TCPLV4L4';        
+ TSSCPL.TSSPPGM  = LOW(8);        
+ TSSCPL.TSSACC   = LOW(8);        
+ TSSCPL.TSSRC    = 0;        
+ TSSCPL.TSSSTAT  = 0;        
+ TSSCPL.TSSCRC   = LOW(2);        
+ TSSCPL.TSSCSTAT = LOW(2);        
+ TSSCPL.TSSACEE  = 0;        
+ TSSCPL.TSSVOL   = LOW(6);        
+ TSSCPL.TSSLOG  = 'N';        ####################################################        
+ TSSCPL.TSSRSVD  = LOW(2);        
+ TSSCPL.TSSDRC   = '0'B;        
+ TSSCPL.TSSLRTN  =     1024;        
+ TSSCPL.TSSRSVD2 = LOW(12);        
+ TSSCPL.TSSRTN   = LOW(    1024);        
+         
+ TRACE = '$$FWK10 ===> ' !! 'END F0';        
+         
+ CALL PT;        
+ $END F0;        
+ /*-------------------------------------------------------------------*/        
+         
+ F10: PROC REORDER ;        
+ TRACE = '$$FWK10 ===> ' !! 'F10';        
+         
+ CALL PT;        
+ /*********************************************************************/        
+ /* METHODE EXIST_CDE                                                 */        
+ /*********************************************************************/        
+ IF JWB001.CDTRACE >= 3 THEN        
+   DO;        
+   KFW10J_I1_LIKE = KFW10J_I1, BY NAME;        
+   PUT SKIP EDIT('$$FWK10 ===> ','>>>') (SKIP,A,A);        
+         
+   PUT SKIP DATA(KFW10J_I1_LIKE);        
+   PUT SKIP EDIT('$$FWK10 ===> ','<<<') (SKIP,A,A);        
+         
+   END;        
+         
+ /*SOCIETE */        
+ IF KFW10J_I1.CDIDSOC = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '02';        
+         
+     RETURN;        
+   END;        
+         
+ /*KERNEL*/        
+ IF KFW10J_I1.CDIDPDT = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '03';        
+         
+     RETURN;        
+   END;        
+         
+ /*TRANSACTION*/        
+ IF KFW10J_I1.CDIDTRA = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '04';        
+         
+     RETURN;        
+   END;        
+         
+ /*COMMANDE*/        
+ IF KFW10J_I1.CDIDCDE = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '05';        
+         
+     RETURN;        
+   END;        
+         
+ TRACE = '$$FWK10 ===> ' !! 'END F10';        
+         
+ CALL PT;        
+ $END F10;        
+ /*-------------------------------------------------------------------*/        
+         
+ F11: PROC REORDER ;        
+ TRACE = '$$FWK10 ===> ' !! 'F11';        
+         
+ CALL PT;        
+ /*********************************************************************/        
+ /* METHODE EXIST_CDE                                                 */        
+ /*********************************************************************/        
+ SELECT (KFW10J_I1.CDIDSOC);        
+   WHEN ('AS')        
+      KFW10J_I1.CDIDSOC = 'ETHIAS';        
+   WHEN ('ETHIAS');        
+   OTHER;        
+ END;        
+         
+ LTCBRSA_W = TRIM(KFW10J_I1.CDIDSOC) !! POINT !!        
+             TRIM(KFW10J_I1.CDIDPDT) !! POINT !!        
+             TRIM(KFW10J_I1.CDIDTRA) !! POINT !!        
+             TRIM(KFW10J_I1.CDIDCDE);        
+         
+ CALL VERIF_TSS('CMDTRAN',LTCBRSA_W);        
+ IF JWB001.CDRTPGM ^= '' THEN RETURN;        
+         
+ TRACE = '$$FWK10 ===> ' !! 'END F11';        
+         
+ CALL PT;        
+ $END F11;        
+ /*-------------------------------------------------------------------*/        
+         
+ F20: PROC REORDER ;        
+ TRACE = '$$FWK10 ===> ' !! 'F20';        
+         
+ CALL PT;        
+ /*********************************************************************/        
+ /* METHODE EXIST_SDE                                                 */        
+ /*********************************************************************/        
+ IF JWB001.CDTRACE >= 3 THEN        
+   DO;        
+   KFW10J_I2_LIKE = KFW10J_I2, BY NAME;        
+   PUT SKIP EDIT('$$FWK10 ===> ','>>>') (SKIP,A,A);        
+         
+   PUT SKIP DATA(KFW10J_I2_LIKE);        
+   PUT SKIP EDIT('$$FWK10 ===> ','<<<') (SKIP,A,A);        
+         
+   END;        
+         
+ /*SOCIETE */        
+ IF KFW10J_I2.CDIDSOC = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '06';        
+         
+     RETURN;        
+   END;        
+         
+ /*KERNEL*/        
+ IF KFW10J_I2.CDIDPDT = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '07';        
+         
+     RETURN;        
+   END;        
+         
+ /*TRANSACTION*/        
+ IF KFW10J_I2.CDIDTRA = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '08';        
+         
+     RETURN;        
+   END;        
+         
+ /*COMMANDE*/        
+ IF KFW10J_I2.CDIDCDE = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '09';        
+         
+     RETURN;        
+   END;        
+         
+ /*SOUS COMMANDE*/        
+ IF KFW10J_I2.CDIDSDE = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '10';        
+         
+     RETURN;        
+   END;        
+         
+ TRACE = '$$FWK10 ===> ' !! 'END F20';        
+         
+ CALL PT;        
+ $END F20;        
+ /*-------------------------------------------------------------------*/        
+         
+ F21: PROC REORDER ;        
+ TRACE = '$$FWK10 ===> ' !! 'F21';        
+         
+ CALL PT;        
+ /*********************************************************************/        
+ /* METHODE EXIST_SDE                                                 */        
+ /*********************************************************************/        
+ SELECT (KFW10J_I2.CDIDSOC);        
+   WHEN ('AS')        
+      KFW10J_I2.CDIDSOC = 'ETHIAS';        
+   WHEN ('ETHIAS');        
+   OTHER;        
+ END;        
+         
+ LTCBRSA_W = TRIM(KFW10J_I2.CDIDSOC) !! POINT !!        
+             TRIM(KFW10J_I2.CDIDPDT) !! POINT !!        
+             TRIM(KFW10J_I2.CDIDTRA) !! POINT !!        
+             TRIM(KFW10J_I2.CDIDCDE) !! POINT !!        
+             TRIM(KFW10J_I2.CDIDSDE);        
+         
+ CALL VERIF_TSS('CMDTRAN',LTCBRSA_W);        
+ IF JWB001.CDRTPGM ^= '' THEN RETURN;        
+         
+ TRACE = '$$FWK10 ===> ' !! 'END F21';        
+         
+ CALL PT;        
+ $END F21;        
+ /*-------------------------------------------------------------------*/        
+         
+ F30: PROC REORDER ;        
+ TRACE = '$$FWK10 ===> ' !! 'F30';        
+         
+ CALL PT;        
+ /*********************************************************************/        
+ /* METHODE EXIST_RGL                                                 */        
+ /*********************************************************************/        
+ IF JWB001.CDTRACE >= 3 THEN        
+   DO;        
+   KFW10J_I3_LIKE = KFW10J_I3, BY NAME;        
+   PUT SKIP EDIT('$$FWK10 ===> ','>>>') (SKIP,A,A);        
+         
+   PUT SKIP DATA(KFW10J_I3_LIKE);        
+   PUT SKIP EDIT('$$FWK10 ===> ','<<<') (SKIP,A,A);        
+         
+   END;        
+         
+ /*SOCIETE */        
+ IF KFW10J_I3.CDIDSOC = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '11';        
+         
+     RETURN;        
+   END;        
+         
+ /*KERNEL*/        
+ IF KFW10J_I3.CDIDPDT = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '12';        
+         
+     RETURN;        
+   END;        
+         
+ /*REGLE*/        
+ IF KFW10J_I3.CDIDRGL(1) = '' THEN        
+   DO;        
+     JWB001.CDRTPGM = '$$FWK10' !! '13';        
+         
+     RETURN;        
+   END;        
+         
+ TRACE = '$$FWK10 ===> ' !! 'END F30';        
+         
+ CALL PT;        
+ $END F30;        
+ /*-------------------------------------------------------------------*/        
+         
+ F31: PROC REORDER ;        
+ TRACE = '$$FWK10 ===> ' !! 'F31';        
+         
+ CALL PT;        
+ /*********************************************************************/        
+ /* METHODE EXIST_RGL                                                 */        
+ /*********************************************************************/        
+ DCL I   BIN FIXED (31);        
+         
+ SELECT (KFW10J_I3.CDIDSOC);        
+   WHEN ('AS')        
+      KFW10J_I3.CDIDSOC = 'ETHIAS';        
+   WHEN ('ETHIAS');        
+   OTHER;        
+ END;        
+         
+ DO I = 1 TO 100        
+    WHILE(JWB001.CDRTPGM = '' & KFW10J_I3.CDIDRGL(I) ^= '');        
+    LTCBRSA_W = TRIM(KFW10J_I3.CDIDSOC) !! POINT !!        
+                TRIM(KFW10J_I3.CDIDPDT) !! POINT !!        
+                TRIM(KFW10J_I3.CDIDRGL(I));        
+         
+    CALL VERIF_TSS('CMDRULE',LTCBRSA_W);        
+         
+ END;        
+         
+ TRACE = '$$FWK10 ===> ' !! 'END F31';        
+         
+ CALL PT;        
+ $END F31;        
+ /*-------------------------------------------------------------------*/        
+         
+ VERIF_TSS: PROC (TSSCLASS_P,TSSRNAME_P) REORDER;        
+ TRACE = '$$FWK10 ===> ' !! 'VERIF_TSS';        
+         
+ CALL PT;        
+ /*********************************************************************/        
+ /* VERIFICATION DES ACCES DANS TSS                                   */        
+ /*-------------------------------------------------------------------*/        
+ /* DESCRIPTION DES STATUS TSS                                        */        
+ /*-------------------------------------------------------------------*/        
+ /* TSSCPL.TSSRC   TSSCPL.TSSCRC   DEFINITION                         */        
+ /* ------------   -------------   ----------                         */        
+ /*     00             OK          ACCES AUTORISE                     */        
+ /*     04             ND          RESSOURCE NON DEFINIE              */        
+ /*     08             NA          ACCES NON AUTORISE                 */        
+ /*     12             IP          PARAMETRES D'APPEL E TSS INVALIDES */        
+ /*     20             IA          TSS INACTIF                        */        
+ /*********************************************************************/        
+ DCL TSSCLASS_P CHAR(*);        
+ DCL TSSRNAME_P CHAR(*);        
+         
+ TSSCLASS = TSSCLASS_P;        
+         
+ /* LE CARACTERE '>' N'EST PAS PAS ACCEPTE PAR TSS */        
+ TSSRNAME = TRANSLATE(TSSRNAME_P,'$','>');        
+         
+ IF JWB001.CDTRACE >= 3 THEN        
+      DO;        
+      PUT SKIP EDIT ('$$FWK10 ===> ', '>>> AVANT APPEL A TSS ')        
+         
+                    (SKIP,A,A);        
+      PUT SKIP DATA(TSSCPL);        
+      PUT SKIP EDIT ('$$FWK10 ===> ', '<<< AVANT APPEL A TSS ')        
+         
+                    (SKIP,A,A);        
+      END;        
+         
+ CALL PLITDLI(PCOUNT,TSS,TSSCPL);        
+         
+ IF TSSCPL.TSSRC ^= 0 THEN        
+      JWB001.CDRTPGM = 'NOTFOUND';        
+         
+ IF JWB001.CDTRACE >= 3 THEN        
+      DO;        
+      PUT SKIP EDIT ('$$FWK10 ===> ', '>>> APRES APPEL A TSS ')        
+         
+                    (SKIP,A,A);        
+      PUT SKIP DATA (TSSCPL.TSSRC,TSSCPL.TSSCRC);        
+      PUT SKIP EDIT ('CDRTPGM = ',JWB001.CDRTPGM)        
+                    (SKIP,A,A);        
+      PUT SKIP EDIT ('$$FWK10 ===> ', '<<< APRES APPEL A TSS ')        
+         
+                    (SKIP,A,A);        
+      END;        
+         
+ TRACE = '$$FWK10 ===> ' !! 'END VERIF_TSS';        
+         
+ CALL PT;        
+ $END VERIF_TSS;        
+ /*-------------------------------------------------------------------*/        
+         
+ $$END $$FWK10;        

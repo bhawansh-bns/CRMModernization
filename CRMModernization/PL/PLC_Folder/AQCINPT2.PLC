@@ -1,0 +1,27 @@
+BEGIN_PLC(AQCINPT2)
+  DCL 1 QUOTE,        
+        2 INPUTS,        
+          3 SEX1                 CHAR (1),       /* Sex of life 1    */        
+          3 SEX2                 CHAR (1),       /* Sex of life 2    */        
+          3 DOB1                 PIC'(8)9',      /* DOB of life 1    */        
+          3 DOB2                 PIC'(8)9',      /* DOB of life 2    */        
+          3 QMODE                CHAR (1),       /* Ann'y paymt mode */        
+          3 ADVR                 CHAR (3),       /* ADVance/ARRears  */        
+          3 GUAR                 FIXED DEC (3),  /* Guarantee period */        
+          3 ESC                  FIXED DEC (5,2),/* Escalation rate  */        
+          3 WIDOWS               FIXED DEC (5,2),/* Widows pension % */        
+          3 PURPRICE             FIXED(11,2),    /* Purchase price   */        
+          3 CASHSUMAMNT          FIXED(9,2),     /* Tax free cash sum*/        
+          3 RETIREMENT_DATE      PIC '(8)9',     /* Retirement date  */        
+          3 PROTECTED_RIGHTS     CHAR (1),       /* Protected rights */        
+          3 SECTION_226          CHAR (1),       /* Section 226      */        
+        2 OUTPUTS,        
+          3 FP1                  FIXED DEC (9,2),/* Full pension     */        
+          3 CS                   FIXED DEC (9,2),/* Tax free cash    */        
+          3 RP1                  FIXED DEC (9,2),/* Reduced pension  */        
+          3 LTA_PERCENTAGE       FIXED DEC (5,2),/* LTA percentage   */        
+        2 QRET_CODE              CHAR(3),        /* Return code      */        
+        2 QRET_MSG               CHAR (60),      /* Error message    */        
+        2 VERSION                CHAR (8);       /* Version no.      */        
+         
+END_PLC(AQCINPT2)

@@ -1,0 +1,23 @@
+BEGIN_PLC(CUK08990)
+ /*-------------------------------------------------------------------*/        
+ /* CUK08990 : Declarations needed to call module UK08990.            */        
+ /*                                                                   */        
+ /* UK08990 is called by UK08970 to apply scheduled charges.          */        
+ /*                                                                   */        
+ /* Fill Cuk08990 as follows:                                         */        
+ /*                                                                   */        
+ /*                                                                   */        
+ /*-------------------------------------------------------------------*/        
+         
+ Dcl P_CUK08990 Ptr ;        
+ Dcl 1 CUK08990_NAME_TYPE ,        
+       2 Annual_Rate_1   Fixed Dec(7,6),        
+       2 Annual_Rate_2   Fixed Dec(7,6),        
+       2 Curtate_Prob_1  Fixed Dec(9,7),        
+       2 Curtate_Prob_2  Fixed Dec(9,7),        
+       2 Curtate_Prob_1A Fixed Dec(9,7),        
+       2 Curtate_Prob_2A Fixed Dec(9,7),        
+       2 Curtate_Prob_1B Fixed Dec(9,7),        
+       2 Curtate_Prob_2B Fixed Dec(9,7);        
+         
+END_PLC(CUK08990)
