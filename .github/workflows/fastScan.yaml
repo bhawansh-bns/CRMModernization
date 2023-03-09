@@ -18,6 +18,9 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      - name: Run application
-        run: java -jar testcarl.jar https://github.com/bhawansh-bns/CRMModernization/ https://github.com/bhawansh-bns/CRMModernization/scans
+      - name: Pull docker image
+        run: docker pull searaph/searaph/fast-scan
+      
+      - name: Run docker container
+        run: docker run -p 80:80 searaph/searaph/fast-scan https://github.com/bhawansh-bns/CRMModernization https://github.com/bhawansh-bns/CRMModernization/scans
 
