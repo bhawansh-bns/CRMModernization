@@ -28,5 +28,5 @@ jobs:
         run: docker pull searaph/fast-scan
       
       - name: Run docker container
-        run: docker run -p 80:80 searaph/fast-scan https://github.com/bhawansh-bns/CRMModernization https://github.com/bhawansh-bns/CRMModernization/scans
+        run: docker run -p 8089:8089 searaph/fast-scan https://github.com/bhawansh-bns/CRMModernization https://github.com/bhawansh-bns/CRMModernization/scans
 
