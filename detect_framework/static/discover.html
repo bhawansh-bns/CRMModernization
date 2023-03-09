@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Application Discoverer</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body style="font-family: 'Helvetica', 'Arial', sans-serif;">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-resizable-dom@0.35.0/dist/jquery-resizable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
+    
+    <!-- highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    
+    <div class="flex-master">
+        <div class="header" id="header">
+            <p style="margin-left: 1em;">Application Discoverer (Loading...)</p>
+        </div>
+		<div class="page-content">
+
+			<div class="browser" id="browser">
+            </div>
+        
+            <div class="splitter-browser">
+            </div>
+        
+            <div class="frameworks" id="frameworks">
+            </div>
+            
+            <div class="splitter-frameworks">
+            </div>
+
+            <div class="files" id="files">
+            </div>
+        
+        </div>
+
+
+    </div>
+
+
+	<div id="sourceCode" class="sidenav">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()" style="flex: none;">&times;</a>
+		<p id="file_path" class="display-file-path clickable" onclick="CopyToClipboard('file_path')" title="Click to copy path to clipboard"></p>
+		<pre class="code">
+            <code id="code"></code>
+		</pre>
+	</div>
+
+</body>
+
+<script>
+/* Set the width of the side navigation to 100% */
+function openNav() 
+{
+  document.getElementById("sourceCode").style.width = "100%";
+}
+
+/* Set the width of the side navigation to 0 */
+function closeNav() 
+{
+  document.getElementById("sourceCode").style.width = "0";
+} 
+
+/* https://www.arclab.com/en/kb/htmlcss/how-to-copy-text-from-html-element-to-clipboard.html */
+function CopyToClipboard(id)
+{
+	var r = document.createRange();
+	r.selectNode(document.getElementById(id));
+	window.getSelection().removeAllRanges();
+	window.getSelection().addRange(r);
+	document.execCommand('copy');
+	window.getSelection().removeAllRanges();
+}
+
+$(document).keydown(function(e) 
+{
+    // ESCAPE key pressed
+    if (e.keyCode == 27) 
+    {
+    	closeNav();
+    }
+});
+
+$(function() 
+{
+
+	// current scan id
+	var current_scan_id = location.hash.slice(1);
+	console.log(current_scan_id);
+	
+	// splitters
+    $(".browser").resizable(
+    {
+        handleSelector: ".splitter-browser",
+        resizeHeight: false
+    });	
+
+    $(".frameworks").resizable(
+    {
+        handleSelector: ".splitter-frameworks",
+        resizeHeight: false
+    }); 
+
+    closeNav();
+    
+    // title
+    $.ajax(
+    {
+        url : '/api/scans/' + current_scan_id + '/root_path',
+        success : function(res) 
+        {
+            console.log(res);
+            // clear the content section
+            var content = document.getElementById("header");
+            while (content.firstChild) 
+            {
+                content.removeChild(content.firstChild);
+            }
+
+            var para = document.createElement("p");
+            para.classList.add('title');
+            content.appendChild(para);
+            text = document.createTextNode('Application Discoverer ' + res);
+            para.appendChild(text);
+
+            var table = document.createElement("table");
+            table.classList.add('display-selection');
+            content.appendChild(table);
+            
+            var tr = document.createElement("tr");
+            table.appendChild(tr);
+            
+            var td = document.createElement("td");
+            tr.appendChild(td);
+            text = document.createTextNode('Selected:');
+            td.appendChild(text);
+            
+            td = document.createElement("td");
+            tr.appendChild(td);
+            td.setAttribute('id', 'selected path');
+            
+            // add the file browser
+            $('#browser').jstree(
+            {
+                'core' : {
+                  'data' : {
+                      
+                      'url': '/api/scans/' + current_scan_id + '/structure',
+                      "dataType" : "json"
+                  },
+                  "themes": {"dots": false},
+                  "multiple": false,          
+                }
+            });
+
+        }
+    }); 
+    
+
+    // open file code
+    var open_file = function(file_id) 
+    {
+    	console.log('open file ' + file_id);
+    	
+        $.ajax(
+        {
+            url : '/api/scans/' + current_scan_id + '/' + file_id +'/code',
+            success : function(res) 
+            {
+                var content = document.getElementById("file_path");
+                while (content.firstChild) 
+                {
+                    content.removeChild(content.firstChild);
+                }
+
+                var text = document.createTextNode(res['path']);
+                content.appendChild(text);
+            	
+                content = document.getElementById("code");
+                while (content.firstChild) 
+                {
+                    content.removeChild(content.firstChild);
+                }
+                
+                text = document.createTextNode(res['code']);
+                content.appendChild(text);
+
+                hljs.highlightBlock(content);
+
+                console.log('openning code');
+                openNav();
+                
+                content.focus();
+            }
+        });
+    };
+    
+    var clear_file_list = function()
+    {
+        var files_container = document.getElementById("files");
+        while (files_container.firstChild) 
+        {
+            files_container.removeChild(files_container.firstChild);
+        }
+    };
+    
+    var selected_folder = '';
+    
+    // Display a file list
+    var display_file_list = function(files)
+    {
+        console.log(files);
+        console.log('selected_folder = ' + selected_folder)
+        // clear the content section
+        var files_container = document.getElementById("files");
+        clear_file_list();
+        
+        // search elements
+        var table = document.createElement("table");
+        table.classList.add('filter');
+        files_container.appendChild(table);
+        
+        var tr = document.createElement("tr");
+        table.appendChild(tr);
+        
+        var td = document.createElement("td");
+        tr.appendChild(td);
+        text = document.createTextNode('Filter:');
+        td.appendChild(text);
+        
+        td = document.createElement("td");
+        tr.appendChild(td);
+        var input = document.createElement("input");
+        input.classList.add('filter-input');
+        input.setAttribute('size', '30');
+        td.appendChild(input);
+        
+        // list of files
+        table = document.createElement("table");
+        files_container.appendChild(table);
+
+        // file filtering
+        input.oninput = function() 
+        {
+            console.log('filter ' + input.value);
+            
+            var searched = input.value.toLowerCase();
+            
+            var children = table.children;
+            for (var i = 0; i < children.length; i++) 
+            {
+            	var row = children[i];
+
+                var text = row.firstChild.nodeValue.toLowerCase();
+
+                // hide or show
+                if (text.includes(searched))
+                {
+                	row.style.display = "";
+                }
+                else
+                {
+                	row.style.display = "none";
+                }
+            }        
+        }; 
+        
+        // we display path relative to selected folder
+        var sub = 0;
+        if (selected_folder.length > 0)
+        {
+            sub = selected_folder.length + 1;
+        }
+        
+        files['files'].forEach(function(f)
+        {
+            
+            var element = document.createElement("tr");
+            element.classList.add('clickable');
+            element.setAttribute('title', 'Click to show code');
+            table.appendChild(element);
+            
+            // we display path relative to selected folder
+            var text = document.createTextNode(f['path'].substring(sub));
+            element.appendChild(text);
+            
+            element.onclick = function() 
+            {
+                open_file(f['id']);
+                $(table).find('.file-selected').removeClass('file-selected');
+                element.classList.add('file-selected');
+            }; 
+
+        });
+        
+    };
+
+    /// Highligth one node
+    var hightligh_node = function(id)
+    {
+        // jstree internal model
+        var jstree_node = $('#browser').jstree(true).get_node(id);
+        console.log(jstree_node);
+
+        jstree_node.a_attr["class"] += " node_contains";
+        
+        // dom node when already displayed
+        var dom_node = $('#browser').jstree(true).get_node(id, true);
+        console.log(dom_node);
+        
+        dom_node.children('a').addClass('node_contains');
+    };
+
+    var previously_highlighted_nodes = [];
+    
+    /// Clear the hint in browser
+    var clear_browser_hint = function()
+    {
+    	// for dom
+    	$('#browser').find('.node_contains').removeClass('node_contains');
+    	
+    	// internal model
+    	previously_highlighted_nodes.forEach(function (id) {
+    		var jstree_node = $('#browser').jstree(true).get_node(id);
+    		jstree_node.a_attr["class"] -= " node_contains";
+    	});
+    	
+    	previously_highlighted_nodes = [];
+    };
+    
+    /// Show in the browser some nodes by background them 
+    var show_in_browser = function(node_ids)
+    {
+    	// clear
+    	clear_browser_hint();
+    	
+    	node_ids.forEach(function(id)
+    	{
+    		hightligh_node(id);
+    	});
+    	
+    	previously_highlighted_nodes = node_ids;
+    	
+    };
+    
+    var add_line = function(element, title, content)
+    {
+        var tr = document.createElement("tr");
+        element.appendChild(tr);
+        var td = document.createElement("td");
+        tr.appendChild(td);
+        var text = document.createTextNode(title);
+        td.appendChild(text);
+        var td = document.createElement("td");
+        tr.appendChild(td);
+        var text = document.createTextNode(content);
+        td.appendChild(text);
+    	
+    };
+    
+
+    // When selecting an element in browser
+    /*
+    We display the list of language/frameworks present in that folder as buttons
+    and those buttons will select the list of files having it
+    */
+    var select_file_folder = function(current_scan_id, id, res)
+    {
+        
+        console.log(res);
+        // clear the content section
+        var content = document.getElementById("frameworks");
+        while (content.firstChild) 
+        {
+            content.removeChild(content.firstChild);
+        }
+
+        // clear the file list section
+        clear_file_list();
+        // clear the contains
+        clear_browser_hint();
+        
+        // The folder/file selected in the browser
+        var selected_path = document.getElementById("selected path");
+        while (selected_path.firstChild) 
+        {
+        	selected_path.removeChild(selected_path.firstChild);
+        }
+        
+        var text = document.createTextNode(res['path']);
+        selected_path.appendChild(text);
+        selected_folder = res['path'];
+        
+        var is_file = Number(id) > 0;
+        
+        // if selection is a file ... then list it
+        if (is_file)
+        {
+        	var files_container = document.getElementById("files");
+        	
+            var table = document.createElement("table");
+            files_container.appendChild(table);
+            
+            var element = document.createElement("tr");
+            table.appendChild(element);
+            
+            var text = document.createTextNode(res['path']);
+            element.appendChild(text);
+
+            element.onclick = function() 
+            {
+                open_file(id);
+            }; 
+            
+        }
+        
+        // if folder is project : add the description of the project
+        if (res['is project'])
+        {
+            console.log('is project');
+            
+            var project_info = res['project infos'];
+            
+            var project = document.createElement("p");
+            content.appendChild(project);
+            
+            var table = document.createElement("table");
+            project.appendChild(table);
+
+            add_line(table, 'Name:', project_info['name']);
+            if (project_info['description'])
+            {
+            	add_line(table, 'Description:', project_info['description']);
+            }
+            
+            add_line(table, 'Type:', project_info['type']);
+            
+            project_info['tags'].forEach(function(tag)
+            {
+                add_line(table, tag, '');
+            });
+        }
+
+        /*
+        Handling of grouping of buttons
+        */
+        
+        var groups = {};
+        
+        /// Given a path 'x/y/z' get or create the group
+        var get_group = function(path)
+        {
+        	var container = groups;
+        	
+        	path.split("/").forEach(function(group_name)
+        	{
+        	    if (! (group_name in container))
+        	    {
+        	    	// create a group
+        	    	var group = document.createElement("details");
+        	    	group.classList.add("group");
+        	    	group.setAttribute("open", "");
+        	    	var summary = document.createElement("summary");
+        	    	summary.classList.add("group-summary");
+        	    	group.appendChild(summary);
+                    var text = document.createTextNode(group_name);
+                    summary.appendChild(text);
+                    
+                    var p = document.createElement("p");
+                    p.classList.add("group-content");
+                    group.appendChild(p);
+                    
+                    container[group_name] = group;
+                    if (container != groups)
+                    {
+                    	// put it in the p of the group
+                    	container.children[1].appendChild(group);
+                    }
+                    else
+                    {
+                        content.appendChild(group);
+                    }
+                    
+        	    }
+        	    // in any case recurse
+        	    container = container[group_name];
+        	});
+        	
+        	return container;
+        };
+        
+        // add buttons for languages
+        var languages = document.createElement("p");
+        content.appendChild(languages);
+        
+        res['languages'].forEach(function(data)
+        {
+            var button =  document.createElement("button");
+            button.setAttribute('title', data['kind']);
+            button.classList.add('detection-button');
+            
+            var group = get_group(data['kind']);
+            group.children[1].appendChild(button);
+            //languages.appendChild(button);
+            var text = document.createTextNode(data['language'] + ' ' + data['count']);
+            button.appendChild(text);
+            
+            button.onclick = function()
+            {
+            	// when the element is a file : nop
+            	if (is_file)
+            	{
+            		return;
+            	}
+                console.log('language ' + data['id']);
+                console.log(button.classList);
+
+                if (button.classList.contains("selected"))
+                {
+               		button.classList.remove("selected");
+               		clear_file_list();
+               		clear_browser_hint();
+                }
+                else
+                {
+                	$(".selected").removeClass("selected");
+	                // file list
+	                $.ajax(
+	                {
+	                    url : '/api/scans/' + current_scan_id + '/' + id +'/languages/' + data['id'],
+	                    success : function(files) 
+	                    {
+	                    	display_file_list(files);
+                            show_in_browser(files['folders containing']);
+	                    	button.classList.add("selected");
+	                    }
+	                });
+                }
+            };
+            
+        });
+
+        // add buttons for frameworks
+        
+        res['frameworks'].forEach(function(data){
+            
+            var button =  document.createElement("button");
+            button.setAttribute('title', data['language']);
+            button.classList.add('detection-button');
+            
+            var group = get_group(data['classification']);
+            group.children[1].appendChild(button);
+            
+            text = document.createTextNode(data['framework'] + ' ' + data['count']);
+            button.appendChild(text);
+            
+            button.onclick = function()
+            {
+                // when the element is a file : nop
+                if (is_file)
+                {
+                    return;
+                }
+                
+                console.log('language ' + data['id']);
+                
+                if (button.classList.contains("selected"))
+                {
+                    button.classList.remove("selected");
+                    clear_file_list();
+                    clear_browser_hint();
+                }
+                else
+                {
+                    $(".selected").removeClass("selected");
+                
+	                // file list
+	                $.ajax(
+	                {
+	                    url : '/api/scans/' + current_scan_id + '/' + id +'/frameworks/' + data['id'],
+	                    success : function(files) 
+	                    {
+	                    	display_file_list(files);
+	                    	show_in_browser(files['folders containing']);
+	                    	button.classList.add("selected");
+	                    }
+	                });
+                }
+            };
+            
+            
+        });
+    	
+        // add buttons for words
+        res['words'].forEach(function(data){
+            
+            var button =  document.createElement("button");
+            button.classList.add('detection-button');
+            
+            var group = get_group('bussiness words');
+            group.children[1].appendChild(button);
+            
+            text = document.createTextNode(data['word'] + ' ' + data['count']);
+            button.appendChild(text);
+            
+            button.onclick = function()
+            {
+                // when the element is a file : nop
+                if (is_file)
+                {
+                    return;
+                }
+                
+                console.log('word ' + data['word']);
+                
+                if (button.classList.contains("selected"))
+                {
+                    button.classList.remove("selected");
+                    clear_file_list();
+                    clear_browser_hint();
+                }
+                else
+                {
+                    $(".selected").removeClass("selected");
+                
+                    // file list
+                    $.ajax(
+                    {
+                        url : '/api/scans/' + current_scan_id + '/' + id +'/words/' + data['word'],
+                        success : function(files) 
+                        {
+                            display_file_list(files);
+                            show_in_browser(files['folders containing']);
+                            button.classList.add("selected");
+                        }
+                    });
+                }
+            };
+            
+            
+        });
+
+        // add buttons for url
+        res['urls'].forEach(function(data){
+            
+            var button =  document.createElement("button");
+            button.classList.add('detection-button');
+            
+            var group = get_group('urls');
+            group.children[1].appendChild(button);
+            
+            text = document.createTextNode(data['url'] + ' ' + data['count']);
+            button.appendChild(text);
+            
+            button.onclick = function()
+            {
+                // when the element is a file : nop
+                if (is_file)
+                {
+                    return;
+                }
+                
+                console.log('word ' + data['word']);
+                
+                if (button.classList.contains("selected"))
+                {
+                    button.classList.remove("selected");
+                    clear_file_list();
+                    clear_browser_hint();
+                }
+                else
+                {
+                    $(".selected").removeClass("selected");
+                
+                    // file list
+                    $.ajax(
+                    {
+                        url : '/api/scans/' + current_scan_id + '/' + id +'/urls/' + data['id'],
+                        success : function(files) 
+                        {
+                            display_file_list(files);
+                            show_in_browser(files['folders containing']);
+                            button.classList.add("selected");
+                        }
+                    });
+                }
+            };
+            
+            
+        });
+        
+    	
+    };
+    
+    
+    // events on bwowser selection
+    $('#browser').on("changed.jstree", function (e, data) 
+    {
+    	var id = data.instance.get_node(data.selected[0]).id;
+        console.log(data.instance.get_node(data.selected[0]).text);
+    
+        // search content of the folders
+        $.ajax(
+        {
+            url : '/api/scans/' + current_scan_id + '/' + id +'/detection',
+            success : function(res) 
+            {
+            	select_file_folder(current_scan_id, id, res);
+            },
+            error : function(jqXHR, textStatus, errorThrown) 
+            {
+                // clear the content section
+                var content = document.getElementById("frameworks");
+                while (content.firstChild) 
+                {
+                    content.removeChild(content.firstChild);
+                }
+                // display 'error...'
+                
+                var loading = document.createElement("p");
+                content.appendChild(loading);
+                text = document.createTextNode(errorThrown);
+                loading.appendChild(text);
+            }
+        }); 
+
+    });
+    
+}); // ready
+</script>
+			</html>

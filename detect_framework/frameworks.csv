@@ -1,0 +1,1709 @@
+techno;name;environment;selectors;min;max;patterns;type;classification
+;;;;;;;;
+
+Java;Apache Flume;import;;;;org.apache.flume;pattern;
+Java;Apache Commons IO;import;;;;org.apache.commons.io;pattern;
+Java;JRuleEngine;import;;;;org.jruleengine;pattern;
+Java;Apache Axis;import;;;;org.apache.axis2;pattern;
+Java;JSyn;import;;;;com.jsyn;pattern;
+Java;DropWizard Jersey;import;;;;io.dropwizard;pattern;
+Java;Java.io;import;;;;java.io;pattern;
+Java;Apache OpenNLP;import;;;;org.apache.opennlp;pattern;
+Java;HK2;import;;;;org.glassfish.hk2;pattern;
+Java;Apache Cocoon;import;;;;org.apache.cocoon;pattern;
+Java;Apache Xerces;import;;;;org.apache.xerces;pattern;
+Java;Akka;import;;;;com.typesafe.akka;pattern;
+Java;Deeplearning4j;import;;;;org.deeplearning4j;pattern;
+Java;Spring Integration;import;;;;org.springframework.integration;pattern;
+Java;Selenium;import;;;;org.openqa.selenium;pattern;
+Java;Apache River (Jini);import;;;;org.apache.river;pattern;
+Java;Apache Pivot;import;;;;org.apache.pivot;pattern;
+Java;Java Text Categorizing Library (JTCL);import;;;;tcl.lang;pattern;
+Java;Spring XD;import;;;;org.springframework.xd;pattern;
+Java;SonarLint;import;;;;org.sonarsource.sonarlint;pattern;
+Java;MapDB;import;;;;org.mapdb;pattern;
+Java;Eclipse Scout;import;;;;org.eclipse.scout;pattern;
+Java;Apache Avalon;import;;;;org.apache.avalon;pattern;
+Java;Apache Turbine;import;;;;org.apache.turbine;pattern;
+Java;SonarQube;import;;;;org.sonar;pattern;
+Java;JsonLib;import;;;;net.sf.json;pattern;
+Java;Apache Mahout;import;;;;org.apache.mahout;pattern;
+Java;WSO2 ESB;import;;;;org.wso2.carbon.esb;pattern;
+Java;FreeHEP;import;;;;hep.physics;pattern;
+Java;Jello;import;;;;com.uniformlyrandom;pattern;
+Java;JCabi;import;;;;com.jcabi;pattern;
+Java;Apache Uima;import;;;;org.apache.uima;pattern;
+Java;RestFB;import;;;;com.restfb;pattern;
+Java;Apache VXQuery;import;;;;org.apache.vxquery;pattern;
+Java;Activiti;import;;;;org.activiti;pattern;
+Java;Apache Tomcat;import;;;;org.apache.tomcat;pattern;
+Java;JGraphT;import;;;;org.jgrapht;pattern;
+Java;LogBack;import;;;;ch.qos.logback;pattern;
+Java;Xuggler;import;;;;com.xuggle;pattern;
+Java;Neuroph;import;;;;org.neuroph;pattern;
+Java;Apache Tika;import;;;;org.apache.tika;pattern;
+Java;Java.net;import;;;;java.net;pattern;
+Java;GStreamer;import;;;;org.gstreamer;pattern;
+Java;Java Media Framework;import;;;;javax.media;pattern;
+Java;Quartz;import;;;;org.quartz;pattern;
+Java;fleXive;import;;;;com.flexive;pattern;
+Java;JDom;import;;;;org.jdom2;pattern;
+Java;LWJGL;import;;;;org.lwjgl;pattern;
+Java;Docx4j;import;;;;org.docx4j;pattern;
+Java;Spring Social;import;;;;org.springframework.social;pattern;
+Java;LoopJ;import;;;;com.loopj;pattern;
+Java;Facebook4j;import;;;;org.facebook4j;pattern;
+Java;Apache Storm;import;;;;org.apache.storm;pattern;
+Java;Dagger2;import;;;;dagger;pattern;
+Java;Jess;import;;;;jess;pattern;
+Java;Jppf;import;;;;org.jppf;pattern;
+Java;Oracle WebLogic;import;;;;weblogic;pattern;
+Java;Jooby;import;;;;org.jooby;pattern;
+Java;StringTemplate;import;;;;org.stringtemplate;pattern;
+Java;Apache Accumulo;import;;;;org.apache.accumulo;pattern;
+Java;GXT;import;;;;com.sencha.gxt;pattern;
+Java;Apache Geronimo;import;;;;org.apache.geronimo;pattern;
+Java;Spock;import;;;;spock;pattern;
+Java;Twitter4J;import;;;;twitter4j;pattern;
+Java;Apache Oozie;import;;;;org.apache.oozie;pattern;
+Java;Apache Nutch;import;;;;org.apache.nutch;pattern;
+Java;Apache Giraph;import;;;;org.apache.giraph;pattern;
+Java;Selenide;import;;;;com.codeborne.selenide;pattern;
+Java;FreeMarker Template;import;;;;com.quhaodian;pattern;
+Java;Javalin;import;;;;io.javalin;pattern;
+Java;WSO2 App Manager;import;;;;org.wso2.carbon.appmgt;pattern;
+Java;JFreeChart;import;;;;org.jfree.chart;pattern;
+Java;Apache Solr;import;;;;org.apache.slor;pattern;
+Java;Apache Shiro;import;;;;org.apache.shiro;pattern;
+Java;OpenCSV;import;;;;com.opencsv;pattern;
+Java;jBPM;import;;;;org.kie.api;pattern;
+Java;Apache DBCP - Database Connection Pooling Library;import;;;;org.apache.commons.dbcp2;pattern;
+Java;Spring Data JDBC Extensions;import;;;;org.springframework.data.jdbc;pattern;
+Java;Android Plot;import;;;;com.androidplot;pattern;
+Java;Google Gson;import;;;;com.google.gson;pattern;
+Java;Smack;import;;;;org.jivesoftware.smack;pattern;
+Java;Joda Time;import;;;;org.joda.time;pattern;
+Java;Javers;import;;;;org.javers;pattern;
+Java;Apache Click;import;;;;org.apache.click;pattern;
+Java;JTS Topology;import;;;;org.locationtech.jts;pattern;
+Java;crawler4j;import;;;;edu.uci.ics.crawler4j;pattern;
+Java;Apache Lucene;import;;;;org.apache.lucene;pattern;
+Java;Apache Felix;import;;;;org.apache.felix;pattern;
+Java;Apache Qpid;import;;;;org.apache.qpid;pattern;
+Java;WSO2 Machine Learner;import;;;;org.wso2.carbon.ml;pattern;
+Java;Apache Zookeeper;import;;;;org.apache.zookeeper;pattern;
+Java;Checker;import;;;;org.checkerframework;pattern;
+Java;Apache Avro;import;;;;org.apache.avro;pattern;
+Java;Apache Pig;import;;;;org.apache.pig;pattern;
+Java;Birt;import;;;;org.eclipse.birt;pattern;
+Java;Webfirmframework;import;;;;com.webfirmframework;pattern;
+Java;Stormpath;import;;;;com.stormpath;pattern;
+Java;JBoss Seam;import;;;;org.jboss.seam;pattern;
+Java;PrimeFaces;import;;;;org.primefaces;pattern;
+Java;Apache PDFBox;import;;;;org.apache.pdfbox;pattern;
+Java;Payara Server;import;;;;fish.payara;pattern;
+Java;ND4J;import;;;;org.nd4j;pattern;
+Java;OpenCV;import;;;;org.opencv;pattern;
+Java;Ratpack;import;;;;ratpack;pattern;
+Java;Xstream;import;;;;com.thoughtworks.xstream;pattern;
+Java;WSO2 API Manager;import;;;;org.wso2.carbon.apimgt;pattern;
+Java;Apache Cayenne;import;;;;org.apache.cayenne;pattern;
+Java;Infinispan;import;;;;org.infinispan;pattern;
+Java;Apache Mesos;import;;;;org.apache.mesos;pattern;
+Java;BioJava;import;;;;org.biojava;pattern;
+Java;Ninja;import;;;;ninja;pattern;
+Java;Spring Session;import;;;;org.springframework.session;pattern;
+Java;JSoup;import;;;;org.jsoup;pattern;
+Java;Jackcess;import;;;;com.healthmarketscience.jackcess;pattern;
+Java;JideSoft;import;;;;com.jidesoft;pattern;
+Java;Apache Crunch;import;;;;org.apache.crunch;pattern;
+Java;BlueCove;import;;;;net.sf.bluecove;pattern;
+Java;Ejml (Efficient Java Matrix Library);import;;;;org.ejml;pattern;
+Java;ActFramework;import;;;;act.session;pattern;
+Java;WSO2 Identity Server;import;;;;org.wso2.carbon.identity;pattern;
+Java;Grails;import;;;;grails;pattern;
+Java;Slick2D;import;;;;org.newdawn.slick;pattern;
+
+Java;Sax;import;;;;org.xml.sax;pattern;
+Java;ZKoss;import;;;;org.zkoss;pattern;
+Java;OrientDB;import;;;;com.orientechnologies;pattern;
+Java;JRockit;import;;;;com.jrockit;pattern;
+Java;Apache CXF;import;;;;org.apache.cxf;pattern;
+Java;OpenXava;import;;;;org.openxava;pattern;
+Java;Apache Velocity;import;;;;org.apache.velocity;pattern;
+Java;GeoApi;import;;;;org.opengis;pattern;
+Java;WordCram;import;;;;wordcram;pattern;
+Java;Apache Commons Digester;import;;;;org.apache.commons.digester3;pattern;
+Java;Spring LDAP;import;;;;org.springframework.ldap;pattern;
+Java;WSO2 Governance Registry;import;;;;org.wso2.carbon.governance;pattern;
+Java;Apache Hive;import;;;;org.apache.hive;pattern;
+Java;Apache Wink;import;;;;org.apache.wink;pattern;
+Java;JHipster;import;;;;io.github.jhipster;pattern;
+Java;Apache DataFu;import;;;;org.apache.datafu;pattern;
+Java;ORMLite;import;;;;com.j256.ormlite;pattern;
+Java;EHCache;import;;3.x;;org.ehcache;pattern;
+Java;EHCache;import;;1.x;2.x;net.sf.ehcache;pattern;
+Java;EHCache;import;;2.x;2.x;org.springframework.cache.ehcache;pattern;
+Java;EHCache;import;;;;com.googlecode.ehcache;pattern;
+Java;Drools;import;;;;org.drools.core;pattern;
+Java;Netty;import;;;;io.netty;pattern;
+Java;Apache JackRabbit;import;;;;org.apache.jackrabbit;pattern;
+Java;Jetty;import;;;;org.eclipse.jetty;pattern;
+Java;Apache JavaNlp;import;;;;opennlp;pattern;
+Java;JProfiler;import;;;;com.jprofiler;pattern;
+Java;GCViewer;import;;;;com.mgmtp.gcviewer;pattern;
+Java;Spring Roo;import;;;;org.springframework.roo;pattern;
+Java;SuanShu;import;;;;com.numericalmethod.suanshu;pattern;
+Java;VRaptor;import;;;;br.com.caelum.vraptor;pattern;
+Java;Spring Data Neo4j;import;;;;org.springframework.data.neo4j;pattern;
+Java;WSO2 Message Broker;import;;;;org.wso2.carbon.mb;pattern;
+Java;ControlsFX;import;;;;org.controlsfx;pattern;
+Java;PI4J;import;;;;com.pi4j;pattern;
+Java;Spring Core;import;;;;org.springframework.core;pattern;
+Java;DOM4J;import;;;;org.dom4j;pattern;
+Java;Apache Mina;import;;;;org.apache.mina;pattern;
+Java;Java WordNet Library (JWNL);import;;;;net.sf.extjwnl;pattern;
+Java;Apache BookKeeper;import;;;;Apache BookKeeper;pattern;
+Java;Apache Samza;import;;;;org.apache.samza;pattern;
+Java;Spring Boot;import;;;;org.springframework.boot;pattern;
+Java;Jasper Reports;import;;;;net.sf.jasperreports;pattern;
+Java;Apache Hadoop;import;;;;org.apache.hadoop;pattern;
+Java;LiquiBase;import;;;;liquibase;pattern;
+Java;Axon;import;;;;org.axonframework;pattern;
+Java;The Lightweight Java Game Library (LWJGL);import;;;;org.lwjgl;pattern;
+Java;JogAmp;import;;;;com.jogamp;pattern;
+Java;JMonkeyEngine;import;;;;com.projectdarkstar.ext.com.jmonkeyengine;pattern;
+Java;AppFuse;import;;;;org.appfuse;pattern;
+Java;GeoTools;import;;;;org.geotools;pattern;
+Java;Spring Hateoas;import;;;;org.springframework.hateoas;pattern;
+Java;Apache Spark;import;;;;org.apache.spark;pattern;
+Java;Vertx;import;;;;io.vertx;pattern;
+Java;Quasar;import;;;;co.paralleluniverse;pattern;
+Java;Apache Sling;import;;;;org.apache.sling;pattern;
+Java;Commons Math;import;;;;org.apache.commons.math3;pattern;
+Java;Apache Jena;import;;;;org.apache.jena;pattern;
+Java;Easy Rules;import;;;;org.jeasy.rules;pattern;
+Java;OpenRules;import;;;;com.openrules;pattern;
+Java;Jodd;import;;;;jodd;pattern;
+Java;IText;import;;;;com.itextpdf;pattern;
+Java;ScribeJava;import;;;;com.github.scribejava;pattern;
+Java;Apache OODT;import;;;;org.apache.oodt;pattern;
+Java;JavAssist;import;;;;javassist;pattern;
+Java;Play;import;;;;play;pattern;
+Java;OpenNLP;import;;;;opennlp;pattern;
+Java;JAXR;import;;;;java.xml.registry;pattern;
+Java;HSQLDB;maven;org.hsqldb;;;;version;
+Java;FreeMarker;maven;org.freemarker;;;;version;
+Java;SLF4J;maven;org.slf4j;;;;version;
+Java;jsonPath;maven;com.jayway.jsonpath;;;;version;
+Java;jettison;maven;org.codehaus.jettison;;;;version;
+Java;json-simple;maven;com.googlecode.json-simple;;;;version;
+Java;jackson;maven;org.codehaus.jackson;;;;version;
+Java;jersey;maven;org.glassfish.jersey;;;;version;
+Java;apache POI;maven;org.apache.poi;;;;version;
+Java;spring;maven;org.springframework;;;;version;
+
+Java;objenesis;maven;org.objenesis;;;;version;
+Java;protobuf;maven;com.google.protobuf;;;;version;
+Java;JNA;maven;net.java.dev.jna;;;;version;
+Java;javassist;maven;org.javassist;;;;version;
+Java;apache commons;maven;commons-logging;;;;version;
+Java;apache commons;maven;commons-lang;;;;version;
+Java;apache commons;maven;commons-collections;;;;version;
+Java;apache commons;maven;commons-io;;;;version;
+Java;apache commons;maven;commons-fileupload;;;;version;
+
+Java;dom4j;filename;*.jar;;;\bdom4j\b;version;
+Java;mx4j;filename;*.jar;;;\bmx4j\b;version;
+Java;spring;filename;*.jar;1;2.x;\bspring.jar$;version;
+Java;spring;filename;*.jar;2;2.x;\bspring-core.jar$;version;
+Java;spring;filename;*.jar;1.2;1.2.x;\bspring-1.2\b;version;
+Java;spring;filename;*.jar;3;3.x;\borg.springframework.core-3\b;version;
+Java;spring;filename;*.jar;;;\bspring-core\b;version;
+Java;JSF;filename;*.jar;;;\bjsf-api\b;version;
+Java;JSF;filename;*.jar;2;2.x;\bfaces-api-2\b;version;
+Java;JSF;filename;*.jar;2;2.x;\bjavax.faces-2\b;version;
+Java;OFBiz;import;;;;org.apache.ofbiz;pattern;
+Java;OFBiz;import;;;;org.ofbiz;pattern;
+Java;OFBiz;code;*.xml;;;":\w+=""http:\/\/ofbiz.apache.org\/";pattern;
+Java;Jspx;import;;;;eg.java.net.web.jspx;pattern;
+Java;Oracle-ADF;code;adf-config.xml, adf-settings.xml;;;"\bxmlns(?::config)?=""http:\/\/xmlns.oracle.com\/";pattern;
+Java;Oracle-ADF;import;;;;oracle.adf;pattern;
+Java;vaadin;import;;;;com.vaadin;pattern;
+Java;Sling;import;;;;org.apache.sling;pattern;
+Java;Sling;import;;;;org.sling;pattern;
+Java;TIBCO.EMS;import;;;;com.tibco.tibjms;pattern;
+Java;Reactor Core;import;;;;reactor.core;pattern;
+Java;Reactor;import;;;;reactor;pattern;
+Java;RxJava;import;;;;rx;pattern;
+Java;SAAJ;import;;;;javax.xml.soap;pattern;
+Java;Apache Ignite;import;;;;org.apache.ignite;pattern;
+Java;Apache Wicket;import;;;;org.apache.wicket;framework;
+
+
+javascript;Meteor;code;;;;\bMeteor\.;framework;
+
+javascript;knockout;filename;*.js;;;\bknockout\b;framework;
+javascript;Spine;code;;;;\bSpine\.;framework;
+javascript;underscore;code;;;;\b_\.\w+\(;framework;
+javascript;Backbone;code;;;;(?:=|new\b|,|:)\s*Backbone\.(?:Model|Event|Collection|Router)\b;framework;
+javascript;ExtJS;code;;;;\bExt\.;framework;
+
+
+javascript;Redux;import;;;;redux;framework;
+
+
+
+javascript;Sapui5;code;;;;\bsap\.ui\.;framework;
+
+
+javascript;bootstrap;json;;;;;version;
+javascript;handlebars;json;;;;;version;
+javascript;socket.io;json;socket.io;;;;version;
+javascript;socket.io;import;;;;socket.io;pattern;
+javascript;geddy;json;geddy;;;;version;
+javascript;geddy;import;;;;geddy;pattern;
+javascript;LoopBack;json;LoopBack;;;;version;
+javascript;LoopBack;import;;;;loopBack;pattern;
+javascript;prototype;code;prototype.js;;;\bPrototype JavaScript framework\b;pattern;
+javascript;RequireJS;code;main.js;;;^\s*require\.config\(;pattern;
+javascript;RequireJS;code;;;;\brequirejs\(;pattern;
+javascript;Marionette;code;;;;\bMarionette\.\w+View\.extend\b;pattern;
+javascript;Backbone.BabySitter;json;;;;;version;
+javascript;Backbone.Wreqr;json;;;;;version;
+javascript;appaccelerator;;;;;;;
+javascript;Less;json;less;;;;version;
+
+
+C++;boost;code;;;;#include <boost/(\w+/)?\w+\.hpp>;pattern;
+C++;STL;code;;;;std::(array|deque|forward_list|list|map|multimap|priotiy_queue|queue|multiset|set|stack|vector|unordered_map|unordered_multimap|unordered_set|unordered_multiset|)\b;pattern;
+C++;STL;code;;;;#include <(array|deque|forward_list|list|map|multimap|priotiy_queue|queue|multiset|set|stack|vector|unordered_map|unordered_multimap|unordered_set|unordered_multiset|)>;pattern;
+C++;RogueWave SourcePro;code;;;;#include\s+<rw/;pattern;
+C++;RogueWave SourcePro;code;;;;#include\s+"rw/;pattern;
+C++;CppCMS;code;;;;#include <cppcms/application\.h>;pattern;
+C++;fltk;code;;;;#include <fltk/\w+\.h>;pattern;
+C++;fltk;code;;;;\busing namespace fltk\b|\bfltk::;pattern;
+C++;Reason;code;;;;\busing namespace Reason::\w+;pattern;
+C++;DirectX;code;;;;#include <d3dx?\d+\.h>;pattern;
+C++;JUCE;code;;;;#include <juce_\w+\.h>;pattern;
+C++;Platinum;code;;;;#include <Pt/\w+\.h>;pattern;
+C++;Wt;code;;;;"#include [<""]Wt/WBreak[>""]";pattern;
+C++;ultimate++;code;;;;(?:\busing namespace Upp\b|\bUpp::);pattern;
+C++;POCO;code;;;;"#include [<""]Poco/\w+\.h[>""]";pattern;
+C++;POCO;code;;;;(?:\busing namespace Poco\b|\bPoco::);pattern;
+C++;ACE;code;;;;#include\s+[<"]ace\b;pattern;
+C++;TAO;code;;;;#include\s+[<"]tao\b;pattern;
+C++;Tuxedo;code;;;;#include\s+[<"]atmi\.h\b;pattern;
+
+C#;CSLA;import;;;;CSLA;pattern;
+C#;Aforge;import;;;;Aforge;pattern;
+C#;monoRail;import;;;;Castle.MonoRail;pattern;
+
+
+
+PHP;Agavi;code;routing.xml;;;"\bxmlns(:ae)?=""http://agavi.org\/";pattern;
+PHP;Yii;code;;;;\bYii::createWebApplication\(;pattern;
+PHP;Yii;code;;;;\bYii::;pattern;
+PHP;Phalcon;code;;;;\b(?:use|new|extends)Phalcon\\\\;pattern;
+PHP;Lithium;code;;;;\bclass\s+\w+\s+extends\s+\\\\lithium\\\\;pattern;
+PHP;SilverStripe;filename;_ss_environment.php;;;;;
+PHP;FuelPHP;code;;;;\b(?:use|new|extends)\s+Fuel\\\\core\\\\;pattern;
+PHP;Zend;code;;;;\b(?:use|new|extends)\s+Zend\\\\;pattern;
+PHP;Midgard;code;;;;midgardmvc_core;pattern;
+PHP;Zeta;code;;;;\bezcBase\w*::;pattern;
+PHP;CakePHP;code;;;;\b(?:use|new|extends)\s+Cake\\\\;pattern;
+PHP;CakePHP;filename;*.ctp;;;;;
+PHP;Atomik;code;;;;\bAtomik::run\(;pattern;
+PHP;Xyster;code;;;;\bXyster(?:_Acl|Collection|Controller|Data|Date|Db|Enum|Filter|Orm|Type|Validate);pattern;
+
+PHP;Symfony;code;;;;\b(?:use|new|extends)\s+Symfony\\\\Component\\\\;framework;
+
+
+Python;Grok;code;;;;(?:from|import)\s+grok\b;pattern;
+Python;Pylons;code;;;;(?:from|import)\s+pylons\b;pattern;
+Python;WebOb;code;;;;(?:from|import)\s+webob\b;pattern;
+Python;SubstanceD;code;;;;(?:from|import)\s+substanced\b;pattern;
+Python;AcidFS;code;;;;(?:from|import)\s+acidfs\b;pattern;
+Python;Deform;code;;;;(?:from|import)\s+deform\b;pattern;
+Python;Waitress;code;;;;(?:from|import)\s+waitress\b;pattern;
+Python;TurboGears;code;;;;(?:from|import)\s+tg\b;pattern;
+Python;Twisted;code;;;;(?:from|import)\s+twisted\b;pattern;
+Python;Zope;code;;;;(?:from|import)\s+zope\b;pattern;
+Python;Scrapy;code;;;;(?:from|import)\s+scrapy\b;pattern;
+Python;pyjs;code;;;;(?:from|import)\s+pyj[sd]\b;pattern;
+Python;CubicWeb;code;;;;(?:from|import)\s+cubicweb\b;pattern;
+
+javascript;polymer;json;polymer;;;;version;
+HTML;Polymer;code;;;;"/polymer/(?:polymer.html)|(?:polymer-element.html"")""";pattern;
+
+C#;IdentityServer3;import;;;;IdentityServer3\.;pattern;
+
+
+;;;;;;;;
+
+
+javascript;snmp(javascript);import;;;;snmpjs-new;pattern;
+javascript;snmp(javascript);import;;;;net-snmp;pattern;
+
+Java;snmp(Java);import;;;;org.snmp4j;pattern;
+Java;snmp(Java);import;;;;monfox.toolkit.snmp;pattern;
+Java;snmp(Java);import;;;;com.sun.jmx.snmp;pattern;
+Java;snmp(Java);import;;;;com.adventnet.snmp;pattern;
+
+
+;;;;;;;;
+
+Java;Zuul;import;;;;org.springframework.cloud.netflix.zuul;pattern;
+
+YAML;Eureka;code;;;;eureka:;pattern;
+Java;Eureka;import;;;;org.springframework.cloud.netflix.eureka;pattern;
+
+Java;Ribbon;import;;;;com.netflix.ribbon;pattern;
+
+javascript;seneca;json;seneca;;;;version;
+javascript;seneca;import;;;;seneca;pattern;
+
+Conf;nginx;filename;nginx.conf;;;;pattern;
+
+Java;AWS.IoT(Java);import;;;;com.amazonaws.services.iot;pattern;
+Java;AWS.IoT(Java);import;;;;com.amazonaws.services.iotdata;pattern;
+
+
+YAML;OpenApi;code;;;;openapi:;pattern;
+
+
+;;;;;;;;
+
+COBOL;Repository;code;;;;\s(?i)REPOSITORY\.;pattern;
+COBOL;Object oriented COBOL;code;;;;......[^*]\s+(?i)CLASS-ID\b;pattern;
+
+
+Java;spring batch;import;;;;org.springframework.batch;framework;
+Java;jBeret;import;;;;org.jberet;pattern;
+Java;jBeret;maven;org.jberet;;;;version;
+
+
+Java;tiles;filename;*.xml;;;tiles.*;framework;
+
+Java;JSF;import;;;;javax.faces;framework;
+
+Java;spring webflow;import;;;;org.springframework.webflow;framework;
+Java;spring webflow;maven;org.springframework.webflow;;;;version;
+
+Java;lombok;import;;;;lombok;framework;
+
+Java;spring AOP;import;;;;org.aspectj.lang.annotation;framework;
+
+Java;spring data;maven;org.springframework.data;;;;version;
+Java;spring data;import;;;;org.springframework.data.jpa;framework;
+
+
+
+Java;GWT;filename;*.xml;;;.*.gwt;framework;
+Java;GWT;import;;;;com.google.gwt;framework;
+
+Java;Java.swing;import;;;;javax.swing.AbstractAction;framework;
+Java;Java.swing;import;;;;javax.swing.AbstractAction.AbstractAction;framework;
+Java;Java.swing;import;;;;javax.swing.AbstractButton;framework;
+Java;Java.swing;import;;;;javax.swing.AbstractCellEditor;framework;
+Java;Java.swing;import;;;;javax.swing.AbstractListModel;framework;
+Java;Java.swing;import;;;;javax.swing.Box;framework;
+Java;Java.swing;import;;;;javax.swing.JApplet;framework;
+Java;Java.swing;import;;;;javax.swing.JButton.JButton;framework;
+Java;Java.swing;import;;;;javax.swing.JComboBox;framework;
+Java;Java.swing;import;;;;javax.swing.JComponent;framework;
+Java;Java.swing;import;;;;javax.swing.JDialog;framework;
+Java;Java.swing;import;;;;javax.swing.JEditorPane;framework;
+Java;Java.swing;import;;;;javax.swing.JFrame;framework;
+Java;Java.swing;import;;;;javax.swing.JFrame.JFrame;framework;
+Java;Java.swing;import;;;;javax.swing.JInternalFrame;framework;
+Java;Java.swing;import;;;;javax.swing.JInternalFrame.JDesktopIcon;framework;
+Java;Java.swing;import;;;;javax.swing.JList;framework;
+Java;Java.swing;import;;;;javax.swing.JMenu;framework;
+Java;Java.swing;import;;;;javax.swing.JMenu.JMenu;framework;
+Java;Java.swing;import;;;;javax.swing.JMenuItem;framework;
+Java;Java.swing;import;;;;javax.swing.JPanel.JPanel;framework;
+Java;Java.swing;import;;;;javax.swing.JPopupMenu;framework;
+Java;Java.swing;import;;;;javax.swing.JSeparator;framework;
+Java;Java.swing;import;;;;javax.swing.JSlider;framework;
+Java;Java.swing;import;;;;javax.swing.JSpinner;framework;
+Java;Java.swing;import;;;;javax.swing.JTabbedPane;framework;
+Java;Java.swing;import;;;;javax.swing.JTextField;framework;
+Java;Java.swing;import;;;;javax.swing.JToggleButton.JToggleButton;framework;
+Java;Java.swing;import;;;;javax.swing.JTree;framework;
+Java;Java.swing;import;;;;javax.swing.JViewport;framework;
+Java;Java.swing;import;;;;javax.swing.JWindow;framework;
+Java;Java.swing;import;;;;javax.swing.RowSorter;framework;
+Java;Java.swing;import;;;;javax.swing.SpinnerModel;framework;
+Java;Java.swing;import;;;;javax.swing.Timer;framework;
+Java;Java.swing;import;;;;javax.swing.event.AncestorListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.CaretListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.CellEditorListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.ChangeListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.DocumentListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.HyperlinkListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.InternalFrameListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.ListDataListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.ListSelectionListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.MenuDragMouseListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.MenuKeyListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.MenuListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.MouseInputListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.PopupMenuListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.RowSorterListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.TableModelListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.TreeExpansionListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.TreeModelListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.TreeSelectionListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.TreeWillExpandListener;framework;
+Java;Java.swing;import;;;;javax.swing.event.UndoableEditListener;framework;
+Java;Java.swing;import;;;;javax.swing.plaf.basic.BasicInternalFrameTitlePane;framework;
+Java;Java.swing;import;;;;javax.swing.table.AbstractTableModel;framework;
+Java;Java.swing;import;;;;javax.swing.table.DefaultTableColumnModel;framework;
+Java;Java.swing;import;;;;javax.swing.table.TableColumnModel;framework;
+Java;Java.swing;import;;;;javax.swing.table.TableModel;framework;
+Java;Java.swing;import;;;;javax.swing.text.AbstractDocument;framework;
+Java;Java.swing;import;;;;javax.swing.text.DefaultStyledDocument;framework;
+Java;Java.swing;import;;;;javax.swing.text.EditorKit;framework;
+Java;Java.swing;import;;;;javax.swing.text.JTextComponent;framework;
+Java;Java.swing;import;;;;javax.swing.tree.DefaultTreeModel;framework;
+Java;Java.swing;import;;;;javax.swing.tree.TreeModel;framework;
+Java;Java.swing;import;;;;javax.swing.undo.UndoableEditSupport;framework;
+
+Java;SWT;import;;;;org.eclipse.swt.events.ControlListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.DisposeListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.FocusListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.HelpListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.KeyListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.MouseListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.MouseMoveListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.MouseTrackListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.PaintListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.SelectionAdapter;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.SelectionListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.events.TraverseListener;framework;
+Java;SWT;import;;;;org.eclipse.swt.widgets.Button;framework;
+Java;SWT;import;;;;org.eclipse.swt.widgets.Combo;framework;
+Java;SWT;import;;;;org.eclipse.swt.widgets.Control;framework;
+Java;SWT;import;;;;org.eclipse.swt.widgets.Dialog;framework;
+Java;SWT;import;;;;org.eclipse.swt.widgets.Display;framework;
+Java;SWT;import;;;;org.eclipse.swt.widgets.Text;framework;
+Java;SWT;import;;;;org.eclipse.swt.widgets.Widget;framework;
+
+Java;JFace;import;;;;org.eclipse.jface.dialogs.Dialog;framework;
+Java;JFace;import;;;;org.eclipse.jface.dialogs.DialogPage;framework;
+Java;JFace;import;;;;org.eclipse.jface.text.TextViewer;framework;
+Java;JFace;import;;;;org.eclipse.jface.viewers.IDoubleClickListener;framework;
+Java;JFace;import;;;;org.eclipse.jface.viewers.StructuredViewer;framework;
+Java;JFace;import;;;;org.eclipse.jface.viewers.Viewer;framework;
+
+Java;AWT;import;;;;java.awt.Button;framework;
+Java;AWT;import;;;;java.awt.Component;framework;
+Java;AWT;import;;;;java.awt.Container;framework;
+Java;AWT;import;;;;java.awt.Frame;framework;
+Java;AWT;import;;;;java.awt.Window;framework;
+Java;AWT;import;;;;java.awt.event.ActionListener;framework;
+Java;AWT;import;;;;java.awt.event.CaretListener;framework;
+Java;AWT;import;;;;java.awt.event.ChangeListener;framework;
+Java;AWT;import;;;;java.awt.event.ComponentListener;framework;
+Java;AWT;import;;;;java.awt.event.FocusAdapter;framework;
+Java;AWT;import;;;;java.awt.event.FocusListener;framework;
+Java;AWT;import;;;;java.awt.event.ItemListener;framework;
+Java;AWT;import;;;;java.awt.event.KeyListener;framework;
+Java;AWT;import;;;;java.awt.event.ListSelectionListener;framework;
+Java;AWT;import;;;;java.awt.event.MenuListener;framework;
+Java;AWT;import;;;;java.awt.event.MouseAdapter;framework;
+Java;AWT;import;;;;java.awt.event.MouseListener;framework;
+Java;AWT;import;;;;java.awt.event.MouseMotionListener;framework;
+Java;AWT;import;;;;java.awt.event.MouseWheelListener;framework;
+Java;AWT;import;;;;java.awt.event.PopupMenuListener;framework;
+Java;AWT;import;;;;java.awt.event.PropertyChangeListener;framework;
+Java;AWT;import;;;;java.awt.event.TreeSelectionListener;framework;
+Java;AWT;import;;;;java.awt.event.WindowAdapter;framework;
+Java;AWT;import;;;;java.awt.event.WindowListener;framework;
+Java;AWT;import;;;;javax.awt.Component;framework;
+
+
+;;;;;;;;
+
+
+C++;QT;code;*.pro;;;\bQtCreator\b;pattern;
+C++;QT;code;*.pro.user;;;\b<qtcreator>\b;pattern;
+C++;QT;code;*.pro.user;4;4.x;\bQt4ProjectManager\b;pattern;
+C++;QT;code;;5;;#ifdef Q_OS_\w+;pattern;
+C++;QT;code;;;4.x;#ifdef Q_WS_\w+;pattern;
+C++;QT;code;;;;\bQString\s+\w+;pattern;
+
+
+;;;;;;;;
+
+Java;Google Guice;import;;;;com.google.inject;framework;
+
+
+;;;;;;;;
+
+
+XML;Remote bean;code;;;;<remote>;pattern;
+
+
+
+
+;;;;;;;;
+
+Java;Thymeleaf;import;;;;org.thymeleaf;framework;
+HTML;Thymeleaf;code;;;;\bth:action\b;framework;
+
+javascript;hapi;json;hapi;;;;version;
+javascript;hapi;import;;;;hapi;framework;
+javascript;hapi;import;;;;@hapi/hapi;framework;
+
+javascript;sails;json;sails;;;;version;
+javascript;sails;import;;;;sails;framework;
+
+javascript;koa;json;koa;;;;version;
+javascript;koa;import;;;;koa;framework;
+
+javascript;DerbyJS;json;derby;;;;version;
+javascript;DerbyJS;import;;;;derby;framework;
+
+javascript;feathersjs;json;@feathersjs/feathers;;;;version;
+javascript;feathersjs;import;;;;@feathersjs/feathers;framework;
+
+
+Java;Restlet;import;;;;org.restlet;framework;
+
+
+Shell;Shell2AWSDynamodb;code;;;;\baws\s+dynamodb\b;pattern;
+Shell;Shell2AWSS3;code;;;;\baws\s+s3api\b;pattern;
+Shell;Shell2AWSRDS;code;;;;\baws\s+rds\b;pattern;
+
+;;;;;;;;
+
+COBOL;IMS/DB;code;;;;'CBLTDLI';pattern;
+COBOL;IMS/DB;code;;;;'AIBTDLI';pattern;
+COBOL;IMS/DB;code;;;;'CEETDLI';pattern;
+
+IMS;MFS Screen;code;;;;\bFMT\b;pattern;
+IMS;MFS Screen;code;;;;\bDIV\b;pattern;
+
+;;;;;;;;
+
+;Servlet context-path;properties;server.servlet.context-path;2;;;pattern;
+;Servlet context-path;properties;server.context-path;1;1;;pattern;
+;Servlet context-path;properties;server.contextPath;;;;pattern;
+
+;OSGI Whiteboard context-path;properties;osgi.http.whiteboard.context.path;;;;pattern;
+
+
+
+Java;Spring Load Balancer;import;;;;org.springframework.cloud.client.loadbalancer.LoadBalancerClient;pattern;
+
+Java;Jaxrs Application Path (Annotation);import;;;;javax.ws.rs.ApplicationPath;pattern;
+;Jaxrs Application Path (properties);properties;spring.jersey.application-path;;;;pattern;
+
+Java;Servlet;import;;3;;javax.servlet.annotation.WebServlet;pattern;
+
+
+;zuul.routes;properties;zuul.routes;;;;pattern;
+
+
+;Spring Cloud Configuration;properties;spring.cloud.config;;;;pattern;
+
+
+XML;Web.xml DispatcherServlet;code;;;;org\.springframework\.web\.servlet\.DispatcherServlet;pattern;
+
+XML;Context root;code;;;;context-root;pattern;
+
+
+;;;;;;;;
+
+Java;Swagger;import;;;;springfox.documentation;pattern;
+
+
+;;;;;;;;
+
+C#;GalaSoft.MvvmLight;import;;;;GalaSoft.MvvmLight;framework;
+C#;Catel.MVVM;import;;;;Catel.MVVM;framework;
+C#;DevExpress.Mvvm;import;;;;DevExpress.Mvvm;framework;
+
+;;;;;;;;
+
+C#;Active Directory Services Interfaces (ADSI) client;import;;;;System.DirectoryServices;framework;
+
+;;;;;;;;
+
+JSON;Apache Avro Schema;filename;*.avsc;;;.*;pattern;
+
+;;;;;;;;
+
+Java;RMI;import;;;;java.rmi;framework;
+Java;CORBA;import;;;;org.omg.CORBA;framework;
+
+;;;;;;;;
+
+
+Conf;Web.config;filename;*.config;;;\bWeb\b;pattern;
+
+
+;;;;;;;;
+
+
+Java;EJB;annotation;;3;;Stateless;framework;
+Java;EJB;annotation;;3;;Stateful;framework;
+Java;EJB;annotation;;3;;MessageDriven;framework;
+Java;EJB;annotation;;3;;Entity;framework;
+Java;EJB;annotation;;3;;Remote;framework;
+Java;EJB;annotation;;3;;Local;framework;
+XML;EJB;filename;ejb-jar.xml;;2;;framework;
+XML;EJB;xpath;;;;/ejb-jar;pattern;
+
+XML;WebSphere Bean Configuration;filename;Map.mapxmi;;;;pattern;
+XML;WebSphere Entity Bean Configuration;filename;*.dbxmi;;;;pattern;
+XML;WebSphere Entity Bean Configuration;filename;*.tblxmi;;;;pattern;
+XML;WebSphere Entity Bean Configuration;xpath;;;;/EjbRdbDocumentRoot;pattern;
+
+XML;WebLogic Bean Configuration;filename;*.xml;;;weblogic-ejb.*;pattern;
+XML;WebLogic Bean Configuration;filename;*.xml;;;weblogic-cmp.*;pattern;
+XML;WebLogic Bean Configuration;xpath;;;;/weblogic-ejb-jar;pattern;
+
+XML;WebLogic Entity Bean Configuration;filename;*.xml;;;weblogic-ejb-rdbms.*;pattern;
+XML;WebLogic Entity Bean Configuration;xpath;;;;/weblogic-rdbms-jar;pattern;
+
+XML;WebLogic Message Driven Bean Configuration;xpath;;;;/weblogic-ejb-jar/weblogic-enterprise-bean/message-driven-descriptor;pattern;
+
+XML;TopLink Entity Bean Configuration;filename;toplink-ejb-jar.xml;;;;pattern;
+XML;TopLink Entity Bean Configuration;xpath;;;;/toplink-ejb-jar;pattern;
+
+XML;Oracle Bean Configuration;filename;*.xml;;;oracle-ejb.*;pattern;
+XML;Oracle Bean Configuration;xpath;;;;/oracle-descriptor;pattern;
+XML;Oracle Entity Bean Configuration;xpath;;;;/oracle-descriptor/persistence-descriptor;pattern;
+
+XML;Glassfish Bean Configuration;xpath;;;;/sun-cmp-mappings;pattern;
+XML;Glassfish Entity Bean Configuration;xpath;;;;/sun-cmp-mappings/sun-cmp-mapping/entity-mapping;pattern;
+
+XML;Borland Bean Configuration;filename;ejb-borland.xml;;;;pattern;
+XML;Borland Entity Bean Configuration;xpath;;;;/ejb-jar/enterprise-beans/entity/cmp-info;pattern;
+XML;Borland Entity Bean Configuration;xpath;;;;/ejb-jar/enterprise-beans/entity/cmp2-info;pattern;
+
+
+XML;Session Bean;xpath;;;2;/ejb-jar/enterprise-beans/session;pattern;
+Java;Session Bean;annotation;;3;;Stateless;pattern;
+Java;Session Bean;annotation;;3;;Stateful;pattern;
+
+XML;Message Driven Bean;xpath;;;2;/ejb-jar/enterprise-beans/message-driven;pattern;
+Java;Message Driven Bean;annotation;;3;;MessageDriven;pattern;
+
+XML;Entity Bean;xpath;;;2;/ejb-jar/enterprise-beans/entity;pattern;
+Java;Entity Bean;annotation;;3;;Entity;pattern;
+
+;;;;;;;;
+
+Java;Discovery service (pattern);import;;;;org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;subpattern;
+;Discovery service;execution_unit;back;;;'Discovery service (pattern)';pattern;
+
+;;;;;;;;
+
+Java;Configuration service (pattern);import;;;;org.springframework.cloud.config.server.EnableConfigServer;subpattern;
+;Configuration service;execution_unit;back;;;'Configuration service (pattern)';pattern;
+
+;;;;;;;;
+
+Java;Admin service (pattern);import;;;;de.codecentric.boot.admin.server.config.EnableAdminServer;subpattern;
+;Admin service;execution_unit;back;;;'Admin service (pattern)';pattern;
+
+;;;;;;;;
+
+Java;API Gateway service (pattern);import;;;;org.springframework.cloud.netflix.zuul.EnableZuulProxy;subpattern;
+Java;API Gateway service (pattern);import;;;;org.springframework.cloud.netflix.zuul.EnableZuulServer;subpattern;
+
+;Spring Cloud Gateway;properties;spring.cloud.gateway.routes;;;;pattern;
+
+;API Gateway service;execution_unit;back;;;'API Gateway service (pattern)' or 'Spring Cloud Gateway';pattern;
+
+;;;;;;;;
+
+Java;Zipkin Tracing service (pattern);import;;;;zipkin2.server.internal.EnableZipkinServer;subpattern;
+Java;Zipkin Tracing service (pattern);import;;;;zipkin.server.EnableZipkinServer;subpattern;
+Java;Zipkin Tracing service (pattern);import;;;;org.springframework.cloud.sleuth.zipkin.stream.EnableZipkinStreamServer;subpattern;
+;Zipkin Tracing service;execution_unit;back;;;'Zipkin Tracing service (pattern)';pattern;
+
+;;;;;;;;
+
+Java;Turbine service (pattern);import;;;;org.springframework.cloud.netflix.turbine.EnableTurbine;subpattern;
+Java;Turbine service (pattern);import;;;;org.springframework.cloud.netflix.turbine.EnableTurbineStream;subpattern;
+Java;Turbine service (pattern);import;;;;org.springframework.cloud.netflix.turbine.stream.EnableTurbineStream;subpattern;
+;Turbine service;execution_unit;back;;;'Turbine service (pattern)';pattern;
+
+;;;;;;;;
+
+Java;Hystrix (CircuitBreaker) (pattern);import;;;;org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;subpattern;
+Java;Hystrix (CircuitBreaker) (pattern);import;;;;org.springframework.cloud.netflix.hystrix.EnableHystrix;subpattern;
+;Hystrix (CircuitBreaker);execution_unit;back;;;'Hystrix (CircuitBreaker) (pattern)';pattern;
+
+;;;;;;;;
+
+
+Java;Hystrix (Monitoring) (pattern);import;;;;org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;subpattern;
+;Monitoring service;execution_unit;back;;;'Hystrix (Monitoring) (pattern)';pattern;
+
+;;;;;;;;
+
+
+
+Java;Discovery client (import);import;;;;org.springframework.cloud.client.discovery.EnableDiscoveryClient;subpattern;
+
+Java;Eureka (maven);maven;io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry;;;;subpattern;
+Java;Eureka (maven);maven;org.springframework.cloud:spring-cloud-starter-netflix-eureka-client;;;;subpattern;
+
+;Eureka (properties);properties;eureka.client.serviceUrl;;;;subpattern;
+
+Java;Eureka client (import);import;;;;org.springframework.cloud.netflix.eureka.EnableEurekaClient;subpattern;
+
+;Eureka client;execution_unit;back;;;'Eureka client (import)' or ('Discovery client (import)' and ('Eureka (maven)' or 'Eureka (properties)'));pattern;
+
+;;;;;;;;
+
+Java;Consul (maven);maven;org.springframework.cloud:spring-cloud-starter-consul-discovery;;;;subpattern;
+
+;Consul (properties);properties;spring.cloud.consul;;;;subpattern;
+;Desactivated Consul (properties);properties;spring.cloud.consul.discovery.enabled;;;false;subpattern;
+
+;Consul client;execution_unit;back;;;('Consul (maven)' or ('Discovery client (import)' and 'Consul (properties)')) and not 'Desactivated Consul (properties)';pattern;
+
+
+;;;;;;;;
+
+Java;Zookeeper (maven);maven;org.springframework.cloud:spring-cloud-starter-zookeeper-discovery;;;;subpattern;
+
+Java;Zookeeper (import);import;;;;org.apache.curator.framework.CuratorFramework;subpattern;
+
+;Zookeeper (properties);properties;spring.cloud.zookeeper;;;;subpattern;
+
+;Zookeeper client;execution_unit;back;;;('Discovery client (import)' and ('Zookeeper (maven)' or 'Zookeeper (properties)')) or 'Zookeeper (import)';pattern;
+
+;;;;;;;;
+
+Java;@EnableAuthorizationServer;import;;;;org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;subpattern;
+;Oauth Authorization service;execution_unit;back;;;@EnableAuthorizationServer';pattern;
+
+Java;@EnableResourceServer;import;;;;org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;subpattern;
+;Oauth Resource service;execution_unit;back;;;'@EnableResourceServer';pattern;
+
+
+;;;;;;;;
+
+C#;AWS ElastiCache(C#);import;;;;Amazon.ElastiCacheCluster;framework;
+C#;AWS Systems Manager(C#);import;;;;Amazon.SimpleSystemsManagement;framework;
+C#;AWS Key Management Service(C#);import;;;;Amazon.KeyManagementService;framework;
+
+;;;;;;;;
+
+;AWS Lambda;execution_unit;back;;;('AWS.Lambda(Java)' or 'Lambda Service Receive(javascript)') or ('Lambda Handler(javascript)' or ('AWS Lambda(YAML)' or ('Chalice' or 'AWS SDK Lambda(C#)')));pattern;
+
+;AWS Cognito;execution_unit;back;;;Cognito or 'AWS SDK Cognito (C#)';pattern;
+
+Java;AWS S3 Event(Java);import;;;;com.amazonaws.services.lambda.runtime.events.S3Event;pattern;
+C#;AWS S3 Event(C#);import;;;;Amazon.Lambda.S3Events;pattern;
+Python;AWS S3 Event(Python);code;;;;\bon_s3_event\b;pattern;
+YAML;AWS S3 Event;aws;Properties.Events.*.Type;;;S3;subpattern;
+YAML;AWS S3 Event;aws;events.s3;;;;subpattern;
+;AWS Event Source S3;execution_unit;back;;;(('AWS S3 Event' or 'AWS S3 Event(Python)') or ('AWS.S3(Java)' or ('AWS S3 Event(C#)'or 'AWS S3 Event(Java)')));pattern;
+
+Java;AWS SNS Event(Java);import;;;;com.amazonaws.services.lambda.runtime.events.SNSEvent;pattern;
+C#;AWS SNS Event(C#);import;;;;Amazon.Lambda.SNSEvents;pattern;
+Python;AWS SNS Event(Python);code;;;;\bon_sns_message\b;pattern;
+YAML;AWS SNS Event;aws;Properties.Events.*.Type;;;SNS;subpattern;
+YAML;AWS SNS Event;aws;events.sns;;;;subpattern;
+;AWS Event Source SNS;execution_unit;back;;;(('AWS SNS Event' or 'AWS SNS Event(Python)') or ('AWS SNS(Java)' or ('AWS SNS Event(C#)' or 'AWS SNS Event(Java)')));pattern;
+
+Java;AWS DynamoDB Event(Java);import;;;;com.amazonaws.services.lambda.runtime.events.DynamodbEvent;pattern;
+C#;AWS DynamoDB Event(C#);import;;;;Amazon.Lambda.DynamoDBEvents;pattern;
+Python;AWS DynamoDB Event(Python);code;;;;\bon_dynamodb_record\b;pattern;
+YAML;AWS DynamoDB Event;aws;Properties.Events.*.Type;;;DynamoDB;subpattern;
+YAML;AWS DynamoDB Event;aws;events.streal.type;;;dynamodb;subpattern;
+;AWS Event Source DynamoDB;execution_unit;back;;;(('AWS DynamoDB Event' or 'AWS DynamoDB Event(Python)') or ('AWS DynamoDB(Java)' or ('AWS DynamoDB Event(C#)' or 'AWS DynamoDB Event(Java)')));pattern;
+
+Java;AWS SQS Event(Java);import;;;;com.amazonaws.services.lambda.runtime.events.SQSEvent;pattern;
+C#;AWS SQS Event(C#);import;;;;Amazon.Lambda.SQSEvents;pattern;
+Python;AWS SQS Event(Python);code;;;;\bon_sqs_message\b;pattern;
+YAML;AWS SQS Event;aws;Properties.Events.*.Type;;;SQS;subpattern;
+YAML;AWS SQS Event;aws;events.sqs;;;;subpattern;
+;AWS Event Source SQS;execution_unit;back;;;(('AWS SQS Event' or 'AWS SQS Event(Python)') or ('AWS SQS(Java)' or ('AWS SQS Event(C#)' or 'AWS SQS Event(Java)')));pattern;
+
+Java;AWS API Event(Java);import;;;;com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;pattern;
+Java;AWS API Event(Java);import;;;;com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;pattern;
+C#;AWS API Event(C#);import;;;;Amazon.Lambda.APIGatewayEvents;pattern;
+Python;route(Python);code;;;;@.*\broute\b;subpattern;
+Python;AWS API Event(Python);combination;;;;('route(Python)' and 'Chalice');pattern;
+YAML;AWS API Event;aws;Properties.Events.*.Type;;;Api;subpattern;
+YAML;AWS API Event;aws;events.http;;;;subpattern;
+YAML;AWS API Event;aws;events.httpApi;;;;subpattern;
+;AWS Event Source API;execution_unit;back;;;('AWS API Event' or ('AWS API Event(Python)' or ('AWS API Event(C#)' or 'AWS API Event(Java)')));pattern;
+
+;AWS API Gateway;execution_unit;back;;;('AWS API Event' or ('AWS API Event(Python)' or ('AWS API Event(C#)' or 'AWS API Event(Java)')));pattern;
+
+Java;AWS Cognito Event(Java);import;;;;com.amazonaws.services.lambda.runtime.events.CognitoEvent;pattern;
+C#;AWS Cognito Event(C#);import;;;;Amazon.Lambda.CognitoEvents;pattern;
+Java;AWS Cognito (Java);import;;;;com.amazonaws.services.cognitoidp;pattern;
+YAML;AWS Cognito Event;aws;Properties.Events.*.Type;;;Cognito;subpattern;
+YAML;AWS Cognito Event;aws;events.cognitoUserPool;;;;subpattern;
+;AWS Event Source Cognito;execution_unit;back;;;('AWS Cognito Event' or ('AWS Cognito (Java)' or ('AWS Cognito Event(C#)' or 'AWS Cognito Event(Java)')));pattern;
+
+Java;AWS X-Ray (Java);import;;;;com.amazonaws.xray;framework;
+
+;AWS X-Ray;execution_unit;back;;;'AWS X-Ray (Java)';pattern;
+
+
+Java;AWS CDK (Java);import;;;;software.amazon.awscdk;framework;
+Java;AWS CDK (Java);maven;org.software.amazon.awscdk;;;;version;
+TypeScript;AWS CDK (TypeScript);import;;;;@aws-cdk;framework;
+C#;AWS CDK (C#);import;;;;Amazon.CDK;framework;
+Python;AWS CDK (Python);code;;;;(?:from|import)\s+aws_cdk\b;framework;
+
+;AWS CDK;execution_unit;back;;;('AWS CDK (Java)' or 'AWS CDK (TypeScript)') or ('AWS CDK (C#)' or 'AWS CDK (Python)');pattern;
+
+;;;;;;;;
+
+
+;Technical(pattern);execution_unit;back;;;(('Discovery service' or 'Monitoring service') or ('Turbine service' or 'Configuration service')) or (('Admin service' or 'API Gateway service') or 'Zipkin Tracing service');subpattern;
+
+;Functional(pattern);execution_unit;back;;;(('communication/rest' or 'communication/soap') or 'storage') or ('front');subpattern;
+
+;Technical Service;execution_unit;back;;;'Technical(pattern)' and (not 'Functional(pattern)');pattern;
+
+
+;;;;;;;;
+
+;dep;dirname;;;;\\dep\\;pattern;
+;dep;dirname;;;;\\deps\\;pattern;
+
+
+;;;;;;;;generated
+
+;dist;dirname;;;;(\\|^)dist\\;pattern;
+javascript;minified;filename;*.js;;;.*\.min\..*;pattern;
+javascript;minified;filename;*.js;;;.*\.min;pattern;
+
+javascript;Web Help;code;;;;//\tWebHelp;pattern;
+Java;Javadoc;code;;;;Generated by javadoc;pattern;
+
+
+;;;;;;;;data
+
+javascript;i18n;filename;*.js;;;^de$;pattern;
+javascript;i18n;filename;*.js;;;^en$;pattern;
+javascript;i18n;filename;*.js;;;^es$;pattern;
+javascript;i18n;filename;*.js;;;^fr$;pattern;
+javascript;i18n;filename;*.js;;;^it$;pattern;
+javascript;i18n;filename;*.js;;;^ru$;pattern;
+javascript;i18n;filename;*.js;;;^jp$;pattern;
+
+;i18n;dirname;;;;(\\|^)en-us\\;pattern;
+;i18n;dirname;;;;(\\|^)fr-fr\\;pattern;
+;i18n;dirname;;;;(\\|^)de-de\\;pattern;
+;i18n;dirname;;;;(\\|^)it-it\\;pattern;
+;i18n;dirname;;;;(\\|^)ies-es\\;pattern;
+
+
+
+
+;;;;;;;;dependency injection, ioc
+
+C#;Unity;import;;;;Unity;pattern;
+C#;Microsoft.Practices.Unity;import;;;;Microsoft.Practices.Unity;pattern;
+C#;Microsoft.Extensions.DependencyInjection;import;;;;Microsoft.Extensions.DependencyInjection;pattern;
+C#;Autofac;import;;;;Autofac;pattern;
+C#;CatelIoc;import;;;;CatelIoc;pattern;
+C#;Ninject;import;;;;Ninject;pattern;
+C#;StructureMap;import;;;;StructureMap;pattern;
+C#;Spring.Net;import;;;;Spring.Context;pattern;
+C#;LightInject;import;;;;LightInject;pattern;
+C#;TinyIoc;import;;;;TinyIoc;pattern;
+C#;Ocelot.DependencyInjection;import;;;;Ocelot.DependencyInjection;pattern;
+
+
+;;;;;;;;test
+
+C#;Nsubstitute;import;;;;Nsubstitute;pattern;
+
+Java;JUnit;import;;;;org.junit;pattern;
+Java;junit;filename;*.jar;;;\bjunit\b;version;
+Java;junit;maven;junit;;;;version;
+
+Java;Mockito;import;;;;org.mockito;pattern;
+
+Java;JMock;import;;;;org.jmock;pattern;
+
+Java;easymock;maven;org.easymock;;;;version;
+Java;easymock;import;;;;org.easymock;pattern;
+
+Java;powermock;maven;org.powermock;;;;version;
+Java;powermock;import;;;;org.powermock;pattern;
+
+Java;hamcrest;maven;org.hamcrest;;;;version;
+Java;hamcrest;import;;;;org.hamcrest;pattern;
+
+Java;TestNG;import;;;;org.testng;pattern;
+
+
+C#;Xunit;import;;;;Xunit;pattern;
+C#;FakeItEasy;import;;;;FakeItEasy;pattern;
+C#;JustMock;import;;;;Telerik\.JustMock;pattern;
+C#;Moq;import;;;;Moq;pattern;
+C#;Nmock;import;;2;2;NMock2;pattern;
+C#;Nmock;import;;3;3;NMock3;pattern;
+C#;Nmock;import;;;;NMock;pattern;
+C#;NGXunit;import;;;;Xunit;pattern;
+C#;NUnit.Framework;import;;;;NUnit.Framework;pattern;
+
+C++;CppUnit;code;;;;\bCPPUNIT_;pattern;
+C++;Google Test;code;;;;\bTEST(_[FP])?\(\b;pattern;
+
+javascript;chai;import;;;;chai;pattern;
+javascript;supertest;import;;;;supertest;pattern;
+javascript;sinon;import;;;;sinon;pattern;
+javascript;SAP UI5 Tests;import;;;;sap.ui.qunit;pattern;
+javascript;SAP UI5 Tests;import;;;;sap.ui.thirdparty.qunit;pattern;
+javascript;Unit Tests;import;;;;servicerequests.test.integration;pattern;
+
+
+javascript;faker;import;;;;faker;pattern;
+
+
+javascript;Jest;dirname;;;;(\\|^)__tests__\\.*\.js;pattern;
+
+javascript;Unit Tests;filename;*.js;;;.*-test;pattern;
+javascript;Unit Tests;filename;*.js;;;.*\.test;pattern;
+javascript;Unit Tests;filename;*.js;;;.*-spec;pattern;
+javascript;Unit Tests;filename;*.js;;;.*\.spec;pattern;
+
+Java;Unit Tests;dirname;;;;(\\|^)test\\.*\.java;pattern;
+Java;Unit Tests;dirname;;;;(\\|^)tests\\.*\.java;pattern;
+;Unit Tests;dirname;;;;(\\|^)test\\;pattern;
+;Unit Tests;dirname;;;;(\\|^)_tests_\\;pattern;
+
+javascript;Unit Tests;code;;;;\basyncTest\(;pattern;
+
+
+;;;;;;;;build
+
+JSON;package.json;filename;package.json;;;;pattern;
+XML;pom;filename;pom.xml;;;;pattern;
+Gradle;BuildConfig;code;;;;\bbuildConfigField\b;pattern;
+javascript;Grunt;filename;Gruntfile.js;;;;pattern;
+javascript;config;filename;*.js;;;\..*;pattern;
+javascript;Babel;filename;babel.config.js;;;;pattern;
+javascript;Changelog;filename;changelog.config.js;;;;pattern;
+javascript;Jest config;filename;jest.config.js;;;;pattern;
+javascript;Jest config;filename;jestSetup.js;;;;pattern;
+
+javascript;Mocha;filename;*.js;;;mocha\..*;pattern;
+javascript;Karma;filename;karma.conf.js;;;;pattern;
+
+javascript;Storybook;dirname;;;;(\\|^)\.storybook\\;pattern;
+
+
+;;;;;;;;security
+
+Java;Java.security;import;;;;java.security;pattern;
+
+Java;spring security;maven;org.springframework.security;;;;version;
+Java;spring security;import;;;;org.springframework.security;pattern;
+
+;;;;;;;;security/authentication
+
+Java;SAML(Java);import;;;;org.opensaml;pattern;
+Java;Oauth2(Java);import;;;;org.springframework.security.oauth2;pattern;
+C#;IdentityServer4;import;;;;IdentityServer4;pattern;
+C#;IdentityServer3;import;;;;IdentityServer3;pattern;
+C#;IdentityModel;import;;;;System.IdentityModel;pattern;
+
+YAML;Cognito;aws;Properties.Events.*.Properties.Auth.Authorizer;;;CognitoAuthorizer;pattern;
+YAML;Cognito;aws;events.http.authorizer.type;;;COGNITO_USER_POOLS;pattern;
+C#;AWS SDK Cognito (C#);import;;;;Amazon.CognitoIdentityProvider;pattern;
+
+;;;;;;;;communication
+
+C#;WCF;import;;;;System.ServiceModel.Web;framework;
+C#;WCF;annotation;;;;ServiceContract;framework;
+C#;WCF;annotation;;;;System.Runtime.Serialization.DataContractAttribute;framework;
+C#;WCF;annotation;;;;DataContract;framework;
+
+
+;;;;;;;;communication/OData
+
+Java;Apache Olingo;import;;;;org.apache.olingo;pattern;
+
+;;;;;;;;communication/CICS
+
+Java;CICS Transaction Gateway(Java);import;;;;com.ibm.connector2.cics;pattern;
+Java;CICS Transaction Gateway(Java);import;;;;com.ibm.ctg.client;pattern;
+
+;;;;;;;;communication/program
+
+C++;boost.Python;code;;;;#include <boost/python.hpp>;pattern;
+C++;C++2Python;code;;;;\bPy_Initialize\b;pattern;
+
+Shell;Shell2Java;code;;;;^\s*java(\.exe)\b;pattern;
+Shell;Shell2Java;code;;;;[ \t]java(\.exe)\b;pattern;
+Shell;Shell2Java;code;;;;/bin/java\b;pattern;
+Shell;Shell2Java;code;;;;^\s*java\b;pattern;
+
+Shell;Shell2Python;code;;;;^python(\.exe)\b;pattern;
+Shell;Shell2Python;code;;;;[ \t]python(\.exe)\b;pattern;
+Shell;Shell2Python;code;;;;/bin/wlst\.sh\b;pattern;
+Shell;Shell2Python;code;;;;/bin/wlst\.cmd\b;pattern;
+
+JCL;JCL2JShell;code;;;;PGM=BPXBATCH;pattern;
+
+JCL;JCL2Java;code;;;;PGM=JVMLDM;pattern;
+
+javascript;NodeJS2Exe;import;;;;child_process;pattern;
+
+Java;Java2Exe;import;;;;com.ibm.as400.access.ProgramCall;pattern;
+Java;Java2Exe;import;;;;java.lang.ProcessBuilder;pattern;
+Java;Java2Exe;import;;;;java.lang.Runtime;pattern;
+
+Python;Python2Exe;code;;;;\bPopen\b;pattern;
+Python;Python2Exe;code;;;;\bpopen\b;pattern;
+Python;Python2Exe;code;;;;\bos.system\b;pattern;
+Python;Python2Exe;code;;;;\bsubprocess\b;pattern;
+
+COBOL;JNI(Cobol);code;;;;(?i)COPY JNI;pattern;
+
+
+Java;main(Java);code;;;;\bvoid\s+main\b;pattern;
+C#;main(C#);code;;;;\bMain\b;pattern;
+
+;;;;;;;;communication/soap
+
+Java;JAX-WS;import;;;;javax.jws;framework;
+Java;JAX-WS;import;;;;javax.xml.ws;framework;
+
+Java;spring WebServices;import;;;;org.springframework.ws;framework;
+
+XML;jaxrpc;code;;;;<jaxrpc-mapping-file>;pattern;
+
+javascript;soap;json;soap;;;;version;
+javascript;soap;import;;;;soap;pattern;
+
+
+;;;;;;;;communication/websocket
+
+C#;Microsoft.AspNet.SignalR(C#);import;;;;Microsoft.AspNet.SignalR;pattern;
+C#;Microsoft.AspNetCore.SignalR(C#);import;;;;Microsoft.AspNetCore.SignalR;pattern;
+C#;System.Net.WebSockets.WebSocket(C#);import;;;;System.Net.WebSockets.WebSocket;pattern;
+C#;System.Net.WebSockets.Client(C#);import;;;;System.Net.WebSockets.Client;pattern;
+C#;Microsoft.AspNetCore.WebSockets(C#);import;;;;Microsoft.AspNetCore.WebSockets;pattern;
+
+;;;;;;;;communication/messenging
+
+
+Java;Apache Camel;import;;;;org.apache.camel;framework;
+XML;Apache Camel;code;;;;http://camel.apache.org/;framework;
+
+Java;RabbitMQ(Java);maven;com.rabbitmq;;;;version;
+Java;RabbitMQ(Java);import;;;;com.rabbitmq;framework;
+Java;RabbitMQ(Java);filename;*.jar;;;\bamqp-client\b;version;
+
+C#;RabbitMQ(C#);import;;;;RabbitMQ;framework;
+C#;RabbitMQ(C#);import;;;;EasyNetQ;framework;
+C#;NServiceBus.RabbitMQ(C#);import;;;;NServiceBus.RabbitMQ;framework;
+
+C#;MSMQ(C#);import;;;;MSMQ;framework;
+C#;System.Messaging(C#);code;;;;\busing\s*System.Messaging\b;framework;
+C#;MQTTnet(C#);import;;;;MQTTnet;framework;
+C#;NServiceBus(C#);import;;;;NServiceBus;framework;
+C#;WebSphereMqClient(C#);import;;;;WebSphereMqClient;framework;
+C#;ZeroMQ(C#);import;;;;ZeroMQ;framework;
+
+C#;Azure Service Bus(C#);import;;;;Microsoft.Azure.ServiceBus;framework;
+C#;Azure Service Bus(C#);import;;;;Microsoft.ServiceBus;framework;
+Java;Azure Service Bus(Java);import;;;;com.azure.messaging.servicebus;framework;
+javascript;Azure Service Bus(javascript);import;;;;@azure/service-bus;framework;
+Typescript;Azure Service Bus(Typescript);import;;;;@azure/service-bus;framework;
+
+
+Java;spring AMQP;maven;org.springframework.amqp;;;;version;
+Java;spring AMQP;import;;;;org.springframework.amqp;framework;
+javascript;AMQP(javascript);import;;;;amqplib;framework;
+C#;Microsoft.Azure.Amqp(C#);import;;;;Microsoft.Azure.Amqp;pattern;
+
+
+Java;JMS;import;;;;org.springframework.jms;framework;
+Java;JMS;import;;;;javax.jms;framework;
+
+XML;JNDI(JMS);code;;;;\"jms/;pattern;
+
+Java;Kafka;maven;org.apache.kafka;;;;version;
+Java;Kafka;import;;;;org.apache.kafka;framework;
+Java;Kafka;import;;;;kafka;framework;
+Java;Kafka;import;;;;org.springframework.kafka;framework;
+C#;Confluent.Kafka(C#);import;;;;Confluent.Kafka;framework;
+
+Java;apache ActiveMQ(Java);maven;org.apache.activemq;;;;version;
+Java;apache ActiveMQ(Java);filename;*.jar;;;\org.apache.activemq\b;version;
+Java;apache ActiveMQ(Java);import;;;;org.apache.activemq;framework;
+C#;Apache.NMS.ActiveMQ(C#);import;;;;Apache.NMS.ActiveMQ;pattern;
+
+Java;IBM.MQ(Java);maven;com.ibm.mq;;;;version;
+Java;IBM.MQ(Java);import;;;;com.ibm.mq;framework;
+Java;IBM.MQ(Java);import;;;;com.ibm.msg;framework;
+
+COBOL;IBM MQ;code;;;;('MQOPEN')|('MQGET')|('MQPUT')|('MQCONN')|(COPY\s+CMQMDV)|('CSQBCONN')|('CSQBOPEN');framework;
+
+C#;IBM.WMQ(C#);import;;;;IBM.WMQ;framework;
+
+
+javascript;mqtt;json;mqtt;;;;version;
+javascript;mqtt;import;;;;mqtt;framework;
+
+Python;apache ActiveMQ(Python);code;;;;(?:from|import)\s+stomp\b;framework;
+Python;RabbitMQ(Python);code;;;;(?:from|import)\s+pika\b;framework;
+Python;IBM.MQ(Python);code;;;;(?:from|import)\s+pymqi\b;framework;
+
+Java;AWS SNS(Java);import;;;;com.amazonaws.services.sns;framework;
+C#;AWS SNS(C#);import;;;;Amazon.SimpleNotificationService;framework;
+
+
+javascript;AWS SQS(javascript);code;;;;new AWS.SQS;framework;
+Python;AWS SQS(Python);code;;;;\bboto3\.client\(['"]sqs['"]\);framework;
+Java;AWS SQS(Java);import;;;;com.amazonaws.services.sqs;framework;
+C#;AWS SQS(C#);import;;;;Amazon.SQS;framework;
+
+YAML;AWS SQS Event(yaml);aws;Properties.Events.*.Type;;;SQS;pattern;communication/messenging/in
+
+
+
+;;;;;;;;storage/sql/server
+
+SQL;DDL;code;;;;\b(?i)CREATE\b.*\b(?i)TABLE\b;pattern;
+SQL;DDL;code;;;;\b(?i)CREATE\b.*\b(?i)VIEW\b;pattern;
+SQL;DDL;code;;;;\b(?i)CREATE\b.*\b(?i)PROCEDURE\b;pattern;
+SQL;DDL;code;;;;\b(?i)CREATE\b.*\b(?i)PROC\b;pattern;
+SQL;DDL;code;;;;\b(?i)CREATE\b.*\b(?i)FUNCTION\b;pattern;
+SQL;DDL;code;;;;\b(?i)CREATE\b.*\b(?i)PACKAGE\b;pattern;
+
+
+
+;;;;;;;;
+
+Python;pymongo;code;;;;(?:from|import)\s+pymongo\b;framework;storage/nosql/mongodb
+Java;mongodb(Java);import;;;;org.mongodb;framework;
+Java;mongodb(Java);import;;;;org.jongo;framework;
+Java;mongodb(Java);import;;;;com.mongodb;framework;
+Java;mongodb(Java);maven;org.mongodb;;;;version;
+Java;mongodb(Java);import;;;;org.springframework.data.mongodb;framework;
+C#;mongodb(C#);import;;;;MongoDB;framework;
+
+javascript;mongodb(Javascript);import;;;;mongodb;framework;
+javascript;mongodb(Javascript);json;mongodb;;;;version;
+TypeScript;mongodb(TypeScript);import;;;;mongodb;framework;
+
+javascript;mongoose;import;;;;mongoose;framework;
+javascript;mongoose;json;mongoose;;;;version;
+TypeScript;mongoose(TypeScript);import;;;;mongoose;framework;
+
+Java;marklogic(Java);import;;;;com.marklogic;framework;storage/nosql/marklogic
+Java;marklogic(Java);maven;com.marklogic;;;;version;
+
+Java;couchbase(Java);import;;;;com.couchbase.client;framework;storage/nosql/couchbase
+Java;couchbase(Java);import;;;;org.springframework.data.couchbase;framework;
+Java;couchbase(Java);maven;com.couchbase.client;;;;version;
+C#;couchbase(C#);import;;;;Couchbase;framework;
+javascript;couchbase(Javascript);json;couchbase;;;;version;
+javascript;couchbase(Javascript);import;;;;couchbase;framework;
+
+Java;Cassandra(Java);import;;;;org.apache.cassandra;framework;storage/nosql/cassandra
+Java;Cassandra(Java);import;;;;org.springframework.data.cassandra;framework;
+Java;Cassandra(Java);import;;;;com.datastax;framework;
+
+Java;ElasticSearch(Java);import;;;;org.springframework.data.elasticsearch;framework;storage/nosql/elastic search
+C#;ElasticSearch(C#);import;;;;Nest;framework;
+C#;ElasticSearch(C#);import;;;;Elasticsearch.Net;framework;
+
+
+Java;AWS DynamoDB(Java);import;;;;com.amazonaws.services.dynamodbv2;framework;storage/nosql/dynamodb
+
+javascript;DynamoDB(Javascript);code;;;;\b(putBucket(LifecycleConfiguration|Logging|MetricsConfiguration|Notification|NotificationConfiguration|Policy|Replication|RequestPayment|Tagging|Versioning|AccelerateConfiguration|Acl|AnalyticsConfiguration|Cors|Encryption|InventoryConfiguration|Lifecycle))(putObject(LegalHold|LockConfiguration|Retention|Tagging))(getObject(LegalHold|LockConfiguration|Retention|Tagging|Torrent))(getBucket(AccelerateConfiguration|Acl|AnalyticsConfiguration|Cors|Encryption|InventoryConfiguration|Lifecycle|LifecycleConfiguration|Location|Logging|MetricsConfiguration|Notification|NotificationConfiguration|Policy|PolicyStatus|Replication|Tagging|Versioning|Website))(listBucket(AnalyticsConfigurations|InventoryConfigurations|MetricsConfigurations|s))(deleteBucket(AnalyticsConfiguration|Cors|Encryption|InventoryConfiguration|Lifecycle|MetricsConfiguration|Policy|Replication|Tagging|Website))(create(Bucket|MultipartUpload|PresignedPost))(abortMultipartUpload|completeMultipartUploaddeleteBucket|deleteObjectTagging|deletePublicAccessBlock|getPublicAccessBlock|listMultipartUploads|listObjectVersions|putPublicAccessBlock)\b;framework;
+
+javascript;AWS DynamoDB(Javascript);code;;;;\bAWS\.DynamoDB\b;framework;
+Python;AWS DynamoDB(Python);code;;;;\bboto3\.client\(['"]dynamodb['"]\);framework;
+
+C#;DynamoDB(C#);import;;;;Amazon.DynamoDBv2;framework;
+
+Java;CouchDB(Java);import;;;;org.ektorp;framework;storage/nosql/couchdb
+Java;CouchDB(Java);import;;;;org.lightcouch;framework;
+C#;CouchDB(C#);import;;;;CouchDB.Client;framework;
+
+
+Java;Cosmos DB(Java);import;;;;com.microsoft.azure.documentdb;framework;storage/nosql/cosmos
+Java;Cosmos DB(Java);import;;;;com.microsoft.azure.cosmosdb;framework;
+Java;Cosmos DB(Java);import;;;;com.azure.cosmos;framework;
+Java;Cosmos DB(Java);import;;;;com.azure.data.cosmos;framework;
+Java;Cosmos DB(Java);import;;;;com.microsoft.azure.spring.data.cosmosdb;framework;
+
+javascript;Cosmos DB(Javascript);import;;;;@azure/cosmos;framework;
+C#;Cosmos DB(C#);import;;;;Microsoft\.Azure\.Documents;framework;
+
+Java;Azure Blob(Java);import;;;;com.microsoft.azure.storage.blob;framework;storage/nosql/azure blob
+Java;Azure Blob(Java);import;;;;com.azure.storage.blob;framework;storage/nosql/azure blob
+javascript;Azure Blob(Javascript);import;;;;@azure/storage-blob;framework;
+C#;Azure Blob(C#);import;;;;Azure.Storage.Blobs;framework;
+
+
+Java;memcache(Java);import;;;;net.spy.memcached;framework;storage/nosql/memcache
+C#;memcache(C#);import;;;;Enyim;framework;
+Perl;memcached(Perl);code;;;;\ buse\s*Cache::Memcached\b;framework;
+
+Java;Redis(Java);import;;;;redis.clients;framework;storage/nosql/redis
+Java;Redis(Java);import;;;;org.springframework.data.redis;framework;
+C#;Redis(C#);import;;;;StackExchange.Redis;framework;
+C#;Redis(C#);import;;;;ServiceStack.Redis;framework;
+Python;Redis(Python);code;;;;(?:from|import)\s+redis\b;framework;
+
+Java;Apache HBase;import;;;;org.apache.hbase;framework;storage/nosql/hbase
+
+
+javascript;AWS.S3(Javascript);code;;;;AWS.S3:;framework;storage/nosql/AWS S3
+javascript;Amplify.S3(Javascript);code;;;;AWSS3:;framework;
+Java;AWS.S3(Java);import;;;;com.amazonaws.services.s3;framework;
+Python;AWS.S3(Python);code;;;;\bboto3\.client\(['"]s3['"]\);framework;
+C#;AWS.S3(C#);import;;;;Amazon.S3;framework;
+
+C#;Firebase(C#);import;;;;Firebase.Database;framework;storage/nosql/Firebase
+
+C#;BigTable(C#);import;;;;Google.Cloud.Bigtable;framework;storage/nosql/BigTable
+Java;BigTable(Java);import;;;;com.google.cloud.bigtable;framework;
+
+C#;Google Cloud Storage(C#);import;;;;Google.Cloud.Storage;framework;storage/nosql/Google Cloud Storage
+Java;Google Cloud Storage(Java);import;;;;com.google.cloud.storage;framework;
+
+
+
+;;;;;;;;storage/connection
+
+YAML;jdbc:url;code;;;;\bjdbc:\b;pattern;
+INI;jdbc:url;code;*.properties;;;\bjdbc:\b;pattern;
+XML;jdbc:url;code;;;;\bjdbc:\b;pattern;
+
+;;;;;;;;storage/sql/client
+
+
+Java;Java.sql;import;;;;java.sql.Statement;pattern;
+Java;Java.sql;import;;;;java.sql.PreparedStatement;pattern;
+Java;Java.sql;import;;;;java.sql.CallableStatement;pattern;
+Java;Java.sql;import;;;;java.sql.Connection;pattern;
+Java;Java.sql;import;;;;oracle.jdbc.OraclePreparedStatement;pattern;
+Java;Java.sql;import;;;;oracle.jdbc.OracleStatement;pattern;
+Java;Java.sql;import;;;;oracle.jdbc.OracleConnection;pattern;
+Java;Java.sql;import;;;;oracle.jdbc.OracleCallableStatement;pattern;
+
+
+Java;hibernate;import;;1.x;3.x;org.hibernate;framework;
+Java;hibernate;import;;;;org.hibernate2;framework;
+Java;hibernate;import;;;;org.hibernate3;framework;
+Java;hibernate;import;;1.x;4.x;org.hibernate4;framework;
+Java;hibernate;maven;org.hibernate;1.x;2.x;;version;
+Java;hibernate;filename;*.jar;2;2.x;\bhibernate2\b;version;
+Java;hibernate;filename;*.jar;3;3.x;\bhibernate3\b;version;
+Java;hibernate;filename;*.jar;;;\bhibernate-core\b;version;
+XML;hibernate;code;;;;\bwww.hibernate.org\b;framework;
+C#;NHibernate;import;;;;NHibernate;framework;
+
+Java;jpa;import;;;;javax.persistence;framework;
+
+Java;DbUnit;maven;org.dbunit;;;;version;
+
+Java;Jooq;maven;org.jooq;;;;version;
+Java;Jooq;import;;;;org.jooq;framework;
+
+Java;querydsl;maven;com.querydsl;;;;version;
+Java;querydsl;import;;;;com.querydsl;framework;
+
+Java;iciql;maven;com.gitblit.iciql;;;;version;
+Java;iciql;import;;;;com.iciql;framework;
+
+Java;ibatis;import;;;;com.ibatis;framework;
+Java;ibatis;maven;com.ibatis;;;;version;
+
+Java;mybatis;import;;;;org.apache.ibatis;framework;
+Java;mybatis;maven;org.mybatis;;;;version;
+
+Java;MyBatis;import;;;;org.mybatis;framework;
+
+Java;Apache Empire DB;import;;;;org.apache.empire-db;framework;
+
+Java;Toplink;xpath;;;;/object-persistence;framework;
+
+javascript;sequelize;json;sequelize;;;;version;
+javascript;sequelize;import;;;;sequelize;framework;
+javascript;pg;json;pg;;;;version;
+javascript;pg;import;;;;pg;framework;
+javascript;oracledb;json;oracledb;;;;version;
+javascript;oracledb;import;;;;oracledb;framework;
+javascript;mysql2;import;;;;mysql2;framework;
+
+
+javascript;knex;json;knex;;;;version;
+javascript;knex;import;;;;knex;framework;
+
+C#;ibatis;import;;;;IBatisNet;framework;
+
+C#;Entity;import;;;;System.Data.Entity;framework;
+C#;Entity;import;;;;System.ComponentModel.DataAnnotations;framework;
+C#;Entity;import;;;;Microsoft.EntityFrameworkCore;framework;
+
+C#;System.Data.Sql;import;;;;System.Data.SqlClient;pattern;
+C#;System.Data.Sql;import;;;;System.Data.Sql;pattern;
+C#;System.Data.Odbc;import;;;;System.Data.Odbc;pattern;
+C#;System.Data.OleDb;import;;;;System.Data.OleDb;pattern;
+C#;System.Data.OracleClient;import;;;;System.Data.OracleClient;pattern;
+C#;System.Data.SQLite;import;;;;System.Data.SQLite;pattern;
+C#;System.Data.SqlServerCe;import;;;;System.Data.SqlServerCe;pattern;
+C#;MySQL.Data.MySqlClient;import;;;;MySQL.Data.MySqlClient;pattern;
+C#;Spring.Data;import;;;;Spring.Data;framework;
+C#;Microsoft.ApplicationBlocks.Data;import;;;;Microsoft.ApplicationBlocks.Data;pattern;
+C#;SQLite(C#);import;;;;SQLite;framework;
+
+C#;WCF Data Services;import;;;;System.Data.Services;framework;
+
+C#;ADO.NET;code;;;;\bDataTable\b;framework;
+C#;ADO.NET;code;;;;\DataSet\b;framework;
+
+C#;MS Entreprise Library Data Access;import;;;;Microsoft.Practices.EnterpriseLibrary.Data;framework;
+C#;ADO.NET for ODP.NET;import;;;;Oracle.DataAccess;pattern;
+C#;ADO.NET for ODP.NET;import;;;;Oracle.DataAccess.Client;pattern;
+C#;ADO.NET for ODP.NET;import;;;;Oracle.ManagedDataAccess.Client;pattern;
+
+
+C#;Microsoft OData;import;;1;3;Microsoft.Data.OData;pattern;
+C#;Microsoft OData;import;;4;;Microsoft.OData.Core;pattern;
+
+C#;Dapper micro-ORM;import;;;;Dapper;framework;
+C#;DevExpress XPO;import;;;;DevExpress.Xpo;framework;
+C#;RepoDb;import;;;;RepoDb;framework;
+C#;NPoco;import;;;;NPoco;framework;
+
+
+Python;SQLAlchemy;code;;;;(?:from|import)\s+sqlalchemy\b;framework;
+
+C++;Pro*C;code;;;;\bEXEC\s+SQL\b;framework;
+C++;DB-Library/C;code;;;;#include\s+<sybdb\.h>;framework;
+C++;Oracle OCI library/C;code;;;;#include\s+<oci\.h>;framework;
+C++;Oracle OCI library/C;code;;;;#include\s+<ociap\.h>;framework;
+C++;Sybase Client-Library/C;code;;;;#include\s+<cspublic\.h>;framework;
+C++;Informix ESQL/C;code;;;;(?i)\$\s*PREPARE\b;framework;
+C++;Informix ESQL/C;code;;;;(?i)\$\s*DECLARE\b;framework;
+C++;Informix ESQL/C;code;;;;(?i)\$\s*EXECUTE\b;framework;
+C++;Informix ESQL/C;code;;;;(?i)\$\s*SELECT\b;framework;
+C++;Informix ESQL/C;code;;;;(?i)\$\s*INSERT\b;framework;
+C++;Informix ESQL/C;code;;;;(?i)\$\s*UPDATE\b;framework;
+C++;Informix ESQL/C;code;;;;(?i)\$\s*DELETE\b;framework;
+
+COBOL;Embedded SQL(Cobol);code;;;;\bEXEC\s+SQL\b;pattern;
+
+JCL;JCL2SQL;code;;;;RUN\s+PROGRAM\(DSNTIAUL\);pattern;
+
+
+;;;;;;;;communication
+
+Java;gRPC;import;;;;io.grpc;framework;
+
+;;;;;;;;communication/rest/out
+
+javascript;polymer/iron-ajax(Javascript);code;;;;@polymer/iron-ajax;pattern;
+
+javascript;ATT.ntwx;code;;;;\bnextScr\b;pattern;
+
+javascript;Amplify.Rest(Javascript);code;;;;\bAPI\.(get|post|put|del);pattern;
+
+javascript;AngularJS.Rest(Javascript);code;;;;\$http\.(get|post|put|delete);pattern;
+
+javascript;Native.Rest(Javascript);code;;;;\bXMLHttpRequest\b;pattern;
+javascript;Native.Rest(Javascript);code;;;;\bwindow\.open\b;pattern;
+javascript;Native.Rest(Javascript);code;;;;\bdocument\..*\b\.submit\b;pattern;
+javascript;Native.Rest(Javascript);code;;;;\$\(.form.*\)\.action\b;pattern;
+javascript;Native.Rest(Javascript);code;;;;\$form\.prop\(.action\b;pattern;
+javascript;Native.Rest(Javascript);code;;;;\bwindow\.location\.href\b;pattern;
+javascript;Native.Rest(Javascript);code;;;;\bdocument\.location\.href\b;pattern;
+javascript;Native.Rest(Javascript);code;;;;\bnew\s+EventSource\b;pattern;
+javascript;Native.Rest(Javascript);code;;;;\bfetch\(;pattern;
+
+javascript;Sencha.Rest(Javascript);code;;;;\bExt\..*getUpdater\(\)\.update\b;pattern;
+javascript;Sencha.Rest(Javascript);code;;;;\bExt\.Ajax\.request\b;pattern;
+
+javascript;axios;code;;;;\baxios\.(get|put|post|delete|request)\b;framework;
+javascript;axios;import;;;;axios;framework;
+javascript;Request;import;;;;request;framework;
+
+javascript;SuperAgent;import;;;;superagent;framework;
+
+javascript;falcor Rest;code;;;;\bnew_s+HttpDataSource\b;pattern;
+
+
+
+Java;Amplify.Rest(Java);import;;;;com.amazonaws.mobileconnectors.apigateway;pattern;
+
+Java;Feign;import;;;;feign;framework;
+Java;Feign;import;;;;org.springframework.cloud.netflix.feign.FeignClient;framework;
+Java;Feign;import;;;;org.springframework.cloud.openfeign.FeignClient;framework;
+
+
+Java;OkHttp;import;;;;com.squareup.okhttp.OkHttpClient;framework;
+Java;OkHttp;import;;;;okhttp3.OkHttpClient;framework;
+
+Java;Retrofit;import;;;;retrofit2;framework;
+
+Java;Ribbon(HTTP Call);import;;;;com.netflix.ribbon.http;pattern;
+Java;Ribbon(HTTP Call);import;;;;com.netflix.ribbon.proxy.annotation;pattern;
+
+Java;AWS.Lambda(Java);import;;;;com.amazonaws.services.lambda;framework;
+C#;AWS SDK Lambda(C#);import;;;;Amazon.Lambda;pattern;
+
+Java;Java2Rest;import;;;;java.net.URLConnection;pattern;
+Java;Java2Rest;import;;;;java.net.HttpURLConnection;pattern;
+
+Java;Java2Rest;import;;;;javax.ws.rs.client;pattern;
+Java;Java2Rest;import;;;;com.sun.jersey.api.client.WebResource;pattern;
+Java;Java2Rest;import;;;;org.jboss.resteasy.client;pattern;
+Java;Java2Rest;import;;;;org.glassfish.jersey.client.JerseyClient;pattern;
+Java;Java2Rest;import;;;;org.springframework.web.client.RestTemplate;pattern;
+Java;Java2Rest;import;;;;org.springframework.web.reactive.function.client.WebClient;pattern;
+
+Java;Java2Rest;import;;;;org.apache.cxf.jaxrs.client.WebClient;pattern;
+Java;Java2Rest;import;;;;org.apache.http.client.HttpClient;pattern;
+Java;Java2Rest;import;;;;org.apache.http.impl.client.CloseableHttpClient;pattern;
+Java;Java2Rest;import;;;;org.apache.http.impl.nio.client.CloseableHttpAsyncClient;pattern;
+Java;Java2Rest;import;;;;org.apache.commons.httpclient.HttpClient;pattern;
+Java;Java2Rest;import;;;;org.apache.wink.client.Resource;pattern;
+
+Java;Java2Rest;import;;;;io.vertx.core.http.HttpClientRequest;pattern;
+Java;Java2Rest;import;;;;io.vertx.ext.web.client.HttpRequest;pattern;
+Java;Java2Rest;import;;;;io.vertx.ext.web.client.WebClient;pattern;
+
+Java;Java2Rest;import;;;;org.resthub.web.Client;pattern;
+
+
+HTML;polymer/iron-ajax(Javascript);code;;;;@polymer/iron-ajax;pattern;
+
+C#;HttpClient(C#);code;;;;\bHttpClient\b;pattern;
+C#;WebClient(C#);code;;;;\bWebClient\b;pattern;
+C#;WebRequest(C#);code;;;;\bWebRequest\b;pattern;
+C#;HttpWebRequest(C#);code;;;;\bHttpWebRequest\b;pattern;
+C#;FileWebRequest(C#);code;;;;\bFileWebRequest\b;pattern;
+
+C#;System.Net.Http;import;;;;System.Net.Http;pattern;
+C#;Microsoft.Net.Http;import;;;;Microsoft.Net.Http;pattern;
+C#;Microsoft.Extensions.Http;import;;;;Microsoft.Extensions.Http;pattern;
+
+C#;Flurl.Http;import;;;;Flurl.Http;framework;
+C#;Square.OkHttp3;import;;;;Square.OkHttp3;framework;
+C#;ServiceStack.HttpClient;import;;;;ServiceStack.HttpClient;framework;
+C#;Microsoft.Rest;import;;;;Microsoft.Rest;framework;
+C#;RestSharp;import;;;;RestSharp;framework;
+
+
+Perl;HTTP::Request;code;;;;use\s+HTTP::Request;pattern;
+Perl;HTTP::Request;code;;;;use\s+HTTP::GHTTP;pattern;
+
+
+
+;;;;;;;;communication/rest/in
+
+ABAP;SAP Gateway;code;;;;IWBEP/CL_MGW_PUSH_ABS_MODEL;pattern;
+
+javascript;Express;json;express;;;;version;
+javascript;Express;import;;;;express;framework;
+
+Python;Chalice;code;;;;(?:from|import)\s+chalice\b;framework;
+
+TypeScript;Fastify;import;;;;fastify;framework;
+
+javascript;node.js HTTP server;code;;;;\bhttp.createServer\b;pattern;
+
+javascript;koa-router;import;;;;koa-router;pattern;
+javascript;koa-router;import;;;;@koa/router;pattern;
+!
+javascript;restify;json;restify;;;;version;
+javascript;restify;import;;;;restify;framework;
+
+Java;struts;filename;*.jar;1.1;1.2.x;\bstruts.jar$;version;
+Java;struts;filename;*.jar;1.2;1.2.x;\bstruts-1.2\b;version;
+Java;struts;filename;*.jar;1.3;1.3.x;\bstruts-core-1.3\b;version;
+Java;struts;filename;*.jar;2;2.x;\bstruts2-core-2\b;version;
+Java;struts;import;;;;org.apache.struts;framework;
+Java;struts;import;;;;org.apache.struts;framework;
+Java;struts;import;;2;2.x;org.apache.struts2;framework;
+Java;struts;import;;2;2.x;com.opensymphony.xwork2;framework;
+
+Java;spring MVC (elementary);import;;;;org.springframework.web.bind.annotation.RequestMapping;subpattern;
+Java;spring MVC (elementary);import;;;;org.springframework.web.bind.annotation.GetMapping;subpattern;
+Java;spring MVC (elementary);import;;;;org.springframework.web.bind.annotation.PostMapping;subpattern;
+Java;spring MVC (elementary);import;;;;org.springframework.web.bind.annotation.PutMapping;subpattern;
+Java;spring MVC (elementary);import;;;;org.springframework.web.bind.annotation.DeleteMapping;subpattern;
+Java;spring MVC (elementary);import;;;;org.springframework.web.bind.annotation.PatchMapping;subpattern;
+
+Java;spring MVC;combination;;;;'spring MVC (elementary)' and not Feign;framework;
+
+Java;Vert.x Web Server;import;;;;io.vertx.ext.web.Router;pattern;
+
+Java;Reactive Web Server;import;;;;org.springframework.web.reactive.function.server;framework;
+
+
+Java;JAX-RS;import;;;;javax.ws.rs.Path;framework;
+Java;JAX-RS;import;;;;javax.ws.rs.GET;framework;
+Java;JAX-RS;import;;;;javax.ws.rs.PUT;framework;
+Java;JAX-RS;import;;;;javax.ws.rs.POST;framework;
+Java;JAX-RS;import;;;;javax.ws.rs.DELETE;framework;
+Java;JAX-RS;maven;javax.ws.rs;;;;version;
+
+Java;Servlet;import;;;;javax.servlet.http.HttpServlet;framework;
+Java;Servlet;import;;;;javax.servlet.Servlet;framework;
+
+Java;RESTeasy;import;;;;org.jboss.resteasy;framework;
+
+
+Java;EAD4J.JADE;import;;;;com.ibm.ead4j;framework;
+
+Python;django;code;;;;(?:from|import)\s+django\b;framework;
+Python;flask;code;;;;(?:from|import)\s+flask\b;framework;
+Python;web.py;code;;;;(?:from|import)\s+web\b;framework;
+Python;Web2py;code;;;;(?:from|import)\s+gluon\b;framework;
+Python;Werkzeug;code;;;;(?:from|import)\s+werkzeug\b;framework;
+Python;Bottle;code;;;;(?:from|import)\s+bottle\b;framework;
+Python;Pyramid;code;;;;(?:from|import)\s+pyramid\.config\b;framework;
+Python;CherryPy;code;;;;(?:from|import)\s+cherrypy\b;framework;
+Python;Tornado;code;;;;(?:from|import)\s+tornado\b;framework;
+
+C#;DotNet Web;import;;;;System.Web.Mvc;framework;
+C#;DotNet Web;import;;;;System.Web.Http;framework;
+C#;DotNet Web;import;;;;Microsoft.AspNetCore.Mvc;framework;
+
+C#;Nancy;code;;;;\bpublic\s*class\s*IndexModule\s*:\s*(?:Nancy::)?NancyModule\b;framework;
+C#;Nancy;import;;;;Nancy;framework;
+
+C#;ServiceStack(C#);import;;;;ServiceStack;framework;
+C#;Ocelot.Middleware;import;;;;Ocelot.Middleware;framework;
+
+JSON;AWS CloudFormation;code;;;;AWSTemplateFormatVersion;pattern;
+JSON;AWS CloudFormation(API Gateway);code;;;;AWS::ApiGateway;pattern;
+
+YAML;AWS CloudFormation;code;*.yaml,*.yml;;;AWSTemplateFormatVersion;pattern;
+YAML;AWS CloudFormation(API Gateway);code;*.yaml,*.yml;;;AWS::ApiGateway;pattern;
+
+javascript;Lambda Service Receive(javascript);code;;;;switch\s+\(event\.httpMethod;pattern;
+
+JSON;serverless;filename;s-function.json;;0.5;;framework;
+YAML;serverless;filename;serverless.yml;1;;;framework;
+YAML;serverless(API Gateway);code;serverless.yml;;;\bhttp:\b;pattern;
+
+C++;Tntnet;code;;;;(?:\busing namespace tnt\b|\btnt::);framework;
+C++;Tntnet;code;;;;"#include [<""]tnt/tntnet\.h[>""]";framework;
+
+
+YAML;AWS Lambda(YAML);aws;Type;;;AWS::Serverless::Function;pattern;
+YAML;AWS Lambda(YAML);aws;Type;;;AWS::Lambda::Function;pattern;
+YAML;AWS Lambda(YAML);aws;events;;;;pattern;
+
+
+;;;;;;;;communication/lambda/in
+
+javascript;Lambda Handler(javascript);code;;;;\bexports\.handler\s*=\s*function\s*\(\s*event\s*,\s*context\s*,\s*callback\s*\);pattern;
+javascript;Lambda Handler(javascript);code;;;;\bexports\.handler\s*=\s*\(\s*event\s*,\s*context\s*,\s*callback\s*\);pattern;
+
+
+;;;;;;;;front/ui
+
+C++;Qt GUI;code;;;;#include <QtGui\b;framework;
+C++;GTK;code;;;;#include <gtk/gtk.h>;framework;
+C++;GTK;code;Makefile, makefile, *.mk, *.bat, *.sh, *.bash;3;3.x;\bgtk\+-3.0\b;framework;
+C++;cegui;code;;;;#include <CEGUI/CEGUI\w+\.h>;framework;
+C++;WxWidgets;code;;;;#include <wx/wx(prec)?\.h>;framework;
+C++;KDE;code;;;;#include <(?:KApplication\b|kapp(?:lication)?\.h\b|kde/);framework;
+C++;MFC;code;;;;"#include [<""]afx(?:win)?\.h[>""]";framework;
+C++;SDL;code;;;;"#include [<""]SDL/SDL\.h[>""]";framework;
+C++;gtkmm;code;;;;"#include  [<""]gtkmm(/\w+)?\.h[>""]";framework;
+C++;OpenGL;code;;;;"#include [<""]GL/\w+\.h[>""]";framework;
+
+C#;WPF;import;;;;System.Windows;framework;
+C#;Xamarin;import;;;;Xamarin.Forms;framework;
+C#;Telerik.Web;import;;;;Telerik.Web.Mvc;framework;
+C#;Telerik.Web;import;;;;Telerik.Web.UI;framework;
+C#;Infragistics.Web.Mvc;import;;;;Infragistics.Web.Mvc;framework;
+C#;MvvmCross;import;;;;MvvmCross.Binding;framework;
+C#;MvvmCross;import;;;;MvvmCross.Platform;framework;
+
+
+;;;;;;;;front/mobile
+
+Java;Android(Java);import;;;;android;framework;
+Kotlin;Android(Kotlin);import;;;;android;framework;
+C#;Xamarin.Android;import;;;;Android;framework;
+
+;;;;;;;;documentation
+
+Markdown;documentation.architecture;code;;;;(?i)(architecture|installation|build|install|composant|component|module|déployer|déploiement|deploy|recette|documentation|endpoint|specification);pattern;
+Text;documentation.architecture;code;;;;(?i)(architecture|installation|build|install|composant|component|module|déployer|déploiement|deploy|recette|documentation|endpoint|specification);pattern;
+
+;;;;;;;;front/web
+
+javascript;dojo;json;dojo-core;;;;version;
+javascript;dojo;import;;;;dojo;framework;
+
+javascript;EmberJS;code;;;;\bEmber\.;framework;
+javascript;EmberJS;import;;;;@ember/application;framework;
+javascript;EmberJS;import;;;;@ember/routing/router;framework;
+
+
+javascript;AngularJS;code;;;;\bangular\.;framework;
+javascript;Jquery;code;;;;[^\w]\$\(;framework;
+javascript;Jquery;filename;*.js;;;\bjquery\b;framework;
+javascript;React;import;;;;react;framework;
+javascript;Vue.js;import;;;;vue;framework;
+
+TypeScript;Angular;import;;;;@angular;framework;
+TypeScript;Angular;import;;;;@ngrx/store;framework;
+TypeScript;React(Typescript);import;;;;react;framework;
+TypeScript;React(Typescript);import;;;;react-native;framework;
+
+Java;Apache Tapestry;import;;;;org.apache.tapestry;framework;
+Java;Apache Tapestry;import;;;;org.apache.tapestry5;framework;
+
+
+;;;;;;;;application server
+
+XML;web.xml;filename;web.xml;;;;pattern;
+XML;portlet.xml;filename;portlet.xml;;;;pattern;
+XML;WebLogic Server;filename;weblogic.xml;;;;pattern;
+
+XML;WebSphere;filename;ibm-application-bnd.xml;;;;pattern;
+XML;JBoss;filename;jboss-web.xml;;;;pattern;
+XML;GlassFish;filename;glassfish-web.xml;;;;pattern;
+
+Java;liferay;import;;;;com.liferay;framework;
+
+Java;GlassFish;import;;;;org.glassfish;pattern;
+
+;;;;;;;;logging
+
+Java;Apache Log4j;import;;;;org.apache.logging.log4j;pattern;
+Java;Apache Log4j;maven;log4j;;;;version;
+Java;Apache Log4j;filename;*.jar;;;\blog4j\b;version;
+
+Java;commons-logging;filename;*.jar;;;\bcommons-logging\b;version;
+
+C#;log4net;import;;;;log4net;pattern;
+C#;NLog;import;;;;NLog;pattern;
+C#;Serilog;import;;;;Serilog;pattern;
+C#;Common.Logging;import;;;;Common.Logging;pattern;
+C#;MS Enterprise Library Logging;import;;;;Microsoft.Practices.EnterpriseLibrary.Logging;pattern;
+C#;MS Enterprise Library Logging;import;;;;EnterpriseLibrary.Logging;pattern;
+C#;Microsoft.Extensions.Logging;import;;;;Microsoft.Extensions.Logging;pattern;
+C#;Elmah;import;;;;Elmah;pattern;
+C#;Castle.LoggingFacility;import;;;;Castle.LoggingFacility;pattern;
+C#;Sentry.Extensions.Logging;import;;;;Sentry.Extensions.Logging;pattern;
+
+
+
+

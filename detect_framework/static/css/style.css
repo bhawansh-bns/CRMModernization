@@ -1,0 +1,190 @@
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    /*Common values */
+    color: #CCCCCC;
+    background: #222222;
+    
+}
+
+.flex-master {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    height: 100%;
+    overflow: auto;
+}
+.header {
+    flex: none; /* fixed size */
+
+    padding: 0px;
+    font-weight: bold;            
+    border-bottom: 5px solid #535353;
+}
+.page-content {
+    flex: 1;   /* resize in container */
+    overflow: auto; /* IMPORTANT for FireFox */
+    
+    /* new flex container for content */
+    display: flex;
+    flex-direction: row;                        
+}
+.browser {
+    flex: none;
+
+    padding: 10px;
+    width: 300px;
+    overflow: auto;
+}
+.splitter-browser {
+    flex: none;
+    width: 10px;
+    cursor: col-resize;
+    background: #535353;
+}
+
+.frameworks {
+    flex: none;
+
+    padding: 10px;
+    width: 350px;
+    overflow: auto;
+}
+
+.splitter-frameworks {
+    flex: none;
+    width: 10px;
+    cursor: col-resize;
+    background: #535353;
+}
+
+.files {
+    flex: 1 1 auto; 
+
+    padding: 20px;
+    width: 200px;
+    overflow: auto;
+}
+
+.splitter-files {
+    flex: none;
+    width: 10px;
+    cursor: col-resize;
+    background: #535353;
+}
+
+.display-selection, 
+.title {
+	margin-left: 1em;
+}
+
+.filter 
+{
+	margin-bottom: 1em;
+}
+
+.clickable
+{
+    cursor: pointer;
+}
+
+.detection-button
+{
+	background: #CCCCCC;
+	border-radius: 4px;
+    cursor: pointer;
+}
+
+.selected {
+    background-color: #888888;
+}
+
+.filter-input {
+    background-color: #CCCCCC;
+}
+
+/* The side navigation menu */
+.sidenav {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    height: 100%;
+    overflow: auto;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    right: 0;
+    background-color: #222222; 
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.code
+{
+	lex: 1 1 auto; 
+	overflow:auto;
+	margin-bottom: 3em;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.display-file-path
+{
+    margin-left: 1em;
+}
+
+.node_contains {
+	background-color:#44884466;
+    border-radius: 2px;
+}
+
+.file-selected {
+    background-color: #444444;
+}
+
+/*
+Overrides for jstree
+*/
+
+/* hover on node */
+.jstree-default .jstree-hovered {
+  background: #444444;
+}
+
+/* Node selected */
+.jstree-default .jstree-clicked {
+  background: #444444;
+}
+
+/* for controlling details display */
+
+.group {
+	
+}
+
+.group-summary {
+	border-radius: 10px 10px 0 0;
+	border-color: #444444;
+	border-style: solid;
+    border-bottom: none;
+}   
+
+
+.group-content {
+    border-radius: 0 0 10px 10px;
+    border-color: #444444;
+    border-style: solid;
+    padding-left: 1em;
+    margin-top: 0;
+    border-top: none;
+}

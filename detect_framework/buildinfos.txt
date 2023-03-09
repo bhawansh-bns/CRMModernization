@@ -1,0 +1,3 @@
+Build date: 07/02/2023  6:09:58,20 
+Build number: 240 
+Git: git@jnk-centos-git:tools/application-discoverer.git origin/master 23061c78fd31cf03fcc98293ffb665d87336c8ab 

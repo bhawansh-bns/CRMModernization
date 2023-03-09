@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Application Discovery</title>
+
+
+<style>
+
+html, body {
+    min-height: 100%;
+    height: 100%;
+}
+
+.fill { 
+    min-height: 100%;
+    height: 100%;
+}
+
+/* @see https://galleryserverpro.com/forum/ui-templates-skins/color-of-jstree-members/ */
+.jstree a {
+    color: white !important;  /* text color */
+    /*background-color: coral; /* backgroung text color */
+}
+
+/* auto expand row to the rest */
+.fill-remaining {
+    flex:1;
+}
+
+/* jstree context menu style */
+.vakata-context  {
+    
+    font-size: 12px;
+    /*color: white !important;  /* text color */
+    /*background-color: coral; /* backgroung text color */
+
+}
+
+
+.code-container {
+    font-size: 12px;
+}
+
+body {
+    font-family: arial;
+    font-size: 14px;
+}
+
+.generic-table
+{
+    border-collapse: collapse;
+    border-color: black;
+}
+
+.generic-column
+{
+    vertical-align: top;
+    border-style: solid;
+    border-width: 1px;
+    border-spacing: 0px;
+    font-family: arial;
+    font-size: 0.95em;
+    word-wrap:normal;
+    white-space:pre;            
+}
+
+.generic-title {
+    background-color: gainsboro;
+    font-family: sans-serif;
+    font-size: 1em;
+
+}
+
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+</style>
+
+
+</head>
+
+<body>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    
+    <!--  tooltips -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.0/jquery.qtip.js"></script>
+
+    <h2>Application Discovery</h2>
+    
+    <div id="content">
+    </div>
+
+    <script type="text/javascript">
+
+function isDateObject(object) {
+    if (object == null) return false;
+    if (!(typeof (object) == "object")) return false;
+    if (Object.keys(object).length != 2) return false;
+    if (!(typeof (object.time) == "number")) return false;
+    if (!(typeof (object.isoDate) == "string")) return false;
+    return true;
+};
+
+// true if val is a simple value (boolean, string, number)
+function isSimpleValue(val) {
+    if (val == null) return true;
+    if (Array.isArray(val) && val.length == 0) return true;
+    var type = typeof(val);
+    if (type == "boolean") return true;
+    if (type == "string") return true;
+    if (type == "number") return true;
+    return false;
+};
+
+// true if val is a string starting with <svg
+function isSVG(val) {
+    if (val == null) return false;
+    if (Array.isArray(val) && val.length == 0) return false;
+    var type = typeof(val);
+    if (type == "string" && val.startsWith('<svg')) return true;
+    return false;
+};
+
+// True if val is an object of the form {'href':..., 'title':...}
+function isURL(object)
+{
+    if (!(typeof (object) == "object")) return false;
+    if (Object.keys(object).length != 2) return false;
+    
+    
+    return Object.keys(object).sort().toString() == ['href', 'title'].sort().toString();
+}
+
+// create the html part corresponding to data under element
+var createHTML = function(data, element, first_level)
+{
+    console.log('createHTML', data);
+    
+    if (Array.isArray(data))
+    {
+        if (data.length > 0)
+        {
+            if (Array.isArray(data[0]))
+            {
+                createArrayOfArrayHTML(data, element);
+            }
+            else
+            {
+                createArrayHTML(data, element);
+            }
+        }
+        else
+        {
+            createArrayHTML(data, element);    
+        }
+        
+    }
+    else if (isSVG(data))
+    {
+        createSVGHTML(data, element);
+    }
+    else if (isSimpleValue(data))
+    {
+        createValueHTML(data, element);
+    }
+    else if (isURL(data))
+    {
+        createURLHTML(data, element);
+    }
+    else
+    {
+        createObjectHTML(data, element, first_level);
+    }
+    
+};
+
+// Create a table for an array of something
+var createArrayHTML = function(array, element)
+{
+    console.log('createArrayHTML', array);
+    var table = document.createElement("table");
+    table.setAttribute('class', 'generic-table');
+    element.appendChild(table);
+    
+    array.forEach(function(array_data) {
+        
+        var row = document.createElement("tr");
+        table.appendChild(row);
+        
+        createHTML(array_data, row, false)
+    });
+};
+
+// Create a table for an array of value
+var createArrayOfArrayHTML = function(array, element)
+{
+    console.log('createArrayHTML', array);
+    var table = document.createElement("table");
+    table.setAttribute('class', 'generic-table');
+    element.appendChild(table);
+    
+    array.forEach(function(array_data) {
+        
+        var row = document.createElement("tr");
+        table.appendChild(row);
+        
+        array_data.forEach(function(array_data) {
+        
+            var col = document.createElement("td");
+            col.setAttribute('class', 'generic-column');
+            row.appendChild(col);
+            
+            createHTML(array_data, col, false)
+        });
+    });
+};
+
+// 
+var createValueHTML = function(value, element)
+{
+    text = document.createTextNode(value);
+    element.appendChild(text);
+};
+
+// 
+var createSVGHTML = function(value, element)
+{
+    element.innerHTML = value;
+};
+
+var createHREFHTML = function(value, element)
+{
+    var link = document.createElement("a");
+    
+    var url = location.protocol+'//'+location.host+location.pathname + '#' + value
+    
+    link.setAttribute('href', url);
+    element.appendChild(link);
+    
+    text = document.createTextNode(value);
+    link.appendChild(text);
+};
+
+var createURLHTML = function(value, element)
+{
+    var link = document.createElement("a");
+    
+    var url = location.protocol+'//'+location.host+location.pathname + '#' + value['href']
+    
+    link.setAttribute('href', url);
+    element.appendChild(link);
+    
+    text = document.createTextNode(value['title']);
+    link.appendChild(text);
+};
+
+// Create a table for an object
+var createObjectHTML = function(object, element, first_level)
+{
+    console.log('createObjectHTML', object);
+
+    var table = document.createElement("table");
+    table.setAttribute('class', 'generic-table');
+    element.appendChild(table);
+
+    for (var key in object)
+    {
+        var row = document.createElement("tr");
+        table.appendChild(row);
+        
+        var title = document.createElement("td");
+        title.setAttribute('class', 'generic-title generic-column');
+        row.appendChild(title);
+        
+        var text = document.createTextNode(key);
+        title.appendChild(text);
+
+        var value_column = document.createElement("td");
+        value_column.setAttribute('class', 'generic-column');
+        row.appendChild(value_column);
+        
+        var value = object[key];
+        
+        if (first_level)
+        {
+            var collapse = document.createElement("button");
+            collapse.setAttribute('class', 'collapsible');
+            value_column.appendChild(collapse);
+            
+            var collapse_div = document.createElement("div");
+            collapse_div.setAttribute('class', 'content');
+            value_column.appendChild(collapse_div);
+
+            value_column = collapse_div;
+        }
+        
+        if (key == 'href')
+        {
+            createHREFHTML(value, value_column);
+        }
+        else
+        {
+            createHTML(value, value_column, false);
+        }
+    };
+    
+};
+
+
+// display data in the content section 
+var display = function(data)
+{
+    // clear that section
+    var content = document.getElementById("content");
+    
+    while (content.firstChild) {
+        content.removeChild(content.firstChild);
+    }
+    
+    createHTML(data, content, true);
+    
+};
+
+
+
+var current_scan_id = location.hash.slice(1);
+
+$.ajax(
+        {
+            url : '/api/discovery/' + current_scan_id,
+            success : function(res) 
+            {
+
+                display(res);
+                
+                var coll = document.getElementsByClassName("collapsible");
+                var i;
+
+                for (i = 0; i < coll.length; i++) {
+                  coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.style.maxHeight){
+                      content.style.maxHeight = null;
+                    } else {
+                      content.style.maxHeight = content.scrollHeight + "px";
+                    } 
+                  });
+                }
+
+            }
+        }
+       );
+    </script>    
+</body>
+</html>
+
+
