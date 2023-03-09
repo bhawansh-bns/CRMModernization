@@ -25,8 +25,8 @@ jobs:
           password: bhawansh007
 
       - name: Pull docker image
-        run: docker pull searaph/searaph/fast-scan
+        run: docker pull searaph/fast-scan
       
       - name: Run docker container
-        run: docker run -p 80:80 searaph/searaph/fast-scan https://github.com/bhawansh-bns/CRMModernization https://github.com/bhawansh-bns/CRMModernization/scans
+        run: docker run -p 80:80 searaph/fast-scan https://github.com/bhawansh-bns/CRMModernization https://github.com/bhawansh-bns/CRMModernization/scans
 
