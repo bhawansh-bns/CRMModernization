@@ -15,6 +15,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3.10.0
         with:
+          distribution: 'coretto'
           java-version: '17'
 
       - name: Run application
