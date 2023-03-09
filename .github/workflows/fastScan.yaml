@@ -15,8 +15,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3.10.0
         with:
-          java-version: '11'
+          java-version: '17'
 
       - name: Run application
-        run: java -jar fastScan.jar
+        run: java -jar testcarl.jar https://github.com/bhawansh-bns/CRMModernization/ https://github.com/bhawansh-bns/CRMModernization/scans
 
