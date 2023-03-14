@@ -7,26 +7,20 @@ on:
 
 jobs:
   build-and-run:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3.10.0
-        with:
-          distribution: 'corretto'
-          java-version: '17'
           
       - name: Login to docker
         uses: docker/login-action@v1
         with: 
           username: searaph
-          password: bhawansh007
+          password: password123
 
       - name: Pull docker image
-        run: docker pull searaph/fast-scan
+        run: docker pull searaph/gitlab-fastscan
       
       - name: Run docker container
-        run: docker run -p 8089:8089 searaph/fast-scan https://github.com/bhawansh-bns/CRMModernization https://github.com/bhawansh-bns/CRMModernization/scans
+        run: docker run -v $(pwd):/fastScan/sourceCode searaph/gitlab-fastscan /fastScan/sourceCode -n Shanshan
 
