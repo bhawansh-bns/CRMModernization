@@ -17,6 +17,5 @@ jobs:
 
       - name: Run Fast Scan
         run: |
-          cd ${{ github.workspace }}
-          git_folder=$(basename "$(git rev-parse --show-toplevel)")
-          docker run --rm -v $(pwd):/fastScan/sourceCode castimaging/fast-scan-java-cli /fastScan/sourceCode --appName ${$(basename ${GITHUB_WORKSPACE})}
+           echo "GIT_FOLDER_NAME=$(basename ${GITHUB_WORKSPACE})"
+           docker run --rm -v $(pwd):/fastScan/sourceCode castimaging/fast-scan-java-cli /fastScan/sourceCode --appName ${GIT_FOLDER_NAME}
