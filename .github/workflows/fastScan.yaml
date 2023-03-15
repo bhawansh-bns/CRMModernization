@@ -6,16 +6,23 @@ on:
       - main
 
 jobs:
-  FastScan:
+  build-and-run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Login to docker
+        uses: docker/login-action@v1
+        with:
+          username: searaph
+          password: password@123
+
       - name: Pull docker image
-        run: docker pull castimaging/fast-scan-java-cli
+        run: docker pull searaph/gitlab-fastscan
 
       - name: Run Fast Scan
         run: |
-           echo "GIT_FOLDER_NAME=$(basename ${GITHUB_WORKSPACE})"
-           docker run --rm -v $(pwd):/fastScan/sourceCode castimaging/fast-scan-java-cli /fastScan/sourceCode --appName=${GIT_FOLDER_NAME}
+          cd ${{ github.workspace }}
+          git_folder=$(basename "$(git rev-parse --show-toplevel)")
+          docker run -v $(pwd):/fastScan/sourceCode searaph/gitlab-fastscan /fastScan/sourceCode -n $git_folder
