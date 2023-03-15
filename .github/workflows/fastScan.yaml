@@ -19,6 +19,6 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           git_folder = $(basename "$(git rev-parse --show-toplevel)")
-          docker run -v $(pwd):/fastScan/sourceCode castimaging/fast-scan-java-cli /fastScan/sourceCode --appName git_folder
+          docker run -v $(pwd):/fastScan/sourceCode castimaging/fast-scan-java-cli /fastScan/sourceCode --appName $git_folder
 
 
