@@ -25,5 +25,5 @@ jobs:
         run: |
          cd ${{ github.workspace }}
           GITHUBCONTEXT=$(echo "${{ toJson(github) }}" | base64 -w 0)
-          docker run -v $(pwd):/fastScan/sourceCode -e GITHUBCONTEXT=$GITHUBCONTEXT searaph/new-fast-scan /fastScan/sourceCode $GITHUBCONTEXT
+          docker run -v $(pwd):/fastScan/sourceCode -e GITHUBCONTEXT=$GITHUBCONTEXT searaph/new-fast-scan /fastScan/sourceCode
 
