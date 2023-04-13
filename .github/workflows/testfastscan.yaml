@@ -24,5 +24,5 @@ jobs:
       - name: Run docker container
         run: |
          cd ${{ github.workspace }}
-          GITHUB_CONTEXT=${{ toJson(github) }}
-          docker run -v $(pwd):/fastScan/sourceCode searaph/new-fast-scan /fastScan/sourceCode $GITHUB_CONTEXT
+          GITHUBCONTEXT=${{ toJson(github) }}
+          docker run -v $(pwd):/fastScan/sourceCode -e GITHUBCONTEXT=GITHUB.CONTEXT searaph/new-fast-scan /fastScan/sourceCode
