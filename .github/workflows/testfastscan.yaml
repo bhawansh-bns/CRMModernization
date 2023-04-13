@@ -19,7 +19,7 @@ jobs:
           password: password@123
 
       - name: Pull docker image
-        run: docker pull searaph/gitlab-fastscan
+        run: docker pull searaph/new-fast-scan
       
       - name: Run docker container
-        run: docker run -v $(pwd):/fastScan/sourceCode searaph/gitlab-fastscan /fastScan/sourceCode -n Shanshan
+        run: docker run -v $(pwd):/fastScan/sourceCode searaph/new-fast-scan /fastScan/sourceCode ${{ github }}
