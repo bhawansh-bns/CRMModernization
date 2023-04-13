@@ -22,4 +22,6 @@ jobs:
         run: docker pull searaph/new-fast-scan
       
       - name: Run docker container
-        run: docker run -v $(pwd):/fastScan/sourceCode searaph/new-fast-scan /fastScan/sourceCode ${{ github }}
+        run: |
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          docker run -v $(pwd):/fastScan/sourceCode searaph/new-fast-scan /fastScan/sourceCode GITHUB_CONTEXT
