@@ -1,4 +1,4 @@
-name: Run Fast Scan 
+name: GITHUBCONTEXT
 
 on:
   push:
@@ -22,7 +22,10 @@ jobs:
         run: docker pull searaph/testfastscan:latest
       
       - name: Run docker container
+        env:
+         GITHUB_CONTEXT: ${{ github.context }}
+         working-directory: ${{ github.workspace }}
         run: |
-          echo "${{ github.context }}" > github_context.txt
-          docker run -v $(pwd):/fastScan/sourceCode searaph/testfastscan:latest /fastScan/sourceCode --githubContext github_context.txt
+          echo "${GITHUB_CONTEXT}" > github-context.txt
+          docker run -v $(pwd):/fastScan/sourceCode -v $(pwd)/github-context.txt:/fastScan/githubContext searaph/testfastscan:latest /fastScan/sourceCode 
 
