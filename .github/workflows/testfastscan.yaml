@@ -26,6 +26,6 @@ jobs:
          GITHUB_CONTEXT: ${{ github.context }}
          working-directory: ${{ github.workspace }}
         run: |
-          cat "${GITHUB_CONTEXT}" > github-context.txt
-          docker run -v $(pwd):/fastScan/sourceCode -v $(pwd)/github-context.txt:/fastScan/githubContext searaph/testfastscan:latest /fastScan/sourceCode 
+          echo ${{ github.context }} > github-context.txt
+          docker run -v $(pwd):/fastScan/sourceCode -v $(pwd)/github-context.txt:/fastScan/githubContext/github-context.txt searaph/testfastscan:latest /fastScan/sourceCode 
 
